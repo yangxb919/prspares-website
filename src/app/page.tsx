@@ -127,18 +127,18 @@ export default function Home() {
             <h1 className={`text-6xl md:text-7xl font-black text-white mb-8 leading-tight transition-all duration-1500 delay-500 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
-              Transform Your
+              您的一站式手机配件
               <span className="bg-gradient-to-r from-[#00B140] to-[#00D155] bg-clip-text text-transparent block hover:from-[#00D155] hover:to-[#00B140] transition-all duration-1000">
-                Repair Business
+                Factory / Wholesale Supplier
               </span>
             </h1>
 
             <p className={`text-2xl md:text-3xl text-white/95 mb-12 leading-relaxed font-light transition-all duration-1500 delay-700 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
-              From Shenzhen Huaqiangbei to the World • Premium OEM Parts
+              Professional Mobile Phone Repair Parts Factory & OEM/ODM Manufacturer from Shenzhen Huaqiangbei • Cell Phone Replacement Parts Wholesale Supplier serving 50+ countries with iPhone, Samsung, Android parts
               <br />
-              <span className="text-[#00D155] font-medium">Boost Your Profits • Delight Your Customers • Grow Your Reputation</span>
+              <span className="text-[#00D155] font-medium">Premium Quality • Fast Global Shipping • 12-Month Warranty</span>
             </p>
 
             <div className={`flex flex-col sm:flex-row gap-6 mb-12 transition-all duration-1500 delay-1000 transform ${
@@ -207,7 +207,7 @@ export default function Home() {
                 Why Choose PRSPARES?
               </h2>
               <p className="text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                More than just a parts supplier - we're your trusted partner for repair business success
+                Leading Mobile Phone Parts Manufacturer & Wholesale Supplier - Your trusted OEM/ODM factory partner for cell phone replacement parts and smartphone repair components
               </p>
             </div>
           </FadeInSection>
@@ -273,10 +273,10 @@ export default function Home() {
           <FadeInSection>
             <div className="text-center mb-20">
               <h2 className="text-4xl md:text-5xl font-black mb-6 text-gray-900">
-                Popular Product Categories
+                Mobile Phone Repair Parts Wholesale Categories
               </h2>
               <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                Covering all major brands to meet every repair need
+                OEM Quality Cell Phone Replacement Parts Factory Direct - iPhone, Samsung, Android Smartphone Components & Spare Parts Manufacturer
               </p>
             </div>
           </FadeInSection>
@@ -284,38 +284,38 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                name: 'Phone LCD',
+                name: 'iPhone LCD Screen Wholesale',
                 image: 'prspares-mobile-phone-lcd-oled-display-screens-replacement-parts.jpg',
                 count: '500+',
-                description: 'Premium OLED & LCD displays for iPhone, Samsung, Huawei and all major brands',
-                features: ['iPhone Series', 'Samsung Galaxy', 'Huawei P/Mate', 'Xiaomi Mi'],
+                description: 'OEM Quality Mobile Phone LCD & OLED Display Screens Wholesale - iPhone, Samsung, Android Replacement Parts Factory Direct',
+                features: ['iPhone Series OEM', 'Samsung Galaxy OLED', 'Huawei P/Mate LCD', 'Xiaomi Mi Display'],
                 delay: 0,
                 link: '/products/screens'
               },
               {
-                name: 'Phone Battery',
+                name: 'Phone Battery Replacement Factory',
                 image: 'prspares-smartphone-battery-high-capacity-lithium-original-replacement.jpg',
                 count: '300+',
-                description: 'High-capacity lithium batteries with original specifications and safety certifications',
-                features: ['Original Capacity', 'Safety Certified', 'Long Lifespan', 'Easy Installation'],
+                description: 'Smartphone Battery Replacement Manufacturer - High-capacity lithium batteries with OEM specifications and safety certifications',
+                features: ['Original OEM Capacity', 'Safety Certified', 'Long Lifespan', 'Factory Direct'],
                 delay: 150,
                 link: '/products/batteries'
               },
               {
-                name: 'Phone Parts',
+                name: 'Mobile Phone Parts ODM',
                 image: 'prspares-mobile-phone-parts-camera-speakers-charging-ports-components.jpg',
                 count: '800+',
-                description: 'Complete range of smartphone components including cameras, speakers, charging ports',
-                features: ['Camera Modules', 'Charging Ports', 'Speakers', 'Flex Cables'],
+                description: 'Cell Phone Spare Parts Wholesale Manufacturer - Complete range of smartphone components including rear cameras, speakers, charging ports',
+                features: ['iPhone Rear Camera OEM', 'Charging Port Supplier', 'Speaker Components', 'Flex Cable Factory'],
                 delay: 300,
-                link: '/products/small-parts'
+                link: '/products/iphone-rear-camera-wholesale'
               },
               {
-                name: 'Phone Repair Tools',
+                name: 'Phone Repair Tools Supplier',
                 image: 'prspares-professional-phone-repair-tools-screwdriver-heat-gun-equipment.jpg',
                 count: '100+',
-                description: 'Professional repair equipment and tools for smartphone disassembly and repair',
-                features: ['Screwdriver Sets', 'Opening Tools', 'Heat Guns', 'Suction Cups'],
+                description: 'Professional Phone Repair Tools Wholesale - Complete equipment and tools for smartphone disassembly and repair from factory',
+                features: ['Professional Screwdriver Sets', 'Opening Tool Kits', 'Heat Gun Equipment', 'Suction Cup Tools'],
                 delay: 450,
                 link: '/products/repair-tools'
               }
@@ -360,7 +360,7 @@ export default function Home() {
 
                       <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                         <span className="text-[#00B140] font-semibold group-hover:text-[#00D155] transition-colors duration-300">
-                          View Products
+                          {category.name}
                         </span>
                         <div className="w-10 h-10 bg-gray-100 group-hover:bg-[#00B140] rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110">
                           <ArrowRight className="text-gray-600 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" size={18} />
