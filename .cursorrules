@@ -1,0 +1,173 @@
+# PRSPARES Mobile Repair Parts Platform - Cursor Rules
+
+## Project Overview
+This is a modern mobile repair parts e-commerce platform built with Next.js 14, TypeScript, and Tailwind CSS. The platform provides product catalog, repair guides, educational content, and resources for mobile repair professionals and technicians.
+
+## Technology Stack
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: Supabase (PostgreSQL)
+- **Icons**: Lucide React
+- **Deployment**: Vercel
+
+## Code Style Guidelines
+
+### General Principles
+- Write clean, readable, and maintainable code
+- Follow TypeScript best practices with strict typing
+- Use English for all code, comments, and documentation
+- Implement responsive design for all components
+- Prioritize accessibility (a11y) standards
+
+### Next.js Specific Rules
+- Use App Router structure (`src/app/` directory)
+- Implement proper metadata for SEO
+- Use `'use client'` directive only when necessary (client components)
+- Prefer Server Components by default
+- Use proper error boundaries and loading states
+
+### Component Structure
+- Place components in `src/components/` directory
+- Organize by feature: `layout/`, `features/`, `shared/`
+- Use PascalCase for component names
+- Export components as default exports
+- Include proper TypeScript interfaces for props
+
+### Styling Guidelines
+- Use Tailwind CSS utility classes
+- Follow mobile-first responsive design
+- Use semantic color names with CSS variables when needed
+- Maintain consistent spacing using Tailwind's spacing scale
+- Implement modern design principles (glassmorphism, subtle shadows)
+
+### Brand Colors
+- Primary Green: `#00B140`
+- Secondary Green: `#008631`
+- Background: `white/gray-50`
+- Text: `gray-700/gray-900`
+- Borders: `gray-100/gray-200`
+
+### File Naming Conventions
+- Use PascalCase for component files: `ComponentName.tsx`
+- Use kebab-case for page files: `page-name/page.tsx`
+- Use camelCase for utility files: `utilityFunction.ts`
+
+### TypeScript Guidelines
+- Use proper type definitions for all props and state
+- Prefer interfaces over types for object shapes
+- Use proper generics where applicable
+- Avoid `any` type; use proper typing
+
+### Database & API Guidelines
+- Use Supabase client for database operations
+- Implement proper error handling for API calls
+- Use TypeScript types for database schemas
+- Implement proper authentication where needed
+
+### Performance Guidelines
+- Use Next.js Image component with proper optimization
+- Implement proper loading states and suspense boundaries
+- Use dynamic imports for heavy components
+- Optimize bundle size with proper imports
+
+### Accessibility Guidelines
+- Include proper ARIA labels and roles
+- Ensure keyboard navigation works properly
+- Use semantic HTML elements
+- Maintain proper color contrast ratios
+- Include alt text for all images
+
+### Code Examples
+
+#### Component Structure:
+```tsx
+'use client';
+
+import { useState } from 'react';
+import type { ComponentProps } from '@/types';
+
+interface MyComponentProps {
+  title: string;
+  optional?: boolean;
+}
+
+const MyComponent = ({ title, optional = false }: MyComponentProps) => {
+  const [state, setState] = useState<string>('');
+
+  return (
+    <div className="p-4 bg-white rounded-lg shadow-sm">
+      <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+      {/* Component content */}
+    </div>
+  );
+};
+
+export default MyComponent;
+```
+
+#### Page Structure:
+```tsx
+import type { Metadata } from 'next';
+import ComponentName from '@/components/features/ComponentName';
+
+export const metadata: Metadata = {
+  title: 'Page Title - PRSPARES',
+  description: 'Page description for SEO',
+};
+
+export default function PageName() {
+  return (
+    <main className="min-h-screen">
+      <ComponentName />
+    </main>
+  );
+}
+```
+
+### Common Patterns
+- Use consistent button styles with proper hover states
+- Implement proper form validation and error handling
+- Use consistent card layouts for content display
+- Implement proper loading and error states
+- Use consistent navigation patterns
+
+### Testing Guidelines
+- Write unit tests for utility functions
+- Test component rendering and user interactions
+- Use proper TypeScript in tests
+- Test accessibility features
+
+### Documentation
+- Comment complex logic and business rules
+- Use JSDoc for function documentation
+- Keep README.md updated with setup instructions
+- Document API endpoints and database schema
+
+## Specific Project Rules
+
+### Navigation
+- Main navigation should be consistent across all pages
+- Use active states to show current page
+- Implement proper mobile navigation
+- Maintain brand consistency in header/footer
+
+### Content Management
+- Use consistent typography scale
+- Implement proper content hierarchy
+- Use consistent spacing and layout patterns
+- Ensure all content is accessible and readable
+
+### Educational Features
+- Quiz components should be interactive and accessible
+- Blog articles should have proper typography and readability
+- Product displays should be informative and visually appealing
+- Contact forms should have proper validation
+
+### Performance
+- Optimize images for web (use Next.js Image component)
+- Minimize JavaScript bundle size
+- Use proper caching strategies
+- Implement lazy loading where appropriate
+
+Remember: Always prioritize user experience, accessibility, and code maintainability in all development decisions. 
