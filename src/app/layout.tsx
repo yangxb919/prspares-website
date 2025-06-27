@@ -17,7 +17,7 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | OEM·ODM Manufacturer – PRSPARES",
-  description: "PRSPARES 是深圳华强北 10 年手机配件制造商，提供 iPhone/Android 屏幕、电池、摄像头等 OEM • ODM 批发，全球发货，库存充足，质保 12 个月。",
+  description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale, global shipping, sufficient stock, 12-month warranty.",
 };
 
 export default function RootLayout({
@@ -93,7 +93,7 @@ export default function RootLayout({
         {children}
         <Footer />
 
-        {/* N8N Chat - 智能客服聊天功能 */}
+        {/* N8N Chat - Intelligent Customer Service */}
         <N8NChat />
       </body>
     </html>

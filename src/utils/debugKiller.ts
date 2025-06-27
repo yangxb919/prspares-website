@@ -77,7 +77,7 @@ export class DebugKiller {
         const id = element.id || '';
         const className = element.className || '';
 
-        // 检查是否是调试元素
+        // Check if it's a debug element
         const isDebugElement = (
           text.includes('N8N Chat Debug') ||
           text.includes('Elements found') ||
@@ -96,7 +96,7 @@ export class DebugKiller {
       });
     });
 
-    // 也检查所有div元素的文本内容
+    // Also check text content of all div elements
     const allDivs = document.querySelectorAll('div:not([id*="n8n-chat"]):not([class*="n8n-chat"])');
     allDivs.forEach(div => {
       const text = div.textContent || '';

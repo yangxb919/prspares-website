@@ -17,13 +17,13 @@ const Footer = () => {
 
     setIsSubmitting(true);
     
-    // 模拟订阅提交
+    // Simulate subscription submission
     setTimeout(() => {
       setIsSubscribed(true);
       setEmail('');
       setIsSubmitting(false);
       
-      // 3秒后重置状态
+      // Reset status after 3 seconds
       setTimeout(() => {
         setIsSubscribed(false);
       }, 3000);

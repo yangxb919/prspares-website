@@ -15,13 +15,13 @@ const N8NChat = ({
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // 确保只在客户端运行且只初始化一次
+    // Ensure it only runs on client side and initializes once
     if (typeof window !== 'undefined' && !isInitialized) {
       const initializeChat = async () => {
         try {
           console.log('🚀 Initializing N8N Chat with webhook:', webhookUrl);
 
-          // 创建聊天实例
+          // Create chat instance
           createChat({
             webhookUrl: webhookUrl,
             mode: 'window', // 窗口模式，会在右下角显示聊天按钮

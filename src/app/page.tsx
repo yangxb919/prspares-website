@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import InquiryModal from '@/components/InquiryModal';
 import LatestBlogPosts from '@/components/features/LatestBlogPosts';
 
-// 动画组件
+// Animation Components
 const FadeInSection = ({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
@@ -127,7 +127,7 @@ export default function Home() {
             <h1 className={`text-6xl md:text-7xl font-black text-white mb-8 leading-tight transition-all duration-1500 delay-500 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
-              您的一站式手机配件
+              Your One-Stop Mobile Parts
               <span className="bg-gradient-to-r from-[#00B140] to-[#00D155] bg-clip-text text-transparent block hover:from-[#00D155] hover:to-[#00B140] transition-all duration-1000">
                 Factory / Wholesale Supplier
               </span>
@@ -178,7 +178,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 优雅的浮动效果 */}
+        {/* Elegant Floating Effects */}
         <div className="absolute inset-0 pointer-events-none opacity-30">
           {[...Array(6)].map((_, i) => (
             <div

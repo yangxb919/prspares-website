@@ -29,7 +29,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* 优化的动画效果 */
+/* Optimized Animation Effects */
 @keyframes gentle-float {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
