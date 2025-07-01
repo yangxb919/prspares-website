@@ -311,3 +311,58 @@ body {
     max-height: 70px !important;
   }
 }
+
+/* Table of Contents Custom Scrollbar Styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f3f4f6;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Table of Contents Smooth Scrolling */
+.toc-smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced hover effects for TOC */
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+/* TOC Active Item Animation */
+@keyframes toc-highlight {
+  0% {
+    background-color: rgba(34, 197, 94, 0.1);
+    transform: scale(1);
+  }
+  50% {
+    background-color: rgba(34, 197, 94, 0.2);
+    transform: scale(1.02);
+  }
+  100% {
+    background-color: rgba(34, 197, 94, 0.1);
+    transform: scale(1);
+  }
+}
+
+.toc-active-highlight {
+  animation: toc-highlight 0.6s ease-in-out;
+}
