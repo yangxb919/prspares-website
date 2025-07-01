@@ -116,7 +116,7 @@ export default function Home() {
           <div className={`max-w-4xl transition-all duration-2000 transform ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
           }`}>
-            <div className={`mb-6 transition-all duration-1500 delay-300 transform ${
+            <div className={`mb-10 transition-all duration-1500 delay-300 transform ${
               isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
             }`}>
               <span className="inline-block bg-gradient-to-r from-[#00B140] to-[#00D155] text-white px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
@@ -124,24 +124,30 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 className={`text-6xl md:text-7xl font-black text-white mb-8 leading-tight transition-all duration-1500 delay-500 transform ${
+            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-black text-white mb-10 leading-[1.1] transition-all duration-1500 delay-500 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               Your One-Stop Mobile Parts
-              <span className="bg-gradient-to-r from-[#00B140] to-[#00D155] bg-clip-text text-transparent block hover:from-[#00D155] hover:to-[#00B140] transition-all duration-1000">
+              <span className="bg-gradient-to-r from-[#00B140] to-[#00D155] bg-clip-text text-transparent block mt-3 hover:from-[#00D155] hover:to-[#00B140] transition-all duration-1000">
                 Factory / Wholesale Supplier
               </span>
             </h1>
 
-            <p className={`text-2xl md:text-3xl text-white/95 mb-12 leading-relaxed font-light transition-all duration-1500 delay-700 transform ${
+            <div className={`text-xl md:text-2xl text-white/95 mb-16 leading-relaxed font-light transition-all duration-1500 delay-700 transform space-y-4 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
-              Professional Mobile Phone Repair Parts Factory & OEM/ODM Manufacturer from Shenzhen Huaqiangbei • Cell Phone Replacement Parts Wholesale Supplier serving 50+ countries with iPhone, Samsung, Android parts
-              <br />
-              <span className="text-[#00D155] font-medium">Premium Quality • Fast Global Shipping • 12-Month Warranty</span>
-            </p>
+              <p className="max-w-3xl">
+                Professional Mobile Phone Repair Parts Factory & OEM/ODM Manufacturer from Shenzhen Huaqiangbei
+              </p>
+              <p className="max-w-3xl">
+                Cell Phone Replacement Parts Wholesale Supplier serving 50+ countries with iPhone, Samsung, Android parts
+              </p>
+              <p className="text-[#00D155] font-medium text-lg mt-6">
+                Premium Quality • Fast Global Shipping • 12-Month Warranty
+              </p>
+            </div>
 
-            <div className={`flex flex-col sm:flex-row gap-6 mb-12 transition-all duration-1500 delay-1000 transform ${
+            <div className={`flex flex-col sm:flex-row gap-6 mb-16 transition-all duration-1500 delay-1000 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               <Link
@@ -161,7 +167,7 @@ export default function Home() {
             </div>
 
             {/* Trust Indicators */}
-            <div className={`flex flex-wrap gap-8 text-white/90 transition-all duration-1500 delay-1200 transform ${
+            <div className={`flex flex-wrap justify-center gap-12 text-white/90 transition-all duration-1500 delay-1200 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               {[
