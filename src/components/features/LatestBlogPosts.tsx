@@ -185,7 +185,25 @@ export default function LatestBlogPosts() {
           day: 'numeric',
           year: 'numeric'
         });
-        const coverImage = post.meta?.cover_image || `https://picsum.photos/seed/prspares-blog-${post.id}/500/400`;
+        // 为不同类型的文章提供更相关的默认图片
+        const getDefaultCoverImage = (post: BlogPost) => {
+          const title = post.title.toLowerCase();
+          const content = post.content?.toLowerCase() || '';
+
+          if (title.includes('screen') || title.includes('display') || title.includes('lcd') || title.includes('oled')) {
+            return '/prspares-mobile-phone-lcd-oled-display-screens-replacement-parts.jpg';
+          } else if (title.includes('battery') || content.includes('battery')) {
+            return '/prspares-smartphone-battery-high-capacity-lithium-original-replacement.jpg';
+          } else if (title.includes('repair') || title.includes('tool') || content.includes('repair')) {
+            return '/prspares-professional-phone-repair-tools-screwdriver-heat-gun-equipment.jpg';
+          } else if (title.includes('parts') || title.includes('component') || content.includes('parts')) {
+            return '/prspares-mobile-phone-parts-camera-speakers-charging-ports-components.jpg';
+          } else {
+            return '/prspares-mobile-repair-parts-hero-banner-professional-oem-quality.jpg';
+          }
+        };
+
+        const coverImage = post.meta?.cover_image || getDefaultCoverImage(post);
         const authorProfile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles;
         const authorName = authorProfile?.display_name || 'PRSPARES Team';
         const category = post.meta?.category || 'Repair Tips';

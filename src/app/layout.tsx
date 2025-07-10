@@ -18,6 +18,30 @@ const robotoMono = Roboto_Mono({
 export const metadata: Metadata = {
   title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | OEM·ODM Manufacturer – PRSPARES",
   description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale, global shipping, sufficient stock, 12-month warranty.",
+  keywords: "mobile phone repair parts, iPhone parts, Samsung parts, Android parts, OEM manufacturer, ODM supplier, wholesale, Shenzhen Huaqiangbei, screen replacement, battery, camera module",
+  openGraph: {
+    title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
+    description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
+    type: "website",
+    url: "https://prspares.com",
+    images: [
+      {
+        url: "https://prspares.com/PRSPARES1.png",
+        width: 1200,
+        height: 630,
+        alt: "PRSPARES - Mobile Phone Repair Parts Factory",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
+    description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
+    images: ["https://prspares.com/PRSPARES1.png"],
+  },
+  alternates: {
+    canonical: "https://prspares.com",
+  },
 };
 
 export default function RootLayout({

@@ -112,11 +112,11 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#00B140]/20 to-transparent"></div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 max-w-6xl">
+        <div className="relative z-10 container mx-auto px-4 max-w-6xl h-full flex items-center">
           <div className={`max-w-4xl transition-all duration-2000 transform ${
             isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
           }`}>
-            <div className={`mb-10 transition-all duration-1500 delay-300 transform ${
+            <div className={`mb-6 transition-all duration-1500 delay-300 transform ${
               isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
             }`}>
               <span className="inline-block bg-gradient-to-r from-[#00B140] to-[#00D155] text-white px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
@@ -124,16 +124,16 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-black text-white mb-10 leading-[1.1] transition-all duration-1500 delay-500 transform ${
+            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-[1.1] transition-all duration-1500 delay-500 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               Your One-Stop Mobile Parts
-              <span className="bg-gradient-to-r from-[#00B140] to-[#00D155] bg-clip-text text-transparent block mt-3 hover:from-[#00D155] hover:to-[#00B140] transition-all duration-1000">
+              <span className="bg-gradient-to-r from-[#00B140] to-[#00D155] bg-clip-text text-transparent block mt-2 hover:from-[#00D155] hover:to-[#00B140] transition-all duration-1000">
                 Factory / Wholesale Supplier
               </span>
             </h1>
 
-            <div className={`text-xl md:text-2xl text-white/95 mb-16 leading-relaxed font-light transition-all duration-1500 delay-700 transform space-y-4 ${
+            <div className={`text-lg md:text-xl text-white/95 mb-8 leading-relaxed font-light transition-all duration-1500 delay-700 transform space-y-2 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               <p className="max-w-3xl">
@@ -142,32 +142,32 @@ export default function Home() {
               <p className="max-w-3xl">
                 Cell Phone Replacement Parts Wholesale Supplier serving 50+ countries with iPhone, Samsung, Android parts
               </p>
-              <p className="text-[#00D155] font-medium text-lg mt-6">
+              <p className="text-[#00D155] font-medium text-base mt-4">
                 Premium Quality • Fast Global Shipping • 12-Month Warranty
               </p>
             </div>
 
-            <div className={`flex flex-col sm:flex-row gap-6 mb-16 transition-all duration-1500 delay-1000 transform ${
+            <div className={`flex flex-col sm:flex-row gap-4 mb-8 transition-all duration-1500 delay-1000 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               <Link
                 href="/products"
-                className="group bg-gradient-to-r from-[#00B140] to-[#00D155] hover:from-[#008631] hover:to-[#00B140] text-white font-bold py-5 px-10 rounded-xl transition-all duration-500 flex items-center justify-center text-xl shadow-2xl hover:shadow-[#00B140]/50 transform hover:-translate-y-2 hover:scale-105"
+                className="group bg-gradient-to-r from-[#00B140] to-[#00D155] hover:from-[#008631] hover:to-[#00B140] text-white font-bold py-4 px-8 rounded-xl transition-all duration-500 flex items-center justify-center text-lg shadow-2xl hover:shadow-[#00B140]/50 transform hover:-translate-y-1 hover:scale-105"
               >
                 Browse Products
-                <ArrowRight size={24} className="ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+                <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
               <button
                 onClick={() => setIsInquiryModalOpen(true)}
-                className="group bg-white/15 backdrop-blur-md border-2 border-white/30 hover:bg-white hover:text-gray-900 text-white font-bold py-5 px-10 rounded-xl transition-all duration-500 flex items-center justify-center text-xl hover:shadow-2xl transform hover:-translate-y-1"
+                className="group bg-white/15 backdrop-blur-md border-2 border-white/30 hover:bg-white hover:text-gray-900 text-white font-bold py-4 px-8 rounded-xl transition-all duration-500 flex items-center justify-center text-lg hover:shadow-2xl transform hover:-translate-y-1"
               >
                 Request Quote
-                <Send size={24} className="ml-3 group-hover:rotate-12 transition-transform duration-300" />
+                <Send size={20} className="ml-2 group-hover:rotate-12 transition-transform duration-300" />
               </button>
             </div>
 
             {/* Trust Indicators */}
-            <div className={`flex flex-wrap justify-center gap-12 text-white/90 transition-all duration-1500 delay-1200 transform ${
+            <div className={`flex flex-wrap justify-center gap-8 text-white/90 transition-all duration-1500 delay-1200 transform ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               {[
@@ -175,9 +175,9 @@ export default function Home() {
                 { icon: Shield, text: 'Guaranteed Authentic' },
                 { icon: Clock, text: 'Lightning Fast Delivery' }
               ].map((item, index) => (
-                <div key={index} className="flex items-center gap-3 group hover:text-[#00D155] transition-colors duration-300">
-                  <item.icon className="text-[#00B140] group-hover:text-[#00D155] group-hover:scale-110 transition-all duration-300" size={24} />
-                  <span className="text-lg font-medium">{item.text}</span>
+                <div key={index} className="flex items-center gap-2 group hover:text-[#00D155] transition-colors duration-300">
+                  <item.icon className="text-[#00B140] group-hover:text-[#00D155] group-hover:scale-110 transition-all duration-300" size={20} />
+                  <span className="text-base font-medium">{item.text}</span>
                 </div>
               ))}
             </div>

@@ -9,8 +9,7 @@ module.exports = {
     '/admin/*',
     '/auth/*',
     '/api/*',
-    '/thank-you',
-    '/products/debug'
+    '/thank-you'
   ],
   additionalPaths: async (config) => [
     await config.transform(config, '/products/iphone-rear-camera-wholesale'),

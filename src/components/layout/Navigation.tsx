@@ -18,12 +18,10 @@ const Navigation = ({ orientation = 'horizontal', onMenuItemClick }: NavigationP
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Blog', path: '/blog' },
-    { name: 'Quiz', path: '/quiz' },
     { name: 'Contact', path: '/contact' },
   ];
 
   const productCategories = [
-    { name: 'All Products', path: '/products' },
     { name: 'Screens', path: '/products/screens' },
     { name: 'Repair Tools', path: '/products/repair-tools' },
     { name: 'Batteries', path: '/products/batteries' },
