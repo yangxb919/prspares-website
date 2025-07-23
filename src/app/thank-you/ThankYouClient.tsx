@@ -130,10 +130,10 @@ export default function ThankYouClient() {
             <p className="text-gray-700 text-xl">
               Call us at{' '}
               <a
-                href="tel:+8612345678900"
+                href="tel:+8618588999234"
                 className="text-[#00B140] hover:text-[#00D155] font-bold transition-colors duration-300 hover:underline decoration-2 underline-offset-4"
               >
-                +86 123 4567 8900
+                +8618588999234
               </a>
             </p>
             <p className="text-gray-500 text-sm mt-3">

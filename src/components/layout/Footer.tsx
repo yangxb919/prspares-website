@@ -2,12 +2,34 @@
 
 import Link from 'next/link';
 import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Send } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getClientIP, getBrowserInfo } from '@/utils/getClientIP';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [clientIP, setClientIP] = useState<string>('');
+  const [browserInfo, setBrowserInfo] = useState<string>('');
+
+  // Get client IP and browser info on component mount
+  useEffect(() => {
+    const fetchClientInfo = async () => {
+      try {
+        const ip = await getClientIP();
+        const browser = getBrowserInfo();
+        setClientIP(ip);
+        setBrowserInfo(browser);
+        console.log('📍 Client info loaded:', { ip, browser });
+      } catch (error) {
+        console.error('Failed to get client info:', error);
+        setClientIP('unknown');
+        setBrowserInfo('unknown');
+      }
+    };
+
+    fetchClientInfo();
+  }, []);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,18 +38,42 @@ const Footer = () => {
     }
 
     setIsSubmitting(true);
-    
-    // Simulate subscription submission
-    setTimeout(() => {
-      setIsSubscribed(true);
-      setEmail('');
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          clientIP: clientIP,
+          browserInfo: browserInfo
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSubscribed(true);
+        setEmail('');
+        console.log('✅ Newsletter subscription successful:', data.message);
+
+        // Reset status after 5 seconds
+        setTimeout(() => {
+          setIsSubscribed(false);
+        }, 5000);
+      } else {
+        console.error('Newsletter subscription failed:', data.error);
+        // You could add error state handling here
+        alert(data.error || 'Subscription failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      alert('Network error. Please check your connection and try again.');
+    } finally {
       setIsSubmitting(false);
-      
-      // Reset status after 3 seconds
-      setTimeout(() => {
-        setIsSubscribed(false);
-      }, 3000);
-    }, 1000);
+    }
   };
 
   return (
@@ -123,11 +169,11 @@ const Footer = () => {
             <ul className="space-y-3 mb-6 flex-grow">
               <li className="flex items-start space-x-2">
                 <Mail size={16} className="mt-0.5 flex-shrink-0" />
-                <span className="text-sm">info@prspares.com</span>
+                <span className="text-sm">service.team@phonerepairspares.com</span>
               </li>
               <li className="flex items-start space-x-2">
                 <Phone size={16} className="mt-0.5 flex-shrink-0" />
-                <span className="text-sm">+86 755 8888 9999</span>
+                <span className="text-sm">+8618588999234</span>
               </li>
               <li className="flex items-start space-x-2">
                 <MapPin size={16} className="mt-0.5 flex-shrink-0" />

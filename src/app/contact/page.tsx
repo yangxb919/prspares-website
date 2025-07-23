@@ -37,8 +37,8 @@ export default function ContactPage() {
               <ContactInfo 
                 companyName="PRSPARES"
                 address="Huaqiangbei, Shenzhen, China"
-                phone="+86 123 4567 8900" // Replace with actual phone
-                email="sales@prspares.com" // Replace with actual email
+                phone="+8618588999234" // Replace with actual phone
+                email="parts.info@phonerepairspares.com" // Replace with actual email
                 description="Your trusted source for mobile repair parts and expert advice. We are committed to providing quality components and excellent customer service."
               />
             </div>

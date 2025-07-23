@@ -58,12 +58,12 @@ export default function SignUp() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <Link href="/" className="inline-block">
-            <Image 
-              src="/PRSPARES1.png" 
-              alt="PRSPARES Logo" 
-              width={300} 
-              height={100} 
-              className="mx-auto h-20 w-auto" 
+            <Image
+              src="/PRSPARES1 .png"
+              alt="PRSPARES Logo"
+              width={240}
+              height={78}
+              className="mx-auto h-16 w-auto"
             />
           </Link>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create a new account</h2>

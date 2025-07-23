@@ -25,11 +25,11 @@ const Header = () => {
         <div className="md:relative md:transform-none absolute left-1/2 transform -translate-x-1/2 md:left-auto">
           <Link href="/" className="hover:scale-105 transition-transform duration-200">
             <Image
-              src="/PRSPARES1.png"
+              src="/PRSPARES1 .png"
               alt="PRSPARE"
-              width={140}
-              height={45}
-              className="h-11 w-auto"
+              width={200}
+              height={65}
+              className="h-14 w-auto"
               priority
             />
           </Link>

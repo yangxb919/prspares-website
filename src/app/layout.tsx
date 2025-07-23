@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | OEM·ODM Manufacturer – PRSPARES",
   description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale, global shipping, sufficient stock, 12-month warranty.",
   keywords: "mobile phone repair parts, iPhone parts, Samsung parts, Android parts, OEM manufacturer, ODM supplier, wholesale, Shenzhen Huaqiangbei, screen replacement, battery, camera module",
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
   openGraph: {
     title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
     description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
@@ -26,7 +31,7 @@ export const metadata: Metadata = {
     url: "https://prspares.com",
     images: [
       {
-        url: "https://prspares.com/PRSPARES1.png",
+        url: "https://prspares.com/PRSPARES1 .png",
         width: 1200,
         height: 630,
         alt: "PRSPARES - Mobile Phone Repair Parts Factory",
@@ -37,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
     description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
-    images: ["https://prspares.com/PRSPARES1.png"],
+    images: ["https://prspares.com/PRSPARES1 .png"],
   },
   alternates: {
     canonical: "https://prspares.com",
@@ -55,7 +60,7 @@ export default function RootLayout({
     "name": "PRSPARES",
     "description": "Professional Mobile Phone Repair Parts Factory & OEM/ODM Manufacturer from Shenzhen Huaqiangbei",
     "url": "https://prspares.com",
-    "logo": "https://prspares.com/PRSPARES1.png",
+    "logo": "https://prspares.com/PRSPARES1 .png",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Shenzhen",
@@ -64,7 +69,7 @@ export default function RootLayout({
     },
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+86-xxx-xxxx-xxxx",
+      "telephone": "+8618588999234",
       "contactType": "customer service",
       "availableLanguage": ["English", "Chinese"]
     },

@@ -10,7 +10,7 @@ export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
   const [authDebug, setAuthDebug] = useState<string>('Checking authentication...')
-  const [stats, setStats] = useState({ articles: 0, products: 0, contacts: 0 })
+  const [stats, setStats] = useState({ articles: 0, products: 0, contacts: 0, newsletter: 0 })
   const router = useRouter()
   const supabase = createPublicClient()
 
@@ -30,13 +30,20 @@ export default function AdminDashboard() {
 
       // Fetch contact forms count
       const { count: contactsCount } = await supabase
-        .from('contact_forms')
+        .from('contact_submissions')
         .select('*', { count: 'exact', head: true })
+
+      // Fetch newsletter subscriptions count
+      const { count: newsletterCount } = await supabase
+        .from('newsletter_subscriptions')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'active')
 
       setStats({
         articles: articlesCount || 0,
         products: productsCount || 0,
         contacts: contactsCount || 0,
+        newsletter: newsletterCount || 0,
       })
     } catch (error) {
       console.error('Error fetching stats:', error)
@@ -269,7 +276,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Stats cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg">
                 <div className="flex items-center">
                   <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl">
@@ -308,6 +315,20 @@ export default function AdminDashboard() {
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Contact Forms</p>
                     <p className="text-2xl font-bold text-gray-900">{stats.contacts}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg">
+                <div className="flex items-center">
+                  <div className="p-3 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Newsletter Subscribers</p>
+                    <p className="text-2xl font-bold text-gray-900">{stats.newsletter}</p>
                   </div>
                 </div>
               </div>
@@ -403,6 +424,36 @@ export default function AdminDashboard() {
                   </p>
                   <div className="flex items-center text-sm text-orange-600 font-medium">
                     <span>Manage Contacts</span>
+                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+
+              {/* Newsletter Management Card */}
+              <Link href="/admin/newsletter" className="group">
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:border-purple-200">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-300">
+                    Newsletter Management
+                  </h3>
+                  <p className="text-gray-600 mb-4 leading-relaxed">
+                    View and manage newsletter subscriptions. Export subscriber lists and track engagement.
+                  </p>
+                  <div className="flex items-center text-sm text-purple-600 font-medium">
+                    <span>Manage Subscribers</span>
                     <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
