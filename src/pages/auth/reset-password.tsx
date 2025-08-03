@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createClient } from '@/utils/supabase'
+import { createPublicClient } from '@/utils/supabase-public'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -8,7 +8,7 @@ export default function ResetPassword() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const supabase = createClient()
+  const supabase = createPublicClient()
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault()

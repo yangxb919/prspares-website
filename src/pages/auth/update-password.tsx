@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createClient } from '@/utils/supabase'
+import { createPublicClient } from '@/utils/supabase-public'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
@@ -11,7 +11,7 @@ export default function UpdatePassword() {
   const [success, setSuccess] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createPublicClient()
 
   useEffect(() => {
     // Check if we have an access token, which means the user is trying to reset their password

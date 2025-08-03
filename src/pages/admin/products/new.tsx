@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
-import { ensureProductImagesSetup, testProductImageUpload } from '@/utils/supabase-storage-setup'
+import { ensureProductImagesSetup } from '@/utils/supabase-storage-setup'
 import Link from 'next/link'
 import Image from 'next/image'
 

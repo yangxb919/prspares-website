@@ -9,6 +9,8 @@ const AboutHero = () => {
         fill
         className="object-cover"
         priority
+        sizes="100vw"
+        quality={85}
       />
       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
         <div className="text-center text-white">

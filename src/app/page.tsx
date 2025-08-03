@@ -107,6 +107,8 @@ export default function Home() {
             fill
             className="object-cover scale-105 hover:scale-110 transition-transform duration-[3000ms] ease-out"
             priority
+            sizes="100vw"
+            quality={85}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/50 to-transparent"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#00B140]/20 to-transparent"></div>

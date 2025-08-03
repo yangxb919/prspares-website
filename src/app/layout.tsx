@@ -20,9 +20,12 @@ export const metadata: Metadata = {
   description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale, global shipping, sufficient stock, 12-month warranty.",
   keywords: "mobile phone repair parts, iPhone parts, Samsung parts, Android parts, OEM manufacturer, ODM supplier, wholesale, Shenzhen Huaqiangbei, screen replacement, battery, camera module",
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/favicon.ico',
+    icon: [
+      { url: '/favicon .png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon .png', sizes: '16x16', type: 'image/png' }
+    ],
+    shortcut: '/favicon .png',
+    apple: '/favicon .png',
   },
   openGraph: {
     title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
