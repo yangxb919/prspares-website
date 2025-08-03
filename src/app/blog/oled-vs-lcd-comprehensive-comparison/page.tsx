@@ -208,7 +208,7 @@ export default function OLEDvsLCDBlogPage() {
               <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-6">
                 <h3 className="text-lg font-bold text-yellow-900 mb-2">PWM Flicker Concerns</h3>
                 <p className="text-gray-700">
-                  Most OLED displays use low-frequency PWM (240-480Hz) for brightness control at low levels, which may cause eye strain and headaches for sensitive users. LCD displays typically use high-frequency PWM (>1kHz) or DC dimming, reducing flicker-related discomfort.
+                  Most OLED displays use low-frequency PWM (240-480Hz) for brightness control at low levels, which may cause eye strain and headaches for sensitive users. LCD displays typically use high-frequency PWM (&gt;1kHz) or DC dimming, reducing flicker-related discomfort.
                 </p>
               </div>
               

@@ -46,45 +46,48 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
       threshold: [0, 0.25, 0.5, 0.75, 1]
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       // Find the heading that's most visible
-      let mostVisibleEntry = null;
+      let mostVisibleEntry: IntersectionObserverEntry | undefined;
       let maxRatio = 0;
 
-      entries.forEach(entry => {
+      for (const entry of entries) {
         if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
           maxRatio = entry.intersectionRatio;
           mostVisibleEntry = entry;
         }
-      });
+      }
 
       // If no heading is intersecting, find the closest one above the viewport
       if (!mostVisibleEntry) {
-        const headingElements = toc.map(({ id }) => document.getElementById(id)).filter(Boolean);
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const headingElements = toc
+          .map(({ id }) => document.getElementById(id))
+          .filter((el): el is HTMLElement => el !== null);
 
-        let closestHeading = null;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        let closestHeading: HTMLElement | undefined;
         let minDistance = Infinity;
 
-        headingElements.forEach(element => {
-          if (element) {
-            const elementTop = element.offsetTop;
-            const distance = Math.abs(scrollTop - elementTop);
+        for (const element of headingElements) {
+          const elementTop = element.offsetTop;
+          const distance = Math.abs(scrollTop - elementTop);
 
-            if (elementTop <= scrollTop + 200 && distance < minDistance) {
-              minDistance = distance;
-              closestHeading = element;
-            }
+          if (elementTop <= scrollTop + 200 && distance < minDistance) {
+            minDistance = distance;
+            closestHeading = element;
           }
-        });
+        }
 
         if (closestHeading) {
           setActiveId(closestHeading.id);
         }
       } else {
-        setActiveId(mostVisibleEntry.target.id);
+        const target = mostVisibleEntry.target as HTMLElement;
+        setActiveId(target.id);
       }
-    }, observerOptions);
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
 
     // Observe all heading elements
     toc.forEach(({ id }) => {
