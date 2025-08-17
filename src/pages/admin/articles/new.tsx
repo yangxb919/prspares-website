@@ -4,6 +4,8 @@ import { createPublicClient } from '@/utils/supabase-public'
 import { ensureStorageSetup } from '@/utils/supabase-storage-setup'
 import Link from 'next/link'
 import Image from 'next/image'
+import { generateAutoSEO } from '@/utils/auto-seo-generator'
+import SEOEditor from '@/components/admin/SEOEditor'
 
 export default function NewArticle() {
   const [title, setTitle] = useState('')
@@ -21,6 +23,7 @@ export default function NewArticle() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ start: 0, end: 0 })
+  const [customSEOData, setCustomSEOData] = useState<any>(null)
   
   const router = useRouter()
   const supabase = createPublicClient()
@@ -210,6 +213,17 @@ export default function NewArticle() {
         }
       }
       
+      // 使用自定义SEO数据或生成自动SEO数据
+      const seoData = customSEOData || generateAutoSEO(
+        title,
+        content,
+        slug,
+        excerpt,
+        featuredImageUrl,
+        user.display_name || 'PRSPARES Team',
+        status === 'publish' ? new Date().toISOString() : undefined
+      );
+
       const newPost = {
         author_id: user.id,
         title,
@@ -219,7 +233,12 @@ export default function NewArticle() {
         status,
         published_at: status === 'publish' ? new Date().toISOString() : null,
         meta: {
-          cover_image: featuredImageUrl
+          cover_image: featuredImageUrl,
+          seo: seoData.seo,
+          structured_data: seoData.structuredData,
+          open_graph: seoData.openGraph,
+          twitter: seoData.twitter,
+          canonical: seoData.canonical
         }
       }
       
@@ -676,6 +695,21 @@ export default function NewArticle() {
                       </button>
                     </div>
                   </form>
+                </div>
+              </div>
+
+              {/* SEO编辑器 */}
+              <div className="bg-white shadow rounded-lg">
+                <div className="px-4 py-5 sm:p-6">
+                  <SEOEditor
+                    title={title}
+                    content={content}
+                    slug={slug}
+                    excerpt={excerpt}
+                    coverImage={featuredImagePreview || undefined}
+                    author={user?.display_name}
+                    onSEOChange={setCustomSEOData}
+                  />
                 </div>
               </div>
             </div>

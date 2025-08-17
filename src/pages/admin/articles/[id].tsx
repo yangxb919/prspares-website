@@ -4,6 +4,8 @@ import { createPublicClient } from '@/utils/supabase-public'
 import { ensureStorageSetup } from '@/utils/supabase-storage-setup'
 import Link from 'next/link'
 import Image from 'next/image'
+import { generateAutoSEO } from '@/utils/auto-seo-generator'
+import SEOEditor from '@/components/admin/SEOEditor'
 
 export default function EditArticle() {
   const [title, setTitle] = useState('')
@@ -22,7 +24,9 @@ export default function EditArticle() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null)
   const [cursorPosition, setCursorPosition] = useState({ start: 0, end: 0 })
-  
+  const [customSEOData, setCustomSEOData] = useState<any>(null)
+  const [initialSEOData, setInitialSEOData] = useState<any>(null)
+
   const router = useRouter()
   const { id } = router.query
   const supabase = createPublicClient()
@@ -135,7 +139,12 @@ export default function EditArticle() {
       if (article.meta?.cover_image) {
         setFeaturedImagePreview(article.meta.cover_image)
       }
-      
+
+      // 设置初始SEO数据
+      if (article.meta?.seo) {
+        setInitialSEOData(article.meta)
+      }
+
       setInitialLoad(false)
     } catch (error: any) {
       console.error('加载文章失败:', error.message)
@@ -295,14 +304,32 @@ export default function EditArticle() {
         updates.published_at = new Date().toISOString()
       }
       
-      // 更新meta数据（如果有新的特色图片）
-      if (featuredImageUrl || featuredImagePreview) {
-        updates.meta = {
-          cover_image: featuredImageUrl || featuredImagePreview
-        }
-      } else if (featuredImagePreview === null) {
-        // 如果移除了特色图片
-        updates.meta = { cover_image: null }
+      // 使用自定义SEO数据或生成自动SEO数据
+      const seoData = customSEOData || generateAutoSEO(
+        title,
+        content,
+        slug,
+        excerpt,
+        featuredImageUrl || featuredImagePreview,
+        user?.display_name || 'PRSPARES Team',
+        status === 'publish' ? (updates.published_at || new Date().toISOString()) : undefined
+      );
+
+      // 更新meta数据（包含SEO数据）
+      const currentMeta = currentArticle?.meta || {};
+      updates.meta = {
+        ...currentMeta,
+        cover_image: featuredImageUrl || featuredImagePreview || currentMeta.cover_image,
+        seo: seoData.seo,
+        structured_data: seoData.structuredData,
+        open_graph: seoData.openGraph,
+        twitter: seoData.twitter,
+        canonical: seoData.canonical
+      };
+
+      // 如果移除了特色图片
+      if (featuredImagePreview === null) {
+        updates.meta.cover_image = null;
       }
       
       // 更新文章
@@ -744,6 +771,22 @@ export default function EditArticle() {
                       </button>
                     </div>
                   </form>
+                </div>
+              </div>
+
+              {/* SEO编辑器 */}
+              <div className="bg-white shadow rounded-lg">
+                <div className="px-4 py-5 sm:p-6">
+                  <SEOEditor
+                    title={title}
+                    content={content}
+                    slug={slug}
+                    excerpt={excerpt}
+                    coverImage={featuredImagePreview || undefined}
+                    author={user?.display_name}
+                    initialSEOData={initialSEOData}
+                    onSEOChange={setCustomSEOData}
+                  />
                 </div>
               </div>
             </div>

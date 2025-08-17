@@ -13,23 +13,45 @@ import RelatedPosts from '@/components/features/RelatedPosts';
 // Generate dynamic metadata
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const supabase = createPublicClient();
-  
+
   const { data: post } = await supabase
     .from('posts')
-    .select('title,excerpt')
+    .select('title,excerpt,meta')
     .eq('slug', params.slug)
     .single();
-  
+
   if (!post) {
     return {
       title: 'Guide Not Found - PRSPARES',
       description: 'Sorry, the repair guide or article you requested does not exist.'
     };
   }
-  
+
+  // 使用存储的SEO数据（如果有）
+  const seoData = post.meta?.seo;
+  const openGraphData = post.meta?.open_graph;
+  const twitterData = post.meta?.twitter;
+
   return {
-    title: `${post.title} - PRSPARES Repair Guides`,
-    description: post.excerpt || `Read our expert guide on ${post.title}`
+    title: seoData?.title || `${post.title} - PRSPARES Repair Guides`,
+    description: seoData?.description || post.excerpt || `Read our expert guide on ${post.title}`,
+    keywords: seoData?.keywords?.join(', '),
+    openGraph: openGraphData ? {
+      title: openGraphData.title,
+      description: openGraphData.description,
+      type: 'article',
+      url: openGraphData.url,
+      images: openGraphData.image ? [{ url: openGraphData.image }] : undefined,
+    } : undefined,
+    twitter: twitterData ? {
+      card: 'summary_large_image',
+      title: twitterData.title,
+      description: twitterData.description,
+      images: twitterData.image ? [twitterData.image] : undefined,
+    } : undefined,
+    alternates: {
+      canonical: post.meta?.canonical
+    }
   };
 }
 
@@ -100,8 +122,22 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       .limit(3)
       .order('published_at', { ascending: false });
     
+    // 获取结构化数据
+    const structuredData = typedPost.meta?.structured_data;
+
     return (
-      <main className="min-h-screen bg-gray-50">
+      <>
+        {/* 结构化数据 */}
+        {structuredData && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(structuredData)
+            }}
+          />
+        )}
+
+        <main className="min-h-screen bg-gray-50">
         {/* Hero Section */}
         <div className="relative h-[55vh] min-h-[450px] overflow-hidden shadow-lg">
           <div className="absolute inset-0">
@@ -297,6 +333,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
         </div>
       </main>
+      </>
     );
   } catch (error) {
     console.error('Guide page rendering error:', error);

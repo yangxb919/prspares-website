@@ -118,11 +118,7 @@ const Footer = () => {
                   Blog
                 </Link>
               </li>
-              <li>
-                <Link href="/quiz" className="text-sm hover:text-[#00B140] transition-colors">
-                  Knowledge Tests
-                </Link>
-              </li>
+
               <li>
                 <Link href="/products" className="text-sm hover:text-[#00B140] transition-colors">
                   Products
