@@ -264,10 +264,10 @@ export default function EditArticle() {
         }
       }
       
-      // 获取当前文章数据以检查发布状态
+      // 获取当前文章数据以检查发布状态和meta数据
       const { data: currentArticle } = await supabase
         .from('posts')
-        .select('published_at, status')
+        .select('published_at, status, meta')
         .eq('id', id)
         .single()
       
@@ -310,7 +310,7 @@ export default function EditArticle() {
         content,
         slug,
         excerpt,
-        featuredImageUrl || featuredImagePreview,
+        featuredImageUrl || featuredImagePreview || undefined,
         user?.display_name || 'PRSPARES Team',
         status === 'publish' ? (updates.published_at || new Date().toISOString()) : undefined
       );

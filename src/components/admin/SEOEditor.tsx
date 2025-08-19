@@ -278,7 +278,7 @@ const SEOEditor: React.FC<SEOEditorProps> = ({
             SEO优化建议 {useCustomSEO && reanalyzedSEO && <span className="text-xs text-blue-600">(基于自定义设置)</span>}
           </h4>
           <ul className="space-y-2">
-            {currentSuggestions.map((suggestion, index) => (
+            {currentSuggestions.map((suggestion: string, index: number) => (
               <li key={index} className="flex items-start space-x-2 text-sm">
                 <span className="text-yellow-500 mt-0.5">⚠</span>
                 <span className="text-gray-600">{suggestion}</span>

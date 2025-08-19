@@ -219,7 +219,7 @@ export default function NewArticle() {
         content,
         slug,
         excerpt,
-        featuredImageUrl,
+        featuredImageUrl || undefined,
         user.display_name || 'PRSPARES Team',
         status === 'publish' ? new Date().toISOString() : undefined
       );

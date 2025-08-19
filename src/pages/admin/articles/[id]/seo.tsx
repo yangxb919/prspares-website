@@ -97,7 +97,7 @@ export default function ArticleSEOEdit() {
       if (updateError) throw updateError;
 
       // 更新本地状态
-      setArticle(prev => ({
+      setArticle((prev: any) => ({
         ...prev,
         meta: updatedMeta
       }));
