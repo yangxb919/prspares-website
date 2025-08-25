@@ -43,3 +43,6 @@ next-env.d.ts
 # IDE and editor files
 .cursor/
 mcp-servers/
+
+# Image backup directories (exclude nested backups)
+public/images/backup/backup/

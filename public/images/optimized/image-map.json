@@ -1,0 +1,1346 @@
+{
+  "android-batteries.jpg": {
+    "original": "android-batteries.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/android-batteries-800w.webp",
+        "images/optimized/android-batteries-600w.webp",
+        "images/optimized/android-batteries-400w.webp",
+        "images/optimized/android-batteries-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/android-batteries-800w.avif",
+        "images/optimized/android-batteries-600w.avif",
+        "images/optimized/android-batteries-400w.avif",
+        "images/optimized/android-batteries-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/android-batteries-800w.jpeg",
+        "images/optimized/android-batteries-600w.jpeg",
+        "images/optimized/android-batteries-400w.jpeg",
+        "images/optimized/android-batteries-300w.jpeg"
+      ]
+    }
+  },
+  "android-screens.jpg": {
+    "original": "android-screens.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/android-screens-800w.webp",
+        "images/optimized/android-screens-600w.webp",
+        "images/optimized/android-screens-400w.webp",
+        "images/optimized/android-screens-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/android-screens-800w.avif",
+        "images/optimized/android-screens-600w.avif",
+        "images/optimized/android-screens-400w.avif",
+        "images/optimized/android-screens-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/android-screens-800w.jpeg",
+        "images/optimized/android-screens-600w.jpeg",
+        "images/optimized/android-screens-400w.jpeg",
+        "images/optimized/android-screens-300w.jpeg"
+      ]
+    }
+  },
+  "batteries-hero.jpg": {
+    "original": "batteries-hero.jpg",
+    "type": "hero",
+    "formats": {
+      "webp": [
+        "images/optimized/batteries-hero-1200w.webp",
+        "images/optimized/batteries-hero-800w.webp",
+        "images/optimized/batteries-hero-600w.webp",
+        "images/optimized/batteries-hero-400w.webp"
+      ],
+      "avif": [
+        "images/optimized/batteries-hero-1200w.avif",
+        "images/optimized/batteries-hero-800w.avif",
+        "images/optimized/batteries-hero-600w.avif",
+        "images/optimized/batteries-hero-400w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/batteries-hero-1200w.jpeg",
+        "images/optimized/batteries-hero-800w.jpeg",
+        "images/optimized/batteries-hero-600w.jpeg",
+        "images/optimized/batteries-hero-400w.jpeg"
+      ]
+    }
+  },
+  "ipad-screens.jpg": {
+    "original": "ipad-screens.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/ipad-screens-800w.webp",
+        "images/optimized/ipad-screens-600w.webp",
+        "images/optimized/ipad-screens-400w.webp",
+        "images/optimized/ipad-screens-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/ipad-screens-800w.avif",
+        "images/optimized/ipad-screens-600w.avif",
+        "images/optimized/ipad-screens-400w.avif",
+        "images/optimized/ipad-screens-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/ipad-screens-800w.jpeg",
+        "images/optimized/ipad-screens-600w.jpeg",
+        "images/optimized/ipad-screens-400w.jpeg",
+        "images/optimized/ipad-screens-300w.jpeg"
+      ]
+    }
+  },
+  "iphone-batteries.jpg": {
+    "original": "iphone-batteries.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/iphone-batteries-800w.webp",
+        "images/optimized/iphone-batteries-600w.webp",
+        "images/optimized/iphone-batteries-400w.webp",
+        "images/optimized/iphone-batteries-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/iphone-batteries-800w.avif",
+        "images/optimized/iphone-batteries-600w.avif",
+        "images/optimized/iphone-batteries-400w.avif",
+        "images/optimized/iphone-batteries-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/iphone-batteries-800w.jpeg",
+        "images/optimized/iphone-batteries-600w.jpeg",
+        "images/optimized/iphone-batteries-400w.jpeg",
+        "images/optimized/iphone-batteries-300w.jpeg"
+      ]
+    }
+  },
+  "iphone-screens.jpg": {
+    "original": "iphone-screens.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/iphone-screens-800w.webp",
+        "images/optimized/iphone-screens-600w.webp",
+        "images/optimized/iphone-screens-400w.webp",
+        "images/optimized/iphone-screens-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/iphone-screens-800w.avif",
+        "images/optimized/iphone-screens-600w.avif",
+        "images/optimized/iphone-screens-400w.avif",
+        "images/optimized/iphone-screens-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/iphone-screens-800w.jpeg",
+        "images/optimized/iphone-screens-600w.jpeg",
+        "images/optimized/iphone-screens-400w.jpeg",
+        "images/optimized/iphone-screens-300w.jpeg"
+      ]
+    }
+  },
+  "laptop-batteries.jpg": {
+    "original": "laptop-batteries.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/laptop-batteries-800w.webp",
+        "images/optimized/laptop-batteries-600w.webp",
+        "images/optimized/laptop-batteries-400w.webp",
+        "images/optimized/laptop-batteries-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/laptop-batteries-800w.avif",
+        "images/optimized/laptop-batteries-600w.avif",
+        "images/optimized/laptop-batteries-400w.avif",
+        "images/optimized/laptop-batteries-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/laptop-batteries-800w.jpeg",
+        "images/optimized/laptop-batteries-600w.jpeg",
+        "images/optimized/laptop-batteries-400w.jpeg",
+        "images/optimized/laptop-batteries-300w.jpeg"
+      ]
+    }
+  },
+  "LCD display structure.png": {
+    "original": "LCD display structure.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/LCD display structure-800w.webp",
+        "images/optimized/LCD display structure-600w.webp",
+        "images/optimized/LCD display structure-400w.webp",
+        "images/optimized/LCD display structure-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/LCD display structure-800w.avif",
+        "images/optimized/LCD display structure-600w.avif",
+        "images/optimized/LCD display structure-400w.avif",
+        "images/optimized/LCD display structure-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/LCD display structure-800w.jpeg",
+        "images/optimized/LCD display structure-600w.jpeg",
+        "images/optimized/LCD display structure-400w.jpeg",
+        "images/optimized/LCD display structure-300w.jpeg"
+      ]
+    }
+  },
+  "macbook-screens.jpg": {
+    "original": "macbook-screens.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/macbook-screens-800w.webp",
+        "images/optimized/macbook-screens-600w.webp",
+        "images/optimized/macbook-screens-400w.webp",
+        "images/optimized/macbook-screens-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/macbook-screens-800w.avif",
+        "images/optimized/macbook-screens-600w.avif",
+        "images/optimized/macbook-screens-400w.avif",
+        "images/optimized/macbook-screens-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/macbook-screens-800w.jpeg",
+        "images/optimized/macbook-screens-600w.jpeg",
+        "images/optimized/macbook-screens-400w.jpeg",
+        "images/optimized/macbook-screens-300w.jpeg"
+      ]
+    }
+  },
+  "oem-quality-iphone-screen-wholesale-collection.jpg": {
+    "original": "oem-quality-iphone-screen-wholesale-collection.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-800w.webp",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-600w.webp",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-400w.webp",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-800w.avif",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-600w.avif",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-400w.avif",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-800w.jpeg",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-600w.jpeg",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-400w.jpeg",
+        "images/optimized/oem-quality-iphone-screen-wholesale-collection-300w.jpeg"
+      ]
+    }
+  },
+  "OLED display structure.png": {
+    "original": "OLED display structure.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/OLED display structure-800w.webp",
+        "images/optimized/OLED display structure-600w.webp",
+        "images/optimized/OLED display structure-400w.webp",
+        "images/optimized/OLED display structure-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/OLED display structure-800w.avif",
+        "images/optimized/OLED display structure-600w.avif",
+        "images/optimized/OLED display structure-400w.avif",
+        "images/optimized/OLED display structure-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/OLED display structure-800w.jpeg",
+        "images/optimized/OLED display structure-600w.jpeg",
+        "images/optimized/OLED display structure-400w.jpeg",
+        "images/optimized/OLED display structure-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\airpods-parts.jpg": {
+    "original": "parts\\airpods-parts.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/airpods-parts-800w.webp",
+        "images/optimized/airpods-parts-600w.webp",
+        "images/optimized/airpods-parts-400w.webp",
+        "images/optimized/airpods-parts-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/airpods-parts-800w.avif",
+        "images/optimized/airpods-parts-600w.avif",
+        "images/optimized/airpods-parts-400w.avif",
+        "images/optimized/airpods-parts-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/airpods-parts-800w.jpeg",
+        "images/optimized/airpods-parts-600w.jpeg",
+        "images/optimized/airpods-parts-400w.jpeg",
+        "images/optimized/airpods-parts-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\apple-watch-glass.jpg": {
+    "original": "parts\\apple-watch-glass.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/apple-watch-glass-800w.webp",
+        "images/optimized/apple-watch-glass-600w.webp",
+        "images/optimized/apple-watch-glass-400w.webp",
+        "images/optimized/apple-watch-glass-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/apple-watch-glass-800w.avif",
+        "images/optimized/apple-watch-glass-600w.avif",
+        "images/optimized/apple-watch-glass-400w.avif",
+        "images/optimized/apple-watch-glass-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/apple-watch-glass-800w.jpeg",
+        "images/optimized/apple-watch-glass-600w.jpeg",
+        "images/optimized/apple-watch-glass-400w.jpeg",
+        "images/optimized/apple-watch-glass-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\back-covers.jpg": {
+    "original": "parts\\back-covers.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/back-covers-800w.webp",
+        "images/optimized/back-covers-600w.webp",
+        "images/optimized/back-covers-400w.webp",
+        "images/optimized/back-covers-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/back-covers-800w.avif",
+        "images/optimized/back-covers-600w.avif",
+        "images/optimized/back-covers-400w.avif",
+        "images/optimized/back-covers-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/back-covers-800w.jpeg",
+        "images/optimized/back-covers-600w.jpeg",
+        "images/optimized/back-covers-400w.jpeg",
+        "images/optimized/back-covers-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\buttons.jpg": {
+    "original": "parts\\buttons.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/buttons-800w.webp",
+        "images/optimized/buttons-600w.webp",
+        "images/optimized/buttons-400w.webp",
+        "images/optimized/buttons-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/buttons-800w.avif",
+        "images/optimized/buttons-600w.avif",
+        "images/optimized/buttons-400w.avif",
+        "images/optimized/buttons-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/buttons-800w.jpeg",
+        "images/optimized/buttons-600w.jpeg",
+        "images/optimized/buttons-400w.jpeg",
+        "images/optimized/buttons-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\cameras.jpg": {
+    "original": "parts\\cameras.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/cameras-800w.webp",
+        "images/optimized/cameras-600w.webp",
+        "images/optimized/cameras-400w.webp",
+        "images/optimized/cameras-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/cameras-800w.avif",
+        "images/optimized/cameras-600w.avif",
+        "images/optimized/cameras-400w.avif",
+        "images/optimized/cameras-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/cameras-800w.jpeg",
+        "images/optimized/cameras-600w.jpeg",
+        "images/optimized/cameras-400w.jpeg",
+        "images/optimized/cameras-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\charging-ports.jpg": {
+    "original": "parts\\charging-ports.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/charging-ports-800w.webp",
+        "images/optimized/charging-ports-600w.webp",
+        "images/optimized/charging-ports-400w.webp",
+        "images/optimized/charging-ports-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/charging-ports-800w.avif",
+        "images/optimized/charging-ports-600w.avif",
+        "images/optimized/charging-ports-400w.avif",
+        "images/optimized/charging-ports-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/charging-ports-800w.jpeg",
+        "images/optimized/charging-ports-600w.jpeg",
+        "images/optimized/charging-ports-400w.jpeg",
+        "images/optimized/charging-ports-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\ipad-glass.jpg": {
+    "original": "parts\\ipad-glass.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/ipad-glass-800w.webp",
+        "images/optimized/ipad-glass-600w.webp",
+        "images/optimized/ipad-glass-400w.webp",
+        "images/optimized/ipad-glass-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/ipad-glass-800w.avif",
+        "images/optimized/ipad-glass-600w.avif",
+        "images/optimized/ipad-glass-400w.avif",
+        "images/optimized/ipad-glass-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/ipad-glass-800w.jpeg",
+        "images/optimized/ipad-glass-600w.jpeg",
+        "images/optimized/ipad-glass-400w.jpeg",
+        "images/optimized/ipad-glass-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\macbook-camera.jpg": {
+    "original": "parts\\macbook-camera.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/macbook-camera-800w.webp",
+        "images/optimized/macbook-camera-600w.webp",
+        "images/optimized/macbook-camera-400w.webp",
+        "images/optimized/macbook-camera-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/macbook-camera-800w.avif",
+        "images/optimized/macbook-camera-600w.avif",
+        "images/optimized/macbook-camera-400w.avif",
+        "images/optimized/macbook-camera-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/macbook-camera-800w.jpeg",
+        "images/optimized/macbook-camera-600w.jpeg",
+        "images/optimized/macbook-camera-400w.jpeg",
+        "images/optimized/macbook-camera-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\macbook-cover.jpg": {
+    "original": "parts\\macbook-cover.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/macbook-cover-800w.webp",
+        "images/optimized/macbook-cover-600w.webp",
+        "images/optimized/macbook-cover-400w.webp",
+        "images/optimized/macbook-cover-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/macbook-cover-800w.avif",
+        "images/optimized/macbook-cover-600w.avif",
+        "images/optimized/macbook-cover-400w.avif",
+        "images/optimized/macbook-cover-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/macbook-cover-800w.jpeg",
+        "images/optimized/macbook-cover-600w.jpeg",
+        "images/optimized/macbook-cover-400w.jpeg",
+        "images/optimized/macbook-cover-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\macbook-keyboard.jpg": {
+    "original": "parts\\macbook-keyboard.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/macbook-keyboard-800w.webp",
+        "images/optimized/macbook-keyboard-600w.webp",
+        "images/optimized/macbook-keyboard-400w.webp",
+        "images/optimized/macbook-keyboard-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/macbook-keyboard-800w.avif",
+        "images/optimized/macbook-keyboard-600w.avif",
+        "images/optimized/macbook-keyboard-400w.avif",
+        "images/optimized/macbook-keyboard-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/macbook-keyboard-800w.jpeg",
+        "images/optimized/macbook-keyboard-600w.jpeg",
+        "images/optimized/macbook-keyboard-400w.jpeg",
+        "images/optimized/macbook-keyboard-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\macbook-trackpad.jpg": {
+    "original": "parts\\macbook-trackpad.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/macbook-trackpad-800w.webp",
+        "images/optimized/macbook-trackpad-600w.webp",
+        "images/optimized/macbook-trackpad-400w.webp",
+        "images/optimized/macbook-trackpad-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/macbook-trackpad-800w.avif",
+        "images/optimized/macbook-trackpad-600w.avif",
+        "images/optimized/macbook-trackpad-400w.avif",
+        "images/optimized/macbook-trackpad-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/macbook-trackpad-800w.jpeg",
+        "images/optimized/macbook-trackpad-600w.jpeg",
+        "images/optimized/macbook-trackpad-400w.jpeg",
+        "images/optimized/macbook-trackpad-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\playstation-parts.jpg": {
+    "original": "parts\\playstation-parts.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/playstation-parts-800w.webp",
+        "images/optimized/playstation-parts-600w.webp",
+        "images/optimized/playstation-parts-400w.webp",
+        "images/optimized/playstation-parts-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/playstation-parts-800w.avif",
+        "images/optimized/playstation-parts-600w.avif",
+        "images/optimized/playstation-parts-400w.avif",
+        "images/optimized/playstation-parts-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/playstation-parts-800w.jpeg",
+        "images/optimized/playstation-parts-600w.jpeg",
+        "images/optimized/playstation-parts-400w.jpeg",
+        "images/optimized/playstation-parts-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\speakers.jpg": {
+    "original": "parts\\speakers.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/speakers-800w.webp",
+        "images/optimized/speakers-600w.webp",
+        "images/optimized/speakers-400w.webp",
+        "images/optimized/speakers-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/speakers-800w.avif",
+        "images/optimized/speakers-600w.avif",
+        "images/optimized/speakers-400w.avif",
+        "images/optimized/speakers-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/speakers-800w.jpeg",
+        "images/optimized/speakers-600w.jpeg",
+        "images/optimized/speakers-400w.jpeg",
+        "images/optimized/speakers-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\switch-parts.jpg": {
+    "original": "parts\\switch-parts.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/switch-parts-800w.webp",
+        "images/optimized/switch-parts-600w.webp",
+        "images/optimized/switch-parts-400w.webp",
+        "images/optimized/switch-parts-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/switch-parts-800w.avif",
+        "images/optimized/switch-parts-600w.avif",
+        "images/optimized/switch-parts-400w.avif",
+        "images/optimized/switch-parts-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/switch-parts-800w.jpeg",
+        "images/optimized/switch-parts-600w.jpeg",
+        "images/optimized/switch-parts-400w.jpeg",
+        "images/optimized/switch-parts-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\tablet-camera.jpg": {
+    "original": "parts\\tablet-camera.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/tablet-camera-800w.webp",
+        "images/optimized/tablet-camera-600w.webp",
+        "images/optimized/tablet-camera-400w.webp",
+        "images/optimized/tablet-camera-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/tablet-camera-800w.avif",
+        "images/optimized/tablet-camera-600w.avif",
+        "images/optimized/tablet-camera-400w.avif",
+        "images/optimized/tablet-camera-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/tablet-camera-800w.jpeg",
+        "images/optimized/tablet-camera-600w.jpeg",
+        "images/optimized/tablet-camera-400w.jpeg",
+        "images/optimized/tablet-camera-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\tablet-charging.jpg": {
+    "original": "parts\\tablet-charging.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/tablet-charging-800w.webp",
+        "images/optimized/tablet-charging-600w.webp",
+        "images/optimized/tablet-charging-400w.webp",
+        "images/optimized/tablet-charging-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/tablet-charging-800w.avif",
+        "images/optimized/tablet-charging-600w.avif",
+        "images/optimized/tablet-charging-400w.avif",
+        "images/optimized/tablet-charging-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/tablet-charging-800w.jpeg",
+        "images/optimized/tablet-charging-600w.jpeg",
+        "images/optimized/tablet-charging-400w.jpeg",
+        "images/optimized/tablet-charging-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\tablet-flex.jpg": {
+    "original": "parts\\tablet-flex.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/tablet-flex-800w.webp",
+        "images/optimized/tablet-flex-600w.webp",
+        "images/optimized/tablet-flex-400w.webp",
+        "images/optimized/tablet-flex-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/tablet-flex-800w.avif",
+        "images/optimized/tablet-flex-600w.avif",
+        "images/optimized/tablet-flex-400w.avif",
+        "images/optimized/tablet-flex-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/tablet-flex-800w.jpeg",
+        "images/optimized/tablet-flex-600w.jpeg",
+        "images/optimized/tablet-flex-400w.jpeg",
+        "images/optimized/tablet-flex-300w.jpeg"
+      ]
+    }
+  },
+  "parts\\wireless-charging.jpg": {
+    "original": "parts\\wireless-charging.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/wireless-charging-800w.webp",
+        "images/optimized/wireless-charging-600w.webp",
+        "images/optimized/wireless-charging-400w.webp",
+        "images/optimized/wireless-charging-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/wireless-charging-800w.avif",
+        "images/optimized/wireless-charging-600w.avif",
+        "images/optimized/wireless-charging-400w.avif",
+        "images/optimized/wireless-charging-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/wireless-charging-800w.jpeg",
+        "images/optimized/wireless-charging-600w.jpeg",
+        "images/optimized/wireless-charging-400w.jpeg",
+        "images/optimized/wireless-charging-300w.jpeg"
+      ]
+    }
+  },
+  "repair-tools-hero.jpg": {
+    "original": "repair-tools-hero.jpg",
+    "type": "hero",
+    "formats": {
+      "webp": [
+        "images/optimized/repair-tools-hero-1200w.webp",
+        "images/optimized/repair-tools-hero-800w.webp",
+        "images/optimized/repair-tools-hero-600w.webp",
+        "images/optimized/repair-tools-hero-400w.webp"
+      ],
+      "avif": [
+        "images/optimized/repair-tools-hero-1200w.avif",
+        "images/optimized/repair-tools-hero-800w.avif",
+        "images/optimized/repair-tools-hero-600w.avif",
+        "images/optimized/repair-tools-hero-400w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/repair-tools-hero-1200w.jpeg",
+        "images/optimized/repair-tools-hero-800w.jpeg",
+        "images/optimized/repair-tools-hero-600w.jpeg",
+        "images/optimized/repair-tools-hero-400w.jpeg"
+      ]
+    }
+  },
+  "samsung-android-oled-screen-replacement-collection.jpg": {
+    "original": "samsung-android-oled-screen-replacement-collection.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/samsung-android-oled-screen-replacement-collection-800w.webp",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-600w.webp",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-400w.webp",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/samsung-android-oled-screen-replacement-collection-800w.avif",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-600w.avif",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-400w.avif",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/samsung-android-oled-screen-replacement-collection-800w.jpeg",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-600w.jpeg",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-400w.jpeg",
+        "images/optimized/samsung-android-oled-screen-replacement-collection-300w.jpeg"
+      ]
+    }
+  },
+  "screens-hero.jpg": {
+    "original": "screens-hero.jpg",
+    "type": "hero",
+    "formats": {
+      "webp": [
+        "images/optimized/screens-hero-1200w.webp",
+        "images/optimized/screens-hero-800w.webp",
+        "images/optimized/screens-hero-600w.webp",
+        "images/optimized/screens-hero-400w.webp"
+      ],
+      "avif": [
+        "images/optimized/screens-hero-1200w.avif",
+        "images/optimized/screens-hero-800w.avif",
+        "images/optimized/screens-hero-600w.avif",
+        "images/optimized/screens-hero-400w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/screens-hero-1200w.jpeg",
+        "images/optimized/screens-hero-800w.jpeg",
+        "images/optimized/screens-hero-600w.jpeg",
+        "images/optimized/screens-hero-400w.jpeg"
+      ]
+    }
+  },
+  "small-parts-hero.jpg": {
+    "original": "small-parts-hero.jpg",
+    "type": "hero",
+    "formats": {
+      "webp": [
+        "images/optimized/small-parts-hero-1200w.webp",
+        "images/optimized/small-parts-hero-800w.webp",
+        "images/optimized/small-parts-hero-600w.webp",
+        "images/optimized/small-parts-hero-400w.webp"
+      ],
+      "avif": [
+        "images/optimized/small-parts-hero-1200w.avif",
+        "images/optimized/small-parts-hero-800w.avif",
+        "images/optimized/small-parts-hero-600w.avif",
+        "images/optimized/small-parts-hero-400w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/small-parts-hero-1200w.jpeg",
+        "images/optimized/small-parts-hero-800w.jpeg",
+        "images/optimized/small-parts-hero-600w.jpeg",
+        "images/optimized/small-parts-hero-400w.jpeg"
+      ]
+    }
+  },
+  "smart-device-batteries.jpg": {
+    "original": "smart-device-batteries.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/smart-device-batteries-800w.webp",
+        "images/optimized/smart-device-batteries-600w.webp",
+        "images/optimized/smart-device-batteries-400w.webp",
+        "images/optimized/smart-device-batteries-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/smart-device-batteries-800w.avif",
+        "images/optimized/smart-device-batteries-600w.avif",
+        "images/optimized/smart-device-batteries-400w.avif",
+        "images/optimized/smart-device-batteries-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/smart-device-batteries-800w.jpeg",
+        "images/optimized/smart-device-batteries-600w.jpeg",
+        "images/optimized/smart-device-batteries-400w.jpeg",
+        "images/optimized/smart-device-batteries-300w.jpeg"
+      ]
+    }
+  },
+  "surface-screens.jpg": {
+    "original": "surface-screens.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/surface-screens-800w.webp",
+        "images/optimized/surface-screens-600w.webp",
+        "images/optimized/surface-screens-400w.webp",
+        "images/optimized/surface-screens-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/surface-screens-800w.avif",
+        "images/optimized/surface-screens-600w.avif",
+        "images/optimized/surface-screens-400w.avif",
+        "images/optimized/surface-screens-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/surface-screens-800w.jpeg",
+        "images/optimized/surface-screens-600w.jpeg",
+        "images/optimized/surface-screens-400w.jpeg",
+        "images/optimized/surface-screens-300w.jpeg"
+      ]
+    }
+  },
+  "tablet-batteries.jpg": {
+    "original": "tablet-batteries.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/tablet-batteries-800w.webp",
+        "images/optimized/tablet-batteries-600w.webp",
+        "images/optimized/tablet-batteries-400w.webp",
+        "images/optimized/tablet-batteries-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/tablet-batteries-800w.avif",
+        "images/optimized/tablet-batteries-600w.avif",
+        "images/optimized/tablet-batteries-400w.avif",
+        "images/optimized/tablet-batteries-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/tablet-batteries-800w.jpeg",
+        "images/optimized/tablet-batteries-600w.jpeg",
+        "images/optimized/tablet-batteries-400w.jpeg",
+        "images/optimized/tablet-batteries-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\air-gun.jpg": {
+    "original": "tools\\air-gun.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/air-gun-800w.webp",
+        "images/optimized/air-gun-600w.webp",
+        "images/optimized/air-gun-400w.webp",
+        "images/optimized/air-gun-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/air-gun-800w.avif",
+        "images/optimized/air-gun-600w.avif",
+        "images/optimized/air-gun-400w.avif",
+        "images/optimized/air-gun-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/air-gun-800w.jpeg",
+        "images/optimized/air-gun-600w.jpeg",
+        "images/optimized/air-gun-400w.jpeg",
+        "images/optimized/air-gun-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\cable-tester.jpg": {
+    "original": "tools\\cable-tester.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/cable-tester-800w.webp",
+        "images/optimized/cable-tester-600w.webp",
+        "images/optimized/cable-tester-400w.webp",
+        "images/optimized/cable-tester-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/cable-tester-800w.avif",
+        "images/optimized/cable-tester-600w.avif",
+        "images/optimized/cable-tester-400w.avif",
+        "images/optimized/cable-tester-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/cable-tester-800w.jpeg",
+        "images/optimized/cable-tester-600w.jpeg",
+        "images/optimized/cable-tester-400w.jpeg",
+        "images/optimized/cable-tester-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\heating-pad.jpg": {
+    "original": "tools\\heating-pad.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/heating-pad-800w.webp",
+        "images/optimized/heating-pad-600w.webp",
+        "images/optimized/heating-pad-400w.webp",
+        "images/optimized/heating-pad-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/heating-pad-800w.avif",
+        "images/optimized/heating-pad-600w.avif",
+        "images/optimized/heating-pad-400w.avif",
+        "images/optimized/heating-pad-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/heating-pad-800w.jpeg",
+        "images/optimized/heating-pad-600w.jpeg",
+        "images/optimized/heating-pad-400w.jpeg",
+        "images/optimized/heating-pad-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\hot-air-station.jpg": {
+    "original": "tools\\hot-air-station.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/hot-air-station-800w.webp",
+        "images/optimized/hot-air-station-600w.webp",
+        "images/optimized/hot-air-station-400w.webp",
+        "images/optimized/hot-air-station-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/hot-air-station-800w.avif",
+        "images/optimized/hot-air-station-600w.avif",
+        "images/optimized/hot-air-station-400w.avif",
+        "images/optimized/hot-air-station-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/hot-air-station-800w.jpeg",
+        "images/optimized/hot-air-station-600w.jpeg",
+        "images/optimized/hot-air-station-400w.jpeg",
+        "images/optimized/hot-air-station-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\microscope.jpg": {
+    "original": "tools\\microscope.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/microscope-800w.webp",
+        "images/optimized/microscope-600w.webp",
+        "images/optimized/microscope-400w.webp",
+        "images/optimized/microscope-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/microscope-800w.avif",
+        "images/optimized/microscope-600w.avif",
+        "images/optimized/microscope-400w.avif",
+        "images/optimized/microscope-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/microscope-800w.jpeg",
+        "images/optimized/microscope-600w.jpeg",
+        "images/optimized/microscope-400w.jpeg",
+        "images/optimized/microscope-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\port-tester.jpg": {
+    "original": "tools\\port-tester.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/port-tester-800w.webp",
+        "images/optimized/port-tester-600w.webp",
+        "images/optimized/port-tester-400w.webp",
+        "images/optimized/port-tester-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/port-tester-800w.avif",
+        "images/optimized/port-tester-600w.avif",
+        "images/optimized/port-tester-400w.avif",
+        "images/optimized/port-tester-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/port-tester-800w.jpeg",
+        "images/optimized/port-tester-600w.jpeg",
+        "images/optimized/port-tester-400w.jpeg",
+        "images/optimized/port-tester-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\power-supply.jpg": {
+    "original": "tools\\power-supply.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/power-supply-800w.webp",
+        "images/optimized/power-supply-600w.webp",
+        "images/optimized/power-supply-400w.webp",
+        "images/optimized/power-supply-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/power-supply-800w.avif",
+        "images/optimized/power-supply-600w.avif",
+        "images/optimized/power-supply-400w.avif",
+        "images/optimized/power-supply-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/power-supply-800w.jpeg",
+        "images/optimized/power-supply-600w.jpeg",
+        "images/optimized/power-supply-400w.jpeg",
+        "images/optimized/power-supply-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\programmer-1.jpg": {
+    "original": "tools\\programmer-1.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/programmer-1-800w.webp",
+        "images/optimized/programmer-1-600w.webp",
+        "images/optimized/programmer-1-400w.webp",
+        "images/optimized/programmer-1-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/programmer-1-800w.avif",
+        "images/optimized/programmer-1-600w.avif",
+        "images/optimized/programmer-1-400w.avif",
+        "images/optimized/programmer-1-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/programmer-1-800w.jpeg",
+        "images/optimized/programmer-1-600w.jpeg",
+        "images/optimized/programmer-1-400w.jpeg",
+        "images/optimized/programmer-1-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\programmer-2.jpg": {
+    "original": "tools\\programmer-2.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/programmer-2-800w.webp",
+        "images/optimized/programmer-2-600w.webp",
+        "images/optimized/programmer-2-400w.webp",
+        "images/optimized/programmer-2-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/programmer-2-800w.avif",
+        "images/optimized/programmer-2-600w.avif",
+        "images/optimized/programmer-2-400w.avif",
+        "images/optimized/programmer-2-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/programmer-2-800w.jpeg",
+        "images/optimized/programmer-2-600w.jpeg",
+        "images/optimized/programmer-2-400w.jpeg",
+        "images/optimized/programmer-2-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\programmer-3.jpg": {
+    "original": "tools\\programmer-3.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/programmer-3-800w.webp",
+        "images/optimized/programmer-3-600w.webp",
+        "images/optimized/programmer-3-400w.webp",
+        "images/optimized/programmer-3-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/programmer-3-800w.avif",
+        "images/optimized/programmer-3-600w.avif",
+        "images/optimized/programmer-3-400w.avif",
+        "images/optimized/programmer-3-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/programmer-3-800w.jpeg",
+        "images/optimized/programmer-3-600w.jpeg",
+        "images/optimized/programmer-3-400w.jpeg",
+        "images/optimized/programmer-3-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\pry-tools.jpg": {
+    "original": "tools\\pry-tools.jpg",
+    "type": "tool",
+    "formats": {
+      "webp": [
+        "images/optimized/pry-tools-600w.webp",
+        "images/optimized/pry-tools-400w.webp",
+        "images/optimized/pry-tools-300w.webp",
+        "images/optimized/pry-tools-200w.webp"
+      ],
+      "avif": [
+        "images/optimized/pry-tools-600w.avif",
+        "images/optimized/pry-tools-400w.avif",
+        "images/optimized/pry-tools-300w.avif",
+        "images/optimized/pry-tools-200w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/pry-tools-600w.jpeg",
+        "images/optimized/pry-tools-400w.jpeg",
+        "images/optimized/pry-tools-300w.jpeg",
+        "images/optimized/pry-tools-200w.jpeg"
+      ]
+    }
+  },
+  "tools\\screen-tester.jpg": {
+    "original": "tools\\screen-tester.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/screen-tester-800w.webp",
+        "images/optimized/screen-tester-600w.webp",
+        "images/optimized/screen-tester-400w.webp",
+        "images/optimized/screen-tester-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/screen-tester-800w.avif",
+        "images/optimized/screen-tester-600w.avif",
+        "images/optimized/screen-tester-400w.avif",
+        "images/optimized/screen-tester-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/screen-tester-800w.jpeg",
+        "images/optimized/screen-tester-600w.jpeg",
+        "images/optimized/screen-tester-400w.jpeg",
+        "images/optimized/screen-tester-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\screwdriver-set.jpg": {
+    "original": "tools\\screwdriver-set.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/screwdriver-set-800w.webp",
+        "images/optimized/screwdriver-set-600w.webp",
+        "images/optimized/screwdriver-set-400w.webp",
+        "images/optimized/screwdriver-set-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/screwdriver-set-800w.avif",
+        "images/optimized/screwdriver-set-600w.avif",
+        "images/optimized/screwdriver-set-400w.avif",
+        "images/optimized/screwdriver-set-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/screwdriver-set-800w.jpeg",
+        "images/optimized/screwdriver-set-600w.jpeg",
+        "images/optimized/screwdriver-set-400w.jpeg",
+        "images/optimized/screwdriver-set-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\soldering-station.jpg": {
+    "original": "tools\\soldering-station.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/soldering-station-800w.webp",
+        "images/optimized/soldering-station-600w.webp",
+        "images/optimized/soldering-station-400w.webp",
+        "images/optimized/soldering-station-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/soldering-station-800w.avif",
+        "images/optimized/soldering-station-600w.avif",
+        "images/optimized/soldering-station-400w.avif",
+        "images/optimized/soldering-station-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/soldering-station-800w.jpeg",
+        "images/optimized/soldering-station-600w.jpeg",
+        "images/optimized/soldering-station-400w.jpeg",
+        "images/optimized/soldering-station-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\suction-cups.jpg": {
+    "original": "tools\\suction-cups.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/suction-cups-800w.webp",
+        "images/optimized/suction-cups-600w.webp",
+        "images/optimized/suction-cups-400w.webp",
+        "images/optimized/suction-cups-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/suction-cups-800w.avif",
+        "images/optimized/suction-cups-600w.avif",
+        "images/optimized/suction-cups-400w.avif",
+        "images/optimized/suction-cups-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/suction-cups-800w.jpeg",
+        "images/optimized/suction-cups-600w.jpeg",
+        "images/optimized/suction-cups-400w.jpeg",
+        "images/optimized/suction-cups-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\test-board.jpg": {
+    "original": "tools\\test-board.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/test-board-800w.webp",
+        "images/optimized/test-board-600w.webp",
+        "images/optimized/test-board-400w.webp",
+        "images/optimized/test-board-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/test-board-800w.avif",
+        "images/optimized/test-board-600w.avif",
+        "images/optimized/test-board-400w.avif",
+        "images/optimized/test-board-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/test-board-800w.jpeg",
+        "images/optimized/test-board-600w.jpeg",
+        "images/optimized/test-board-400w.jpeg",
+        "images/optimized/test-board-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\thermal-camera.jpg": {
+    "original": "tools\\thermal-camera.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/thermal-camera-800w.webp",
+        "images/optimized/thermal-camera-600w.webp",
+        "images/optimized/thermal-camera-400w.webp",
+        "images/optimized/thermal-camera-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/thermal-camera-800w.avif",
+        "images/optimized/thermal-camera-600w.avif",
+        "images/optimized/thermal-camera-400w.avif",
+        "images/optimized/thermal-camera-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/thermal-camera-800w.jpeg",
+        "images/optimized/thermal-camera-600w.jpeg",
+        "images/optimized/thermal-camera-400w.jpeg",
+        "images/optimized/thermal-camera-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\tweezers.jpg": {
+    "original": "tools\\tweezers.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/tweezers-800w.webp",
+        "images/optimized/tweezers-600w.webp",
+        "images/optimized/tweezers-400w.webp",
+        "images/optimized/tweezers-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/tweezers-800w.avif",
+        "images/optimized/tweezers-600w.avif",
+        "images/optimized/tweezers-400w.avif",
+        "images/optimized/tweezers-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/tweezers-800w.jpeg",
+        "images/optimized/tweezers-600w.jpeg",
+        "images/optimized/tweezers-400w.jpeg",
+        "images/optimized/tweezers-300w.jpeg"
+      ]
+    }
+  },
+  "tools\\watch-tool.jpg": {
+    "original": "tools\\watch-tool.jpg",
+    "type": "tool",
+    "formats": {
+      "webp": [
+        "images/optimized/watch-tool-600w.webp",
+        "images/optimized/watch-tool-400w.webp",
+        "images/optimized/watch-tool-300w.webp",
+        "images/optimized/watch-tool-200w.webp"
+      ],
+      "avif": [
+        "images/optimized/watch-tool-600w.avif",
+        "images/optimized/watch-tool-400w.avif",
+        "images/optimized/watch-tool-300w.avif",
+        "images/optimized/watch-tool-200w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/watch-tool-600w.jpeg",
+        "images/optimized/watch-tool-400w.jpeg",
+        "images/optimized/watch-tool-300w.jpeg",
+        "images/optimized/watch-tool-200w.jpeg"
+      ]
+    }
+  },
+  "tools\\work-mat.jpg": {
+    "original": "tools\\work-mat.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/work-mat-800w.webp",
+        "images/optimized/work-mat-600w.webp",
+        "images/optimized/work-mat-400w.webp",
+        "images/optimized/work-mat-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/work-mat-800w.avif",
+        "images/optimized/work-mat-600w.avif",
+        "images/optimized/work-mat-400w.avif",
+        "images/optimized/work-mat-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/work-mat-800w.jpeg",
+        "images/optimized/work-mat-600w.jpeg",
+        "images/optimized/work-mat-400w.jpeg",
+        "images/optimized/work-mat-300w.jpeg"
+      ]
+    }
+  }
+}

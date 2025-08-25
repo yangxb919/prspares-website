@@ -1,6 +1,7 @@
 'use client';
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import OptimizedImage, { HeroImage, ProductImage } from '@/components/OptimizedImage';
 import Link from 'next/link';
 import { useState } from 'react';
 import InquiryModal from '@/components/InquiryModal';
@@ -64,11 +65,9 @@ export default function RepairToolsPage() {
             </div>
             <div className="relative">
               <div className="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden shadow-2xl">
-                <Image
+                <HeroImage
                   src="/images/repair-tools-hero.jpg"
                   alt="Professional Mobile Repair Tools - Complete Repair Solutions"
-                  width={600}
-                  height={400}
                   className="object-cover w-full h-full"
                   priority
                 />
@@ -115,11 +114,9 @@ export default function RepairToolsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 group">
                 <div className="aspect-w-4 aspect-h-3 overflow-hidden h-48">
-                  <Image
+                  <ProductImage
                     src="/images/tools/screwdriver-set.jpg"
                     alt="Professional Screwdriver Set"
-                    width={400}
-                    height={300}
                     className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
@@ -131,11 +128,9 @@ export default function RepairToolsPage() {
 
               <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105 group">
                 <div className="aspect-w-4 aspect-h-3 overflow-hidden h-48">
-                  <Image
+                  <ProductImage
                     src="/images/tools/pry-tools.jpg"
                     alt="Pry Tools"
-                    width={400}
-                    height={300}
                     className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>

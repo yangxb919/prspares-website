@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
 import { ensureProductImagesSetup } from '@/utils/supabase-storage-setup'
+import { compressImages, COMPRESSION_PRESETS } from '@/utils/imageCompression'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -166,12 +167,12 @@ export default function AddProduct() {
     if (!files || files.length === 0) return
 
     setImageUploading(true)
-    
+
     try {
       // 验证文件类型
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
       const invalidFiles = Array.from(files).filter(file => !allowedTypes.includes(file.type))
-      
+
       if (invalidFiles.length > 0) {
         throw new Error(`不支持的文件格式: ${invalidFiles.map(f => f.name).join(', ')}`)
       }
@@ -179,21 +180,31 @@ export default function AddProduct() {
       // 验证文件大小 (10MB)
       const maxSize = 10 * 1024 * 1024
       const oversizeFiles = Array.from(files).filter(file => file.size > maxSize)
-      
+
       if (oversizeFiles.length > 0) {
         throw new Error(`文件过大 (最大10MB): ${oversizeFiles.map(f => f.name).join(', ')}`)
       }
 
+      // 压缩图片
+      console.log('开始压缩图片...')
+      const compressionResults = await compressImages(
+        Array.from(files),
+        COMPRESSION_PRESETS.high,
+        (progress, current, total) => {
+          console.log(`压缩进度: ${progress.toFixed(1)}% (${current}/${total})`)
+        }
+      )
+
       const uploadedUrls: string[] = []
-      
-      for (const file of Array.from(files)) {
-        const fileExt = file.name.split('.').pop()
+
+      for (const result of compressionResults) {
+        const fileExt = result.format
         const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`
         const filePath = `products/${fileName}`
 
         const { data, error } = await supabase.storage
           .from('product-images')
-          .upload(filePath, file, {
+          .upload(filePath, result.file, {
             cacheControl: '3600',
             upsert: false
           })
@@ -209,6 +220,12 @@ export default function AddProduct() {
           .getPublicUrl(filePath)
 
         uploadedUrls.push(publicUrlData.publicUrl)
+
+        // 显示压缩统计
+        console.log(`图片压缩完成: ${result.file.name}`)
+        console.log(`原始大小: ${(result.originalSize / 1024).toFixed(1)} KB`)
+        console.log(`压缩后大小: ${(result.compressedSize / 1024).toFixed(1)} KB`)
+        console.log(`压缩率: ${result.compressionRatio.toFixed(1)}%`)
       }
 
       setFormData(prev => ({
