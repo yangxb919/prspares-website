@@ -1,7 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
-// 创建公共客户端
+// 单例模式的 Supabase 客户端
+let supabaseInstance: ReturnType<typeof createClient> | null = null;
+
+// 创建公共客户端（单例模式）
 export const createPublicClient = () => {
+  // 如果已经有实例，直接返回
+  if (supabaseInstance) {
+    return supabaseInstance;
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
@@ -10,7 +18,8 @@ export const createPublicClient = () => {
     throw new Error('Supabase configuration missing. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your environment variables.');
   }
 
-  return createClient(supabaseUrl, supabaseAnonKey, {
+  // 创建新实例并缓存
+  supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
@@ -24,4 +33,6 @@ export const createPublicClient = () => {
       }
     }
   });
+
+  return supabaseInstance;
 };

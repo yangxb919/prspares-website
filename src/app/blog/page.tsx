@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ArticleCard } from '@/types/blog';
 import BlogHeader from '@/components/features/BlogHeader';
 import Breadcrumb from '@/components/shared/Breadcrumb';
+import SafeImage from '@/components/SafeImage';
 
 export const metadata: Metadata = {
   title: 'Repair Guides & Insights - PRSPARES',
@@ -182,10 +183,11 @@ export default async function BlogPage({
                 <Link key={article.id} href={`/blog/${article.slug}`} className="group block h-full">
                   <article className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-gray-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer h-full flex flex-col">
                     <div className="relative h-52 overflow-hidden flex-shrink-0">
-                      <Image
+                      <SafeImage
                         src={article.imageSrc}
                         alt={article.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

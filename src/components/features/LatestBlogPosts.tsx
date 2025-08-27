@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { createPublicClient } from '@/utils/supabase-public';
 import { useEffect, useState } from 'react';
+import SafeImage from '@/components/SafeImage';
 
 interface BlogPost {
   id: number;
@@ -135,11 +136,12 @@ export default function LatestBlogPosts() {
           <FadeInSection key={index} delay={guide.delay}>
             <div className="group bg-gray-50 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-100 hover:border-[#00B140]/30 h-full flex flex-col">
               <div className="relative h-56 overflow-hidden">
-                <Image
+                <SafeImage
                   src={`https://picsum.photos/seed/${guide.image}/500/400`}
                   alt={guide.title}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent group-hover:from-black/40 transition-all duration-500"></div>
                 <div className="absolute top-4 left-4 bg-gradient-to-r from-[#00B140] to-[#00D155] text-white px-3 py-2 rounded-full text-sm font-bold shadow-lg">
@@ -216,11 +218,12 @@ export default function LatestBlogPosts() {
               className="group bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-100 hover:border-[#00B140]/30 h-full flex flex-col"
             >
               <div className="relative h-56 overflow-hidden">
-                <Image
+                <SafeImage
                   src={coverImage}
                   alt={post.title}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent group-hover:from-black/40 transition-all duration-500"></div>
                 <div className="absolute top-4 left-4 bg-gradient-to-r from-[#00B140] to-[#00D155] text-white px-3 py-2 rounded-full text-sm font-bold shadow-lg">

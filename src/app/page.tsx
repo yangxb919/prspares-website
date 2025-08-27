@@ -188,14 +188,21 @@ export default function Home() {
 
         {/* Elegant Floating Effects */}
         <div className="absolute inset-0 pointer-events-none opacity-30">
-          {[...Array(6)].map((_, i) => (
+          {[
+            { left: '30%', top: '20%', delay: '0s' },
+            { left: '70%', top: '40%', delay: '1s' },
+            { left: '45%', top: '60%', delay: '2s' },
+            { left: '80%', top: '25%', delay: '3s' },
+            { left: '25%', top: '70%', delay: '4s' },
+            { left: '60%', top: '35%', delay: '5s' }
+          ].map((item, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 bg-[#00B140]/60 rounded-full gentle-float"
               style={{
-                left: `${25 + Math.random() * 50}%`,
-                top: `${25 + Math.random() * 50}%`,
-                animationDelay: `${Math.random() * 6}s`
+                left: item.left,
+                top: item.top,
+                animationDelay: item.delay
               }}
             />
           ))}
@@ -338,6 +345,7 @@ export default function Home() {
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-700"
                         priority={index < 2}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                       <div className="absolute top-6 right-6 bg-gradient-to-r from-[#00B140] to-[#00D155] text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl">
@@ -479,6 +487,7 @@ export default function Home() {
                         alt={`${review.name} customer testimonial - ${review.role} - PRSPARES mobile repair parts review`}
                         fill
                         className="object-cover"
+                        sizes="64px"
                       />
                     </div>
                     <div>

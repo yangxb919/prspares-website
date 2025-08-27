@@ -16,6 +16,7 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NODE_ENV === 'production' ? 'https://prspares.com' : 'http://localhost:3000'),
   title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | OEM·ODM Manufacturer – PRSPARES",
   description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale, global shipping, sufficient stock, 12-month warranty.",
   keywords: "mobile phone repair parts, iPhone parts, Samsung parts, Android parts, OEM manufacturer, ODM supplier, wholesale, Shenzhen Huaqiangbei, screen replacement, battery, camera module",
@@ -31,10 +32,10 @@ export const metadata: Metadata = {
     title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
     description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
     type: "website",
-    url: "https://prspares.com",
+    url: "/",
     images: [
       {
-        url: "https://prspares.com/PRSPARES1 .png",
+        url: "/PRSPARES1 .png",
         width: 1200,
         height: 630,
         alt: "PRSPARES - Mobile Phone Repair Parts Factory",
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
     description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
-    images: ["https://prspares.com/PRSPARES1 .png"],
+    images: ["/PRSPARES1 .png"],
   },
   alternates: {
     canonical: "https://prspares.com",
@@ -130,12 +131,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
 
-        {/* Lucky Orange Analytics */}
-        <script
-          async
-          defer
-          src="https://tools.luckyorange.com/core/lo.js?site-id=39a3c095"
-        />
+
       </head>
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}

@@ -9,6 +9,7 @@ import rehypeRaw from 'rehype-raw';
 import { Post, Profile } from '@/types/blog';
 import TableOfContents from '@/components/features/TableOfContents';
 import RelatedPosts from '@/components/features/RelatedPosts';
+import SafeImage from '@/components/SafeImage';
 
 // Generate dynamic metadata
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -141,12 +142,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         {/* Hero Section */}
         <div className="relative h-[55vh] min-h-[450px] overflow-hidden shadow-lg">
           <div className="absolute inset-0">
-            <Image 
-              src={coverImage} 
-              alt={typedPost.title} 
+            <SafeImage
+              src={coverImage}
+              alt={typedPost.title}
               fill
               style={{objectFit: 'cover'}}
               priority
+              sizes="100vw"
               className="transform scale-105 group-hover:scale-110 transition-transform duration-500 ease-in-out"
             />
           </div>
