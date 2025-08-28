@@ -11,6 +11,18 @@ import TableOfContents from '@/components/features/TableOfContents';
 import RelatedPosts from '@/components/features/RelatedPosts';
 import SafeImage from '@/components/SafeImage';
 
+// 定义Meta类型
+interface PostMeta {
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string[];
+  };
+  open_graph?: any;
+  twitter?: any;
+  cover_image?: string;
+}
+
 // Generate dynamic metadata
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const supabase = createPublicClient();
@@ -29,9 +41,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   // 使用存储的SEO数据（如果有）
-  const seoData = post.meta?.seo;
-  const openGraphData = post.meta?.open_graph;
-  const twitterData = post.meta?.twitter;
+  const meta = post.meta as PostMeta | null;
+  const seoData = meta?.seo;
+  const openGraphData = meta?.open_graph;
+  const twitterData = meta?.twitter;
 
   return {
     title: seoData?.title || `${post.title} - PRSPARES Repair Guides`,
