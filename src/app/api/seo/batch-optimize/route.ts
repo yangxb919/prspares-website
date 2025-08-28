@@ -4,12 +4,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createPublicClient } from '@/utils/supabase-public';
 import { batchGenerateSEO } from '@/utils/auto-seo-generator';
 
+// 定义Post类型
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  slug: string;
+  excerpt?: string;
+  meta?: any;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = createPublicClient();
     
     // 获取所有已发布的文章（没有SEO数据的）
-    const { data: posts, error: fetchError } = await supabase
+    const { data: postsData, error: fetchError } = await supabase
       .from('posts')
       .select('id, title, content, slug, excerpt, meta')
       .eq('status', 'publish')
@@ -23,13 +33,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!posts || posts.length === 0) {
+    if (!postsData || postsData.length === 0) {
       return NextResponse.json({
         success: true,
         message: 'No posts need SEO optimization',
         processed: 0
       });
     }
+
+    // 类型断言确保数据类型正确
+    const posts: Post[] = postsData as Post[];
 
     // 批量生成SEO数据
     const seoResults = await batchGenerateSEO(posts);
