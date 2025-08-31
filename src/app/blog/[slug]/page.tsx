@@ -23,22 +23,32 @@ interface PostMeta {
   cover_image?: string;
 }
 
+// 定义查询返回的Post类型
+interface QueryPost {
+  title: string;
+  excerpt: string | null;
+  meta: any;
+}
+
 // Generate dynamic metadata
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const supabase = createPublicClient();
 
-  const { data: post } = await supabase
+  const { data: postData } = await supabase
     .from('posts')
     .select('title,excerpt,meta')
     .eq('slug', params.slug)
     .single();
 
-  if (!post) {
+  if (!postData) {
     return {
       title: 'Guide Not Found - PRSPARES',
       description: 'Sorry, the repair guide or article you requested does not exist.'
     };
   }
+
+  // 类型断言确保数据类型正确
+  const post = postData as QueryPost;
 
   // 使用存储的SEO数据（如果有）
   const meta = post.meta as PostMeta | null;
