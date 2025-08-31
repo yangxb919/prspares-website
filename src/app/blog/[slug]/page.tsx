@@ -30,6 +30,18 @@ interface QueryPost {
   meta: any;
 }
 
+// 定义RelatedPost类型
+interface RelatedPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  published_at: string;
+  meta?: {
+    cover_image?: string;
+  };
+}
+
 // Generate dynamic metadata
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const supabase = createPublicClient();
@@ -138,13 +150,16 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     const authorName = authorProfile?.display_name || 'PRSPARES Team';
     const authorAvatar = authorProfile?.avatar_url;
 
-    const { data: relatedPosts } = await supabase
+    const { data: relatedPostsData } = await supabase
       .from('posts')
       .select('id, title, slug, excerpt, published_at, meta')
       .eq('status', 'publish')
       .neq('id', post.id)
       .limit(3)
       .order('published_at', { ascending: false });
+
+    // 类型断言确保数据类型正确
+    const relatedPosts = relatedPostsData as RelatedPost[] | null;
     
     // 获取结构化数据
     const structuredData = typedPost.meta?.structured_data;
