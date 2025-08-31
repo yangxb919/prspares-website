@@ -13,6 +13,7 @@ interface SafeImageProps {
   fill?: boolean;
   sizes?: string;
   quality?: number;
+  style?: React.CSSProperties;
 }
 
 export default function SafeImage({
@@ -25,6 +26,7 @@ export default function SafeImage({
   fill = false,
   sizes,
   quality = 75,
+  style,
   ...props
 }: SafeImageProps) {
   const [error, setError] = useState(false);
@@ -52,6 +54,7 @@ export default function SafeImage({
       fill={fill}
       sizes={sizes}
       quality={quality}
+      style={style}
       onError={() => setError(true)}
       onLoad={() => setLoading(false)}
       {...props}
