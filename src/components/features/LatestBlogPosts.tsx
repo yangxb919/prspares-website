@@ -67,7 +67,9 @@ export default function LatestBlogPosts() {
           console.error('Error fetching latest blog posts:', error);
           setPosts([]);
         } else {
-          setPosts(postsData || []);
+          // 类型断言确保数据类型正确
+          const typedPosts = postsData as BlogPost[] | null;
+          setPosts(typedPosts || []);
         }
       } catch (err) {
         console.error('Failed to fetch latest blog posts:', err);
