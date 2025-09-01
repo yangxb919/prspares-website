@@ -9,6 +9,12 @@ import { CheckCircle, ShieldCheck, Truck, Zap } from 'lucide-react';
 import ProductDetailClient from '@/components/features/ProductDetailClient';
 import ProductInfoTabs from '@/components/features/ProductInfoTabs';
 
+// 定义查询返回的Product类型
+interface QueryProduct {
+  name: string;
+  short_desc: string | null;
+}
+
 // 强制重新验证每次请求
 export const revalidate = 0;
 
@@ -53,20 +59,23 @@ async function getRelatedProducts(currentProductId: string, limit: number = 3) {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const supabase = createPublicClient();
   
-  const { data: product } = await supabase
+  const { data: productData } = await supabase
     .from('products')
     .select('name, short_desc')
     .eq('slug', params.slug)
     .eq('status', 'publish')
     .single();
-  
-  if (!product) {
+
+  if (!productData) {
     return {
       title: 'Product Not Found - PRSPARES',
       description: 'Sorry, the mobile repair part you are looking for does not exist.'
     };
   }
-  
+
+  // 类型断言确保数据类型正确
+  const product = productData as QueryProduct;
+
   return {
     title: `${product.name} - PRSPARES Mobile Parts`,
     description: product.short_desc || `Details for ${product.name} - high-quality mobile repair parts.`
