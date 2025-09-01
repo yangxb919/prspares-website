@@ -15,6 +15,23 @@ interface QueryProduct {
   short_desc: string | null;
 }
 
+// 定义完整的Product类型
+interface FullProduct {
+  id: string;
+  name: string;
+  slug: string;
+  short_desc: string | null;
+  long_desc: string | null;
+  price: number;
+  compare_price: number | null;
+  sku: string;
+  stock_quantity: number;
+  status: string;
+  meta: any;
+  created_at: string;
+  updated_at: string;
+}
+
 // 强制重新验证每次请求
 export const revalidate = 0;
 
@@ -86,15 +103,18 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
   const supabase = createPublicClient();
   
   try {
-    const { data: product, error } = await supabase
+    const { data: productData, error } = await supabase
       .from('products')
       .select('*')
       .eq('slug', params.slug)
       .eq('status', 'publish')
       .single();
-    
+
     if (error) throw error;
-    if (!product) notFound();
+    if (!productData) notFound();
+
+    // 类型断言确保数据类型正确
+    const product = productData as FullProduct;
 
     const breadcrumbItems: BreadcrumbItem[] = [
       { label: 'Home', href: '/' },
