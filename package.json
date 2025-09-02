@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run optimize:images && next build && next-sitemap",
+    "build:fast": "next build && next-sitemap",
+    "type-check": "npx tsc --noEmit",
     "start": "next start",
     "lint": "next lint",
     "postbuild": "next-sitemap",

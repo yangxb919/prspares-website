@@ -11,7 +11,7 @@ import ProductInfoTabs from '@/components/features/ProductInfoTabs';
 
 // 使用项目中已定义的Product类型，无需重复定义
 
-// 类型安全的数据转换函数
+// 数据库Product类型转换函数
 function convertSupabaseToProduct(data: any): Product {
   return {
     id: Number(data.id) || 0,
@@ -39,6 +39,29 @@ function convertSupabaseToProduct(data: any): Product {
     created_at: data.created_at ? String(data.created_at) : undefined,
     updated_at: data.updated_at ? String(data.updated_at) : undefined,
     meta: data.meta || undefined
+  };
+}
+
+// ProductDetailClient组件期望的Product类型适配器
+function convertToClientProduct(dbProduct: Product): any {
+  // 处理图片数组
+  const images = Array.isArray(dbProduct.images)
+    ? dbProduct.images.map(img => typeof img === 'string' ? img : img.url || '/placeholder-product.jpg')
+    : ['/placeholder-product.jpg'];
+
+  return {
+    id: String(dbProduct.id),
+    name: dbProduct.name,
+    sku: dbProduct.sku || '',
+    description: dbProduct.description || dbProduct.short_desc || '',
+    price: dbProduct.regular_price || 0,
+    images: images,
+    category: 'Mobile Parts', // 默认分类
+    subcategory: 'Generic', // 默认子分类
+    brand: 'OEM', // 默认品牌
+    compatibility: [], // 兼容性信息
+    specifications: {}, // 规格信息
+    stock_status: dbProduct.stock_status || 'instock'
   };
 }
 
@@ -143,7 +166,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
         </div>
 
         <div className="max-w-[1200px] mx-auto px-4 py-8 md:py-12">
-          <ProductDetailClient product={product} />
+          <ProductDetailClient product={convertToClientProduct(product)} />
 
           {/* Product Information Tabs */}
           <ProductInfoTabs product={product} />
