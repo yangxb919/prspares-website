@@ -15,7 +15,7 @@ import ProductInfoTabs from '@/components/features/ProductInfoTabs';
 export const revalidate = 0;
 
 // Function to get related products from database
-async function getRelatedProducts(currentProductId: string, limit: number = 3) {
+async function getRelatedProducts(currentProductId: number, limit: number = 3) {
   const supabase = createPublicClient();
 
   try {
@@ -33,15 +33,15 @@ async function getRelatedProducts(currentProductId: string, limit: number = 3) {
     }
 
     return products?.map(product => ({
-      id: product.id,
-      slug: product.slug,
-      name: product.name,
-      shortDescription: product.short_desc || 'High-quality mobile repair part',
+      id: String(product.id),
+      slug: String(product.slug),
+      name: String(product.name),
+      shortDescription: String(product.short_desc || 'High-quality mobile repair part'),
       category: 'Mobile Parts',
-      price: product.regular_price || 0,
+      price: Number(product.regular_price) || 0,
       currency: 'USD',
       imageSrc: Array.isArray(product.images) && product.images.length > 0
-        ? product.images[0]
+        ? String(product.images[0])
         : '/placeholder-product.jpg',
       features: ['OEM Quality', 'Perfect Fit', 'Tested']
     })) || [];
@@ -69,8 +69,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
   }
 
-  // 类型断言确保数据类型正确
-  const product = productData as unknown as Product;
+  // 安全地访问产品数据
+  const product = {
+    name: productData.name as string,
+    short_desc: productData.short_desc as string | undefined
+  };
 
   return {
     title: `${product.name} - PRSPARES Mobile Parts`,
@@ -92,8 +95,34 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     if (error) throw error;
     if (!productData) notFound();
 
-    // 类型断言确保数据类型正确
-    const product = productData as unknown as Product;
+    // 验证并转换数据类型
+    const product: Product = {
+      id: productData.id,
+      name: productData.name,
+      slug: productData.slug,
+      status: productData.status,
+      author_id: productData.author_id,
+      sku: productData.sku,
+      type: productData.type,
+      short_desc: productData.short_desc,
+      description: productData.description,
+      regular_price: productData.regular_price,
+      sale_price: productData.sale_price,
+      sale_start: productData.sale_start,
+      sale_end: productData.sale_end,
+      tax_status: productData.tax_status,
+      stock_status: productData.stock_status,
+      stock_quantity: productData.stock_quantity,
+      weight: productData.weight,
+      dim_length: productData.dim_length,
+      dim_width: productData.dim_width,
+      dim_height: productData.dim_height,
+      attributes: productData.attributes,
+      images: productData.images,
+      created_at: productData.created_at,
+      updated_at: productData.updated_at,
+      meta: productData.meta
+    };
 
     const breadcrumbItems: BreadcrumbItem[] = [
       { label: 'Home', href: '/' },
