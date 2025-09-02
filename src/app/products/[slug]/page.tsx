@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   // 类型断言确保数据类型正确
-  const product = productData as Product;
+  const product = productData as unknown as Product;
 
   return {
     title: `${product.name} - PRSPARES Mobile Parts`,
@@ -93,7 +93,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     if (!productData) notFound();
 
     // 类型断言确保数据类型正确
-    const product = productData as Product;
+    const product = productData as unknown as Product;
 
     const breadcrumbItems: BreadcrumbItem[] = [
       { label: 'Home', href: '/' },
