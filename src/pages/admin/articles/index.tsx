@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
 import Link from 'next/link'
+import { convertToProduct, convertToProducts, convertToPost, convertToPosts, convertToContactSubmissions, convertToNewsletterSubscriptions, convertToPostSEOInfos, safeString, safeNumber } from '@/utils/type-converters';
 
 // Article type definition based on Supabase posts table
 type Post = {
@@ -86,7 +87,7 @@ export default function ArticleManagement() {
     
     // If author, can only see their own articles
     if (userRole === 'author') {
-      query = query.eq('author_id', userId)
+      query = query.eq('author_id', String(userId))
     }
     
     const { data, error } = await query
@@ -94,7 +95,7 @@ export default function ArticleManagement() {
     if (error) {
       console.error('Failed to fetch articles:', error)
     } else {
-      setPosts(data || [])
+      setPosts((data as any) || [])
     }
     setLoading(false)
   }
@@ -125,7 +126,7 @@ export default function ArticleManagement() {
     if (error) {
       console.error('Failed to fetch articles:', error)
     } else {
-      setPosts(data || [])
+      setPosts((data as any) || [])
     }
     setLoading(false)
   }
@@ -139,7 +140,7 @@ export default function ArticleManagement() {
     const { error } = await supabase
       .from('posts')
       .delete()
-      .eq('id', id)
+      .eq('id', String(id))
     
     if (error) {
       alert(`Failed to delete article: ${error.message}`)
@@ -157,7 +158,7 @@ export default function ArticleManagement() {
         status: newStatus,
         ...(newStatus === 'publish' ? { published_at: new Date().toISOString() } : {})
       })
-      .eq('id', id)
+      .eq('id', String(id))
     
     if (error) {
       alert(`Failed to update status: ${error.message}`)

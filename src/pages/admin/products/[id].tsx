@@ -4,6 +4,7 @@ import { createPublicClient } from '@/utils/supabase-public'
 import { ensureProductImagesSetup } from '@/utils/supabase-storage-setup'
 import Link from 'next/link'
 import Image from 'next/image'
+import { convertToProduct, convertToProducts, convertToPost, convertToPosts, convertToContactSubmissions, convertToNewsletterSubscriptions, convertToPostSEOInfos, safeString, safeNumber } from '@/utils/type-converters';
 
 // Product form data type
 type ProductFormData = {
@@ -137,7 +138,7 @@ export default function EditProduct() {
         const { data: productData, error: productError } = await supabase
           .from('products')
           .select('*')
-          .eq('id', id)
+          .eq('id', String(id))
           .single()
 
         if (productError) {
@@ -154,29 +155,30 @@ export default function EditProduct() {
           return
         }
 
-        setProduct(productData)
+        setProduct(productData as any)
         
         // Populate form data
+        
         setFormData({
-          name: productData.name || '',
-          slug: productData.slug || '',
-          sku: productData.sku || '',
-          type: productData.type || 'simple',
-          short_desc: productData.short_desc || '',
-          description: productData.description || '',
-          regular_price: productData.regular_price?.toString() || '',
-          sale_price: productData.sale_price?.toString() || '',
-          sale_start: productData.sale_start || '',
-          sale_end: productData.sale_end || '',
-          tax_status: productData.tax_status || 'taxable',
-          stock_status: productData.stock_status || 'instock',
-          stock_quantity: productData.stock_quantity?.toString() || '',
-          weight: productData.weight?.toString() || '',
-          dim_length: productData.dim_length?.toString() || '',
-          dim_width: productData.dim_width?.toString() || '',
-          dim_height: productData.dim_height?.toString() || '',
-          images: productData.images?.map((image: any) => image.url || image) || [],
-          status: productData.status || 'draft'
+          name: safeString(productData.name),
+          slug: safeString(productData.slug),
+          sku: safeString(productData.sku),
+          type: (productData.type as 'simple' | 'variable' | 'virtual') || 'simple',
+          short_desc: safeString(productData.short_desc),
+          description: safeString(productData.description),
+          regular_price: safeNumber(productData.regular_price).toString(),
+          sale_price: safeNumber(productData.sale_price).toString(),
+          sale_start: safeString(productData.sale_start),
+          sale_end: safeString(productData.sale_end),
+          tax_status: safeString(productData.tax_status, 'taxable'),
+          stock_status: (productData.stock_status as 'instock' | 'outofstock') || 'instock',
+          stock_quantity: safeNumber(productData.stock_quantity).toString(),
+          weight: safeNumber(productData.weight).toString(),
+          dim_length: safeNumber(productData.dim_length).toString(),
+          dim_width: safeNumber(productData.dim_width).toString(),
+          dim_height: safeNumber(productData.dim_height).toString(),
+          images: Array.isArray(productData.images) ? productData.images.map((image: any) => image.url || image) : [],
+          status: (productData.status as 'draft' | 'publish') || 'draft'
         })
 
       } catch (error) {

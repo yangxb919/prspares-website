@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { createPublicClient } from '@/utils/supabase-public';
 import Link from 'next/link';
+import { convertToProduct, convertToProducts, convertToPost, convertToPosts, convertToContactSubmissions, convertToNewsletterSubscriptions, convertToPostSEOInfos, safeString, safeNumber } from '@/utils/type-converters';
 
 interface SEOStats {
   total: number;
@@ -97,7 +98,7 @@ export default function SEOManagement() {
         return;
       }
 
-      setPosts(data || []);
+      setPosts((data as any) || []);
     } catch (error) {
       console.error('Failed to fetch posts:', error);
     }

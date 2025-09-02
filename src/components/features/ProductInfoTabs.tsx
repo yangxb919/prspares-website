@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 
-interface Product {
+// 前端组件专用的Product接口
+export interface InfoTabsProduct {
   id: string;
   name: string;
   description?: string;
@@ -12,7 +13,7 @@ interface Product {
 }
 
 interface ProductInfoTabsProps {
-  product: Product;
+  product: InfoTabsProduct;
 }
 
 const ProductInfoTabs = ({ product }: ProductInfoTabsProps) => {

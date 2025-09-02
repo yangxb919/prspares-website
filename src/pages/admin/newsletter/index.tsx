@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
 import Link from 'next/link'
 import { Mail, Calendar, User, Eye, EyeOff, Trash2, RefreshCw, Download } from 'lucide-react'
+import { convertToProduct, convertToProducts, convertToPost, convertToPosts, convertToContactSubmissions, convertToNewsletterSubscriptions, convertToPostSEOInfos, safeString, safeNumber } from '@/utils/type-converters';
 
 interface NewsletterSubscription {
   id: number
@@ -48,7 +49,7 @@ export default function NewsletterAdmin() {
         throw fetchError
       }
 
-      setSubscriptions(data || [])
+      setSubscriptions((data as any) || [])
       
       // Calculate stats
       const total = data?.length || 0
@@ -77,7 +78,7 @@ export default function NewsletterAdmin() {
           status: 'unsubscribed',
           unsubscribed_at: new Date().toISOString()
         })
-        .eq('id', id)
+        .eq('id', String(id))
 
       if (error) throw error
 
@@ -101,7 +102,7 @@ export default function NewsletterAdmin() {
           status: 'active',
           resubscribed_at: new Date().toISOString()
         })
-        .eq('id', id)
+        .eq('id', String(id))
 
       if (error) throw error
 

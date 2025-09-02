@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { generateAutoSEO } from '@/utils/auto-seo-generator'
 import SEOEditor from '@/components/admin/SEOEditor'
+import { convertToProduct, convertToProducts, convertToPost, convertToPosts, convertToContactSubmissions, convertToNewsletterSubscriptions, convertToPostSEOInfos, safeString, safeNumber } from '@/utils/type-converters';
 
 export default function EditArticle() {
   const [title, setTitle] = useState('')
@@ -128,20 +129,20 @@ export default function EditArticle() {
       }
       
       // 设置表单数据
-      setTitle(article.title || '')
-      setSlug(article.slug || '')
-      setOriginalSlug(article.slug || '')
-      setContent(article.content || '')
-      setExcerpt(article.excerpt || '')
+      setTitle(safeString(article.title))
+      setSlug(safeString(article.slug))
+      setOriginalSlug(safeString(article.slug))
+      setContent(safeString(article.content))
+      setExcerpt(safeString(article.excerpt))
       setStatus(article.status as 'draft' | 'publish' | 'private')
       
       // 如果有特色图片，设置预览
-      if (article.meta?.cover_image) {
-        setFeaturedImagePreview(article.meta.cover_image)
+      if ((article as any).meta?.cover_image) {
+        setFeaturedImagePreview((article as any).meta.cover_image)
       }
 
       // 设置初始SEO数据
-      if (article.meta?.seo) {
+      if ((article as any).meta?.seo) {
         setInitialSEOData(article.meta)
       }
 
@@ -268,7 +269,7 @@ export default function EditArticle() {
       const { data: currentArticle } = await supabase
         .from('posts')
         .select('published_at, status, meta')
-        .eq('id', id)
+        .eq('id', String(id))
         .single()
       
       // 准备更新数据
@@ -319,7 +320,7 @@ export default function EditArticle() {
       const currentMeta = currentArticle?.meta || {};
       updates.meta = {
         ...currentMeta,
-        cover_image: featuredImageUrl || featuredImagePreview || currentMeta.cover_image,
+        cover_image: featuredImageUrl || featuredImagePreview || (currentMeta as any).cover_image,
         seo: seoData.seo,
         structured_data: seoData.structuredData,
         open_graph: seoData.openGraph,
@@ -336,7 +337,7 @@ export default function EditArticle() {
       const { error: updateError } = await supabase
         .from('posts')
         .update(updates)
-        .eq('id', id)
+        .eq('id', String(id))
       
       if (updateError) throw updateError
       

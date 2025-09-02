@@ -92,7 +92,7 @@ export default function ArticleSEOEdit() {
           meta: updatedMeta,
           updated_at: new Date().toISOString()
         })
-        .eq('id', id);
+        .eq('id', String(id || ''));
 
       if (updateError) throw updateError;
 

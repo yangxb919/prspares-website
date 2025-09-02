@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { createPublicClient } from '@/utils/supabase-public'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
@@ -10,14 +9,36 @@ export default function SignIn() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [supabase, setSupabase] = useState<any>(null)
   const router = useRouter()
-  const supabase = createPublicClient()
+
+  // 在客户端初始化Supabase
+  useEffect(() => {
+    const initSupabase = async () => {
+      try {
+        const { createPublicClient } = await import('@/utils/supabase-public')
+        const client = createPublicClient()
+        setSupabase(client)
+      } catch (error) {
+        console.error('Failed to initialize Supabase:', error)
+        setError('Failed to initialize authentication system')
+      }
+    }
+
+    initSupabase()
+  }, [])
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setSuccess(null)
     setLoading(true)
+
+    if (!supabase) {
+      setError('Authentication system not ready. Please refresh the page.')
+      setLoading(false)
+      return
+    }
 
     try {
       console.log('开始登录流程...')

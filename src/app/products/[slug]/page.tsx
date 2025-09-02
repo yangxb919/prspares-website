@@ -6,44 +6,16 @@ import { Product } from '@/types/product';
 import Breadcrumb, { BreadcrumbItem } from '@/components/shared/Breadcrumb';
 import { createPublicClient } from '@/utils/supabase-public';
 import { CheckCircle, ShieldCheck, Truck, Zap } from 'lucide-react';
-import ProductDetailClient from '@/components/features/ProductDetailClient';
-import ProductInfoTabs from '@/components/features/ProductInfoTabs';
+import ProductDetailClient, { ClientProduct } from '@/components/features/ProductDetailClient';
+import ProductInfoTabs, { InfoTabsProduct } from '@/components/features/ProductInfoTabs';
+import { convertToProduct } from '@/utils/type-converters';
 
 // 使用项目中已定义的Product类型，无需重复定义
 
-// 数据库Product类型转换函数
-function convertSupabaseToProduct(data: any): Product {
-  return {
-    id: Number(data.id) || 0,
-    name: String(data.name || ''),
-    slug: String(data.slug || ''),
-    status: (data.status === 'publish' || data.status === 'draft') ? data.status : 'draft',
-    author_id: String(data.author_id || ''),
-    sku: data.sku ? String(data.sku) : undefined,
-    type: data.type ? String(data.type) : undefined,
-    short_desc: data.short_desc ? String(data.short_desc) : undefined,
-    description: data.description ? String(data.description) : undefined,
-    regular_price: data.regular_price ? Number(data.regular_price) : undefined,
-    sale_price: data.sale_price ? Number(data.sale_price) : undefined,
-    sale_start: data.sale_start ? String(data.sale_start) : undefined,
-    sale_end: data.sale_end ? String(data.sale_end) : undefined,
-    tax_status: data.tax_status ? String(data.tax_status) : undefined,
-    stock_status: data.stock_status ? String(data.stock_status) : undefined,
-    stock_quantity: data.stock_quantity ? Number(data.stock_quantity) : undefined,
-    weight: data.weight ? Number(data.weight) : undefined,
-    dim_length: data.dim_length ? Number(data.dim_length) : undefined,
-    dim_width: data.dim_width ? Number(data.dim_width) : undefined,
-    dim_height: data.dim_height ? Number(data.dim_height) : undefined,
-    attributes: Array.isArray(data.attributes) ? data.attributes : [],
-    images: Array.isArray(data.images) ? data.images : [],
-    created_at: data.created_at ? String(data.created_at) : undefined,
-    updated_at: data.updated_at ? String(data.updated_at) : undefined,
-    meta: data.meta || undefined
-  };
-}
+// 使用统一的类型转换器
 
 // ProductDetailClient组件期望的Product类型适配器
-function convertToClientProduct(dbProduct: Product): any {
+function convertToClientProduct(dbProduct: Product): ClientProduct {
   // 处理图片数组
   const images = Array.isArray(dbProduct.images)
     ? dbProduct.images.map(img => typeof img === 'string' ? img : img.url || '/placeholder-product.jpg')
@@ -62,6 +34,18 @@ function convertToClientProduct(dbProduct: Product): any {
     compatibility: [], // 兼容性信息
     specifications: {}, // 规格信息
     stock_status: dbProduct.stock_status || 'instock'
+  };
+}
+
+// ProductInfoTabs组件期望的Product类型适配器
+function convertToInfoTabsProduct(dbProduct: Product): InfoTabsProduct {
+  return {
+    id: String(dbProduct.id),
+    name: dbProduct.name,
+    description: dbProduct.description || dbProduct.short_desc || '',
+    category: 'Mobile Parts',
+    brand: 'OEM',
+    compatibility: 'Universal'
   };
 }
 
@@ -123,8 +107,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
   }
 
-  // 使用类型安全的转换函数
-  const product = convertSupabaseToProduct(productData);
+  // 使用统一的类型转换器
+  const product = convertToProduct(productData);
 
   return {
     title: `${product.name} - PRSPARES Mobile Parts`,
@@ -146,8 +130,8 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     if (error) throw error;
     if (!productData) notFound();
 
-    // 使用类型安全的转换函数
-    const product = convertSupabaseToProduct(productData);
+    // 使用统一的类型转换器
+    const product = convertToProduct(productData);
 
     const breadcrumbItems: BreadcrumbItem[] = [
       { label: 'Home', href: '/' },
@@ -169,7 +153,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
           <ProductDetailClient product={convertToClientProduct(product)} />
 
           {/* Product Information Tabs */}
-          <ProductInfoTabs product={product} />
+          <ProductInfoTabs product={convertToInfoTabsProduct(product)} />
 
           {/* Related Products */}
           {relatedProducts.length > 0 && (

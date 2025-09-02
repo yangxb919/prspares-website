@@ -6,7 +6,8 @@ import { ChevronLeft, ChevronRight, MessageCircle, FileText, Phone, Mail, User }
 import InquiryModal from '@/components/InquiryModal';
 import ChatModal from '@/components/ChatModal';
 
-interface Product {
+// 前端组件专用的Product接口
+export interface ClientProduct {
   id: string;
   name: string;
   sku: string;
@@ -22,7 +23,7 @@ interface Product {
 }
 
 interface ProductDetailClientProps {
-  product: Product;
+  product: ClientProduct;
 }
 
 const ProductDetailClient = ({ product }: ProductDetailClientProps) => {

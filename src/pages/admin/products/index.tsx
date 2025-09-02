@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
 import Link from 'next/link'
 import Image from 'next/image'
+import { convertToProducts } from '@/utils/type-converters'
 
 // Product type definition based on Supabase products table
 type Product = {
@@ -103,7 +104,7 @@ export default function ProductManagement() {
     
     // If author, can only see their own products
     if (userRole === 'author') {
-      query = query.eq('author_id', userId)
+      query = query.eq('author_id', String(userId))
     }
     
     const { data, error } = await query
@@ -111,7 +112,7 @@ export default function ProductManagement() {
     if (error) {
       console.error('Failed to fetch products:', error)
     } else {
-      setProducts(data || [])
+      setProducts((data as any) || [])
     }
     setLoading(false)
   }
@@ -142,7 +143,7 @@ export default function ProductManagement() {
     if (error) {
       console.error('Failed to fetch products:', error)
     } else {
-      setProducts(data || [])
+      setProducts((data as any) || [])
     }
     setLoading(false)
   }
@@ -156,7 +157,7 @@ export default function ProductManagement() {
     const { error } = await supabase
       .from('products')
       .delete()
-      .eq('id', id)
+      .eq('id', String(id))
     
     if (error) {
       alert(`Failed to delete product: ${error.message}`)
@@ -171,7 +172,7 @@ export default function ProductManagement() {
     const { error } = await supabase
       .from('products')
       .update({ status: newStatus })
-      .eq('id', id)
+      .eq('id', String(id))
     
     if (error) {
       alert(`Failed to update status: ${error.message}`)

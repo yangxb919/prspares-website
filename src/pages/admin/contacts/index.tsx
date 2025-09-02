@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
 import Link from 'next/link'
 import { Mail, Calendar, User, MessageSquare, Eye, EyeOff, Trash2, RefreshCw, Package, Phone } from 'lucide-react'
+import { convertToProduct, convertToProducts, convertToPost, convertToPosts, convertToContactSubmissions, convertToNewsletterSubscriptions, convertToPostSEOInfos, safeString, safeNumber } from '@/utils/type-converters';
 
 interface ContactSubmission {
   id: number
@@ -74,8 +75,8 @@ export default function ContactsAdmin() {
         return
       }
 
-      setContacts(data || [])
-      setFilteredContacts(data || [])
+      setContacts((data as any) || [])
+      setFilteredContacts((data as any) || [])
     } catch (error) {
       console.error('Error loading contacts:', error)
       setError('Failed to load contact submissions')
@@ -122,7 +123,7 @@ export default function ContactsAdmin() {
           status: newStatus,
           updated_at: new Date().toISOString()
         })
-        .eq('id', id)
+        .eq('id', String(id))
 
       if (error) {
         console.error('Error updating status:', error)
@@ -150,7 +151,7 @@ export default function ContactsAdmin() {
       const { error } = await supabase
         .from('contact_submissions')
         .delete()
-        .eq('id', id)
+        .eq('id', String(id))
 
       if (error) {
         console.error('Error deleting contact:', error)

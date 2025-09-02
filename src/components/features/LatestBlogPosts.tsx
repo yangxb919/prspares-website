@@ -6,6 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { createPublicClient } from '@/utils/supabase-public';
 import { useEffect, useState } from 'react';
 import SafeImage from '@/components/SafeImage';
+import { convertToPosts } from '@/utils/type-converters';
 
 interface BlogPost {
   id: number;
@@ -68,7 +69,7 @@ export default function LatestBlogPosts() {
           setPosts([]);
         } else {
           // 类型断言确保数据类型正确
-          const typedPosts = postsData as BlogPost[] | null;
+          const typedPosts = (postsData as any) || [];
           setPosts(typedPosts || []);
         }
       } catch (err) {
