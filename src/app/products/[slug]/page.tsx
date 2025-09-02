@@ -2,35 +2,14 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { ProductCard } from '@/types/product';
+import { Product } from '@/types/product';
 import Breadcrumb, { BreadcrumbItem } from '@/components/shared/Breadcrumb';
 import { createPublicClient } from '@/utils/supabase-public';
 import { CheckCircle, ShieldCheck, Truck, Zap } from 'lucide-react';
 import ProductDetailClient from '@/components/features/ProductDetailClient';
 import ProductInfoTabs from '@/components/features/ProductInfoTabs';
 
-// 定义查询返回的Product类型
-interface QueryProduct {
-  name: string;
-  short_desc: string | null;
-}
-
-// 定义完整的Product类型
-interface FullProduct {
-  id: string;
-  name: string;
-  slug: string;
-  short_desc: string | null;
-  long_desc: string | null;
-  price: number;
-  compare_price: number | null;
-  sku: string;
-  stock_quantity: number;
-  status: string;
-  meta: any;
-  created_at: string;
-  updated_at: string;
-}
+// 使用项目中已定义的Product类型，无需重复定义
 
 // 强制重新验证每次请求
 export const revalidate = 0;
@@ -91,7 +70,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   // 类型断言确保数据类型正确
-  const product = productData as QueryProduct;
+  const product = productData as Product;
 
   return {
     title: `${product.name} - PRSPARES Mobile Parts`,
@@ -114,7 +93,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     if (!productData) notFound();
 
     // 类型断言确保数据类型正确
-    const product = productData as FullProduct;
+    const product = productData as Product;
 
     const breadcrumbItems: BreadcrumbItem[] = [
       { label: 'Home', href: '/' },
