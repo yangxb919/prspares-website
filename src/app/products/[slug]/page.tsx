@@ -11,6 +11,37 @@ import ProductInfoTabs from '@/components/features/ProductInfoTabs';
 
 // 使用项目中已定义的Product类型，无需重复定义
 
+// 类型安全的数据转换函数
+function convertSupabaseToProduct(data: any): Product {
+  return {
+    id: Number(data.id) || 0,
+    name: String(data.name || ''),
+    slug: String(data.slug || ''),
+    status: (data.status === 'publish' || data.status === 'draft') ? data.status : 'draft',
+    author_id: String(data.author_id || ''),
+    sku: data.sku ? String(data.sku) : undefined,
+    type: data.type ? String(data.type) : undefined,
+    short_desc: data.short_desc ? String(data.short_desc) : undefined,
+    description: data.description ? String(data.description) : undefined,
+    regular_price: data.regular_price ? Number(data.regular_price) : undefined,
+    sale_price: data.sale_price ? Number(data.sale_price) : undefined,
+    sale_start: data.sale_start ? String(data.sale_start) : undefined,
+    sale_end: data.sale_end ? String(data.sale_end) : undefined,
+    tax_status: data.tax_status ? String(data.tax_status) : undefined,
+    stock_status: data.stock_status ? String(data.stock_status) : undefined,
+    stock_quantity: data.stock_quantity ? Number(data.stock_quantity) : undefined,
+    weight: data.weight ? Number(data.weight) : undefined,
+    dim_length: data.dim_length ? Number(data.dim_length) : undefined,
+    dim_width: data.dim_width ? Number(data.dim_width) : undefined,
+    dim_height: data.dim_height ? Number(data.dim_height) : undefined,
+    attributes: Array.isArray(data.attributes) ? data.attributes : [],
+    images: Array.isArray(data.images) ? data.images : [],
+    created_at: data.created_at ? String(data.created_at) : undefined,
+    updated_at: data.updated_at ? String(data.updated_at) : undefined,
+    meta: data.meta || undefined
+  };
+}
+
 // 强制重新验证每次请求
 export const revalidate = 0;
 
@@ -69,11 +100,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
   }
 
-  // 安全地访问产品数据
-  const product = {
-    name: productData.name as string,
-    short_desc: productData.short_desc as string | undefined
-  };
+  // 使用类型安全的转换函数
+  const product = convertSupabaseToProduct(productData);
 
   return {
     title: `${product.name} - PRSPARES Mobile Parts`,
@@ -95,34 +123,8 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     if (error) throw error;
     if (!productData) notFound();
 
-    // 验证并转换数据类型
-    const product: Product = {
-      id: productData.id,
-      name: productData.name,
-      slug: productData.slug,
-      status: productData.status,
-      author_id: productData.author_id,
-      sku: productData.sku,
-      type: productData.type,
-      short_desc: productData.short_desc,
-      description: productData.description,
-      regular_price: productData.regular_price,
-      sale_price: productData.sale_price,
-      sale_start: productData.sale_start,
-      sale_end: productData.sale_end,
-      tax_status: productData.tax_status,
-      stock_status: productData.stock_status,
-      stock_quantity: productData.stock_quantity,
-      weight: productData.weight,
-      dim_length: productData.dim_length,
-      dim_width: productData.dim_width,
-      dim_height: productData.dim_height,
-      attributes: productData.attributes,
-      images: productData.images,
-      created_at: productData.created_at,
-      updated_at: productData.updated_at,
-      meta: productData.meta
-    };
+    // 使用类型安全的转换函数
+    const product = convertSupabaseToProduct(productData);
 
     const breadcrumbItems: BreadcrumbItem[] = [
       { label: 'Home', href: '/' },
