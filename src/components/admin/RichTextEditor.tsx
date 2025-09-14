@@ -27,6 +27,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const [cursorPosition, setCursorPosition] = useState({ start: 0, end: 0 });
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showQuoteButtonMenu, setShowQuoteButtonMenu] = useState(false);
+  const [enableSyntaxHighlight, setEnableSyntaxHighlight] = useState(false);
 
   // 预定义的颜色
   const colors = [
@@ -166,7 +167,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative mb-8">
       {/* 工具栏 */}
       <div className="mb-2 flex flex-wrap items-center gap-2 p-3 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-300 rounded-t-md">
         <span className="text-sm text-gray-600 font-medium">格式:</span>
@@ -327,32 +328,50 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           </div>
         )}
 
+        {/* 语法高亮切换按钮 */}
+        <button
+          type="button"
+          onClick={() => setEnableSyntaxHighlight(!enableSyntaxHighlight)}
+          className={`px-3 py-1.5 text-sm border rounded-md transition-all duration-200 shadow-sm ${
+            enableSyntaxHighlight
+              ? 'bg-[#00B140] text-white border-[#00B140] hover:bg-[#008631]'
+              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+          }`}
+          title={enableSyntaxHighlight ? "关闭语法高亮" : "开启语法高亮"}
+        >
+          {enableSyntaxHighlight ? '🎨 高亮开' : '🎨 高亮关'}
+        </button>
+
         <div className="ml-auto text-xs text-gray-500">
-          支持 Markdown 格式 • 链接自动高亮
+          支持 Markdown 格式 • 可切换语法高亮
         </div>
       </div>
 
-      {/* 编辑器容器 - 修复重影问题 */}
+      {/* 编辑器容器 - 可选语法高亮，彻底解决重影问题 */}
       <div className="relative bg-white border border-gray-300 rounded-b-md">
-        {/* 语法高亮背景层 - 降低透明度避免重影 */}
-        <div
-          className="absolute inset-0 p-3 text-sm font-mono leading-6 pointer-events-none overflow-hidden whitespace-pre-wrap break-words z-10"
-          style={{
-            minHeight: `${rows * 1.5}rem`,
-            color: 'transparent',
-            fontSize: '14px',
-            lineHeight: '1.5',
-            tabSize: 2,
-            background: 'rgba(255, 255, 255, 0.1)' // 添加轻微背景避免完全透明
-          }}
-          dangerouslySetInnerHTML={{ __html: createHighlightedText() }}
-        />
+        {/* 条件渲染语法高亮背景层 */}
+        {enableSyntaxHighlight && (
+          <div
+            className="absolute inset-0 p-3 text-sm font-mono leading-6 pointer-events-none overflow-hidden whitespace-pre-wrap break-words z-10"
+            style={{
+              minHeight: `${rows * 1.5}rem`,
+              color: 'transparent',
+              fontSize: '14px',
+              lineHeight: '1.5',
+              tabSize: 2,
+              background: 'transparent'
+            }}
+            dangerouslySetInnerHTML={{ __html: createHighlightedText() }}
+          />
+        )}
 
-        {/* 实际的文本框 - 调整透明度和颜色 */}
+        {/* 文本框 - 根据高亮状态调整样式 */}
         <textarea
           ref={textareaRef}
           rows={rows}
-          className="relative z-20 w-full text-sm font-mono leading-6 resize-none p-3 outline-none border-transparent focus:ring-2 focus:ring-[#00B140] focus:border-[#00B140] text-gray-800"
+          className={`relative w-full text-sm font-mono leading-6 resize-none p-3 outline-none border-transparent focus:ring-2 focus:ring-[#00B140] focus:border-[#00B140] text-gray-800 ${
+            enableSyntaxHighlight ? 'bg-transparent z-20' : 'bg-white'
+          }`}
           placeholder={placeholder}
           value={value}
           onChange={handleTextareaChange}
@@ -360,13 +379,31 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           onMouseUp={handleCursorChange}
           style={{
             minHeight: `${rows * 1.5}rem`,
-            background: 'rgba(255, 255, 255, 0.7)', // 降低透明度，减少重影
             fontSize: '14px',
             lineHeight: '1.5',
             tabSize: 2,
-            caretColor: '#374151' // 设置光标颜色
+            caretColor: '#374151'
           }}
         />
+
+        {/* 语法提示信息 - 显示在编辑器下方 */}
+        <div className="absolute -bottom-6 left-0 text-xs text-gray-500 flex flex-wrap gap-4">
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 bg-blue-200 rounded"></span>
+            链接: [文本](URL)
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 bg-gray-200 rounded"></span>
+            粗体: **文本**
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 bg-yellow-200 rounded"></span>
+            颜色: &lt;span style="color: #color"&gt;文本&lt;/span&gt;
+          </span>
+          <span className="text-gray-400">
+            {enableSyntaxHighlight ? '语法高亮已开启' : '语法高亮已关闭'}
+          </span>
+        </div>
       </div>
     </div>
   );
