@@ -40,6 +40,46 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Data Model & Supabase
+
+We maintain two separate tables to decouple raw price imports from formal product data:
+
+- `public.product_prices` (raw/import): lightweight table sourced from CSV uploads
+  - Columns: `id uuid`, `title`, `url`, `image`, `price numeric(12,2)`, `currency (ISO-4217)`, `slug`, `clicks`, `created_at`
+  - RLS: authenticated can SELECT; only `service_role` can INSERT
+  - Indexes: unique on `url`/`slug` (nullable), created_at, optional trigram on `title`
+
+- `public.products` (formal/catalog): full product records used by admin UI and public site
+  - Includes: `name`, `slug`, `sku`, pricing fields, stock, dimensions, `images` (json), `status` ('draft'|'publish'), timestamps
+  - Triggers: auto-update `updated_at`, auto-generate `slug` when empty
+  - RLS: public SELECT by default (adjust as needed), `service_role` can write
+
+Run migration in Supabase SQL editor:
+
+- `supabase/migrations/20251016_split_products.sql`
+- Verify with: `supabase/verify_table.sql`
+
+## Import APIs
+
+- `POST /api/admin/prices/import` and `POST /api/admin/prices/import-simple`
+  - Auth: require header `X-Admin-Token: <ADMIN_IMPORT_TOKEN>`
+  - Env: `SUPABASE_SERVICE_ROLE`, `NEXT_PUBLIC_SUPABASE_URL`, `ADMIN_IMPORT_TOKEN`
+  - Behavior: batch upsert into `public.product_prices` (conflict on `url`)
+
+## Environment Variables
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE` (server only)
+- `ADMIN_IMPORT_TOKEN` (server only, for import API)
+- `SITE_URL` (for sitemap/robots)
+
+Note: older `SUPABASE_SERVICE_KEY`/`SUPABASE_URL` fallbacks are deprecated and no longer required in modified APIs.
+
+## Sitemap
+
+`next-sitemap.config.js` now fetches product `slug` values from `public.products` at build time (status='publish'), merging with curated static paths.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

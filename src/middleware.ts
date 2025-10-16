@@ -57,15 +57,31 @@ export async function middleware(request: NextRequest) {
 
     // Only protect specific routes that require authentication
     // Public pages (home, blog, about, etc.) can be freely accessed
-    const protectedRoutes = ['/dashboard', '/profile', '/settings', '/user'] // 暂时移除 '/admin'
-    const isProtectedRoute = protectedRoutes.some(route => 
+    const protectedRoutes = ['/pricing', '/dashboard', '/profile', '/settings', '/user'] // Added /pricing
+    const isProtectedRoute = protectedRoutes.some(route =>
       request.nextUrl.pathname === route || request.nextUrl.pathname.startsWith(route + '/'))
 
     // If accessing a protected route without being logged in, redirect to the login page
     if (isProtectedRoute && !session) {
       console.log('No session found for protected route:', request.nextUrl.pathname)
-      // 使用相对URL进行重定向，避免硬编码的域名问题
-      return NextResponse.redirect(new URL('/auth/signin', request.url))
+      // Redirect to login with the current path as next parameter
+      const loginUrl = new URL('/login', request.url)
+      loginUrl.searchParams.set('next', request.nextUrl.pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+
+    // Additional check for /pricing route - verify email confirmation
+    if (request.nextUrl.pathname.startsWith('/pricing') && session) {
+      const user = session.user
+      const confirmed = user.email_confirmed_at || (user as any)?.confirmed_at
+
+      if (!confirmed) {
+        console.log('User email not confirmed for pricing route:', user.email)
+        const loginUrl = new URL('/login', request.url)
+        loginUrl.searchParams.set('next', request.nextUrl.pathname)
+        loginUrl.searchParams.set('unconfirmed', '1')
+        return NextResponse.redirect(loginUrl)
+      }
     }
 
     // 暂时注释掉admin路由的保护，允许所有用户访问
@@ -114,5 +130,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard', '/profile', '/settings', '/user/:path*'], // 暂时移除 '/admin', '/admin/:path*'
+  matcher: ['/pricing', '/pricing/:path*', '/dashboard', '/profile', '/settings', '/user/:path*'], // Added /pricing protection
 }

@@ -274,32 +274,38 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                         rehypePlugins={[rehypeRaw]}
                         components={{
                           h1: ({ children, ...props }) => (
-                            <h1 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()} {...props}>
+                            <h1 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
+                                className="text-gray-900 font-bold text-4xl mb-8 mt-0 leading-snug" {...props}>
                               {children}
                             </h1>
                           ),
                           h2: ({ children, ...props }) => (
-                            <h2 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()} {...props}>
+                            <h2 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
+                                className="text-gray-900 font-bold text-3xl mb-8 mt-16 border-b border-gray-200 pb-4 leading-snug" {...props}>
                               {children}
                             </h2>
                           ),
                           h3: ({ children, ...props }) => (
-                            <h3 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()} {...props}>
+                            <h3 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
+                                className="text-gray-900 font-bold text-2xl mb-6 mt-12 leading-snug" {...props}>
                               {children}
                             </h3>
                           ),
                           h4: ({ children, ...props }) => (
-                            <h4 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()} {...props}>
+                            <h4 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
+                                className="text-gray-900 font-bold text-xl mb-4 mt-8 leading-snug" {...props}>
                               {children}
                             </h4>
                           ),
                           h5: ({ children, ...props }) => (
-                            <h5 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()} {...props}>
+                            <h5 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
+                                className="text-gray-900 font-bold text-lg mb-3 mt-6" {...props}>
                               {children}
                             </h5>
                           ),
                           h6: ({ children, ...props }) => (
-                            <h6 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()} {...props}>
+                            <h6 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
+                                className="text-gray-900 font-bold text-base mb-2 mt-4" {...props}>
                               {children}
                             </h6>
                           ),
@@ -314,6 +320,39 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                             <li className="mb-2 text-gray-700 leading-8 text-[17px]" {...props}>
                               {children}
                             </li>
+                          ),
+                          // 自定义表格组件以确保颜色正确
+                          table: ({ children, ...props }) => (
+                            <div className="overflow-x-auto my-10">
+                              <table className="min-w-full border-collapse border border-gray-200 rounded-lg shadow-sm" {...props}>
+                                {children}
+                              </table>
+                            </div>
+                          ),
+                          thead: ({ children, ...props }) => (
+                            <thead className="bg-gray-50" {...props}>
+                              {children}
+                            </thead>
+                          ),
+                          th: ({ children, ...props }) => (
+                            <th className="p-4 text-left font-semibold text-gray-900 border-b border-gray-200" {...props}>
+                              {children}
+                            </th>
+                          ),
+                          td: ({ children, ...props }) => (
+                            <td className="p-4 border-b border-gray-100 text-gray-700" {...props}>
+                              {children}
+                            </td>
+                          ),
+                          // 自定义图片组件以确保图片正确显示
+                          img: ({ src, alt, ...props }) => (
+                            <img
+                              src={src}
+                              alt={alt || ''}
+                              className="max-w-full h-auto rounded-xl shadow-lg my-10 border border-gray-200"
+                              loading="lazy"
+                              {...props}
+                            />
                           ),
                         }}
                       >

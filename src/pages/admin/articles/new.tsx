@@ -368,7 +368,7 @@ export default function NewArticle() {
                           type="text"
                           name="title"
                           id="title"
-                          className="shadow-sm focus:ring-[#00B140] focus:border-[#00B140] block w-full sm:text-sm border-gray-300 rounded-md"
+                          className="shadow-sm focus:ring-[#00B140] focus:border-[#00B140] block w-full sm:text-sm border-gray-300 rounded-md text-gray-800"
                           placeholder="文章标题"
                           value={title}
                           onChange={(e) => setTitle(e.target.value)}
@@ -387,7 +387,7 @@ export default function NewArticle() {
                           type="text"
                           name="slug"
                           id="slug"
-                          className="shadow-sm focus:ring-[#00B140] focus:border-[#00B140] block w-full sm:text-sm border-gray-300 rounded-md"
+                          className="shadow-sm focus:ring-[#00B140] focus:border-[#00B140] block w-full sm:text-sm border-gray-300 rounded-md text-gray-800"
                           placeholder="url-alias"
                           value={slug}
                           onChange={(e) => setSlug(e.target.value)}
@@ -408,7 +408,7 @@ export default function NewArticle() {
                           id="excerpt"
                           name="excerpt"
                           rows={3}
-                          className="shadow-sm focus:ring-[#00B140] focus:border-[#00B140] block w-full sm:text-sm border-gray-300 rounded-md"
+                          className="shadow-sm focus:ring-[#00B140] focus:border-[#00B140] block w-full sm:text-sm border-gray-300 rounded-md text-gray-800"
                           placeholder="文章摘要（可选）"
                           value={excerpt}
                           onChange={(e) => setExcerpt(e.target.value)}
@@ -639,7 +639,7 @@ export default function NewArticle() {
                           id="content"
                           name="content"
                           rows={15}
-                          className="shadow-sm focus:ring-[#00B140] focus:border-[#00B140] block w-full sm:text-sm border-gray-300 rounded-b-md"
+                          className="shadow-sm focus:ring-[#00B140] focus:border-[#00B140] block w-full sm:text-sm border-gray-300 rounded-b-md text-gray-800"
                           placeholder="文章内容 (支持Markdown格式)"
                           value={content}
                           onChange={handleTextareaChange}

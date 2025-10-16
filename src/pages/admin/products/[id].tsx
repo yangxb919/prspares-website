@@ -31,7 +31,7 @@ type ProductFormData = {
 
 // Product type from database
 type Product = {
-  id: number
+  id: string
   author_id: string
   name: string
   slug: string

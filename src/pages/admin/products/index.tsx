@@ -7,7 +7,7 @@ import { convertToProducts } from '@/utils/type-converters'
 
 // Product type definition based on Supabase products table
 type Product = {
-  id: number
+  id: string
   author_id: string
   name: string
   slug: string
@@ -149,7 +149,7 @@ export default function ProductManagement() {
   }
 
   // Delete product
-  const deleteProduct = async (id: number) => {
+  const deleteProduct = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
       return
     }
@@ -168,7 +168,7 @@ export default function ProductManagement() {
   }
 
   // Update product status (publish/draft)
-  const updateProductStatus = async (id: number, newStatus: 'draft' | 'publish') => {
+  const updateProductStatus = async (id: string, newStatus: 'draft' | 'publish') => {
     const { error } = await supabase
       .from('products')
       .update({ status: newStatus })

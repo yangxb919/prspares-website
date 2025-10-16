@@ -24,7 +24,7 @@ export interface ProductMeta {
 
 // 数据库产品类型（匹配Supabase表结构）
 export interface Product {
-  id: number;
+  id: string;
   author_id?: string;
   name: string;
   slug: string;

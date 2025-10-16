@@ -121,12 +121,12 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
       </div>
     ),
     th: ({ children, ...props }: any) => (
-      <th className="border border-gray-300 bg-gray-50 px-4 py-2 text-left font-semibold" {...props}>
+      <th className="border border-gray-300 bg-gray-50 px-4 py-2 text-left font-semibold text-gray-900" {...props}>
         {children}
       </th>
     ),
     td: ({ children, ...props }: any) => (
-      <td className="border border-gray-300 px-4 py-2" {...props}>{children}</td>
+      <td className="border border-gray-300 px-4 py-2 text-gray-700" {...props}>{children}</td>
     ),
   };
 
