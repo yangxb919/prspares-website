@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo "✅ Pre-push hook (checks disabled for now)"
+# 如果需要启用检查，取消下面的注释
+# npm run type-check || exit 1
+# npm run lint || exit 1
+# npm run build:fast || exit 1
+

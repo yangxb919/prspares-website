@@ -12,11 +12,12 @@
     "lint": "next lint",
     "postbuild": "next-sitemap",
     "optimize:images": "node scripts/optimize-images.js",
-    "optimize:images:force": "rm -rf public/images/optimized && npm run optimize:images"
+    "optimize:images:force": "rm -rf public/images/optimized && npm run optimize:images",
+    "prepare": "husky install",
+    "pre-push": "npm run type-check && npm run lint"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
-    "@hookform/resolvers": "^5.2.2",
     "@n8n/chat": "^0.27.1",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.39.7",
@@ -27,12 +28,10 @@
     "next-sitemap": "^4.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.65.0",
     "react-markdown": "^9.0.1",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
-    "sharp": "^0.34.4",
-    "zod": "^4.1.12"
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^2.1.4",

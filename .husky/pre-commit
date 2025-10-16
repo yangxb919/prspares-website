@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo "✅ Pre-commit hook (checks disabled for now)"
+# 如果需要启用检查，取消下面的注释
+# npm run lint || exit 1
+
