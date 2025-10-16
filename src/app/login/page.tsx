@@ -16,8 +16,8 @@ export default function LoginPage() {
   const [info, setInfo] = useState<string | null>(null);
   const [resending, setResending] = useState(false);
 
-  const unconfirmed = search.get("unconfirmed");
-  const nextUrl = useMemo(() => search.get("next") || "/pricing", [search]);
+  const unconfirmed = search?.get("unconfirmed");
+  const nextUrl = useMemo(() => search?.get("next") || "/pricing", [search]);
 
   useEffect(() => {
     if (unconfirmed) {
