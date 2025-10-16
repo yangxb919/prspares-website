@@ -53,7 +53,7 @@ function convertToInfoTabsProduct(dbProduct: Product): InfoTabsProduct {
 export const revalidate = 0;
 
 // Function to get related products from database
-async function getRelatedProducts(currentProductId: number, limit: number = 3) {
+async function getRelatedProducts(currentProductId: string | number, limit: number = 3) {
   const supabase = createPublicClient();
 
   try {
