@@ -43,3 +43,7 @@ next-env.d.ts
 # IDE and editor files
 .cursor/
 mcp-servers/
+
+# 注意：优化后的图片已提交到Git，以加快VPS部署速度
+# 原始图片备份保留在本地，不提交到Git
+/public/images/backup/

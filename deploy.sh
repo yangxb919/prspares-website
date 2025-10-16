@@ -116,34 +116,14 @@ module.exports = nextConfig
 NEXTCONFIG
 fi
 
-# 构建项目
-echo "🔨 构建项目..."
+# 构建项目（使用快速构建，跳过图片优化，因为已在本地预优化）
+echo "🔨 构建项目（快速构建模式）..."
 export NODE_OPTIONS="--max-old-space-size=4096"
-if npm run build; then
-    echo "✅ 构建成功"
+if npm run build:fast; then
+    echo "✅ 快速构建成功"
 else
-    echo "❌ 构建失败，尝试无图片优化构建..."
-    # 如果构建失败，尝试禁用图片优化
-    cat > next.config.js << 'NEXTCONFIG_FALLBACK'
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  images: {
-    unoptimized: true,
-  },
-  experimental: {
-    esmExternals: false,
-  },
-}
-
-module.exports = nextConfig
-NEXTCONFIG_FALLBACK
-    
-    if npm run build; then
-        echo "✅ 无图片优化构建成功"
-    else
-        echo "❌ 构建完全失败"
-        exit 1
-    fi
+    echo "❌ 快速构建失败"
+    exit 1
 fi
 
 # 重启服务
