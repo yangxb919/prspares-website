@@ -154,7 +154,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         let inserted = 0;
         for (let i = 0; i < records.length; i++) {
-          const record = records[i];
+          const record = records[i] as Record<string, any>;
 
           try {
             // Extract data from CSV record

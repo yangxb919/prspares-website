@@ -82,7 +82,7 @@ export default function AdminPrices() {
 
       const { data, error, count } = await query;
       if (error) throw error;
-      setProducts(data || []);
+      setProducts((data || []) as any);
       setTotalCount(count || 0);
     } catch (e: any) {
       setError(e.message);

@@ -31,8 +31,8 @@ export class FormPersistence {
       const parsed = JSON.parse(savedData);
 
       // 检查数据是否过期（7天）
-      const七天 = 7 * 24 * 60 * 60 * 1000;
-      if (Date.now() - parsed._timestamp > 七天) {
+      const sevenDays = 7 * 24 * 60 * 60 * 1000;
+      if (Date.now() - parsed._timestamp > sevenDays) {
         this.clearData();
         return null;
       }

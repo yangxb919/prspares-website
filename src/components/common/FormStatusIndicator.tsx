@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FormPersistence } from '@/lib/form-utils';
 import { Save, AlertTriangle, CheckCircle, Clock, Wifi, WifiOff } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface FormStatusIndicatorProps {
   formId: string;

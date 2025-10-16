@@ -63,11 +63,11 @@ export function FormWrapper<T extends FieldValues>({
     watch,
     reset,
     formState: { errors, isDirty, isValid, isSubmitting }
-  } = useForm<T>({
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-    defaultValues: savedData || defaultValues
-  });
+  } = useForm({
+    resolver: zodResolver(schema as any) as any,
+    mode: 'onChange' as const,
+    defaultValues: (savedData || defaultValues) as any
+  }) as UseFormReturn<T>;
 
   // 表单提交状态管理
   const { state, setSubmitting, setSuccess, setError, reset: resetSubmission } = useFormSubmission();
@@ -115,7 +115,7 @@ export function FormWrapper<T extends FieldValues>({
   const handleRecover = () => {
     if (savedData) {
       Object.entries(savedData).forEach(([key, value]) => {
-        setValue(key as keyof T, value);
+        setValue(key as any, value as any);
       });
       setShowRecovery(false);
     }
@@ -143,7 +143,7 @@ export function FormWrapper<T extends FieldValues>({
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onFormSubmit)} noValidate>
+      <form onSubmit={handleSubmit(onFormSubmit as any)} noValidate>
         {/* 恢复数据提示 */}
         {enableRecovery && showRecovery && hasSavedData && (
           <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
@@ -216,10 +216,10 @@ export function FormWrapper<T extends FieldValues>({
         {/* 表单内容 */}
         {children({
           register,
-          control,
+          control: control as any,
           setValue,
           watch,
-          formState: { errors, isDirty, isValid, isSubmitting },
+          formState: { errors, isDirty, isValid, isSubmitting } as any,
           errors,
           isDirty,
           isValid

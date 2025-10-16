@@ -44,9 +44,9 @@ export function safeObject(value: unknown, defaultValue: any = {}): any {
 // Product类型转换器
 export function convertToProduct(data: any): Product {
   if (!data) throw new Error('Product data is required');
-  
+
   return {
-    id: safeNumber(data.id),
+    id: String(safeNumber(data.id)),
     author_id: safeString(data.author_id),
     name: safeString(data.name),
     slug: safeString(data.slug),

@@ -32,11 +32,16 @@ const ERROR_MESSAGES: Record<FormErrorCode, string> = {
   [FormErrorCode.UNKNOWN_ERROR]: '发生未知错误，请稍后重试'
 };
 
+// 类型守卫函数
+function isFormError(error: any): error is FormError {
+  return error && typeof error === 'object' && 'code' in error && 'message' in error;
+}
+
 // 错误处理工具类
 export class FormErrorHandler {
   // 将错误转换为标准格式
   static normalizeError(error: any): FormError {
-    if (error instanceof FormError) {
+    if (isFormError(error)) {
       return error;
     }
 
@@ -88,7 +93,7 @@ export class FormErrorHandler {
       FormErrorCode.SERVER_ERROR,
       FormErrorCode.RATE_LIMIT_ERROR,
       FormErrorCode.DATABASE_ERROR
-    ].includes(error.code);
+    ].includes(error.code as FormErrorCode);
   }
 
   // 记录错误

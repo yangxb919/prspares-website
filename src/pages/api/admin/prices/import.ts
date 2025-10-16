@@ -287,7 +287,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           continue;
         }
 
-        const map = mapColumns(records[0]);
+        const map = mapColumns(records[0] as Record<string, any>);
         console.log('Column mapping:', map);
 
         if (!map.title) {
@@ -316,7 +316,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           // Parse price and currency
           const priceValue = map.price ? parsePrice(r[map.price]) : null;
-          const currencyValue = map.currency && r[map.currency] ? String(r[map.currency]).toUpperCase() : (String(r[map.price]||'').trim().startsWith('US$') ? 'USD' : 'USD');
+          const currencyValue = map.currency && r[map.currency] ? String(r[map.currency]).toUpperCase() : (String((r[map.price as any])||'').trim().startsWith('US$') ? 'USD' : 'USD');
 
           // Extract URL and image
           const urlValue = map.url && r[map.url] ? String(r[map.url]) : null;
@@ -350,7 +350,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           const { data, error, count } = await supabase
             .from('product_prices')
             .upsert(chunk, { onConflict: 'url', ignoreDuplicates: false })
-            .select('id', { count: 'exact' });
+            .select('id');
           if (error) {
             console.error('Batch upsert error:', error);
             continue;

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { UseFormRegister, FieldErrors, Control, Controller } from 'react-hook-form';
 import { cn } from '@/lib/utils';
 
@@ -63,7 +63,6 @@ export function FormInput({
         )}
         <input
           id={fieldId}
-          name={name}
           type={type}
           placeholder={placeholder}
           disabled={disabled}
@@ -180,7 +179,6 @@ export function FormTextarea({
         )}
         <textarea
           id={fieldId}
-          name={name}
           placeholder={placeholder}
           disabled={disabled}
           rows={rows}
@@ -477,7 +475,7 @@ export function FormFileUpload({
     <Controller
       name={name}
       control={control}
-      render={({ field }) => (
+      render={({ field }: any) => (
         <div className={cn('space-y-1', className)}>
           <label htmlFor={name} className={cn(
             'block text-sm font-medium',
@@ -532,7 +530,7 @@ interface FormErrorSummaryProps {
 
 export function FormErrorSummary({ errors, title = '请修正以下错误：' }: FormErrorSummaryProps) {
   const errorMessages = Object.values(errors)
-    .map(error => error?.message as string)
+    .map((error: any) => error?.message as string)
     .filter(Boolean);
 
   if (errorMessages.length === 0) return null;

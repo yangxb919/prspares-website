@@ -70,7 +70,7 @@ export const signUpFormSchema = z.object({
   displayName: z.string()
     .min(2, '显示名称至少需要2个字符')
     .max(30, '显示名称不能超过30个字符')
-}).refine((data) => data.password === data.confirmPassword, {
+}).refine((data: any) => data.password === data.confirmPassword, {
   message: '两次输入的密码不匹配',
   path: ['confirmPassword']
 });
@@ -84,7 +84,7 @@ export const resetPasswordFormSchema = z.object({
 export const updatePasswordFormSchema = z.object({
   password: passwordSchema,
   confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
+}).refine((data: any) => data.password === data.confirmPassword, {
   message: '两次输入的密码不匹配',
   path: ['confirmPassword']
 });
@@ -157,7 +157,7 @@ export const productFormSchema = z.object({
     height: z.number().min(0)
   }).optional(),
   features: z.array(z.string()).optional(),
-  specifications: z.record(z.string()).optional(),
+  specifications: z.record(z.string(), z.string()).optional(),
   seoTitle: z.string().max(60, 'SEO标题不能超过60个字符').optional(),
   seoDescription: z.string().max(160, 'SEO描述不能超过160个字符').optional()
 });

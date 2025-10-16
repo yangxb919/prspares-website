@@ -60,7 +60,7 @@ export default function TestTablePage() {
 
           testResults.recordCount = {
             success: !error,
-            count: data?.count || 0,
+            count: (data as any)?.count || 0,
             error: error?.message
           };
         } catch (e: any) {

@@ -45,13 +45,13 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
     reset,
     formState: { errors, isDirty, isValid }
   } = useForm<QuoteFormData>({
-    resolver: zodResolver(quoteFormSchema),
+    resolver: zodResolver(quoteFormSchema) as any,
     mode: 'onChange', // 实时验证
-    defaultValues: savedData || {
+    defaultValues: (savedData || {
       ...defaultValues,
       product: productName || '',
       source: articleTitle ? `Article: ${articleTitle}` : 'Website'
-    }
+    }) as any
   });
 
   // 表单提交状态管理
@@ -212,7 +212,7 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6" noValidate>
+        <form onSubmit={handleSubmit(onSubmit as any)} className="p-6 space-y-6" noValidate>
           {/* 恢复数据提示 */}
           {hasSavedData && (
             <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
