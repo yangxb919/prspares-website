@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import { createClient } from '@supabase/supabase-js';
 
 // Create a Supabase client with service role key for admin access

@@ -1,12 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+export const dynamic = 'force-dynamic';
+
+import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { getBrowserClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import "../superdesign.css";
 
-export default function LoginPage() {
+function LoginClientInner() {
   const search = useSearchParams();
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -148,5 +150,14 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-[70vh]"><div className="text-gray-400">Loading...</div></div>}>
+      <LoginClientInner />
+    </Suspense>
   );
 }
