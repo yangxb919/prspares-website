@@ -1,3 +1,5 @@
+import React from 'react';
+
 // 错误类型定义
 export interface FormError {
   code: string;

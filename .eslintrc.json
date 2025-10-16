@@ -5,6 +5,7 @@
     "react/no-unescaped-entities": "off",
     "react-hooks/rules-of-hooks": "warn",
     "@next/next/no-img-element": "warn",
-    "@next/next/next-script-for-ga": "warn"
+    "@next/next/next-script-for-ga": "warn",
+    "@next/next/no-html-link-for-pages": "warn"
   }
 }
