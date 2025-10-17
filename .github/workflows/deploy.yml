@@ -23,59 +23,126 @@ jobs:
           script: |
             set -euo pipefail
 
+            echo "=========================================="
+            echo "🚀 开始部署到 VPS"
+            echo "=========================================="
+
             # Configurable via repo secrets (optional)
             APP_DIR="${APP_DIR:-/var/www/prspares-website}"
             BRANCH="${BRANCH:-main}"
             REPO_URL="${REPO_URL:-}"
 
+            echo "📁 应用目录: $APP_DIR"
+            echo "🌿 分支: $BRANCH"
+            echo ""
+
             # Ensure NVM/Node 20
+            echo "📦 检查 Node.js 环境..."
             export NVM_DIR="$HOME/.nvm"
-            if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; else
-              echo "Installing NVM...";
+            if [ -s "$NVM_DIR/nvm.sh" ]; then
+              . "$NVM_DIR/nvm.sh"
+              echo "✅ NVM 已存在"
+            else
+              echo "⬇️  安装 NVM...";
               curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
               . "$NVM_DIR/nvm.sh"
+              echo "✅ NVM 安装完成"
             fi
+
             nvm install 20
             nvm use 20
+            echo "✅ Node.js $(node -v) 已激活"
+            echo ""
 
             # Ensure PM2
+            echo "📦 检查 PM2..."
             if ! command -v pm2 >/dev/null 2>&1; then
+              echo "⬇️  安装 PM2..."
               npm i -g pm2
+              echo "✅ PM2 安装完成"
+            else
+              echo "✅ PM2 已存在"
             fi
+            echo ""
 
             # Clone or update repo
+            echo "📥 更新代码仓库..."
             mkdir -p "$APP_DIR"
             if [ ! -d "$APP_DIR/.git" ]; then
+              echo "⬇️  首次克隆仓库..."
               if [ -n "$REPO_URL" ]; then
                 git clone --depth=1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
               else
                 git clone --depth=1 --branch "$BRANCH" "https://github.com/${{ github.repository }}.git" "$APP_DIR"
               fi
+              echo "✅ 仓库克隆完成"
+            else
+              echo "🔄 更新现有仓库..."
+              cd "$APP_DIR"
+              git fetch origin "$BRANCH"
+              git reset --hard "origin/$BRANCH"
+              echo "✅ 代码更新完成"
             fi
 
             cd "$APP_DIR"
-            git fetch origin "$BRANCH"
-            git reset --hard "origin/$BRANCH"
+            echo "📍 当前提交: $(git log -1 --oneline)"
+            echo ""
 
             # Link production env if stored in shared path (recommended)
             if [ -f "$APP_DIR/shared/.env.production" ] && [ ! -f "$APP_DIR/.env.production" ]; then
+              echo "🔗 链接生产环境配置..."
               ln -sf "$APP_DIR/shared/.env.production" "$APP_DIR/.env.production"
+              echo "✅ 环境配置已链接"
             fi
+            echo ""
 
-            # Install deps and build (include dev deps so Tailwind/ESLint/postcss and husky are present)
+            # Install deps and build
+            echo "📦 安装依赖..."
             export HUSKY=0
             npm ci
+            echo "✅ 依赖安装完成"
+            echo ""
 
-            # Fast build by default (skip heavy image optimization)
+            echo "🔨 构建应用..."
             npm run build:fast
+            echo "✅ 构建完成"
+            echo ""
 
-            # Start or reload via PM2 using ecosystem file in repo
+            # Start or reload via PM2
+            echo "🚀 启动/重载应用..."
             if [ -f ecosystem.config.cjs ]; then
               pm2 startOrReload ecosystem.config.cjs --only prspares-website --env production
             else
+              # 先尝试删除旧进程
+              pm2 delete prspares-website 2>/dev/null || true
+              # 启动新进程
               pm2 start node_modules/next/dist/bin/next --name prspares-website -- start -p 3000
             fi
             pm2 save
+            echo "✅ PM2 进程已更新"
+            echo ""
 
-            # Basic health check
-            curl -I -sS http://127.0.0.1:3000/ | head -n 1 || true
+            # Wait for app to start
+            echo "⏳ 等待应用启动..."
+            sleep 3
+            echo ""
+
+            # Health check
+            echo "🏥 健康检查..."
+            HTTP_STATUS=$(curl -I -sS http://127.0.0.1:3000/ 2>&1 | head -n 1)
+            if echo "$HTTP_STATUS" | grep -q "200\|301\|302"; then
+              echo "✅ 应用运行正常: $HTTP_STATUS"
+            else
+              echo "⚠️  应用响应异常: $HTTP_STATUS"
+              echo "📋 PM2 进程状态:"
+              pm2 list
+              echo ""
+              echo "📋 最近的错误日志:"
+              pm2 logs prspares-website --err --lines 10 --nostream || true
+              exit 1
+            fi
+
+            echo ""
+            echo "=========================================="
+            echo "✅ 部署完成！"
+            echo "=========================================="
