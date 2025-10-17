@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           # Uncomment if you use custom SSH port
           # port: ${{ secrets.VPS_PORT }}
-          script_stop: true
+          script_stop: false  # 不要在第一个错误时停止，让脚本自己处理错误
           envs: APP_DIR,BRANCH,REPO_URL
           script: |
             # 不使用 set -e，改用手动错误检查
@@ -50,9 +50,16 @@ jobs:
               echo "✅ NVM 安装完成"
             fi
 
-            nvm install 20
-            nvm use 20
-            echo "✅ Node.js $(node -v) 已激活"
+            nvm install 20 2>&1 | grep -v "is already installed" || true
+            nvm use 20 2>&1 | head -n 1 || true
+
+            NODE_VERSION=$(node -v 2>&1)
+            if [ $? -eq 0 ]; then
+              echo "✅ Node.js $NODE_VERSION 已激活"
+            else
+              echo "❌ Node.js 激活失败"
+              exit 1
+            fi
             echo ""
 
             # Ensure PM2
