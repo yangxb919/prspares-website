@@ -159,10 +159,29 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
           url = `https://${url}`;
         }
 
-        // 对于外部 URL（特别是 Cloudinary），不要使用 encodeURI
-        // 因为它可能会破坏已经编码的 URL
+        // 检查是否是需要代理的外部图床
+        const needsProxy = (url: string): boolean => {
+          try {
+            const urlObj = new URL(url);
+            const proxyDomains = [
+              'pplx-res.cloudinary.com',
+              'res.cloudinary.com',
+            ];
+            return proxyDomains.some(domain =>
+              urlObj.hostname === domain || urlObj.hostname.endsWith(`.${domain}`)
+            );
+          } catch {
+            return false;
+          }
+        };
+
+        // 如果是需要代理的域名，使用代理 API
+        if (needsProxy(url)) {
+          return `/api/proxy-image?url=${encodeURIComponent(url)}`;
+        }
+
+        // 对于其他外部 URL，保持原样
         if (url.startsWith('https://') && !url.includes(supabaseOrigin)) {
-          // 外部 URL，保持原样
           return url;
         }
 
