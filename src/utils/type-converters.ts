@@ -77,14 +77,14 @@ export function convertToProduct(data: any): Product {
 // Post类型转换器
 export function convertToPost(data: any): Post {
   if (!data) throw new Error('Post data is required');
-  
+
   return {
-    id: safeNumber(data.id),
+    id: safeString(data.id),  // UUID is string type
     title: safeString(data.title),
     slug: safeString(data.slug),
     content: data.content ? safeString(data.content) : undefined,
     excerpt: data.excerpt ? safeString(data.excerpt) : undefined,
-    status: (data.status === 'draft' || data.status === 'publish' || data.status === 'private') 
+    status: (data.status === 'draft' || data.status === 'publish' || data.status === 'private')
       ? data.status : 'draft',
     published_at: data.published_at ? safeString(data.published_at) : undefined,
     created_at: data.created_at ? safeString(data.created_at) : undefined,
