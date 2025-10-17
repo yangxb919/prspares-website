@@ -21,7 +21,8 @@ jobs:
           script_stop: true
           envs: APP_DIR,BRANCH,REPO_URL
           script: |
-            set -e  # Exit on error, but allow more flexible error handling
+            # 不使用 set -e，改用手动错误检查
+            # set -e 会导致某些命令（如 pm2 -v）在子shell中失败时退出
 
             echo "=========================================="
             echo "🚀 开始部署到 VPS"
@@ -61,7 +62,9 @@ jobs:
               npm i -g pm2 || { echo "❌ PM2 安装失败"; exit 1; }
               echo "✅ PM2 安装完成"
             else
-              echo "✅ PM2 已存在: $(pm2 -v)"
+              echo "✅ PM2 已存在"
+              PM2_VERSION=$(pm2 -v 2>&1) || PM2_VERSION="unknown"
+              echo "   版本: $PM2_VERSION"
             fi
             echo ""
 
