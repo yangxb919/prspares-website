@@ -16,7 +16,7 @@ export interface PostMeta {
 
 // u6570u636eu5e93u6587u7ae0u7c7bu578b
 export interface Post {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   content?: string;
@@ -25,7 +25,7 @@ export interface Post {
   published_at?: string;
   created_at?: string;
   updated_at?: string;
-  author_id: string;
+  author_id?: string;
   meta?: PostMeta;
   profiles?: Profile;
 }

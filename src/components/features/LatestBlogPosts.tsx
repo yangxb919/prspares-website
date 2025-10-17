@@ -208,7 +208,21 @@ export default function LatestBlogPosts() {
           }
         };
 
-        const coverImage = post.meta?.cover_image || getDefaultCoverImage(post);
+        const coverImageRaw = post.meta?.cover_image || getDefaultCoverImage(post);
+        const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+        let origin = '';
+        try { origin = base ? new URL(base).origin : ''; } catch {}
+        const normalizeCover = (input: string) => {
+          let url = String(input || '').trim();
+          if (!url) return url;
+          if (url.startsWith('//')) url = `https:${url}`;
+          if (url.startsWith('http://')) url = `https://${url.slice(7)}`;
+          if (/^\/?storage\/v1\//i.test(url) && origin) url = `${origin}/${url.replace(/^\//,'')}`;
+          if (/^\/?post-images\//i.test(url) && origin) url = `${origin}/storage/v1/object/public/${url.replace(/^\//,'')}`;
+          try { url = encodeURI(url); } catch {}
+          return url;
+        };
+        const coverImage = normalizeCover(coverImageRaw);
         const authorProfile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles;
         const authorName = authorProfile?.display_name || 'PRSPARES Team';
         const category = post.meta?.category || 'Repair Tips';

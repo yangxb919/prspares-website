@@ -14,6 +14,7 @@ interface SafeImageProps {
   sizes?: string;
   quality?: number;
   style?: React.CSSProperties;
+  unoptimized?: boolean;
 }
 
 export default function SafeImage({
@@ -31,6 +32,9 @@ export default function SafeImage({
 }: SafeImageProps) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // If external URL, prefer skipping next/image optimization to avoid 401 from upstream
+  const isExternal = typeof src === 'string' && /^(https?:)?\/\//i.test(src);
 
   if (error) {
     return (
@@ -55,6 +59,8 @@ export default function SafeImage({
       sizes={sizes}
       quality={quality}
       style={style}
+      unoptimized={props.unoptimized ?? isExternal}
+      referrerPolicy={isExternal ? 'no-referrer' : undefined}
       onError={() => setError(true)}
       onLoad={() => setLoading(false)}
       {...props}

@@ -52,9 +52,22 @@ const RelatedPosts = ({ posts }: RelatedPostsProps) => {
                 <div className="h-48 bg-gradient-to-br from-green-100 to-blue-100 relative overflow-hidden">
                   {post.meta?.cover_image ? (
                     <img 
-                      src={post.meta.cover_image} 
+                      src={(function(){
+                        const raw = post.meta?.cover_image || '';
+                        const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+                        let origin = '';
+                        try { origin = base ? new URL(base).origin : ''; } catch {}
+                        let url = String(raw).trim();
+                        if (url.startsWith('//')) url = `https:${url}`;
+                        if (url.startsWith('http://')) url = `https://${url.slice(7)}`;
+                        if (/^\/?storage\/v1\//i.test(url) && origin) url = `${origin}/${url.replace(/^\//,'')}`;
+                        if (/^\/?post-images\//i.test(url) && origin) url = `${origin}/storage/v1/object/public/${url.replace(/^\//,'')}`;
+                        try { url = encodeURI(url); } catch {}
+                        return url;
+                      })()}
                       alt={post.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      referrerPolicy="no-referrer"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00B140]/10 to-[#008631]/10">

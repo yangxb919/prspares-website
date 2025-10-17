@@ -105,14 +105,41 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
         {children}
       </a>
     ),
-    img: ({ src, alt, ...props }: any) => (
-      <img
-        src={src}
-        alt={alt}
-        className="max-w-full h-auto rounded-lg shadow-md my-4"
-        {...props}
-      />
-    ),
+    img: ({ src, alt, ...props }: any) => {
+      const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+      let supabaseOrigin = '';
+      try { supabaseOrigin = base ? new URL(base).origin : ''; } catch {}
+      const normalize = (input?: string): string => {
+        if (!input) return '';
+        let url = String(input).trim().replace(/^\"|\"$/g, '').replace(/^'|'$/g, '');
+        if (!url) return '';
+        if (url.startsWith('data:')) return url;
+        if (url.startsWith('//')) url = `https:${url}`;
+        if (url.startsWith('http://')) url = `https://${url.slice(7)}`;
+        if (/^\/?storage\/v1\//i.test(url) && supabaseOrigin) {
+          url = `${supabaseOrigin}/${url.replace(/^\//,'')}`;
+        } else if (/^\/?post-images\//i.test(url) && supabaseOrigin) {
+          url = `${supabaseOrigin}/storage/v1/object/public/${url.replace(/^\//,'')}`;
+        } else if (/^[\w.-]+\.[A-Za-z]{2,}\/.*$/.test(url) && !/^https?:/i.test(url)) {
+          url = `https://${url}`;
+        }
+        try { url = encodeURI(url); } catch {}
+        return url;
+      };
+      const safeSrc = normalize(typeof src === 'string' ? src : (src as any));
+      if (process.env.NODE_ENV !== 'production') {
+        console.debug('[MarkdownRenderer img] raw=', src, ' normalized=', safeSrc);
+      }
+      return (
+        <img
+          src={safeSrc}
+          alt={alt}
+          className="max-w-full h-auto rounded-lg shadow-md my-4"
+          referrerPolicy="no-referrer"
+          {...props}
+        />
+      );
+    },
     table: ({ children, ...props }: any) => (
       <div className="overflow-x-auto my-4">
         <table className="min-w-full border-collapse border border-gray-300" {...props}>

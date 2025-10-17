@@ -3,13 +3,11 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
 import { Post, Profile } from '@/types/blog';
 import TableOfContents from '@/components/features/TableOfContents';
 import RelatedPosts from '@/components/features/RelatedPosts';
 import SafeImage from '@/components/SafeImage';
+import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 // 定义Meta类型
 interface PostMeta {
@@ -44,57 +42,81 @@ interface RelatedPost {
 
 // Generate dynamic metadata
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const supabase = createPublicClient();
-
-  const { data: postData } = await supabase
-    .from('posts')
-    .select('title,excerpt,meta')
-    .eq('slug', params.slug)
-    .single();
-
-  if (!postData) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnon) {
     return {
-      title: 'Guide Not Found - PRSPARES',
-      description: 'Sorry, the repair guide or article you requested does not exist.'
+      title: 'Guide - PRSPARES',
+      description: 'Repair guide details'
     };
   }
 
-  // 类型断言确保数据类型正确
-  const post = postData as QueryPost;
+  const supabase = createPublicClient();
 
-  // 使用存储的SEO数据（如果有）
-  const meta = post.meta as PostMeta | null;
-  const seoData = meta?.seo;
-  const openGraphData = meta?.open_graph;
-  const twitterData = meta?.twitter;
+  try {
+    const { data: postData } = await supabase
+      .from('posts')
+      .select('title,excerpt,meta')
+      .eq('slug', params.slug)
+      .eq('status', 'publish')
+      .single();
 
-  return {
-    title: seoData?.title || `${post.title} - PRSPARES Repair Guides`,
-    description: seoData?.description || post.excerpt || `Read our expert guide on ${post.title}`,
-    keywords: seoData?.keywords?.join(', '),
-    openGraph: openGraphData ? {
-      title: openGraphData.title,
-      description: openGraphData.description,
-      type: 'article',
-      url: openGraphData.url,
-      images: openGraphData.image ? [{ url: openGraphData.image }] : undefined,
-    } : undefined,
-    twitter: twitterData ? {
-      card: 'summary_large_image',
-      title: twitterData.title,
-      description: twitterData.description,
-      images: twitterData.image ? [twitterData.image] : undefined,
-    } : undefined,
-    alternates: {
-      canonical: post.meta?.canonical
+    if (!postData) {
+      return {
+        title: 'Guide Not Found - PRSPARES',
+        description: 'Sorry, the repair guide or article you requested does not exist.'
+      };
     }
-  };
+
+    // 类型断言确保数据类型正确
+    const post = postData as QueryPost;
+
+    // 使用存储的SEO数据（如果有）
+    const meta = post.meta as PostMeta | null;
+    const seoData = meta?.seo;
+    const openGraphData = meta?.open_graph;
+    const twitterData = meta?.twitter;
+
+    return {
+      title: seoData?.title || `${post.title} - PRSPARES Repair Guides`,
+      description: seoData?.description || post.excerpt || `Read our expert guide on ${post.title}`,
+      keywords: seoData?.keywords?.join(', '),
+      openGraph: openGraphData ? {
+        title: openGraphData.title,
+        description: openGraphData.description,
+        type: 'article',
+        url: openGraphData.url,
+        images: openGraphData.image ? [{ url: openGraphData.image }] : undefined,
+      } : undefined,
+      twitter: twitterData ? {
+        card: 'summary_large_image',
+        title: twitterData.title,
+        description: twitterData.description,
+        images: twitterData.image ? [twitterData.image] : undefined,
+      } : undefined,
+      alternates: {
+        canonical: post.meta?.canonical
+      }
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'Guide - PRSPARES',
+      description: 'Repair guide details'
+    };
+  }
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnon) {
+    notFound();
+  }
   const supabase = createPublicClient();
   
   try {
+    // First, fetch the post without the relationship
     const { data: post, error } = await supabase
       .from('posts')
       .select(`
@@ -106,24 +128,37 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         status,
         published_at,
         meta,
-        author_id,
-        profiles:profiles(id, display_name, avatar_url)
+        author_id
       `)
       .eq('slug', params.slug)
       .eq('status', 'publish')
       .single();
-    
+
     if (error) {
       console.error('Error fetching post:', error);
       throw error;
     }
-    
+
     if (!post) {
       notFound();
     }
 
+    // Then fetch the author profile separately if author_id exists
+    let authorProfile: Profile | null = null;
+    if (post.author_id) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id, display_name, avatar_url')
+        .eq('id', post.author_id)
+        .single();
+      authorProfile = profile as Profile | null;
+    }
+
     const typedPost = post as unknown as Post;
-    const authorProfile = typedPost.profiles as unknown as Profile;
+    // Attach the profile to the post object for compatibility
+    if (authorProfile) {
+      (typedPost as any).profiles = authorProfile;
+    }
 
     const wordCount = typedPost.content ? typedPost.content.split(/\s+/).length : 0;
     const readTimeMin = Math.max(1, Math.ceil(wordCount / 200));
@@ -146,7 +181,20 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       }
     };
 
-    const coverImage = typedPost.meta?.cover_image || getDefaultCoverImage(typedPost);
+    const coverImageRaw = typedPost.meta?.cover_image || getDefaultCoverImage(typedPost);
+    const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const origin = (() => { try { return base ? new URL(base).origin : ''; } catch { return ''; } })();
+    const normalizeCover = (input: string) => {
+      let url = String(input || '').trim();
+      if (!url) return url;
+      if (url.startsWith('//')) url = `https:${url}`;
+      if (url.startsWith('http://')) url = `https://${url.slice(7)}`;
+      if (/^\/?storage\/v1\//i.test(url) && origin) url = `${origin}/${url.replace(/^\//,'')}`;
+      if (/^\/?post-images\//i.test(url) && origin) url = `${origin}/storage/v1/object/public/${url.replace(/^\//,'')}`;
+      try { url = encodeURI(url); } catch {}
+      return url;
+    };
+    const coverImage = normalizeCover(coverImageRaw);
     const authorName = authorProfile?.display_name || 'PRSPARES Team';
     const authorAvatar = authorProfile?.avatar_url;
 
@@ -269,95 +317,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                       prose-hr:my-12 prose-hr:border-gray-200
                       first-letter:text-7xl first-letter:font-bold first-letter:text-[#00B140] first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:leading-none
                     ">
-                      <Markdown 
-                        remarkPlugins={[remarkGfm]}
-                        rehypePlugins={[rehypeRaw]}
-                        components={{
-                          h1: ({ children, ...props }) => (
-                            <h1 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
-                                className="text-gray-900 font-bold text-4xl mb-8 mt-0 leading-snug" {...props}>
-                              {children}
-                            </h1>
-                          ),
-                          h2: ({ children, ...props }) => (
-                            <h2 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
-                                className="text-gray-900 font-bold text-3xl mb-8 mt-16 border-b border-gray-200 pb-4 leading-snug" {...props}>
-                              {children}
-                            </h2>
-                          ),
-                          h3: ({ children, ...props }) => (
-                            <h3 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
-                                className="text-gray-900 font-bold text-2xl mb-6 mt-12 leading-snug" {...props}>
-                              {children}
-                            </h3>
-                          ),
-                          h4: ({ children, ...props }) => (
-                            <h4 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
-                                className="text-gray-900 font-bold text-xl mb-4 mt-8 leading-snug" {...props}>
-                              {children}
-                            </h4>
-                          ),
-                          h5: ({ children, ...props }) => (
-                            <h5 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
-                                className="text-gray-900 font-bold text-lg mb-3 mt-6" {...props}>
-                              {children}
-                            </h5>
-                          ),
-                          h6: ({ children, ...props }) => (
-                            <h6 id={children?.toString().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').trim()}
-                                className="text-gray-900 font-bold text-base mb-2 mt-4" {...props}>
-                              {children}
-                            </h6>
-                          ),
-                          // 自定义段落渲染以改善阅读体验
-                          p: ({ children, ...props }) => (
-                            <p className="mb-8 text-gray-700 leading-8 text-[17px]" {...props}>
-                              {children}
-                            </p>
-                          ),
-                          // 自定义列表项
-                          li: ({ children, ...props }) => (
-                            <li className="mb-2 text-gray-700 leading-8 text-[17px]" {...props}>
-                              {children}
-                            </li>
-                          ),
-                          // 自定义表格组件以确保颜色正确
-                          table: ({ children, ...props }) => (
-                            <div className="overflow-x-auto my-10">
-                              <table className="min-w-full border-collapse border border-gray-200 rounded-lg shadow-sm" {...props}>
-                                {children}
-                              </table>
-                            </div>
-                          ),
-                          thead: ({ children, ...props }) => (
-                            <thead className="bg-gray-50" {...props}>
-                              {children}
-                            </thead>
-                          ),
-                          th: ({ children, ...props }) => (
-                            <th className="p-4 text-left font-semibold text-gray-900 border-b border-gray-200" {...props}>
-                              {children}
-                            </th>
-                          ),
-                          td: ({ children, ...props }) => (
-                            <td className="p-4 border-b border-gray-100 text-gray-700" {...props}>
-                              {children}
-                            </td>
-                          ),
-                          // 自定义图片组件以确保图片正确显示
-                          img: ({ src, alt, ...props }) => (
-                            <img
-                              src={src}
-                              alt={alt || ''}
-                              className="max-w-full h-auto rounded-xl shadow-lg my-10 border border-gray-200"
-                              loading="lazy"
-                              {...props}
-                            />
-                          ),
-                        }}
-                      >
-                        {typedPost.content || 'Content not available.'}
-                      </Markdown>
+                      <MarkdownRenderer
+                        content={typedPost.content || 'Content not available.'}
+                        articleTitle={typedPost.title}
+                      />
                     </div>
                   </article>
                   
@@ -416,6 +379,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     );
   } catch (error) {
     console.error('Guide page rendering error:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    });
     notFound();
   }
 }

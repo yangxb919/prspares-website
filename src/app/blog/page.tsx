@@ -21,6 +21,23 @@ export default async function BlogPage({
 }: {
   searchParams: { category?: string };
 }) {
+  // Gracefully handle missing Supabase envs in local dev to avoid runtime crash
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnon) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center">
+        <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a3.75 3.75 0 10-7.5 0v3.75m11.356 10.5H3.644A1.125 1.125 0 012.52 19.875l1.238-8.663A4.5 4.5 0 018.23 7.5h7.54a4.5 4.5 0 014.472 3.712l1.238 8.663a1.125 1.125 0 01-1.125 1.125z"/></svg>
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">Supabase config missing</h2>
+        <p className="text-gray-600 max-w-xl">
+          Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local to load blog posts.
+        </p>
+      </div>
+    );
+  }
+
   const supabase = createPublicClient();
   const category = searchParams.category;
 
@@ -42,8 +59,7 @@ export default async function BlogPage({
         published_at,
         created_at,
         meta,
-        author_id,
-        profiles:profiles(id, display_name, avatar_url)
+        author_id
       `)
       .eq('status', 'publish')
       .order('published_at', { ascending: false })
@@ -58,6 +74,26 @@ export default async function BlogPage({
     const result = await query;
     postsData = result.data || [];
     error = result.error;
+
+    // Fetch author profiles separately for all posts
+    if (postsData && postsData.length > 0) {
+      const authorIds = [...new Set(postsData.map(p => p.author_id).filter(Boolean))];
+      if (authorIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, display_name, avatar_url')
+          .in('id', authorIds);
+
+        // Create a map of profiles by id
+        const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+
+        // Attach profiles to posts
+        postsData = postsData.map(post => ({
+          ...post,
+          profiles: profileMap.get(post.author_id) || null
+        }));
+      }
+    }
 
     console.log('Query completed:', { success: !error, dataCount: postsData?.length || 0 });
 
@@ -99,7 +135,20 @@ export default async function BlogPage({
       }
     };
 
-    const coverImage = post.meta?.cover_image || getDefaultCoverImage(post);
+    const coverImageRaw = post.meta?.cover_image || getDefaultCoverImage(post);
+    const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const origin = (() => { try { return base ? new URL(base).origin : ''; } catch { return ''; } })();
+    const normalizeCover = (input: string) => {
+      let url = String(input || '').trim();
+      if (!url) return url;
+      if (url.startsWith('//')) url = `https:${url}`;
+      if (url.startsWith('http://')) url = `https://${url.slice(7)}`;
+      if (/^\/?storage\/v1\//i.test(url) && origin) url = `${origin}/${url.replace(/^\//,'')}`;
+      if (/^\/?post-images\//i.test(url) && origin) url = `${origin}/storage/v1/object/public/${url.replace(/^\//,'')}`;
+      try { url = encodeURI(url); } catch {}
+      return url;
+    };
+    const coverImage = normalizeCover(coverImageRaw);
     const authorProfile = post.profiles as any;
     const authorName = authorProfile?.display_name || 'PRSPARES Team';
 
