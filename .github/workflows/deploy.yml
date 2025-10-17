@@ -1,0 +1,81 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          BRANCH: ${{ github.ref_name }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          # Uncomment if you use custom SSH port
+          # port: ${{ secrets.VPS_PORT }}
+          script_stop: true
+          envs: APP_DIR,BRANCH,REPO_URL
+          script: |
+            set -euo pipefail
+
+            # Configurable via repo secrets (optional)
+            APP_DIR="${APP_DIR:-/var/www/prspares-website}"
+            BRANCH="${BRANCH:-main}"
+            REPO_URL="${REPO_URL:-}"
+
+            # Ensure NVM/Node 20
+            export NVM_DIR="$HOME/.nvm"
+            if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; else
+              echo "Installing NVM...";
+              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+              . "$NVM_DIR/nvm.sh"
+            fi
+            nvm install 20
+            nvm use 20
+
+            # Ensure PM2
+            if ! command -v pm2 >/dev/null 2>&1; then
+              npm i -g pm2
+            fi
+
+            # Clone or update repo
+            mkdir -p "$APP_DIR"
+            if [ ! -d "$APP_DIR/.git" ]; then
+              if [ -n "$REPO_URL" ]; then
+                git clone --depth=1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
+              else
+                git clone --depth=1 --branch "$BRANCH" "https://github.com/${{ github.repository }}.git" "$APP_DIR"
+              fi
+            fi
+
+            cd "$APP_DIR"
+            git fetch origin "$BRANCH"
+            git reset --hard "origin/$BRANCH"
+
+            # Link production env if stored in shared path (recommended)
+            if [ -f "$APP_DIR/shared/.env.production" ] && [ ! -f "$APP_DIR/.env.production" ]; then
+              ln -sf "$APP_DIR/shared/.env.production" "$APP_DIR/.env.production"
+            fi
+
+            # Install deps and build (include dev deps so Tailwind/ESLint/postcss and husky are present)
+            export HUSKY=0
+            npm ci
+
+            # Fast build by default (skip heavy image optimization)
+            npm run build:fast
+
+            # Start or reload via PM2 using ecosystem file in repo
+            if [ -f ecosystem.config.cjs ]; then
+              pm2 startOrReload ecosystem.config.cjs --only prspares-website --env production
+            else
+              pm2 start node_modules/next/dist/bin/next --name prspares-website -- start -p 3000
+            fi
+            pm2 save
+
+            # Basic health check
+            curl -I -sS http://127.0.0.1:3000/ | head -n 1 || true

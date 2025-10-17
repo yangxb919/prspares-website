@@ -4,11 +4,13 @@ export const revalidate = 0;
 
 import { createClient } from '@supabase/supabase-js';
 
-// Create a Supabase client with service role key for admin access
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE!
-);
+// Create a Supabase client with service role key for admin access.
+// Fallback to anon key if service role is not set (read-only access must be allowed by RLS).
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE;
+const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const EFFECTIVE_KEY = SERVICE_KEY || ANON_KEY || '';
+const supabaseAdmin = createClient(SUPABASE_URL, EFFECTIVE_KEY);
 
 export async function GET(request: NextRequest) {
   try {

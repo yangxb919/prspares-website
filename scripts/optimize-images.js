@@ -42,15 +42,28 @@ async function optimizeImage(inputPath, outputDir, filename) {
     const imageType = getImageType(filename);
     const sizes = CONFIG.sizes[imageType];
     const baseName = path.parse(filename).name;
+    const inputStat = fs.statSync(inputPath);
     
     console.log(`处理图片: ${filename} (类型: ${imageType})`);
     
     // 创建不同格式和尺寸的图片
+    let generatedCount = 0;
     for (const format of CONFIG.formats) {
       for (const width of sizes) {
         const outputFilename = `${baseName}-${width}w.${format}`;
         const outputPath = path.join(outputDir, outputFilename);
         
+        // 若目标文件已存在且不比源文件旧，则跳过
+        if (fs.existsSync(outputPath)) {
+          try {
+            const outStat = fs.statSync(outputPath);
+            if (outStat.mtimeMs >= inputStat.mtimeMs) {
+              console.log(`  ↺ 跳过（已最新）：${outputFilename}`);
+              continue;
+            }
+          } catch (_) {}
+        }
+
         let sharpInstance = sharp(inputPath)
           .resize(width, null, {
             withoutEnlargement: true,
@@ -80,6 +93,7 @@ async function optimizeImage(inputPath, outputDir, filename) {
         }
         
         await sharpInstance.toFile(outputPath);
+        generatedCount++;
         
         // 获取文件大小信息
         const originalSize = fs.statSync(inputPath).size;
@@ -88,6 +102,10 @@ async function optimizeImage(inputPath, outputDir, filename) {
         
         console.log(`  ✓ ${outputFilename} (节省 ${savings}%)`);
       }
+    }
+    
+    if (generatedCount === 0) {
+      console.log('  全部派生文件已最新，跳过重建');
     }
     
     return true;
