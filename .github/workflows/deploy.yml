@@ -126,7 +126,7 @@ jobs:
             # Install deps and build
             echo "📦 安装依赖..."
             export HUSKY=0
-            npm ci || { echo "❌ 依赖安装失败"; exit 1; }
+            npm ci --ignore-scripts || { echo "❌ 依赖安装失败"; exit 1; }
             echo "✅ 依赖安装完成"
             echo ""
 
