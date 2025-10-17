@@ -67,6 +67,13 @@ jobs:
 
             # Clone or update repo
             echo "📥 更新代码仓库..."
+
+            # 检查目录所有者
+            if [ -d "$APP_DIR" ]; then
+              DIR_OWNER=$(stat -c '%U' "$APP_DIR" 2>/dev/null || stat -f '%Su' "$APP_DIR" 2>/dev/null)
+              echo "📁 目录所有者: $DIR_OWNER"
+            fi
+
             mkdir -p "$APP_DIR" || { echo "❌ 创建目录失败"; exit 1; }
 
             if [ ! -d "$APP_DIR/.git" ]; then
@@ -80,13 +87,22 @@ jobs:
             else
               echo "🔄 更新现有仓库..."
               cd "$APP_DIR" || { echo "❌ 进入目录失败"; exit 1; }
-              git fetch origin "$BRANCH" || { echo "❌ 拉取代码失败"; exit 1; }
-              git reset --hard "origin/$BRANCH" || { echo "❌ 重置代码失败"; exit 1; }
+
+              # 重置 Git 配置，避免权限问题
+              git config --global --add safe.directory "$APP_DIR" 2>/dev/null || true
+
+              echo "📥 拉取最新代码..."
+              git fetch origin "$BRANCH" || { echo "❌ 拉取代码失败"; git status; exit 1; }
+
+              echo "🔄 重置到最新提交..."
+              git reset --hard "origin/$BRANCH" || { echo "❌ 重置代码失败"; git status; exit 1; }
+
               echo "✅ 代码更新完成"
             fi
 
             cd "$APP_DIR" || { echo "❌ 进入目录失败"; exit 1; }
             echo "📍 当前提交: $(git log -1 --oneline)"
+            echo "📍 远程最新: $(git log origin/$BRANCH -1 --oneline)"
             echo ""
 
             # Link production env if stored in shared path (recommended)
