@@ -21,7 +21,7 @@ jobs:
           script_stop: true
           envs: APP_DIR,BRANCH,REPO_URL
           script: |
-            set -euo pipefail
+            set -e  # Exit on error, but allow more flexible error handling
 
             echo "=========================================="
             echo "🚀 开始部署到 VPS"
@@ -58,33 +58,34 @@ jobs:
             echo "📦 检查 PM2..."
             if ! command -v pm2 >/dev/null 2>&1; then
               echo "⬇️  安装 PM2..."
-              npm i -g pm2
+              npm i -g pm2 || { echo "❌ PM2 安装失败"; exit 1; }
               echo "✅ PM2 安装完成"
             else
-              echo "✅ PM2 已存在"
+              echo "✅ PM2 已存在: $(pm2 -v)"
             fi
             echo ""
 
             # Clone or update repo
             echo "📥 更新代码仓库..."
-            mkdir -p "$APP_DIR"
+            mkdir -p "$APP_DIR" || { echo "❌ 创建目录失败"; exit 1; }
+
             if [ ! -d "$APP_DIR/.git" ]; then
               echo "⬇️  首次克隆仓库..."
               if [ -n "$REPO_URL" ]; then
-                git clone --depth=1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
+                git clone --depth=1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR" || { echo "❌ 克隆仓库失败"; exit 1; }
               else
-                git clone --depth=1 --branch "$BRANCH" "https://github.com/${{ github.repository }}.git" "$APP_DIR"
+                git clone --depth=1 --branch "$BRANCH" "https://github.com/${{ github.repository }}.git" "$APP_DIR" || { echo "❌ 克隆仓库失败"; exit 1; }
               fi
               echo "✅ 仓库克隆完成"
             else
               echo "🔄 更新现有仓库..."
-              cd "$APP_DIR"
-              git fetch origin "$BRANCH"
-              git reset --hard "origin/$BRANCH"
+              cd "$APP_DIR" || { echo "❌ 进入目录失败"; exit 1; }
+              git fetch origin "$BRANCH" || { echo "❌ 拉取代码失败"; exit 1; }
+              git reset --hard "origin/$BRANCH" || { echo "❌ 重置代码失败"; exit 1; }
               echo "✅ 代码更新完成"
             fi
 
-            cd "$APP_DIR"
+            cd "$APP_DIR" || { echo "❌ 进入目录失败"; exit 1; }
             echo "📍 当前提交: $(git log -1 --oneline)"
             echo ""
 
@@ -99,26 +100,28 @@ jobs:
             # Install deps and build
             echo "📦 安装依赖..."
             export HUSKY=0
-            npm ci
+            npm ci || { echo "❌ 依赖安装失败"; exit 1; }
             echo "✅ 依赖安装完成"
             echo ""
 
             echo "🔨 构建应用..."
-            npm run build:fast
+            npm run build:fast || { echo "❌ 构建失败"; exit 1; }
             echo "✅ 构建完成"
             echo ""
 
             # Start or reload via PM2
             echo "🚀 启动/重载应用..."
             if [ -f ecosystem.config.cjs ]; then
-              pm2 startOrReload ecosystem.config.cjs --only prspares-website --env production
+              echo "使用 ecosystem.config.cjs 配置..."
+              pm2 startOrReload ecosystem.config.cjs --only prspares-website --env production || { echo "❌ PM2 启动失败"; exit 1; }
             else
+              echo "使用默认配置启动..."
               # 先尝试删除旧进程
               pm2 delete prspares-website 2>/dev/null || true
               # 启动新进程
-              pm2 start node_modules/next/dist/bin/next --name prspares-website -- start -p 3000
+              pm2 start node_modules/next/dist/bin/next --name prspares-website -- start -p 3000 || { echo "❌ PM2 启动失败"; exit 1; }
             fi
-            pm2 save
+            pm2 save || { echo "❌ PM2 保存失败"; exit 1; }
             echo "✅ PM2 进程已更新"
             echo ""
 
