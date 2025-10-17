@@ -134,33 +134,78 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
       const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
       let supabaseOrigin = '';
       try { supabaseOrigin = base ? new URL(base).origin : ''; } catch {}
+
       const normalize = (input?: string): string => {
         if (!input) return '';
         let url = String(input).trim().replace(/^\"|\"$/g, '').replace(/^'|'$/g, '');
         if (!url) return '';
+
+        // 保留 data: URLs 原样
         if (url.startsWith('data:')) return url;
+
+        // 处理协议相对 URL
         if (url.startsWith('//')) url = `https:${url}`;
+
+        // 将 http 转换为 https
         if (url.startsWith('http://')) url = `https://${url.slice(7)}`;
+
+        // 处理 Supabase 存储路径
         if (/^\/?storage\/v1\//i.test(url) && supabaseOrigin) {
           url = `${supabaseOrigin}/${url.replace(/^\//,'')}`;
         } else if (/^\/?post-images\//i.test(url) && supabaseOrigin) {
           url = `${supabaseOrigin}/storage/v1/object/public/${url.replace(/^\//,'')}`;
         } else if (/^[\w.-]+\.[A-Za-z]{2,}\/.*$/.test(url) && !/^https?:/i.test(url)) {
+          // 处理没有协议的域名
           url = `https://${url}`;
         }
-        try { url = encodeURI(url); } catch {}
+
+        // 对于外部 URL（特别是 Cloudinary），不要使用 encodeURI
+        // 因为它可能会破坏已经编码的 URL
+        if (url.startsWith('https://') && !url.includes(supabaseOrigin)) {
+          // 外部 URL，保持原样
+          return url;
+        }
+
+        // 只对内部 URL 进行编码
+        try {
+          url = encodeURI(url);
+        } catch (e) {
+          console.warn('[MarkdownRenderer] Failed to encode URL:', url, e);
+        }
+
         return url;
       };
+
       const safeSrc = normalize(typeof src === 'string' ? src : (src as any));
+
       if (process.env.NODE_ENV !== 'production') {
         console.debug('[MarkdownRenderer img] raw=', src, ' normalized=', safeSrc);
       }
+
       return (
         <img
           src={safeSrc}
-          alt={alt}
+          alt={alt || ''}
           className="max-w-full h-auto rounded-lg shadow-md my-4"
           referrerPolicy="no-referrer"
+          crossOrigin="anonymous"
+          loading="lazy"
+          onError={(e) => {
+            console.error('[MarkdownRenderer] Image failed to load:', safeSrc);
+            // 显示占位符
+            const target = e.target as HTMLImageElement;
+            target.style.display = 'none';
+            const placeholder = document.createElement('div');
+            placeholder.className = 'bg-gray-200 rounded-lg p-8 text-center text-gray-500 my-4';
+            placeholder.innerHTML = `
+              <svg class="w-16 h-16 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <p class="text-sm">Image failed to load</p>
+              <p class="text-xs text-gray-400 mt-1 break-all">${safeSrc}</p>
+            `;
+            target.parentNode?.insertBefore(placeholder, target);
+          }}
           {...props}
         />
       );
