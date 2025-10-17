@@ -55,18 +55,43 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
     ),
 
     // 标准Markdown元素的样式 - 修复类型问题
-    h1: ({ children, ...props }: any) => (
-      <h1 className="text-3xl font-bold text-gray-900 mb-6 mt-8" {...props}>{children}</h1>
-    ),
-    h2: ({ children, ...props }: any) => (
-      <h2 className="text-2xl font-bold text-gray-900 mb-4 mt-6" {...props}>{children}</h2>
-    ),
-    h3: ({ children, ...props }: any) => (
-      <h3 className="text-xl font-bold text-gray-900 mb-3 mt-5" {...props}>{children}</h3>
-    ),
-    h4: ({ children, ...props }: any) => (
-      <h4 className="text-lg font-semibold text-gray-900 mb-2 mt-4" {...props}>{children}</h4>
-    ),
+    // 为标题添加 id 属性，使 TableOfContents 能够定位
+    h1: ({ children, ...props }: any) => {
+      const text = typeof children === 'string' ? children : String(children);
+      const id = text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .trim();
+      return <h1 id={id} className="text-3xl font-bold text-gray-900 mb-6 mt-8 scroll-mt-24" {...props}>{children}</h1>;
+    },
+    h2: ({ children, ...props }: any) => {
+      const text = typeof children === 'string' ? children : String(children);
+      const id = text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .trim();
+      return <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>;
+    },
+    h3: ({ children, ...props }: any) => {
+      const text = typeof children === 'string' ? children : String(children);
+      const id = text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .trim();
+      return <h3 id={id} className="text-xl font-bold text-gray-900 mb-3 mt-5 scroll-mt-24" {...props}>{children}</h3>;
+    },
+    h4: ({ children, ...props }: any) => {
+      const text = typeof children === 'string' ? children : String(children);
+      const id = text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .trim();
+      return <h4 id={id} className="text-lg font-semibold text-gray-900 mb-2 mt-4 scroll-mt-24" {...props}>{children}</h4>;
+    },
     p: ({ children, ...props }: any) => (
       <p className="text-gray-700 mb-4 leading-relaxed" {...props}>{children}</p>
     ),
