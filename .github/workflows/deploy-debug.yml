@@ -1,0 +1,129 @@
+name: Deploy Debug
+
+on:
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug VPS Environment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            echo "=========================================="
+            echo "🔍 VPS 环境诊断"
+            echo "=========================================="
+            echo ""
+            
+            echo "1️⃣ 系统信息"
+            echo "操作系统: $(uname -a)"
+            echo "当前用户: $(whoami)"
+            echo "当前目录: $(pwd)"
+            echo ""
+            
+            echo "2️⃣ 磁盘空间"
+            df -h /
+            echo ""
+            
+            echo "3️⃣ 内存使用"
+            free -h
+            echo ""
+            
+            echo "4️⃣ Node.js 环境"
+            export NVM_DIR="$HOME/.nvm"
+            if [ -s "$NVM_DIR/nvm.sh" ]; then
+              . "$NVM_DIR/nvm.sh"
+              nvm use 20 2>/dev/null || nvm install 20
+              echo "Node 版本: $(node -v)"
+              echo "npm 版本: $(npm -v)"
+            else
+              echo "❌ NVM 未安装"
+            fi
+            echo ""
+            
+            echo "5️⃣ PM2 状态"
+            if command -v pm2 >/dev/null 2>&1; then
+              echo "PM2 版本: $(pm2 -v)"
+              echo "PM2 进程列表:"
+              pm2 list
+            else
+              echo "❌ PM2 未安装"
+            fi
+            echo ""
+            
+            echo "6️⃣ 网络连接测试"
+            echo "测试 GitHub 连接..."
+            if curl -I -sS https://github.com 2>&1 | head -n 1; then
+              echo "✅ GitHub 可访问"
+            else
+              echo "❌ GitHub 不可访问"
+            fi
+            echo ""
+            
+            echo "测试 GitHub API..."
+            if curl -sS https://api.github.com 2>&1 | head -n 5; then
+              echo "✅ GitHub API 可访问"
+            else
+              echo "❌ GitHub API 不可访问"
+            fi
+            echo ""
+            
+            echo "7️⃣ Git 配置"
+            if command -v git >/dev/null 2>&1; then
+              echo "Git 版本: $(git --version)"
+              echo "Git 用户: $(git config --global user.name || echo '未配置')"
+              echo "Git 邮箱: $(git config --global user.email || echo '未配置')"
+            else
+              echo "❌ Git 未安装"
+            fi
+            echo ""
+            
+            echo "8️⃣ 应用目录状态"
+            APP_DIR="/var/www/prspares-website"
+            if [ -d "$APP_DIR" ]; then
+              echo "✅ 应用目录存在: $APP_DIR"
+              echo "目录权限: $(ls -ld $APP_DIR)"
+              if [ -d "$APP_DIR/.git" ]; then
+                cd "$APP_DIR"
+                echo "Git 分支: $(git branch --show-current)"
+                echo "最新提交: $(git log -1 --oneline)"
+                echo "远程仓库: $(git remote -v)"
+              else
+                echo "⚠️  不是 Git 仓库"
+              fi
+            else
+              echo "❌ 应用目录不存在"
+            fi
+            echo ""
+            
+            echo "9️⃣ 端口占用"
+            if command -v netstat >/dev/null 2>&1; then
+              echo "端口 3000 状态:"
+              netstat -tlnp | grep :3000 || echo "端口 3000 未被占用"
+            elif command -v ss >/dev/null 2>&1; then
+              echo "端口 3000 状态:"
+              ss -tlnp | grep :3000 || echo "端口 3000 未被占用"
+            else
+              echo "⚠️  无法检查端口"
+            fi
+            echo ""
+            
+            echo "🔟 测试克隆仓库"
+            TEST_DIR="/tmp/test-clone-$$"
+            echo "测试目录: $TEST_DIR"
+            if git clone --depth=1 --branch master https://github.com/yangxb919/prspares-website.git "$TEST_DIR" 2>&1; then
+              echo "✅ 仓库克隆成功"
+              rm -rf "$TEST_DIR"
+            else
+              echo "❌ 仓库克隆失败"
+            fi
+            echo ""
+            
+            echo "=========================================="
+            echo "✅ 诊断完成"
+            echo "=========================================="
+
