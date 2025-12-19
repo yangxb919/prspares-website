@@ -196,6 +196,7 @@ export default function EditArticle() {
       const response = await fetch('/api/admin/upload-image', {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       })
 
       if (!response.ok) {

@@ -122,6 +122,7 @@ export default function ImageUploadHelper() {
         const response = await fetch('/api/admin/upload-image', {
           method: 'POST',
           body: formData,
+          credentials: 'include',
         })
 
         if (!response.ok) {
