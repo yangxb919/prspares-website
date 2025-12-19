@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
 import Link from 'next/link'
-import { convertToProduct, convertToProducts, convertToPost, convertToPosts, convertToContactSubmissions, convertToNewsletterSubscriptions, convertToPostSEOInfos, safeString, safeNumber } from '@/utils/type-converters';
 
 // Article type definition based on Supabase posts table
 type Post = {
-  id: number
+  id: string
   author_id: string
   title: string
   slug: string
@@ -134,7 +133,7 @@ export default function ArticleManagement() {
   }
 
   // Delete article
-  const deletePost = async (id: number) => {
+  const deletePost = async (id: string) => {
     if (!confirm('Are you sure you want to delete this article? This action cannot be undone.')) {
       return
     }
@@ -142,7 +141,7 @@ export default function ArticleManagement() {
     const { error } = await supabase
       .from('posts')
       .delete()
-      .eq('id', String(id))
+      .eq('id', id)
     
     if (error) {
       alert(`Failed to delete article: ${error.message}`)
@@ -153,14 +152,14 @@ export default function ArticleManagement() {
   }
 
   // Update article status (publish/draft)
-  const updatePostStatus = async (id: number, newStatus: 'draft' | 'publish' | 'private') => {
+  const updatePostStatus = async (id: string, newStatus: 'draft' | 'publish' | 'private') => {
     const { error } = await supabase
       .from('posts')
-      .update({ 
+      .update({
         status: newStatus,
         ...(newStatus === 'publish' ? { published_at: new Date().toISOString() } : {})
       })
-      .eq('id', String(id))
+      .eq('id', id)
     
     if (error) {
       alert(`Failed to update status: ${error.message}`)
