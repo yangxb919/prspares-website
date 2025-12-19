@@ -193,9 +193,16 @@ export default function EditArticle() {
       formData.append('bucket', 'post-images')
       formData.append('path', filePath)
 
+      const { data: { session } } = await supabase.auth.getSession()
+      const headers: HeadersInit = {}
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`
+      }
+
       const response = await fetch('/api/admin/upload-image', {
         method: 'POST',
         body: formData,
+        headers,
         credentials: 'include',
       })
 

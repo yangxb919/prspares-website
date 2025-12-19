@@ -83,6 +83,12 @@ export default function ImageUploadHelper() {
     setLoading(true)
     setUploadProgress(0)
 
+    const { data: { session } } = await supabase.auth.getSession()
+    const headers: HeadersInit = {}
+    if (session?.access_token) {
+      headers['Authorization'] = `Bearer ${session.access_token}`
+    }
+
     const results: UploadedImage[] = []
 
     for (let i = 0; i < selectedFiles.length; i++) {
@@ -122,6 +128,7 @@ export default function ImageUploadHelper() {
         const response = await fetch('/api/admin/upload-image', {
           method: 'POST',
           body: formData,
+          headers,
           credentials: 'include',
         })
 

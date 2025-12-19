@@ -12,6 +12,48 @@ export default function SignIn() {
   const [supabase, setSupabase] = useState<any>(null)
   const router = useRouter()
 
+  const isDev = process.env.NODE_ENV !== 'production'
+
+  const formatError = (err: any): string => {
+    if (!err) return '登录时发生错误'
+    if (typeof err === 'string') return err
+    const name = err?.name
+    const status = err?.status
+
+    const rawMessage = typeof err?.message === 'string' ? err.message.trim() : ''
+    const message = rawMessage && rawMessage !== '{}' && rawMessage !== 'null' ? rawMessage : ''
+    if (message) return message
+
+    const rawDetails = typeof err?.details === 'string' ? err.details.trim() : ''
+    const details = rawDetails && rawDetails !== '{}' && rawDetails !== 'null' ? rawDetails : ''
+    if (details) return details
+
+    if ((typeof name === 'string' && name) || typeof status === 'number') {
+      return `${name || 'Error'}${typeof status === 'number' ? ` (HTTP ${status})` : ''}`
+    }
+    try {
+      const json = JSON.stringify(err)
+      if (json && json !== '{}' && json !== 'null') return json
+    } catch { }
+    if (err instanceof Error) return err.message || String(err)
+    return String(err)
+  }
+
+  const handleDevLogin = () => {
+    // Local-only bypass to keep admin tools usable when Supabase Auth is unavailable.
+    const devEmail = email || 'dev@localhost'
+    localStorage.setItem('adminLoggedIn', 'true')
+    localStorage.setItem('adminSessionTime', Date.now().toString())
+    localStorage.setItem('userRole', 'author')
+    localStorage.setItem('userId', 'dev-user')
+    localStorage.setItem('userEmail', devEmail)
+    setSuccess('已使用本地开发模式登录（不依赖 Supabase Auth），正在跳转...')
+    setError(null)
+    setTimeout(() => {
+      window.location.href = '/admin'
+    }, 500)
+  }
+
   // 在客户端初始化Supabase
   useEffect(() => {
     const initSupabase = async () => {
@@ -60,36 +102,53 @@ export default function SignIn() {
       }
       
       // 查询用户的 profile 信息
-      let { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('role, display_name')
-        .eq('id', userId)
-        .maybeSingle()
-      
-      // 如果没有找到用户记录，创建一个新的 profile 记录
-      if (profileError || !profile) {
-        console.log('用户没有 profile 记录，创建新记录')
-        
-        const { data: newProfile, error: insertError } = await supabase
+      let profile: any = null
+      try {
+        const { data: profileData, error: profileError } = await supabase
           .from('profiles')
-          .insert([
-            { 
-              id: userId, 
-              display_name: email.split('@')[0], 
-              role: 'author' 
-            }
-          ])
-          .select()
-          .single()
-          
-        if (insertError) throw insertError
-        profile = newProfile
+          .select('role, display_name')
+          .eq('id', userId)
+          .maybeSingle()
+
+        if (profileError) {
+          console.warn('Profile query failed (will continue login):', profileError)
+        } else {
+          profile = profileData
+        }
+
+        // 如果没有找到用户记录，尝试创建一个新的 profile 记录；创建失败也不阻断登录
+        if (!profile) {
+          console.log('用户没有 profile 记录，尝试创建新记录')
+          const { data: newProfile, error: insertError } = await supabase
+            .from('profiles')
+            .insert([
+              {
+                id: userId,
+                display_name: email.split('@')[0],
+                role: 'author'
+              }
+            ])
+            .select()
+            .single()
+
+          if (insertError) {
+            console.warn('Profile insert failed (will continue login):', insertError)
+          } else {
+            profile = newProfile
+          }
+        }
+      } catch (profileUnexpectedError: any) {
+        console.warn('Unexpected profile error (will continue login):', profileUnexpectedError)
       }
       
       console.log('获取到的用户角色信息:', profile)
       
       // 刷新会话以确保服务器端能识别
-      await supabase.auth.refreshSession()
+      try {
+        await supabase.auth.refreshSession()
+      } catch (refreshError: any) {
+        console.warn('refreshSession failed (will continue login):', refreshError)
+      }
       
       // 保存用户信息到本地存储
       localStorage.setItem('adminLoggedIn', 'true')
@@ -98,8 +157,9 @@ export default function SignIn() {
       localStorage.setItem('userId', userId)
       localStorage.setItem('userEmail', email)
       
-      // 根据用户角色进行跳转
-      if (profile && (profile.role === 'admin' || profile.role === 'author')) {
+      // 根据用户角色进行跳转（profile 取不到时默认当作 author 继续）
+      const role = profile?.role || 'author'
+      if (role === 'admin' || role === 'author') {
         console.log('用户有管理权限，跳转到管理页面')
         setSuccess('登录成功！正在跳转到管理后台...')
         setLoading(false)
@@ -122,7 +182,14 @@ export default function SignIn() {
       
     } catch (error: any) {
       console.error('登录过程中出错:', error)
-      setError(error.message || '登录时发生错误')
+      const formatted = formatError(error)
+      if (typeof error?.status === 'number' && error.status === 502) {
+        setError('Supabase Auth 服务当前不可用（HTTP 502）。请稍后重试，或点击上方“本地开发登录”进入后台继续调试。')
+      } else if (formatted.includes('HTTP 502') || formatted.includes('502')) {
+        setError('Supabase Auth 服务当前不可用（HTTP 502）。请稍后重试，或点击上方“本地开发登录”进入后台继续调试。')
+      } else {
+        setError(formatted)
+      }
       setLoading(false)
     }
   }
@@ -170,6 +237,23 @@ export default function SignIn() {
                 className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00B140]"
               >
                 刷新页面
+              </button>
+            </div>
+          </div>
+        )}
+
+        {isDev && (
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+            <p className="text-yellow-800 text-sm">
+              开发模式：如果 Supabase Auth 服务不可用（例如返回 502），可使用本地开发登录进入后台进行页面调试（不具备真实 Supabase 会话）。
+            </p>
+            <div className="mt-3">
+              <button
+                type="button"
+                onClick={handleDevLogin}
+                className="inline-flex items-center px-3 py-2 border border-yellow-300 text-sm leading-4 font-medium rounded-md text-yellow-900 bg-yellow-100 hover:bg-yellow-200"
+              >
+                本地开发登录
               </button>
             </div>
           </div>
