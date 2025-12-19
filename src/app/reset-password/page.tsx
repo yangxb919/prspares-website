@@ -20,6 +20,12 @@ function ResetPasswordClientInner() {
 
   // 检查 URL 参数并验证 token
   useEffect(() => {
+    if (!searchParams) {
+      setError("Invalid or expired password reset link. Please request a new one.");
+      setChecking(false);
+      return;
+    }
+
     const type = searchParams.get("type");
     const token = searchParams.get("token");
 
