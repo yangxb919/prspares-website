@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "OLED",
+    "slug": "oled"
+  },
+  {
+    "id": 2,
+    "name": "LCD",
+    "slug": "lcd"
+  },
+  {
+    "id": 3,
+    "name": "Screen Technology",
+    "slug": "screen-technology"
+  },
+  {
+    "id": 4,
+    "name": "Display Comparison",
+    "slug": "display-comparison"
+  },
+  {
+    "id": 5,
+    "name": "Mobile Screens",
+    "slug": "mobile-screens"
+  },
+  {
+    "id": 6,
+    "name": "Phone Repair",
+    "slug": "phone-repair"
+  }
+]

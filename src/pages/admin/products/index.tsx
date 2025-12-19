@@ -224,7 +224,7 @@ export default function ProductManagement() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold mb-4 text-gray-800">Product Management</h2>
-            <p className="text-gray-600">Loading your products...</p>
+            <p className="text-gray-900">Loading your products...</p>
           </div>
         </div>
       </div>
@@ -246,13 +246,13 @@ export default function ProductManagement() {
                 </div>
                 <div>
                   <span className="text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Admin Dashboard</span>
-                  <p className="text-xs text-gray-500">Content Management</p>
+                  <p className="text-xs text-gray-800">Content Management</p>
                 </div>
               </Link>
               
               {/* Navigation tabs */}
               <div className="ml-8 flex space-x-1 bg-gray-100/50 rounded-full p-1 backdrop-blur-sm">
-                <Link href="/admin/articles" className="px-4 py-2 text-sm font-medium rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/50 transition-all duration-200">
+                <Link href="/admin/articles" className="px-4 py-2 text-sm font-medium rounded-full text-gray-900 hover:text-gray-900 hover:bg-white/50 transition-all duration-200">
                   Blog Articles
                 </Link>
                 <Link href="/admin/products" className="px-4 py-2 text-sm font-medium rounded-full bg-green-500 text-white shadow-sm transition-all duration-200">
@@ -275,7 +275,7 @@ export default function ProductManagement() {
                   await supabase.auth.signOut()
                   router.push('/auth/signin')
                 }}
-                className="bg-white/50 hover:bg-white/70 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-white/30 hover:scale-105"
+                className="bg-white/50 hover:bg-white/70 text-gray-900 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-white/30 hover:scale-105"
               >
                 <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -296,7 +296,7 @@ export default function ProductManagement() {
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                   Product Management
                 </h1>
-                <p className="text-lg text-gray-600">Create, edit, and manage your product catalog</p>
+                <p className="text-lg text-gray-900">Create, edit, and manage your product catalog</p>
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link
@@ -333,9 +333,9 @@ export default function ProductManagement() {
             <div className="mt-8 bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Search Products</label>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">Search Products</label>
                   <div className="relative">
-                    <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     <input
@@ -349,7 +349,7 @@ export default function ProductManagement() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">Status</label>
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value as any)}
@@ -362,7 +362,7 @@ export default function ProductManagement() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Stock Status</label>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">Stock Status</label>
                   <select
                     value={stockFilter}
                     onChange={(e) => setStockFilter(e.target.value as any)}
@@ -381,7 +381,7 @@ export default function ProductManagement() {
                       setStatusFilter('all')
                       setStockFilter('all')
                     }}
-                    className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-all duration-200 font-medium"
+                    className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-xl transition-all duration-200 font-medium"
                   >
                     Clear Filters
                   </button>
@@ -404,7 +404,7 @@ export default function ProductManagement() {
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">
                     {products.length === 0 ? 'No Products Yet' : 'No Products Found'}
                   </h3>
-                  <p className="text-gray-600 mb-8">
+                  <p className="text-gray-900 mb-8">
                     {products.length === 0 
                       ? 'Get started by creating your first product!' 
                       : 'Try adjusting your search criteria.'}
@@ -458,9 +458,9 @@ export default function ProductManagement() {
                         <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-green-600 transition-colors duration-200">
                           {product.name}
                         </h3>
-                        <p className="text-sm text-gray-500">SKU: {product.sku || 'N/A'}</p>
+                        <p className="text-sm text-gray-800">SKU: {product.sku || 'N/A'}</p>
                         {product.short_desc && (
-                          <p className="text-sm text-gray-600 mt-2 line-clamp-2">{product.short_desc}</p>
+                          <p className="text-sm text-gray-900 mt-2 line-clamp-2">{product.short_desc}</p>
                         )}
                       </div>
 
@@ -471,19 +471,19 @@ export default function ProductManagement() {
                             {product.sale_price ? (
                               <>
                                 <span className="text-lg font-bold text-green-600">{formatPrice(product.sale_price)}</span>
-                                <span className="text-sm text-gray-500 line-through">{formatPrice(product.regular_price)}</span>
+                                <span className="text-sm text-gray-800 line-through">{formatPrice(product.regular_price)}</span>
                               </>
                             ) : (
                               <span className="text-lg font-bold text-gray-900">{formatPrice(product.regular_price)}</span>
                             )}
                           </div>
                           {product.stock_quantity !== null && (
-                            <p className="text-xs text-gray-500">Stock: {product.stock_quantity}</p>
+                            <p className="text-xs text-gray-800">Stock: {product.stock_quantity}</p>
                           )}
                         </div>
                         <div className="text-right">
-                          <p className="text-xs text-gray-500">Created</p>
-                          <p className="text-sm font-medium text-gray-700">{formatDate(product.created_at)}</p>
+                          <p className="text-xs text-gray-800">Created</p>
+                          <p className="text-sm font-medium text-gray-900">{formatDate(product.created_at)}</p>
                         </div>
                       </div>
 

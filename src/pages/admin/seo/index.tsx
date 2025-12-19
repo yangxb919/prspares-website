@@ -148,7 +148,7 @@ export default function SEOManagement() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">加载中...</div>
+        <div className="text-gray-800">加载中...</div>
       </div>
     );
   }
@@ -161,7 +161,7 @@ export default function SEOManagement() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">SEO管理</h1>
-              <p className="text-gray-600 mt-2">管理所有文章的SEO优化状态</p>
+              <p className="text-gray-900 mt-2">管理所有文章的SEO优化状态</p>
             </div>
             <Link
               href="/admin/articles"
@@ -177,19 +177,19 @@ export default function SEOManagement() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="bg-white rounded-lg shadow p-6">
               <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-              <div className="text-gray-600">总文章数</div>
+              <div className="text-gray-900">总文章数</div>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
               <div className="text-2xl font-bold text-green-600">{stats.optimized}</div>
-              <div className="text-gray-600">已优化</div>
+              <div className="text-gray-900">已优化</div>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
               <div className="text-2xl font-bold text-red-600">{stats.needsOptimization}</div>
-              <div className="text-gray-600">需要优化</div>
+              <div className="text-gray-900">需要优化</div>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
               <div className="text-2xl font-bold text-blue-600">{stats.optimizationRate}%</div>
-              <div className="text-gray-600">优化率</div>
+              <div className="text-gray-900">优化率</div>
             </div>
           </div>
         )}
@@ -198,7 +198,7 @@ export default function SEOManagement() {
         <div className="bg-white rounded-lg shadow p-6 mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <label className="text-sm font-medium text-gray-700">筛选:</label>
+              <label className="text-sm font-medium text-gray-900">筛选:</label>
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value as any)}
@@ -232,22 +232,22 @@ export default function SEOManagement() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     文章
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     SEO状态
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     SEO分数
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     关键词
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     发布时间
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     操作
                   </th>
                 </tr>
@@ -260,7 +260,7 @@ export default function SEOManagement() {
                         <div className="text-sm font-medium text-gray-900 max-w-xs truncate">
                           {post.title}
                         </div>
-                        <div className="text-sm text-gray-500">/{post.slug}</div>
+                        <div className="text-sm text-gray-800">/{post.slug}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -280,7 +280,7 @@ export default function SEOManagement() {
                           {post.meta.seo.score}/100
                         </span>
                       ) : (
-                        <span className="text-gray-400 text-sm">-</span>
+                        <span className="text-gray-900 text-sm">-</span>
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -295,16 +295,16 @@ export default function SEOManagement() {
                             </span>
                           ))}
                           {post.meta.seo.keywords.length > 3 && (
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-800">
                               +{post.meta.seo.keywords.length - 3}
                             </span>
                           )}
                         </div>
                       ) : (
-                        <span className="text-gray-400 text-sm">-</span>
+                        <span className="text-gray-900 text-sm">-</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                       {new Date(post.published_at).toLocaleDateString('zh-CN')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -330,7 +330,7 @@ export default function SEOManagement() {
 
           {posts.length === 0 && (
             <div className="text-center py-12">
-              <div className="text-gray-500">没有找到文章</div>
+              <div className="text-gray-800">没有找到文章</div>
             </div>
           )}
         </div>

@@ -47,7 +47,6 @@ export default function ImageUploadPage() {
     setError(null)
 
     try {
-      const supabase = createPublicClient()
       const uploadedUrls: UploadedImage[] = []
 
       for (let i = 0; i < files.length; i++) {
@@ -67,31 +66,28 @@ export default function ImageUploadPage() {
           continue
         }
 
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`
-        const filePath = `products/${fileName}`
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('bucket', 'product-images')
 
-        const { data, error } = await supabase.storage
-          .from('product-images')
-          .upload(filePath, file, {
-            cacheControl: '3600',
-            upsert: false
-          })
+        // 使用自定义API端点进行上传（包含sharp压缩）
+        const response = await fetch('/api/admin/upload-image', {
+          method: 'POST',
+          body: formData,
+        })
 
-        if (error) {
-          console.error('Upload error:', error)
-          setError(`上传失败: ${error.message}`)
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.error('Upload error:', errorData.error)
+          setError(`上传失败: ${errorData.error}`)
           continue
         }
 
-        // Get public URL
-        const { data: publicUrlData } = supabase.storage
-          .from('product-images')
-          .getPublicUrl(filePath)
+        const data = await response.json()
 
         uploadedUrls.push({
-          fileName: fileName,
-          url: publicUrlData.publicUrl,
+          fileName: data.fileName,
+          url: data.url,
           originalName: file.name
         })
 
@@ -161,10 +157,10 @@ export default function ImageUploadPage() {
           )}
 
           <div className="mb-6">
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-900 mb-4">
               上传您的产品图片到Supabase Storage，获取URL用于批量产品导入。
             </p>
-            
+
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
               <input
                 type="file"
@@ -177,13 +173,12 @@ export default function ImageUploadPage() {
               />
               <label
                 htmlFor="image-upload"
-                className={`cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white ${
-                  uploading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
-                }`}
+                className={`cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white ${uploading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
               >
                 {uploading ? '上传中...' : '选择图片文件'}
               </label>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-800">
                 支持 JPG, PNG, GIF, WebP 格式，单个文件最大 10MB
               </p>
             </div>
@@ -196,7 +191,7 @@ export default function ImageUploadPage() {
                     style={{ width: `${uploadProgress}%` }}
                   ></div>
                 </div>
-                <p className="text-sm text-gray-600 mt-1">上传进度: {uploadProgress}%</p>
+                <p className="text-sm text-gray-900 mt-1">上传进度: {uploadProgress}%</p>
               </div>
             )}
           </div>
@@ -236,7 +231,7 @@ export default function ImageUploadPage() {
                       className="w-full h-32 object-cover rounded mb-2"
                     />
                     <p className="text-sm font-medium truncate">{image.originalName}</p>
-                    <p className="text-xs text-gray-500 truncate">{image.url}</p>
+                    <p className="text-xs text-gray-800 truncate">{image.url}</p>
                   </div>
                 ))}
               </div>
@@ -245,7 +240,7 @@ export default function ImageUploadPage() {
 
           <div className="bg-gray-50 rounded-lg p-4">
             <h3 className="font-semibold mb-2">使用说明：</h3>
-            <ol className="text-sm text-gray-600 space-y-1">
+            <ol className="text-sm text-gray-900 space-y-1">
               <li>1. 选择并上传您的产品图片</li>
               <li>2. 点击"复制JSON数组"获取图片URL数组</li>
               <li>3. 在产品JSON文件中使用这些URL作为images字段的值</li>

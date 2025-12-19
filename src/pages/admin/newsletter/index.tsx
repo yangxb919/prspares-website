@@ -192,7 +192,7 @@ export default function NewsletterAdmin() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Newsletter Subscriptions</h1>
-              <p className="text-gray-600">Manage newsletter subscribers</p>
+              <p className="text-gray-900">Manage newsletter subscribers</p>
             </div>
             <div className="flex space-x-3">
               <button
@@ -227,7 +227,7 @@ export default function NewsletterAdmin() {
             <div className="flex items-center">
               <Mail className="text-blue-500" size={24} />
               <div className="ml-4">
-                <p className="text-sm text-gray-600">Total Subscriptions</p>
+                <p className="text-sm text-gray-900">Total Subscriptions</p>
                 <p className="text-2xl font-bold">{stats.total}</p>
               </div>
             </div>
@@ -236,7 +236,7 @@ export default function NewsletterAdmin() {
             <div className="flex items-center">
               <Eye className="text-green-500" size={24} />
               <div className="ml-4">
-                <p className="text-sm text-gray-600">Active Subscribers</p>
+                <p className="text-sm text-gray-900">Active Subscribers</p>
                 <p className="text-2xl font-bold text-green-600">{stats.active}</p>
               </div>
             </div>
@@ -245,7 +245,7 @@ export default function NewsletterAdmin() {
             <div className="flex items-center">
               <EyeOff className="text-red-500" size={24} />
               <div className="ml-4">
-                <p className="text-sm text-gray-600">Unsubscribed</p>
+                <p className="text-sm text-gray-900">Unsubscribed</p>
                 <p className="text-2xl font-bold text-red-600">{stats.unsubscribed}</p>
               </div>
             </div>
@@ -264,22 +264,22 @@ export default function NewsletterAdmin() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     Subscribed Date
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     IP Address
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     Browser
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -289,7 +289,7 @@ export default function NewsletterAdmin() {
                   <tr key={subscription.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <Mail size={16} className="text-gray-400 mr-2" />
+                        <Mail size={16} className="text-gray-900 mr-2" />
                         <span className="text-sm font-medium text-gray-900">
                           {subscription.email}
                         </span>
@@ -307,10 +307,10 @@ export default function NewsletterAdmin() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {formatDate(subscription.subscribed_at)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                       {formatIPAddress(subscription.ip_address)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                       <span title={subscription.user_agent}>
                         {formatUserAgent(subscription.user_agent)}
                       </span>
@@ -340,8 +340,8 @@ export default function NewsletterAdmin() {
           
           {subscriptions.length === 0 && (
             <div className="text-center py-12">
-              <Mail size={48} className="mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-500">No newsletter subscriptions found</p>
+              <Mail size={48} className="mx-auto text-gray-900 mb-4" />
+              <p className="text-gray-800">No newsletter subscriptions found</p>
             </div>
           )}
         </div>

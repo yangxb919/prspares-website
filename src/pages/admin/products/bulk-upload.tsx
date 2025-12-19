@@ -394,13 +394,13 @@ export default function BulkUploadProducts() {
             ← 返回产品管理
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">批量上传产品</h1>
-          <p className="text-gray-600 mt-2">支持CSV、JSON格式的批量产品导入</p>
+          <p className="text-gray-900 mt-2">支持CSV、JSON格式的批量产品导入</p>
         </div>
 
         {/* 模板下载区域 */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">下载模板文件</h2>
-          <p className="text-gray-600 mb-4">请先下载对应格式的模板文件，填写产品信息后再上传。</p>
+          <p className="text-gray-900 mb-4">请先下载对应格式的模板文件，填写产品信息后再上传。</p>
           
           <div className="flex gap-4">
             <button
@@ -424,7 +424,7 @@ export default function BulkUploadProducts() {
           
           {/* 格式选择 */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">文件格式</label>
+            <label className="block text-sm font-medium text-gray-900 mb-2">文件格式</label>
             <select
               value={fileFormat}
               onChange={(e) => setFileFormat(e.target.value as FileFormat)}
@@ -437,7 +437,7 @@ export default function BulkUploadProducts() {
 
           {/* 文件选择 */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">选择文件</label>
+            <label className="block text-sm font-medium text-gray-900 mb-2">选择文件</label>
             <input
               type="file"
               accept={fileFormat === 'csv' ? '.csv' : '.json'}
@@ -456,10 +456,10 @@ export default function BulkUploadProducts() {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">产品名称</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">价格</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">状态</th>
-                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">分类</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-800 uppercase">产品名称</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-800 uppercase">价格</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-800 uppercase">状态</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-800 uppercase">分类</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -479,7 +479,7 @@ export default function BulkUploadProducts() {
                   </tbody>
                 </table>
                 {parsedData.length > 10 && (
-                  <div className="px-4 py-2 text-sm text-gray-500 bg-gray-50">
+                  <div className="px-4 py-2 text-sm text-gray-800 bg-gray-50">
                     还有 {parsedData.length - 10} 个产品...
                   </div>
                 )}

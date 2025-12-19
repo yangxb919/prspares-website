@@ -80,21 +80,24 @@ export default function ArticleManagement() {
   const fetchPostsWithLocalUser = async () => {
     const userRole = localStorage.getItem('userRole')
     const userId = localStorage.getItem('userId')
-    
+
+    console.log('🔍 Fetching posts with local user:', { userRole, userId })
+
     setLoading(true)
-    
+
+    // 🔧 修改：所有用户都可以看到所有文章
     let query = supabase.from('posts').select('*').order('created_at', { ascending: false })
-    
-    // If author, can only see their own articles
-    if (userRole === 'author') {
-      query = query.eq('author_id', String(userId))
-    }
-    
+
+    console.log('👑 Fetching all posts (权限已修改：所有用户都可以看到所有文章)')
+
     const { data, error } = await query
-    
+
     if (error) {
-      console.error('Failed to fetch articles:', error)
+      console.error('❌ Failed to fetch articles:', error)
+      alert(`Failed to fetch articles: ${error.message}`)
     } else {
+      console.log('✅ Fetched posts:', data)
+      console.log('📊 Number of posts:', data?.length || 0)
       setPosts((data as any) || [])
     }
     setLoading(false)
@@ -103,29 +106,28 @@ export default function ArticleManagement() {
   // Fetch article list
   const fetchPosts = async (currentUser?: any) => {
     const targetUser = currentUser || user
-    if (!targetUser) return
-    
-    setLoading(true)
-    
-    // Admin can see all articles, author can only see their own
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', targetUser.id)
-      .single()
-
-    let query = supabase.from('posts').select('*').order('created_at', { ascending: false })
-    
-    // If author, can only see their own articles
-    if (profile?.role === 'author') {
-      query = query.eq('author_id', targetUser.id)
+    if (!targetUser) {
+      console.log('⚠️ No target user, skipping fetch')
+      return
     }
-    
+
+    console.log('🔍 Fetching posts with user:', targetUser)
+
+    setLoading(true)
+
+    // 🔧 修改：所有用户都可以看到所有文章
+    let query = supabase.from('posts').select('*').order('created_at', { ascending: false })
+
+    console.log('👑 Fetching all posts (权限已修改：所有用户都可以看到所有文章)')
+
     const { data, error } = await query
-    
+
     if (error) {
-      console.error('Failed to fetch articles:', error)
+      console.error('❌ Failed to fetch articles:', error)
+      alert(`Failed to fetch articles: ${error.message}`)
     } else {
+      console.log('✅ Fetched posts:', data)
+      console.log('📊 Number of posts:', data?.length || 0)
       setPosts((data as any) || [])
     }
     setLoading(false)
@@ -191,7 +193,7 @@ export default function ArticleManagement() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold mb-4 text-gray-800">Article Management</h2>
-            <p className="text-gray-600">Loading your articles...</p>
+            <p className="text-gray-900">Loading your articles...</p>
           </div>
         </div>
       </div>
@@ -213,7 +215,7 @@ export default function ArticleManagement() {
                 </div>
                 <div>
                   <span className="text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Admin Dashboard</span>
-                  <p className="text-xs text-gray-500">Content Management</p>
+                  <p className="text-xs text-gray-800">Content Management</p>
                 </div>
               </Link>
               
@@ -222,7 +224,7 @@ export default function ArticleManagement() {
                 <Link href="/admin/articles" className="px-4 py-2 text-sm font-medium rounded-full bg-blue-500 text-white shadow-sm transition-all duration-200">
                   Blog Articles
                 </Link>
-                <Link href="/admin/products" className="px-4 py-2 text-sm font-medium rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/50 transition-all duration-200">
+                <Link href="/admin/products" className="px-4 py-2 text-sm font-medium rounded-full text-gray-900 hover:text-gray-900 hover:bg-white/50 transition-all duration-200">
                   Products
                 </Link>
               </div>
@@ -242,7 +244,7 @@ export default function ArticleManagement() {
                   await supabase.auth.signOut()
                   router.push('/auth/signin')
                 }}
-                className="bg-white/50 hover:bg-white/70 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-white/30 hover:scale-105"
+                className="bg-white/50 hover:bg-white/70 text-gray-900 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-white/30 hover:scale-105"
               >
                 <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -262,7 +264,7 @@ export default function ArticleManagement() {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                 Blog Article Management
               </h1>
-              <p className="text-lg text-gray-600">Create, edit, and manage your blog content</p>
+              <p className="text-lg text-gray-900">Create, edit, and manage your blog content</p>
             </div>
             <Link 
               href="/admin/articles/new" 
@@ -287,7 +289,7 @@ export default function ArticleManagement() {
                     </svg>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">No Articles Yet</h3>
-                  <p className="text-gray-600 mb-8">Get started by creating your first blog article!</p>
+                  <p className="text-gray-900 mb-8">Get started by creating your first blog article!</p>
                   <Link 
                     href="/admin/articles/new" 
                     className="inline-flex items-center px-6 py-3 border border-transparent shadow-lg text-sm font-medium rounded-xl text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105"
@@ -320,7 +322,7 @@ export default function ArticleManagement() {
                           <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200">
                             {post.title}
                           </h2>
-                          <div className="text-sm text-gray-500 space-y-1">
+                          <div className="text-sm text-gray-800 space-y-1">
                             <div className="flex items-center">
                               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

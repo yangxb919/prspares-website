@@ -508,3 +508,90 @@ kbd {
 .transition-smooth {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Admin pages - Force dark text colors with !important */
+/* Target all labels in forms */
+label.text-gray-900,
+label.text-gray-800,
+label.text-gray-700 {
+  color: #111827 !important;
+}
+
+/* Target all paragraphs with gray text */
+p.text-gray-900,
+p.text-gray-800,
+p.text-gray-700,
+p.text-gray-600,
+p.text-gray-500 {
+  color: #374151 !important;
+}
+
+/* Target all spans with gray text */
+span.text-gray-900,
+span.text-gray-800,
+span.text-gray-700,
+span.text-gray-600,
+span.text-gray-500 {
+  color: #111827 !important;
+}
+
+/* Target all divs with gray text */
+div.text-gray-900,
+div.text-gray-800,
+div.text-gray-700,
+div.text-gray-600,
+div.text-gray-500 {
+  color: #374151 !important;
+}
+
+/* Force dark colors for links */
+a.text-gray-900,
+a.text-gray-800,
+a.text-gray-700,
+a.text-gray-600,
+a.text-gray-500 {
+  color: #111827 !important;
+}
+
+/* Fix form inputs and textareas - Override @tailwindcss/forms plugin */
+/* Note: This is for light-themed admin pages. Dark-themed pages should override this. */
+input[type="text"]:not(.form-input),
+input[type="email"]:not(.form-input),
+input[type="url"]:not(.form-input),
+input[type="password"]:not(.form-input),
+input[type="number"]:not(.form-input),
+input[type="date"]:not(.form-input),
+input[type="datetime-local"]:not(.form-input),
+input[type="month"]:not(.form-input),
+input[type="search"]:not(.form-input),
+input[type="tel"]:not(.form-input),
+input[type="time"]:not(.form-input),
+input[type="week"]:not(.form-input),
+textarea:not(.form-input),
+select:not(.form-input) {
+  color: #111827 !important;
+}
+
+/* Fix placeholder text color */
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+}
+
+/* Fix select dropdown text */
+select option {
+  color: #111827 !important;
+}
+
+/* Fix disabled input text */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  color: #6b7280 !important;
+}
+
+/* Fix search input placeholder in admin pages */
+input[type="search"]::placeholder {
+  color: #9ca3af !important;
+}

@@ -157,7 +157,7 @@ export default async function BlogPage({
       slug: post.slug,
       title: post.title,
       excerpt: post.excerpt || (post.content ? post.content.substring(0, 150) + '...' : ''),
-      category: post.meta?.category || 'Repair Tips',
+      category: post.meta?.category || 'Parts Knowledge',
       author: authorName,
       date: publishDate,
       readTime: `${readTimeMin} min read`,
@@ -167,12 +167,12 @@ export default async function BlogPage({
   });
 
   const tabs = [
-    { id: 'all', label: 'All Guides', href: '/blog' },
-    { id: 'screen-repair', label: 'Screen Repair', href: '/blog?category=screen-repair' },
-    { id: 'battery', label: 'Battery Issues', href: '/blog?category=battery' },
-    { id: 'water-damage', label: 'Water Damage', href: '/blog?category=water-damage' },
-    { id: 'troubleshooting', label: 'Troubleshooting', href: '/blog?category=troubleshooting' },
-    { id: 'industry-news', label: 'Industry News', href: '/blog?category=industry-news' },
+    { id: 'all', label: '📚 All Articles', href: '/blog' },
+    { id: 'sourcing-suppliers', label: '📦 Sourcing & Suppliers', href: '/blog?category=sourcing-suppliers' },
+    { id: 'repair-guides', label: '🔧 Repair Guides', href: '/blog?category=repair-guides' },
+    { id: 'parts-knowledge', label: '📱 Parts Knowledge', href: '/blog?category=parts-knowledge' },
+    { id: 'business-tips', label: '💼 Business Tips', href: '/blog?category=business-tips' },
+    { id: 'industry-insights', label: '🏭 Industry Insights', href: '/blog?category=industry-insights' },
   ];
 
   // Breadcrumb navigation data

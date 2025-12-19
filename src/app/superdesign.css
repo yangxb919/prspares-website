@@ -59,8 +59,12 @@
   background-color: var(--input);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  color: var(--foreground);
+  color: #ffffff !important; /* 强制白色文字，确保可见 */
   transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
+}
+.form-input::placeholder {
+  color: #9ca3af !important; /* 占位符使用灰色 */
+  opacity: 0.7;
 }
 .form-input:focus {
   outline: none;

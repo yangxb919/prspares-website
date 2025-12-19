@@ -588,61 +588,61 @@ export default function ScreensPage() {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-300 bg-white rounded-lg shadow-lg">
                 <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-900">Parameter</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-blue-700">LCD Typical Values</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-purple-700">OLED Typical Values</th>
-                    <th className="border border-gray-300 px-4 py-3 text-left font-semibold text-gray-900">Impact on Repair Business</th>
+                  <tr className="bg-gradient-to-r from-gray-800 to-gray-700">
+                    <th className="border border-gray-600 px-4 py-3 text-left font-semibold text-white">Parameter</th>
+                    <th className="border border-gray-600 px-4 py-3 text-left font-semibold text-blue-300">LCD Typical Values</th>
+                    <th className="border border-gray-600 px-4 py-3 text-left font-semibold text-purple-300">OLED Typical Values</th>
+                    <th className="border border-gray-600 px-4 py-3 text-left font-semibold text-white">Impact on Repair Business</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3 font-medium">Static Contrast Ratio</td>
-                    <td className="border border-gray-300 px-4 py-3">1,200–1,600:1</td>
-                    <td className="border border-gray-300 px-4 py-3">≥1,000,000:1</td>
-                    <td className="border border-gray-300 px-4 py-3">OLED provides superior HDR experience</td>
+                  <tr className="hover:bg-blue-50 transition-colors">
+                    <td className="border border-gray-300 px-4 py-3 font-semibold text-gray-900 bg-gray-50">Static Contrast Ratio</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">1,200–1,600:1</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">≥1,000,000:1</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">OLED provides superior HDR experience</td>
                   </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-medium">Typical Brightness</td>
-                    <td className="border border-gray-300 px-4 py-3">600–650 nits</td>
-                    <td className="border border-gray-300 px-4 py-3">1,000–1,200 nits</td>
-                    <td className="border border-gray-300 px-4 py-3">OLED better for outdoor visibility</td>
+                  <tr className="bg-white hover:bg-blue-50 transition-colors">
+                    <td className="border border-gray-300 px-4 py-3 font-semibold text-gray-900 bg-gray-50">Typical Brightness</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">600–650 nits</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">1,000–1,200 nits</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">OLED better for outdoor visibility</td>
                   </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3 font-medium">Peak Brightness (HDR)</td>
-                    <td className="border border-gray-300 px-4 py-3">&lt;900 nits</td>
-                    <td className="border border-gray-300 px-4 py-3">1,750–2,300 nits</td>
-                    <td className="border border-gray-300 px-4 py-3">OLED excels in premium devices</td>
+                  <tr className="hover:bg-blue-50 transition-colors">
+                    <td className="border border-gray-300 px-4 py-3 font-semibold text-gray-900 bg-gray-50">Peak Brightness (HDR)</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">&lt;900 nits</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">1,750–2,300 nits</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">OLED excels in premium devices</td>
                   </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-medium">Response Time</td>
-                    <td className="border border-gray-300 px-4 py-3">4–8 ms</td>
-                    <td className="border border-gray-300 px-4 py-3">0.1 ms</td>
-                    <td className="border border-gray-300 px-4 py-3">OLED preferred for gaming phones</td>
+                  <tr className="bg-white hover:bg-blue-50 transition-colors">
+                    <td className="border border-gray-300 px-4 py-3 font-semibold text-gray-900 bg-gray-50">Response Time</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">4–8 ms</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">0.1 ms</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">OLED preferred for gaming phones</td>
                   </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3 font-medium">Lifespan (50% brightness)</td>
-                    <td className="border border-gray-300 px-4 py-3">40,000–60,000 hours</td>
-                    <td className="border border-gray-300 px-4 py-3">8,000–30,000 hours</td>
-                    <td className="border border-gray-300 px-4 py-3">LCD offers better long-term value</td>
+                  <tr className="hover:bg-blue-50 transition-colors">
+                    <td className="border border-gray-300 px-4 py-3 font-semibold text-gray-900 bg-gray-50">Lifespan (50% brightness)</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">40,000–60,000 hours</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">8,000–30,000 hours</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">LCD offers better long-term value</td>
                   </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-medium">Manufacturing Cost</td>
-                    <td className="border border-gray-300 px-4 py-3">Baseline</td>
-                    <td className="border border-gray-300 px-4 py-3">+20% (Rigid), +50% (Flexible)</td>
-                    <td className="border border-gray-300 px-4 py-3">LCD more cost-effective for budget repairs</td>
+                  <tr className="bg-white hover:bg-blue-50 transition-colors">
+                    <td className="border border-gray-300 px-4 py-3 font-semibold text-gray-900 bg-gray-50">Manufacturing Cost</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">Baseline</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">+20% (Rigid), +50% (Flexible)</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">LCD more cost-effective for budget repairs</td>
                   </tr>
-                  <tr>
-                    <td className="border border-gray-300 px-4 py-3 font-medium">PWM Flicker</td>
-                    <td className="border border-gray-300 px-4 py-3">High frequency (&gt;1kHz)</td>
-                    <td className="border border-gray-300 px-4 py-3">Low frequency (240-480Hz)</td>
-                    <td className="border border-gray-300 px-4 py-3">LCD better for eye-sensitive customers</td>
+                  <tr className="hover:bg-blue-50 transition-colors">
+                    <td className="border border-gray-300 px-4 py-3 font-semibold text-gray-900 bg-gray-50">PWM Flicker</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">High frequency (&gt;1kHz)</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">Low frequency (240-480Hz)</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">LCD better for eye-sensitive customers</td>
                   </tr>
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-3 font-medium">Thickness</td>
-                    <td className="border border-gray-300 px-4 py-3">&gt;3mm (with backlight)</td>
-                    <td className="border border-gray-300 px-4 py-3">0.3mm (flexible possible)</td>
-                    <td className="border border-gray-300 px-4 py-3">OLED enables thinner device designs</td>
+                  <tr className="bg-white hover:bg-blue-50 transition-colors">
+                    <td className="border border-gray-300 px-4 py-3 font-semibold text-gray-900 bg-gray-50">Thickness</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">&gt;3mm (with backlight)</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">0.3mm (flexible possible)</td>
+                    <td className="border border-gray-300 px-4 py-3 text-gray-800">OLED enables thinner device designs</td>
                   </tr>
                 </tbody>
               </table>

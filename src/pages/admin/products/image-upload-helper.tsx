@@ -18,7 +18,7 @@ export default function ImageUploadHelper() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([])
   const [uploadProgress, setUploadProgress] = useState(0)
-  
+
   const router = useRouter()
   const supabase = createPublicClient()
 
@@ -28,48 +28,48 @@ export default function ImageUploadHelper() {
       try {
         const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true'
         const userRole = localStorage.getItem('userRole')
-        
+
         if (isLoggedIn && (userRole === 'admin' || userRole === 'author')) {
           setUser({ role: userRole })
           return
         }
-        
+
         const { data } = await supabase.auth.getUser()
         if (!data.user) {
           router.push('/auth/signin')
           return
         }
-        
+
         setUser(data.user)
       } catch (error) {
         console.error('Authentication check failed:', error)
         router.push('/auth/signin')
       }
     }
-    
+
     checkUser()
   }, [])
 
   // 处理文件选择
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
-    
+
     // 验证文件类型
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
     const validFiles = files.filter(file => allowedTypes.includes(file.type))
-    
+
     if (validFiles.length !== files.length) {
       alert(`${files.length - validFiles.length} 个文件格式不支持，已被过滤`)
     }
-    
+
     // 验证文件大小 (5MB)
     const maxSize = 5 * 1024 * 1024
     const sizeValidFiles = validFiles.filter(file => file.size <= maxSize)
-    
+
     if (sizeValidFiles.length !== validFiles.length) {
       alert(`${validFiles.length - sizeValidFiles.length} 个文件超过5MB大小限制，已被过滤`)
     }
-    
+
     setSelectedFiles(sizeValidFiles)
   }
 
@@ -82,13 +82,15 @@ export default function ImageUploadHelper() {
 
     setLoading(true)
     setUploadProgress(0)
-    
+
     const results: UploadedImage[] = []
 
     for (let i = 0; i < selectedFiles.length; i++) {
       const file = selectedFiles[i]
       const fileExt = file.name.split('.').pop()
       const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`
+      // 注意：这里我们让API决定文件名，或者我们可以传递它。
+      // API 能够接受 path 参数
       const filePath = `products/${fileName}`
 
       const uploadItem: UploadedImage = {
@@ -97,28 +99,43 @@ export default function ImageUploadHelper() {
         url: '',
         status: 'uploading'
       }
-      
+
       results.push(uploadItem)
       setUploadedImages([...results])
 
       try {
-        // 上传到Supabase Storage
-        const { data, error } = await supabase.storage
-          .from('product-images')
-          .upload(filePath, file, {
-            cacheControl: '3600',
-            upsert: false
-          })
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('bucket', 'product-images')
+        // 我们不传递 path，让 API 生成文件名，或者如果我们需要保持特定路径结构，可以传递
+        // 此处我们不传递 path，让 API 生成一个唯一的文件名，或者我们可以像之前一样生成
+        // 为了和之前保持一致，我们不传递 'path' 给FormData，让API自己处理，或者我们如果希望控制文件名，
+        // 我们需要修改一下API。
+        // API 代码: const customPath = formData.get('path')
+        // const fileName = customPath || ...
 
-        if (error) throw error
+        // 让我们稍微修改一下 logic，为了简单起见，我们直接调用 API，不指定 path，让 API 自动生成带随机数的文件名。
+        // 或者，为了保持与之前完全一致的文件名生成逻辑（虽然之前的文件名也是随机的），我们可以生成 path 并传递。
+        // API 接收 'path' 参数作为完整文件名（不包含bucket）。
 
-        // 获取公共URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('product-images')
-          .getPublicUrl(filePath)
+        // 上传到自定义API
+        const response = await fetch('/api/admin/upload-image', {
+          method: 'POST',
+          body: formData,
+        })
 
-        uploadItem.url = publicUrl
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.error)
+        }
+
+        const data = await response.json()
+
+        uploadItem.url = data.url
         uploadItem.status = 'success'
+        // 更新fileName为实际保存的文件名
+        uploadItem.fileName = data.fileName
+
       } catch (error: any) {
         uploadItem.status = 'error'
         uploadItem.error = error.message
@@ -176,7 +193,7 @@ export default function ImageUploadHelper() {
   const copyAllUrls = () => {
     const successImages = uploadedImages.filter(img => img.status === 'success')
     const urls = successImages.map(img => img.url).join('\n')
-    
+
     navigator.clipboard.writeText(urls).then(() => {
       alert('所有图片URL已复制到剪贴板')
     }).catch(err => {
@@ -198,7 +215,7 @@ export default function ImageUploadHelper() {
             ← 返回产品管理
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">图片批量上传助手</h1>
-          <p className="text-gray-600 mt-2">将本地图片上传到云存储，获取网络URL用于批量产品导入</p>
+          <p className="text-gray-900 mt-2">将本地图片上传到云存储，获取网络URL用于批量产品导入</p>
         </div>
 
         {/* 使用说明 */}
@@ -215,7 +232,7 @@ export default function ImageUploadHelper() {
         {/* 文件选择区域 */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">选择图片文件</h2>
-          
+
           <div className="mb-4">
             <input
               type="file"
@@ -242,10 +259,10 @@ export default function ImageUploadHelper() {
                         className="object-cover rounded"
                       />
                     </div>
-                    <p className="text-xs text-gray-600 truncate" title={file.name}>
+                    <p className="text-xs text-gray-900 truncate" title={file.name}>
                       {file.name}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-800">
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
@@ -285,7 +302,7 @@ export default function ImageUploadHelper() {
           <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium text-gray-900">上传结果</h3>
-              
+
               <div className="flex gap-2">
                 <button
                   onClick={copyAllUrls}
@@ -339,7 +356,7 @@ export default function ImageUploadHelper() {
                           type="text"
                           value={image.url}
                           readOnly
-                          className="flex-grow text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded px-2 py-1"
+                          className="flex-grow text-xs text-gray-900 bg-gray-50 border border-gray-200 rounded px-2 py-1"
                         />
                         <button
                           onClick={() => navigator.clipboard.writeText(image.url)}
@@ -384,15 +401,15 @@ export default function ImageUploadHelper() {
         {/* 使用步骤 */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">下一步：在批量产品导入中使用</h3>
-          
-          <div className="space-y-4 text-sm text-gray-700">
+
+          <div className="space-y-4 text-sm text-gray-900">
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                 <span className="text-green-600 font-bold text-xs">1</span>
               </div>
               <div>
                 <p className="font-medium">下载图片URL列表</p>
-                <p className="text-gray-600">下载CSV或JSON格式的URL列表，包含原文件名和对应的网络URL</p>
+                <p className="text-gray-900">下载CSV或JSON格式的URL列表，包含原文件名和对应的网络URL</p>
               </div>
             </div>
 
@@ -402,7 +419,7 @@ export default function ImageUploadHelper() {
               </div>
               <div>
                 <p className="font-medium">准备产品数据</p>
-                <p className="text-gray-600">在产品数据中，使用上传后的URL替换图片字段</p>
+                <p className="text-gray-900">在产品数据中，使用上传后的URL替换图片字段</p>
               </div>
             </div>
 
@@ -412,7 +429,7 @@ export default function ImageUploadHelper() {
               </div>
               <div>
                 <p className="font-medium">执行批量导入</p>
-                <p className="text-gray-600">前往 <Link href="/admin/products/bulk-upload" className="text-green-600 hover:text-green-700">批量上传页面</Link> 导入产品数据</p>
+                <p className="text-gray-900">前往 <Link href="/admin/products/bulk-upload" className="text-green-600 hover:text-green-700">批量上传页面</Link> 导入产品数据</p>
               </div>
             </div>
           </div>

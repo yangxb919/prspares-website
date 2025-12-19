@@ -383,7 +383,7 @@ export default function EditProduct() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold mb-4 text-gray-800">Loading Product...</h2>
-            <p className="text-gray-600">Please wait while we load the product data</p>
+            <p className="text-gray-900">Please wait while we load the product data</p>
           </div>
         </div>
       </div>
@@ -401,7 +401,7 @@ export default function EditProduct() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold mb-4 text-gray-800">Product Not Found</h2>
-            <p className="text-gray-600">The product you're looking for doesn't exist or you don't have permission to edit it.</p>
+            <p className="text-gray-900">The product you're looking for doesn't exist or you don't have permission to edit it.</p>
             <Link 
               href="/admin/products" 
               className="inline-flex items-center mt-6 px-6 py-3 border border-transparent shadow-lg text-sm font-medium rounded-xl text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105"
@@ -429,14 +429,14 @@ export default function EditProduct() {
                 </div>
                 <div>
                   <span className="text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Admin Dashboard</span>
-                  <p className="text-xs text-gray-500">Content Management</p>
+                  <p className="text-xs text-gray-800">Content Management</p>
                 </div>
               </Link>
               
               {/* Breadcrumb */}
-              <div className="ml-8 flex items-center space-x-2 text-sm text-gray-600">
+              <div className="ml-8 flex items-center space-x-2 text-sm text-gray-900">
                 <Link href="/admin/products" className="hover:text-green-600 transition-colors duration-200">Products</Link>
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
                 <span className="text-green-600 font-medium">Edit Product</span>
@@ -457,7 +457,7 @@ export default function EditProduct() {
                   await supabase.auth.signOut()
                   router.push('/auth/signin')
                 }}
-                className="bg-white/50 hover:bg-white/70 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-white/30 hover:scale-105"
+                className="bg-white/50 hover:bg-white/70 text-gray-900 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-white/30 hover:scale-105"
               >
                 <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -478,11 +478,11 @@ export default function EditProduct() {
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                   Edit Product
                 </h1>
-                <p className="text-lg text-gray-600">Update product information and settings</p>
+                <p className="text-lg text-gray-900">Update product information and settings</p>
               </div>
               <Link 
                 href="/admin/products" 
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-all duration-200"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white hover:bg-gray-50 transition-all duration-200"
               >
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -508,7 +508,7 @@ export default function EditProduct() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Product Name *
                     </label>
                     <input
@@ -525,7 +525,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Product Slug *
                     </label>
                     <input
@@ -542,7 +542,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       SKU
                     </label>
                     <input
@@ -556,7 +556,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Product Type
                     </label>
                     <select
@@ -572,7 +572,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Status
                     </label>
                     <select
@@ -587,7 +587,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Short Description
                     </label>
                     <textarea
@@ -601,7 +601,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Full Description
                     </label>
                     <textarea
@@ -627,7 +627,7 @@ export default function EditProduct() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Regular Price * ($)
                     </label>
                     <input
@@ -646,7 +646,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Sale Price ($)
                     </label>
                     <input
@@ -665,7 +665,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Sale Start Date
                     </label>
                     <input
@@ -678,7 +678,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Sale End Date
                     </label>
                     <input
@@ -691,7 +691,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Tax Status
                     </label>
                     <select
@@ -718,7 +718,7 @@ export default function EditProduct() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Stock Status
                     </label>
                     <select
@@ -733,7 +733,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Stock Quantity
                     </label>
                     <input
@@ -760,7 +760,7 @@ export default function EditProduct() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Weight (kg)
                     </label>
                     <input
@@ -776,7 +776,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Length (cm)
                     </label>
                     <input
@@ -792,7 +792,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Width (cm)
                     </label>
                     <input
@@ -808,7 +808,7 @@ export default function EditProduct() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Height (cm)
                     </label>
                     <input
@@ -836,7 +836,7 @@ export default function EditProduct() {
                 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Upload Images
                     </label>
                     <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors duration-200">
@@ -856,15 +856,15 @@ export default function EditProduct() {
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <span className="ml-2 text-gray-600">Uploading...</span>
+                            <span className="ml-2 text-gray-900">Uploading...</span>
                           </div>
                         ) : (
                           <>
-                            <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="mx-auto h-12 w-12 text-gray-900 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
-                            <p className="text-gray-600">Click to upload images or drag and drop</p>
-                            <p className="text-sm text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+                            <p className="text-gray-900">Click to upload images or drag and drop</p>
+                            <p className="text-sm text-gray-800 mt-1">PNG, JPG, GIF up to 10MB</p>
                           </>
                         )}
                       </label>
@@ -873,7 +873,7 @@ export default function EditProduct() {
                   
                   {formData.images.length > 0 && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-900 mb-2">
                         Product Images ({formData.images.length})
                       </label>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -909,7 +909,7 @@ export default function EditProduct() {
                 <div className="flex items-center justify-between">
                   <Link 
                     href="/admin/products" 
-                    className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-xl font-medium transition-all duration-200"
+                    className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-900 bg-white hover:bg-gray-50 rounded-xl font-medium transition-all duration-200"
                   >
                     Cancel
                   </Link>

@@ -103,7 +103,12 @@ export default function RegisterPage() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                disabled={false}
+                readOnly={false}
+                aria-label="Password"
+                data-testid="password-input"
               />
+              <p className="text-xs text-gray-400 mt-1">Must be at least 6 characters</p>
             </div>
             <div>
               <button type="submit" className="btn-primary w-full py-3 font-semibold" disabled={loading}>

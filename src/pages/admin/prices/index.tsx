@@ -204,7 +204,7 @@ export default function AdminPrices() {
       <AdminLayout>
         <div className="max-w-4xl mx-auto p-6">
           <h1 className="text-2xl font-bold mb-2">Prices Management</h1>
-          <p className="text-gray-600">Please login as admin/author to access this page. <Link href="/auth/signin" className="underline">Sign in</Link></p>
+          <p className="text-gray-900">Please login as admin/author to access this page. <Link href="/auth/signin" className="underline">Sign in</Link></p>
         </div>
       </AdminLayout>
     );
@@ -215,7 +215,7 @@ export default function AdminPrices() {
       <div className="max-w-7xl mx-auto p-6 space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Prices Management</h1>
-          <p className="text-gray-600">产品价格管理：批量上传CSV、查询、修改、删除产品数据</p>
+          <p className="text-gray-900">产品价格管理：批量上传CSV、查询、修改、删除产品数据</p>
         </div>
 
         {/* Tab 切换 */}
@@ -225,7 +225,7 @@ export default function AdminPrices() {
             className={`px-4 py-2 font-medium ${
               activeTab === 'upload'
                 ? 'border-b-2 border-green-600 text-green-600'
-                : 'text-gray-600 hover:text-gray-900'
+                : 'text-gray-900 hover:text-gray-900'
             }`}
           >
             批量上传 CSV
@@ -235,7 +235,7 @@ export default function AdminPrices() {
             className={`px-4 py-2 font-medium ${
               activeTab === 'manage'
                 ? 'border-b-2 border-green-600 text-green-600'
-                : 'text-gray-600 hover:text-gray-900'
+                : 'text-gray-900 hover:text-gray-900'
             }`}
           >
             产品管理
@@ -249,17 +249,17 @@ export default function AdminPrices() {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="font-medium">选择 CSV 文件（可多选）</p>
-                  <p className="text-sm text-gray-500">建议 UTF-8 或 GB18030；价格可含 US$、逗号分隔，会自动清洗。</p>
+                  <p className="text-sm text-gray-800">建议 UTF-8 或 GB18030；价格可含 US$、逗号分隔，会自动清洗。</p>
                 </div>
-                <button onClick={clear} className="text-sm text-gray-600 underline">清空列表</button>
+                <button onClick={clear} className="text-sm text-gray-900 underline">清空列表</button>
               </div>
               <input type="file" multiple accept=".csv,text/csv" onChange={onSelect} className="block" />
               {files.length > 0 && (
-                <ul className="mt-4 space-y-1 text-sm text-gray-700">
+                <ul className="mt-4 space-y-1 text-sm text-gray-900">
                   {files.map((f, i) => (
                     <li key={i} className="flex items-center justify-between border-b py-1">
                       <span>{f.name}</span>
-                      <span className="text-gray-400">{(f.size/1024).toFixed(1)} KB</span>
+                      <span className="text-gray-900">{(f.size/1024).toFixed(1)} KB</span>
                     </li>
                   ))}
                 </ul>
@@ -276,7 +276,7 @@ export default function AdminPrices() {
                   <p className="font-medium">导入完成：共 {result.total} 条</p>
                   <ul className="mt-2 space-y-1">
                     {result.results?.map((r: any, i: number) => (
-                      <li key={i} className="text-gray-700">
+                      <li key={i} className="text-gray-900">
                         {r.file}: {r.inserted} {r.error ? `（错误：${r.error}）` : ''}
                       </li>
                     ))}
@@ -287,7 +287,7 @@ export default function AdminPrices() {
 
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
               <p className="font-medium mb-2">字段映射说明</p>
-              <p className="text-sm text-gray-600">自动识别列名：
+              <p className="text-sm text-gray-900">自动识别列名：
                 <code className="ml-2 bg-gray-100 px-1 rounded">title/name/产品/产品名称/商品名称</code>，
                 <code className="ml-2 bg-gray-100 px-1 rounded">image/图片/产品图片_URL</code>，
                 <code className="ml-2 bg-gray-100 px-1 rounded">price/价格/售价</code>，
@@ -340,21 +340,21 @@ export default function AdminPrices() {
               </div>
 
               {loading ? (
-                <div className="p-8 text-center text-gray-500">加载中...</div>
+                <div className="p-8 text-center text-gray-800">加载中...</div>
               ) : products.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">暂无数据</div>
+                <div className="p-8 text-center text-gray-800">暂无数据</div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-gray-50 border-b">
                       <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">图片</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">品牌</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">型号</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">产品名称</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">类型</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">价格</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-800 uppercase">图片</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-800 uppercase">品牌</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-800 uppercase">型号</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-800 uppercase">产品名称</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-800 uppercase">类型</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-800 uppercase">价格</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-800 uppercase">操作</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -364,7 +364,7 @@ export default function AdminPrices() {
                             {product.image_url ? (
                               <img src={product.image_url} alt="" className="w-12 h-12 object-cover rounded" />
                             ) : (
-                              <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-400">无图</div>
+                              <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-900">无图</div>
                             )}
                           </td>
                           <td className="px-4 py-3 text-sm">{product.brand}</td>
@@ -398,7 +398,7 @@ export default function AdminPrices() {
               {/* 分页 */}
               {totalCount > itemsPerPage && (
                 <div className="p-4 border-t bg-gray-50 flex justify-between items-center">
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-900">
                     显示 {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, totalCount)} / {totalCount}
                   </p>
                   <div className="flex gap-2">
@@ -445,7 +445,7 @@ export default function AdminPrices() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-md">
               <h3 className="text-lg font-bold mb-4">确认删除</h3>
-              <p className="text-gray-600 mb-6">确定要删除这个产品吗？此操作无法撤销。</p>
+              <p className="text-gray-900 mb-6">确定要删除这个产品吗？此操作无法撤销。</p>
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => setDeleteConfirm(null)}

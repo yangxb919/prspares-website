@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Technology",
+    "slug": "technology",
+    "description": "Technology and innovation articles"
+  },
+  {
+    "id": 2,
+    "name": "Mobile Repair",
+    "slug": "mobile-repair",
+    "description": "Mobile phone repair guides and tips"
+  },
+  {
+    "id": 3,
+    "name": "Display Technology",
+    "slug": "display-technology",
+    "description": "Screen and display technology articles"
+  }
+]

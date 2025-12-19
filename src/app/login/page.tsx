@@ -116,7 +116,12 @@ function LoginClientInner() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="text-sm font-medium text-gray-300">Password</label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="password" className="text-sm font-medium text-gray-300">Password</label>
+              <Link href="/forgot-password" className="text-sm text-[#00B140] hover:text-[#008631] underline">
+                Forgot password?
+              </Link>
+            </div>
             <input
               type="password"
               id="password"

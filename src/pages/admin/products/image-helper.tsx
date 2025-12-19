@@ -48,7 +48,7 @@ export default function ImageHelperPage() {
           <h1 className="text-2xl font-bold mb-6">图片URL管理工具</h1>
           
           <div className="mb-6">
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-900 mb-4">
               管理您的产品图片URL，生成JSON格式用于批量产品导入。
             </p>
             
@@ -63,7 +63,7 @@ export default function ImageHelperPage() {
                   className="bg-white p-3 rounded border hover:shadow-md transition-shadow"
                 >
                   <div className="font-medium text-blue-600">ImgBB</div>
-                  <div className="text-sm text-gray-600">免费，支持批量上传</div>
+                  <div className="text-sm text-gray-900">免费，支持批量上传</div>
                 </a>
                 <a 
                   href="https://imgur.com/" 
@@ -72,7 +72,7 @@ export default function ImageHelperPage() {
                   className="bg-white p-3 rounded border hover:shadow-md transition-shadow"
                 >
                   <div className="font-medium text-blue-600">Imgur</div>
-                  <div className="text-sm text-gray-600">知名度高，稳定可靠</div>
+                  <div className="text-sm text-gray-900">知名度高，稳定可靠</div>
                 </a>
                 <a 
                   href="https://cloudinary.com/" 
@@ -81,7 +81,7 @@ export default function ImageHelperPage() {
                   className="bg-white p-3 rounded border hover:shadow-md transition-shadow"
                 >
                   <div className="font-medium text-blue-600">Cloudinary</div>
-                  <div className="text-sm text-gray-600">专业图片处理</div>
+                  <div className="text-sm text-gray-900">专业图片处理</div>
                 </a>
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function ImageHelperPage() {
                       }}
                     />
                     <div className="flex-1">
-                      <p className="text-sm text-gray-600 truncate">{url}</p>
+                      <p className="text-sm text-gray-900 truncate">{url}</p>
                     </div>
                     <button
                       onClick={() => removeImageUrl(index)}
@@ -161,7 +161,7 @@ export default function ImageHelperPage() {
           {/* 使用说明 */}
           <div className="bg-gray-50 rounded-lg p-4">
             <h3 className="font-semibold mb-2">使用说明：</h3>
-            <ol className="text-sm text-gray-600 space-y-1">
+            <ol className="text-sm text-gray-900 space-y-1">
               <li>1. 选择一个免费图床服务上传您的产品图片</li>
               <li>2. 获取每张图片的直链URL</li>
               <li>3. 在上方输入框中逐个添加图片URL</li>

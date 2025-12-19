@@ -1,0 +1,73 @@
+{
+  "startTime": "2025-11-13T11:05:56.343Z",
+  "sourceDatabase": "https://eiikisplpnbeiscunkap.supabase.co",
+  "targetDatabase": "https://prspares.zeabur.app",
+  "tables": {
+    "categories": {
+      "exported": 3,
+      "imported": 0,
+      "errors": 3,
+      "startTime": "2025-11-13T11:05:56.344Z",
+      "endTime": "2025-11-13T11:06:00.796Z",
+      "description": "分类"
+    },
+    "tags": {
+      "exported": 6,
+      "imported": 0,
+      "errors": 6,
+      "startTime": "2025-11-13T11:06:00.796Z",
+      "endTime": "2025-11-13T11:06:01.783Z",
+      "description": "标签"
+    },
+    "profiles": {
+      "exported": 2,
+      "imported": 0,
+      "errors": 2,
+      "startTime": "2025-11-13T11:06:01.783Z",
+      "endTime": "2025-11-13T11:06:03.218Z",
+      "description": "用户资料"
+    },
+    "products": {
+      "exported": 2,
+      "imported": 0,
+      "errors": 2,
+      "startTime": "2025-11-13T11:06:03.218Z",
+      "endTime": "2025-11-13T11:06:04.985Z",
+      "description": "产品"
+    },
+    "prices": {
+      "exported": 564,
+      "imported": 0,
+      "errors": 564,
+      "startTime": "2025-11-13T11:06:04.985Z",
+      "endTime": "2025-11-13T11:06:19.833Z",
+      "description": "产品价格"
+    },
+    "posts": {
+      "exported": 12,
+      "imported": 0,
+      "errors": 12,
+      "startTime": "2025-11-13T11:06:19.834Z",
+      "endTime": "2025-11-13T11:06:22.563Z",
+      "description": "博客文章"
+    },
+    "post_tags": {
+      "exported": 5,
+      "imported": 0,
+      "errors": 5,
+      "startTime": "2025-11-13T11:06:22.563Z",
+      "endTime": "2025-11-13T11:06:24.337Z",
+      "description": "文章-标签关联"
+    }
+  },
+  "summary": {
+    "totalTables": 7,
+    "successTables": 0,
+    "failedTables": 7,
+    "totalRecordsExported": 594,
+    "totalRecordsImported": 0,
+    "totalErrors": 594
+  },
+  "errors": [],
+  "endTime": "2025-11-13T11:06:24.338Z"
+}

@@ -114,7 +114,7 @@ export default function ArticleSEOEdit() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">加载中...</div>
+        <div className="text-gray-800">加载中...</div>
       </div>
     );
   }
@@ -138,7 +138,7 @@ export default function ArticleSEOEdit() {
   if (!article) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">文章不存在</div>
+        <div className="text-gray-800">文章不存在</div>
       </div>
     );
   }
@@ -151,7 +151,7 @@ export default function ArticleSEOEdit() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">SEO设置</h1>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-900 mt-2">
                 编辑文章 "{article.title}" 的SEO设置
               </p>
             </div>
@@ -178,15 +178,15 @@ export default function ArticleSEOEdit() {
           <h2 className="text-lg font-semibold mb-4">文章信息</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="font-medium text-gray-700">标题:</span>
-              <p className="text-gray-600 mt-1">{article.title}</p>
+              <span className="font-medium text-gray-900">标题:</span>
+              <p className="text-gray-900 mt-1">{article.title}</p>
             </div>
             <div>
-              <span className="font-medium text-gray-700">URL:</span>
-              <p className="text-gray-600 mt-1">/blog/{article.slug}</p>
+              <span className="font-medium text-gray-900">URL:</span>
+              <p className="text-gray-900 mt-1">/blog/{article.slug}</p>
             </div>
             <div>
-              <span className="font-medium text-gray-700">状态:</span>
+              <span className="font-medium text-gray-900">状态:</span>
               <span className={`ml-2 px-2 py-1 rounded text-xs ${
                 article.status === 'publish' ? 'bg-green-100 text-green-800' :
                 article.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
@@ -197,8 +197,8 @@ export default function ArticleSEOEdit() {
               </span>
             </div>
             <div>
-              <span className="font-medium text-gray-700">发布时间:</span>
-              <p className="text-gray-600 mt-1">
+              <span className="font-medium text-gray-900">发布时间:</span>
+              <p className="text-gray-900 mt-1">
                 {article.published_at ? 
                   new Date(article.published_at).toLocaleDateString('zh-CN') : 
                   '未发布'
@@ -228,7 +228,7 @@ export default function ArticleSEOEdit() {
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/admin/articles"
-            className="text-gray-600 hover:text-gray-800"
+            className="text-gray-900 hover:text-gray-800"
           >
             ← 返回文章列表
           </Link>
@@ -239,7 +239,7 @@ export default function ArticleSEOEdit() {
               disabled={saving || !customSEOData}
               className={`px-6 py-2 rounded-lg font-medium transition-colors ${
                 saving || !customSEOData
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  ? 'bg-gray-300 text-gray-800 cursor-not-allowed'
                   : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
             >

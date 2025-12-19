@@ -219,7 +219,7 @@ export default function ContactsAdmin() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading contact submissions...</p>
+          <p className="text-gray-900">Loading contact submissions...</p>
         </div>
       </div>
     )
@@ -256,16 +256,16 @@ export default function ContactsAdmin() {
                 </div>
                 <div>
                   <span className="text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Admin Dashboard</span>
-                  <p className="text-xs text-gray-500">Contact Management</p>
+                  <p className="text-xs text-gray-800">Contact Management</p>
                 </div>
               </Link>
               
               {/* Navigation tabs */}
               <div className="ml-8 flex space-x-1 bg-gray-100/50 rounded-full p-1 backdrop-blur-sm">
-                <Link href="/admin/articles" className="px-4 py-2 text-sm font-medium rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/50 transition-all duration-200">
+                <Link href="/admin/articles" className="px-4 py-2 text-sm font-medium rounded-full text-gray-900 hover:text-gray-900 hover:bg-white/50 transition-all duration-200">
                   Blog Articles
                 </Link>
-                <Link href="/admin/products" className="px-4 py-2 text-sm font-medium rounded-full text-gray-600 hover:text-gray-900 hover:bg-white/50 transition-all duration-200">
+                <Link href="/admin/products" className="px-4 py-2 text-sm font-medium rounded-full text-gray-900 hover:text-gray-900 hover:bg-white/50 transition-all duration-200">
                   Products
                 </Link>
                 <Link href="/admin/contacts" className="px-4 py-2 text-sm font-medium rounded-full bg-orange-500 text-white shadow-sm transition-all duration-200">
@@ -290,7 +290,7 @@ export default function ContactsAdmin() {
                   localStorage.removeItem('userEmail')
                   router.push('/auth/signin')
                 }}
-                className="bg-white/50 hover:bg-white/70 text-gray-700 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-white/30 hover:scale-105"
+                className="bg-white/50 hover:bg-white/70 text-gray-900 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-white/30 hover:scale-105"
               >
                 <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -325,7 +325,7 @@ export default function ContactsAdmin() {
                     <MessageSquare className="w-6 h-6 text-blue-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Total</p>
+                    <p className="text-sm font-medium text-gray-900">Total</p>
                     <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
                   </div>
                 </div>
@@ -337,7 +337,7 @@ export default function ContactsAdmin() {
                     <EyeOff className="w-6 h-6 text-red-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Unread</p>
+                    <p className="text-sm font-medium text-gray-900">Unread</p>
                     <p className="text-2xl font-bold text-gray-900">{stats.unread}</p>
                   </div>
                 </div>
@@ -349,7 +349,7 @@ export default function ContactsAdmin() {
                     <Eye className="w-6 h-6 text-yellow-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Read</p>
+                    <p className="text-sm font-medium text-gray-900">Read</p>
                     <p className="text-2xl font-bold text-gray-900">{stats.read}</p>
                   </div>
                 </div>
@@ -361,7 +361,7 @@ export default function ContactsAdmin() {
                     <Mail className="w-6 h-6 text-green-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Replied</p>
+                    <p className="text-sm font-medium text-gray-900">Replied</p>
                     <p className="text-2xl font-bold text-gray-900">{stats.replied}</p>
                   </div>
                 </div>
@@ -373,7 +373,7 @@ export default function ContactsAdmin() {
                     <Package className="w-6 h-6 text-purple-600" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Quotes</p>
+                    <p className="text-sm font-medium text-gray-900">Quotes</p>
                     <p className="text-2xl font-bold text-gray-900">{stats.quotes}</p>
                   </div>
                 </div>
@@ -382,10 +382,10 @@ export default function ContactsAdmin() {
               <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="flex items-center">
                   <div className="p-3 bg-gray-100 rounded-lg">
-                    <MessageSquare className="w-6 h-6 text-gray-600" />
+                    <MessageSquare className="w-6 h-6 text-gray-900" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Contacts</p>
+                    <p className="text-sm font-medium text-gray-900">Contacts</p>
                     <p className="text-2xl font-bold text-gray-900">{stats.contacts}</p>
                   </div>
                 </div>
@@ -433,9 +433,9 @@ export default function ContactsAdmin() {
           <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-white/20 overflow-hidden">
             {filteredContacts.length === 0 ? (
               <div className="p-12 text-center">
-                <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <MessageSquare className="w-16 h-16 text-gray-900 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">No contact submissions found</h3>
-                <p className="text-gray-500">
+                <p className="text-gray-800">
                   {searchTerm || statusFilter !== 'all' || typeFilter !== 'all'
                     ? 'Try adjusting your search or filter criteria.'
                     : 'Contact submissions will appear here when users submit the contact form.'}
@@ -446,12 +446,12 @@ export default function ContactsAdmin() {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50/50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type & Product</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Contact</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Type & Product</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Message</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Date</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white/30 divide-y divide-gray-200">
@@ -464,15 +464,15 @@ export default function ContactsAdmin() {
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">{contact.name}</div>
-                              <div className="text-sm text-gray-500">{contact.email}</div>
+                              <div className="text-sm text-gray-800">{contact.email}</div>
                               {contact.phone && (
-                                <div className="text-xs text-gray-400 flex items-center">
+                                <div className="text-xs text-gray-900 flex items-center">
                                   <Phone className="w-3 h-3 mr-1" />
                                   {contact.phone}
                                 </div>
                               )}
                               {contact.ip_address && (
-                                <div className="text-xs text-gray-400">IP: {contact.ip_address}</div>
+                                <div className="text-xs text-gray-900">IP: {contact.ip_address}</div>
                               )}
                             </div>
                           </div>
@@ -483,10 +483,10 @@ export default function ContactsAdmin() {
                               {getTypeText(contact.request_type)}
                             </span>
                             {contact.product_name && (
-                              <div className="text-xs text-gray-600">
+                              <div className="text-xs text-gray-900">
                                 <div className="font-medium">{contact.product_name}</div>
                                 {contact.product_sku && (
-                                  <div className="text-gray-400">SKU: {contact.product_sku}</div>
+                                  <div className="text-gray-900">SKU: {contact.product_sku}</div>
                                 )}
                               </div>
                             )}
@@ -506,7 +506,7 @@ export default function ContactsAdmin() {
                             {contact.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-1" />
                             {formatDate(contact.created_at)}
