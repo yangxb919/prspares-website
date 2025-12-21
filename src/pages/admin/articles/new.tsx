@@ -196,17 +196,16 @@ export default function NewArticle() {
     })
   }
 
-  // 在光标位置插入图片
-  const insertImageAtCursor = (imageUrl: string) => {
+  // 在指定位置插入图片（避免异步回调拿到旧的 cursorPosition）
+  const insertImageAtCursor = (imageUrl: string, pos?: { start: number; end: number }) => {
     const textarea = contentTextareaRef.current
     if (!textarea) {
       setContent(prev => prev + `\n![图片描述](${imageUrl})\n`)
       return
     }
 
-    // 使用记录的光标位置，如果没有记录则使用当前位置
-    const start = cursorPosition.start || textarea.selectionStart
-    const end = cursorPosition.end || textarea.selectionEnd
+    const start = pos?.start ?? textarea.selectionStart
+    const end = pos?.end ?? textarea.selectionEnd
     const imageMarkdown = `![图片描述](${imageUrl})`
 
     setContent(prev => {
@@ -645,14 +644,10 @@ export default function NewArticle() {
                             disabled={uploadingImage}
                             onClick={async () => {
                               try {
-                                // 记录当前光标位置
                                 const textarea = contentTextareaRef.current
-                                if (textarea) {
-                                  setCursorPosition({
-                                    start: textarea.selectionStart,
-                                    end: textarea.selectionEnd
-                                  })
-                                }
+                                const selection = textarea
+                                  ? { start: textarea.selectionStart, end: textarea.selectionEnd }
+                                  : { start: content.length, end: content.length }
 
                                 const input = document.createElement('input');
                                 input.type = 'file';
@@ -670,7 +665,7 @@ export default function NewArticle() {
 
                                     const imageUrl = await uploadImageToStorage(file);
                                     if (imageUrl) {
-                                      insertImageAtCursor(imageUrl);
+                                      insertImageAtCursor(imageUrl, selection);
                                     }
                                   }
                                 };
