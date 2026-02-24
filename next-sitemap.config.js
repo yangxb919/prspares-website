@@ -68,19 +68,6 @@ module.exports = {
     const allPaths = [...new Set([...staticPaths, ...dynamicPaths])];
     return Promise.all(allPaths.map((p) => config.transform(config, p)));
   },
-  robotsTxtOptions: {
-    includeHost: false,
-    policies: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/admin/', '/auth/', '/api/']
-      }
-    ],
-    additionalSitemaps: [
-      `${siteUrl}/sitemap.xml`,
-    ],
-  },
   transform: async (config, path) => {
     // Custom priority for B2B wholesale pages
     if (path.includes('wholesale') || path.includes('factory') || path.includes('manufacturer') || path.includes('supplier') || path.includes('oem') || path.includes('odm')) {
