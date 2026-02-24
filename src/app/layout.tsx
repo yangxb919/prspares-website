@@ -88,27 +88,6 @@ export default function RootLayout({
     ]
   };
 
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "Mobile Phone Repair Parts",
-    "description": "OEM Quality Cell Phone Replacement Parts - iPhone LCD Screen, Samsung Battery, Android Smartphone Components",
-    "brand": {
-      "@type": "Brand",
-      "name": "PRSPARES"
-    },
-    "manufacturer": {
-      "@type": "Organization",
-      "name": "PRSPARES"
-    },
-    "category": "Mobile Phone Parts",
-    "offers": {
-      "@type": "AggregateOffer",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/InStock"
-    }
-  };
-
   return (
     <html lang="en">
       <head>
@@ -128,12 +107,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationSchema)
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(productSchema)
           }}
         />
 
