@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { X, Send, User, Mail, MessageCircle } from 'lucide-react';
-import emailjs from '@emailjs/browser';
+import { submitRfqAndNotify } from '@/lib/rfq-client';
 
 interface InquiryModalProps {
   isOpen: boolean;
@@ -35,6 +35,7 @@ const InquiryModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Partial<FormData>>({});
   const [userIP, setUserIP] = useState<string>('');
+  const [submitError, setSubmitError] = useState<string>('');
 
   // Get user IP address
   const getUserIP = async (): Promise<string> => {
@@ -116,6 +117,10 @@ const InquiryModal = ({
       [name]: value
     }));
 
+    if (submitError) {
+      setSubmitError('');
+    }
+
     // Clear validation errors for corresponding field
     if (validationErrors[name as keyof FormData]) {
       setValidationErrors(prev => ({ ...prev, [name]: undefined }));
@@ -129,93 +134,39 @@ const InquiryModal = ({
       return;
     }
 
+    setSubmitError('');
     setIsSubmitting(true);
-    
-    // Send via EmailJS
-    await submitWithEmailJS();
-  };
 
-  // EmailJS send email - includes IP address!
-  const submitWithEmailJS = async () => {
     try {
-      // EmailJS configuration - read from environment variables
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-      const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lijiedong08@gmail.com';
-
-      // If IP wasn't obtained during page load, get it now
       let currentIP = userIP;
       if (!currentIP || currentIP === 'Unable to get') {
-        console.log('🔄 Re-fetching IP address...');
         currentIP = await getUserIP();
         setUserIP(currentIP);
       }
 
-      // Debug information
-      console.log('EmailJS configuration check:', {
-        serviceId,
-        templateId,
-        publicKey: publicKey ? 'Configured' : 'Not configured',
-        contactEmail,
-        userIP: currentIP
+      const submittedAt = new Date().toISOString();
+      const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+
+      await submitRfqAndNotify({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        company: '',
+        phone: '',
+        productInterest: defaultMessage?.trim() || title,
+        message: formData.message.trim(),
+        pageUrl,
+        ip: currentIP,
+        submittedAt,
       });
 
-      // Check if configuration is complete
-      if (!serviceId || !templateId || !publicKey) {
-        console.warn('EmailJS configuration incomplete, using simulation');
-        simulateSubmission();
-        return;
-      }
-
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        message: `INQUIRY: ${formData.message}`,
-        to_email: contactEmail,
-        reply_to: formData.email,
-        user_ip: currentIP,
-        submission_time: new Date().toLocaleString('en-US', {
-          timeZone: 'UTC',
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-        }),
-        inquiry_type: 'Home Page Inquiry'
-      };
-
-      console.log('Email parameters:', templateParams);
-
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
-
-      console.log('Inquiry email sent successfully!');
-      console.log(`User IP: ${currentIP}`);
-
-      // Redirect to thank you page
       router.push('/thank-you');
-
     } catch (error) {
-      console.error('Email sending failed:', error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`Email sending failed: ${errorMessage}`);
-      // If EmailJS fails, fallback to simulation
-      simulateSubmission();
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('[RFQ] Inquiry submission failed:', error);
+      setSubmitError(`Failed to submit inquiry: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  // Simulate submission (fallback)
-  const simulateSubmission = () => {
-    setTimeout(() => {
-      console.log('Inquiry form data:', formData);
-      
-      // Redirect to thank you page
-      router.push('/thank-you');
-    }, 1500);
   };
 
   if (!isOpen) return null;
@@ -330,6 +281,10 @@ const InquiryModal = ({
             </div>
 
             {/* Submit button */}
+            {submitError && (
+              <p className="text-sm text-red-600">{submitError}</p>
+            )}
+
             <button
               type="submit"
               disabled={isSubmitting}

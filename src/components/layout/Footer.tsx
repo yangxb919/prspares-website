@@ -2,78 +2,20 @@
 
 import Link from 'next/link';
 import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Send } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { getClientIP, getBrowserInfo } from '@/utils/getClientIP';
+import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
 
 const Footer = () => {
-  const [email, setEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [clientIP, setClientIP] = useState<string>('');
-  const [browserInfo, setBrowserInfo] = useState<string>('');
-
-  // Get client IP and browser info on component mount
-  useEffect(() => {
-    const fetchClientInfo = async () => {
-      try {
-        const ip = await getClientIP();
-        const browser = getBrowserInfo();
-        setClientIP(ip);
-        setBrowserInfo(browser);
-        console.log('📍 Client info loaded:', { ip, browser });
-      } catch (error) {
-        console.error('Failed to get client info:', error);
-        setClientIP('unknown');
-        setBrowserInfo('unknown');
-      }
-    };
-
-    fetchClientInfo();
-  }, []);
+  const {
+    email,
+    setEmail,
+    isSubmitting,
+    isSubscribed,
+    errorMessage,
+    submit: submitNewsletter,
+  } = useNewsletterSubscription({ source: 'footer' });
 
   const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email)) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch('/api/newsletter', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.trim(),
-          clientIP: clientIP,
-          browserInfo: browserInfo
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setIsSubscribed(true);
-        setEmail('');
-        console.log('✅ Newsletter subscription successful:', data.message);
-
-        // Reset status after 5 seconds
-        setTimeout(() => {
-          setIsSubscribed(false);
-        }, 5000);
-      } else {
-        console.error('Newsletter subscription failed:', data.error);
-        // You could add error state handling here
-        alert(data.error || 'Subscription failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Newsletter subscription error:', error);
-      alert('Network error. Please check your connection and try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    await submitNewsletter(e);
   };
 
   return (
@@ -214,6 +156,9 @@ const Footer = () => {
                   <p className="text-xs text-gray-500">
                     Get product updates and guides
                   </p>
+                  {errorMessage && (
+                    <p className="text-xs text-red-400">{errorMessage}</p>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">

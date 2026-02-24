@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
 import { ensureStorageSetup } from '@/utils/supabase-storage-setup'
+import { compressImage, COMPRESSION_PRESETS, supportsWebP } from '@/utils/imageCompression'
+import { readErrorMessage, readJsonResponse } from '@/utils/fetchResponse'
 import Link from 'next/link'
 import Image from 'next/image'
 import { generateAutoSEO } from '@/utils/auto-seo-generator'
@@ -126,6 +128,22 @@ export default function NewArticle() {
   const uploadImageToStorage = async (file: File): Promise<string | null> => {
     try {
       setUploadingImage(true)
+      let uploadFile = file
+      if (file.type.startsWith('image/') && file.size > 300 * 1024) {
+        try {
+          const useWebP = await supportsWebP()
+          const preset = useWebP
+            ? { ...COMPRESSION_PRESETS.webp, maxWidth: 1400, maxHeight: 1400, maxSizeKB: 600 }
+            : { ...COMPRESSION_PRESETS.high, maxWidth: 1400, maxHeight: 1400, maxSizeKB: 600 }
+          const compressed = await compressImage(file, preset)
+          uploadFile = compressed.file
+        } catch (compressionError) {
+          console.warn('Image compression failed, uploading original file:', compressionError)
+        }
+      }
+      if (uploadFile.size > 900 * 1024) {
+        throw new Error('图片压缩后仍超过 1MB（可能会触发 413）。请换更小的图片或提高服务器上传限制。')
+      }
       const fileExt = file.name.split('.').pop()
       const randomString = Math.random().toString(36).substring(2, 15)
       // 我们希望最终文件也是 webp，所以我们在这里预设文件名，但实际上 API 会转换格式
@@ -143,7 +161,7 @@ export default function NewArticle() {
       const filePath = `${user.id}/${fileName}`
 
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', uploadFile)
       formData.append('bucket', 'post-images')
       formData.append('path', filePath)
 
@@ -161,11 +179,10 @@ export default function NewArticle() {
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error)
+        throw new Error(await readErrorMessage(response))
       }
 
-      const data = await response.json()
+      const data = await readJsonResponse<{ url: string }>(response)
 
       return data.url
     } catch (error: any) {
@@ -657,9 +674,9 @@ export default function NewArticle() {
                                 input.onchange = async (e) => {
                                   const file = (e.target as HTMLInputElement).files?.[0];
                                   if (file) {
-                                    // 检查文件大小（限制为5MB）
-                                    if (file.size > 5 * 1024 * 1024) {
-                                      setError('图片文件大小不能超过5MB');
+                                    // 检查文件大小（限制为20MB），实际上传前会自动压缩
+                                    if (file.size > 20 * 1024 * 1024) {
+                                      setError('图片文件大小不能超过20MB');
                                       return;
                                     }
 

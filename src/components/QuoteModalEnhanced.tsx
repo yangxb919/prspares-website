@@ -8,7 +8,7 @@ import { X, Send, User, Mail, Phone, MessageSquare, Package, AlertCircle, CheckC
 import { quoteFormSchema, type QuoteFormData } from '@/lib/form-schemas';
 import { FormInput, FormTextarea, FormErrorSummary, FormStatus } from '@/components/common/FormComponents';
 import { useFormAutoSave, useFormRecovery, useFormChanges, useFormSubmission, usePreventDataLoss } from '@/lib/form-utils';
-import emailjs from '@emailjs/browser';
+import { submitRfqAndNotify } from '@/lib/rfq-client';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -72,74 +72,27 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
     setSubmitting(true);
 
     try {
-      // 1. Save to database via API
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...data,
-          subject: `Quote Request${data.product ? ` - ${data.product}` : ''}`,
-          requestType: 'quote'
-        }),
+      const submittedAt = new Date().toISOString();
+      const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+      const productInterest = [data.product, articleTitle].filter(Boolean).join(' | ');
+
+      await submitRfqAndNotify({
+        name: data.name,
+        email: data.email,
+        company: data.company,
+        phone: data.phone,
+        productInterest,
+        message: data.message,
+        pageUrl,
+        submittedAt,
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to submit quote request');
-      }
-
-      // 2. Send email via EmailJS
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-      const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
-
-      if (serviceId && templateId && publicKey) {
-        const emailParams = {
-          from_name: data.name,
-          from_email: data.email,
-          message: data.message,
-          to_email: contactEmail,
-          reply_to: data.email,
-          phone: data.phone || 'Not provided',
-          company: data.company || 'Not provided',
-          request_type: 'Quote Request',
-          product_name: data.product || 'Not specified',
-          product_sku: 'Not applicable',
-          submission_time: new Date().toLocaleString('en-US', {
-            timeZone: 'UTC',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          })
-        };
-
-        try {
-          await emailjs.send(serviceId, templateId, emailParams, publicKey);
-          console.log('✅ Quote email sent successfully via EmailJS');
-        } catch (emailError) {
-          console.error('EmailJS failed for quote:', emailError);
-          // Don't throw error - continue with success response
-        }
-      } else {
-        console.warn('EmailJS configuration incomplete - skipping email sending');
-      }
-
-      // 3. Set success message and prepare redirect
       setSuccess('Quote request submitted successfully! We will send you a detailed quote within 24 hours.');
 
-      // 4. Clear saved data and reset form
       clearSavedData();
       reset(defaultValues);
       resetSubmission();
 
-      // 5. Close modal and redirect to thank you page
       setTimeout(() => {
         onClose();
         setTimeout(() => {
@@ -149,7 +102,8 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
 
     } catch (error) {
       console.error('Error submitting quote form:', error);
-      setError('Network error. Please check your connection and try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Please check your connection and try again.';
+      setError(`Submission failed: ${errorMessage}`);
     } finally {
       setSubmitting(false);
     }

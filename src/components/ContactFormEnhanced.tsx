@@ -5,7 +5,7 @@ import { contactFormSchema, type ContactFormData } from '@/lib/form-schemas';
 import { FormWrapper } from '@/components/common/FormWrapper';
 import { FormInput, FormTextarea, FormSelect } from '@/components/common/FormComponents';
 import { Mail, Phone, MessageSquare, User, Building } from 'lucide-react';
-import emailjs from '@emailjs/browser';
+import { submitRfqAndNotify } from '@/lib/rfq-client';
 
 interface ContactFormProps {
   className?: string;
@@ -34,64 +34,23 @@ export default function ContactFormEnhanced({ className, showTitle = true, onSuc
 
   const handleSubmit = async (data: ContactFormData) => {
     try {
-      // 1. Save to database via API
-      const apiResponse = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const submittedAt = new Date().toISOString();
+      const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+      const productInterest = [data.productName, data.productSku].filter(Boolean).join(' / ');
+
+      await submitRfqAndNotify({
+        name: data.name,
+        email: data.email,
+        company: data.company,
+        phone: data.phone,
+        productInterest: productInterest || data.requestType,
+        message: data.message,
+        pageUrl,
+        submittedAt,
       });
 
-      if (!apiResponse.ok) {
-        const result = await apiResponse.json();
-        throw new Error(result.error || 'Failed to submit contact form');
-      }
-
-      // 2. Send email via EmailJS
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-      const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
-
-      if (serviceId && templateId && publicKey) {
-        const emailParams = {
-          from_name: data.name,
-          from_email: data.email,
-          message: data.message,
-          to_email: contactEmail,
-          reply_to: data.email,
-          phone: data.phone || 'Not provided',
-          company: data.company || 'Not provided',
-          request_type: data.requestType === 'quote' ? 'Quote Request' : 'General Inquiry',
-          product_name: data.productName || 'Not applicable',
-          product_sku: data.productSku || 'Not applicable',
-          submission_time: new Date().toLocaleString('en-US', {
-            timeZone: 'UTC',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          })
-        };
-
-        try {
-          await emailjs.send(serviceId, templateId, emailParams, publicKey);
-          console.log('✅ Email sent successfully via EmailJS');
-        } catch (emailError) {
-          console.error('EmailJS failed:', emailError);
-          // Don't throw error - continue with success response
-        }
-      } else {
-        console.warn('EmailJS configuration incomplete - skipping email sending');
-      }
-
-      // 3. Redirect to thank you page
       router.push('/thank-you');
 
-      // 4. Call success callback if provided
       if (onSuccess) {
         onSuccess();
       }

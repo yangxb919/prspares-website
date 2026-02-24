@@ -15,6 +15,12 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
   // 预处理内容，将特殊标记转换为组件
   const processContent = (markdown: string) => {
     return markdown
+      // 处理「标题里只有一张图片」的写法：`## ![alt](url)` / `##![alt](url)`
+      // 这种写法会被 TOC 解析为标题且在部分渲染路径下出现空标题，统一改为普通图片段落
+      .replace(
+        /^(#{1,6})\s*!\[([^\]]*)\]\(([^)]+)\)\s*$/gm,
+        (_m, _hashes, alt, url) => `\n\n![${alt}](${url})\n\n`
+      )
       // 处理引用按钮的各种变体
       .replace(
         /\[([^\]]+)\]\(quote:([^)]*)\)/g,
@@ -133,7 +139,9 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
     img: ({ src, alt, ...props }: any) => {
       const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
       let supabaseOrigin = '';
+      let supabaseHost = '';
       try { supabaseOrigin = base ? new URL(base).origin : ''; } catch {}
+      try { supabaseHost = base ? new URL(base).hostname : ''; } catch {}
 
       const normalize = (input?: string): string => {
         if (!input) return '';
@@ -159,28 +167,29 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
           url = `https://${url}`;
         }
 
-        // 检查是否是需要代理的外部图床
-        const needsProxy = (url: string): boolean => {
+        // 仅对 Supabase 存储域名使用本地代理，外部图床（如 Cloudinary）直接走浏览器请求
+        const needsProxy = (u: string): boolean => {
           try {
-            const urlObj = new URL(url);
-            const proxyDomains = [
-              'pplx-res.cloudinary.com',
-              'res.cloudinary.com',
-            ];
-            return proxyDomains.some(domain =>
-              urlObj.hostname === domain || urlObj.hostname.endsWith(`.${domain}`)
-            );
+            const urlObj = new URL(u);
+            // Supabase Storage / gateway domains：优先走同域代理，避免部分地区直连失败
+            if (
+              (supabaseHost && urlObj.hostname === supabaseHost) ||
+              urlObj.hostname === 'eiikisplpnbeiscunkap.supabase.co'
+            ) {
+              return urlObj.pathname.startsWith('/storage/v1/object/public/');
+            }
           } catch {
             return false;
           }
+          return false;
         };
 
-        // 如果是需要代理的域名，使用代理 API
+        // 如果是需要代理的内部存储域名，使用代理 API
         if (needsProxy(url)) {
           return `/api/proxy-image?url=${encodeURIComponent(url)}`;
         }
 
-        // 对于其他外部 URL，保持原样
+        // 对于其他外部 URL（包括 Cloudinary），保持原样
         if (url.startsWith('https://') && !url.includes(supabaseOrigin)) {
           return url;
         }

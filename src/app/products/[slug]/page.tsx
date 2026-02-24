@@ -70,7 +70,7 @@ async function getRelatedProducts(currentProductId: string | number, limit: numb
       return [];
     }
 
-    return products?.map(product => ({
+    return products?.map((product: any) => ({
       id: String(product.id),
       slug: String(product.slug),
       name: String(product.name),
@@ -163,7 +163,7 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 You Might Also Like
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {relatedProducts.map((relatedProd) => (
+                {relatedProducts.map((relatedProd: any) => (
                   <div key={relatedProd.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col">
                     <Link href={`/products/${relatedProd.slug}`} className="block">
                       <div className="relative h-40 overflow-hidden">

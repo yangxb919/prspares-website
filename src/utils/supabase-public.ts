@@ -1,10 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
 // 单例模式的 Supabase 客户端
-let supabaseInstance: ReturnType<typeof createClient> | null = null;
+// NOTE: `Database` generated types are incomplete in this project (missing tables like `posts`),
+// which causes `.from(...).update(...)`/`.select(...)` chains to narrow to `never`.
+// Use a loose client type here to keep production builds unblocked.
+let supabaseInstance: any = null;
 
 // 创建公共客户端（单例模式）
-export const createPublicClient = () => {
+export const createPublicClient = (): any => {
   // 如果已经有实例，直接返回
   if (supabaseInstance) {
     return supabaseInstance;

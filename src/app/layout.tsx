@@ -15,8 +15,14 @@ const robotoMono = Roboto_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  "https://www.phonerepairspares.com"
+).replace(/\/$/, "");
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NODE_ENV === 'production' ? 'https://prspares.com' : 'http://localhost:3000'),
+  metadataBase: new URL(SITE_URL),
   title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | OEM·ODM Manufacturer – PRSPARES",
   description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale, global shipping, sufficient stock, 12-month warranty.",
   keywords: "mobile phone repair parts, iPhone parts, Samsung parts, Android parts, OEM manufacturer, ODM supplier, wholesale, Shenzhen Huaqiangbei, screen replacement, battery, camera module",
@@ -35,7 +41,7 @@ export const metadata: Metadata = {
     url: "/",
     images: [
       {
-        url: "/PRSPARES1 .png",
+        url: "/PRSPARES1%20.png",
         width: 1200,
         height: 630,
         alt: "PRSPARES - Mobile Phone Repair Parts Factory",
@@ -46,10 +52,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
     description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
-    images: ["/PRSPARES1 .png"],
+    images: ["/PRSPARES1%20.png"],
   },
   alternates: {
-    canonical: "https://prspares.com",
+    canonical: "/",
   },
 };
 
@@ -63,8 +69,8 @@ export default function RootLayout({
     "@type": "Organization",
     "name": "PRSPARES",
     "description": "Professional Mobile Phone Repair Parts Factory & OEM/ODM Manufacturer from Shenzhen Huaqiangbei",
-    "url": "https://prspares.com",
-    "logo": "https://prspares.com/PRSPARES1 .png",
+    "url": SITE_URL,
+    "logo": `${SITE_URL}/PRSPARES1%20.png`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Shenzhen",

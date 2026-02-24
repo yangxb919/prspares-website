@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Send } from 'lucide-react';
-import emailjs from '@emailjs/browser';
+import { submitRfqAndNotify } from '@/lib/rfq-client';
 
 interface FormData {
   name: string;
@@ -22,11 +22,11 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Partial<FormData>>({});
   const [userIP, setUserIP] = useState<string>('');
+  const [submitError, setSubmitError] = useState<string>('');
 
-  // Get user IP address
+  // Get user IP address (best effort)
   const getUserIP = async (): Promise<string> => {
     try {
-      // Try multiple IP API services for better success rate
       const ipAPIs = [
         'https://api.ipify.org?format=json',
         'https://ipapi.co/json/',
@@ -38,27 +38,21 @@ const ContactForm = () => {
         try {
           const response = await fetch(apiUrl);
           const data = await response.json();
-
-          // Different APIs return different field names, need to adapt
           const ip = data.ip || data.IPv4 || data.query || '';
           if (ip) {
-            console.log(`✅ Successfully got IP address: ${ip} (source: ${apiUrl})`);
             return ip;
           }
-        } catch (apiError) {
-          console.warn(`❌ IP API ${apiUrl} failed:`, apiError);
+        } catch {
           continue;
         }
       }
 
       throw new Error('All IP APIs failed');
-    } catch (error) {
-      console.error('Failed to get IP address:', error);
+    } catch {
       return 'Unable to get';
     }
   };
 
-  // Get IP address when component loads
   useEffect(() => {
     const fetchIP = async () => {
       const ip = await getUserIP();
@@ -93,140 +87,59 @@ const ContactForm = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
 
-    // Clear validation errors for corresponding field
+    if (submitError) {
+      setSubmitError('');
+    }
+
     if (validationErrors[name as keyof FormData]) {
       setValidationErrors(prev => ({ ...prev, [name]: undefined }));
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
       return;
     }
 
+    setSubmitError('');
     setIsSubmitting(true);
 
-    // Send to backend API (saves to database)
-    submitToAPI();
-
-    // Alternative: Use EmailJS to send email (template ID fixed, includes IP address)
-    // submitWithEmailJS();
-
-    // Development test: simulate submission
-    // simulateSubmission();
-  };
-
-  // EmailJS send email - includes IP address!
-  const submitWithEmailJS = async () => {
     try {
-      // EmailJS configuration - read from environment variables
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-      const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'lijiedong08@gmail.com';
-
-      // If IP wasn't obtained during page load, get it now
       let currentIP = userIP;
       if (!currentIP || currentIP === 'Unable to get') {
-        console.log('🔄 Re-fetching IP address...');
         currentIP = await getUserIP();
         setUserIP(currentIP);
       }
 
-      // Debug information
-      console.log('EmailJS configuration check:', {
-        serviceId,
-        templateId,
-        publicKey: publicKey ? 'Configured' : 'Not configured',
-        contactEmail,
-        userIP: currentIP
+      const submittedAt = new Date().toISOString();
+      const pageUrl = typeof window !== 'undefined' ? window.location.href : '/contact';
+      const searchParams = typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search)
+        : new URLSearchParams();
+      const productInterest = searchParams.get('product') || '';
+
+      await submitRfqAndNotify({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        company: '',
+        phone: '',
+        productInterest,
+        message: formData.message.trim(),
+        pageUrl,
+        ip: currentIP,
+        submittedAt,
       });
 
-      // Check if configuration is complete
-      if (!serviceId || !templateId || !publicKey) {
-        console.warn('EmailJS configuration incomplete, using simulation');
-        alert('EmailJS configuration incomplete, please check environment variables');
-        simulateSubmission();
-        return;
-      }
-
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        message: formData.message,
-        to_email: contactEmail,
-        reply_to: formData.email,
-        user_ip: currentIP,  // 🆕 Add user IP address
-        submission_time: new Date().toLocaleString('en-US', {
-          timeZone: 'UTC',
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-        })  // 🆕 Add submission time
-      };
-
-      console.log('Email parameters:', templateParams);
-
-      await emailjs.send(serviceId, templateId, templateParams, publicKey);
-
-      console.log('Email sent successfully!');
-      console.log(`User IP: ${currentIP}`);
-
-      // Redirect to thank you page
       router.push('/thank-you');
-
     } catch (error) {
-      console.error('Email sending failed:', error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error(`Email sending failed: ${errorMessage}`);
-      // If EmailJS fails, fallback to simulation
-      simulateSubmission();
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setSubmitError(`Failed to submit inquiry: ${errorMessage}`);
+      console.error('[RFQ] Submit failed:', error);
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  // Real API submission
-  const submitToAPI = async () => {
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        console.log('Message sent successfully!');
-        // Redirect to thank you page
-        router.push('/thank-you');
-      } else {
-        console.error('Failed to send message');
-        // Error handling can be added here
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      // Error handling can be added here
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Simulate submission (for demo)
-  const simulateSubmission = () => {
-    setTimeout(() => {
-      console.log('Form data:', formData);
-      setIsSubmitting(false);
-
-      // Redirect to thank you page
-      router.push('/thank-you');
-    }, 1500);
   };
 
   return (
@@ -288,6 +201,10 @@ const ContactForm = () => {
             )}
           </div>
 
+          {submitError && (
+            <p className="mb-4 text-sm text-red-600">{submitError}</p>
+          )}
+
           <button
             type="submit"
             disabled={isSubmitting}
@@ -310,27 +227,6 @@ const ContactForm = () => {
             )}
           </button>
         </form>
-
-      {/* Configuration instructions - Hidden */}
-      {/* <div className="mt-6 p-4 bg-blue-50 rounded-lg text-sm text-gray-600">
-        <p><strong>💡 Configuration Tip:</strong> To enable email sending functionality, please visit <a href="https://www.emailjs.com/" target="_blank" className="text-blue-600 hover:underline">EmailJS.com</a> to register an account and get configuration keys.</p>
-      </div> */}
-
-      {/* IP address display - Hidden */}
-      {/* <div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span>📍 Your IP Address:</span>
-          <span className="font-mono font-medium text-gray-800">
-            {userIP || 'Getting...'}
-          </span>
-        </div>
-        {userIP && userIP !== 'Unable to get' && (
-          <span className="text-green-600 text-xs">✅ Retrieved</span>
-        )}
-        {userIP === 'Unable to get' && (
-          <span className="text-orange-600 text-xs">⚠️ Failed to get</span>
-        )}
-      </div> */}
     </div>
   );
 };

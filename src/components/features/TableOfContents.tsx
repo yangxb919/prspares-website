@@ -25,9 +25,31 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
     const headings: TocItem[] = [];
     let match;
 
+    const cleanHeadingText = (raw: string) => {
+      let text = raw.trim();
+
+      // Remove markdown images: ![alt](url)
+      text = text.replace(/!\[[^\]]*]\([^)]+\)/g, '').trim();
+
+      // Replace markdown links [text](url) -> text
+      text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim();
+
+      // Strip inline code/backticks
+      text = text.replace(/`+/g, '').trim();
+
+      // Strip any residual HTML tags
+      text = text.replace(/<[^>]+>/g, '').trim();
+
+      // Collapse whitespace
+      text = text.replace(/\s+/g, ' ').trim();
+
+      return text;
+    };
+
     while ((match = headingRegex.exec(content)) !== null) {
       const level = match[1].length;
-      const title = match[2].trim();
+      const title = cleanHeadingText(match[2]);
+      if (!title) continue;
       const id = title
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, '')

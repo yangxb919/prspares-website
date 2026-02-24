@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { X, Send, User, Mail, Phone, MessageSquare, Package } from 'lucide-react';
+import { submitRfqAndNotify } from '@/lib/rfq-client';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -11,6 +13,7 @@ interface QuoteModalProps {
 }
 
 export default function QuoteModal({ isOpen, onClose, productName, articleTitle }: QuoteModalProps) {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,40 +29,40 @@ export default function QuoteModal({ isOpen, onClose, productName, articleTitle 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          subject: `Quote Request${productName ? ` - ${productName}` : ''}`,
-          type: 'quote'
-        }),
+      const submittedAt = new Date().toISOString();
+      const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+
+      await submitRfqAndNotify({
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        phone: formData.phone,
+        productInterest: formData.product || productName || '',
+        message: formData.message,
+        pageUrl,
+        submittedAt,
       });
 
-      if (response.ok) {
-        setSubmitStatus('success');
-        setTimeout(() => {
-          onClose();
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            company: '',
-            product: productName || '',
-            message: '',
-            source: articleTitle ? `Article: ${articleTitle}` : 'Website'
-          });
-          setSubmitStatus('idle');
-        }, 2000);
-      } else {
-        setSubmitStatus('error');
-      }
+      setSubmitStatus('success');
+      setTimeout(() => {
+        onClose();
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          product: productName || '',
+          message: '',
+          source: articleTitle ? `Article: ${articleTitle}` : 'Website'
+        });
+        setSubmitStatus('idle');
+        router.push('/thank-you');
+      }, 1200);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('[RFQ] Error submitting form:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);

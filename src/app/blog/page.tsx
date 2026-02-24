@@ -6,6 +6,7 @@ import { ArticleCard } from '@/types/blog';
 import BlogHeader from '@/components/features/BlogHeader';
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import SafeImage from '@/components/SafeImage';
+import BlogNewsletterSubscribe from '@/components/features/BlogNewsletterSubscribe';
 
 export const metadata: Metadata = {
   title: 'Repair Guides & Insights - PRSPARES',
@@ -77,7 +78,7 @@ export default async function BlogPage({
 
     // Fetch author profiles separately for all posts
     if (postsData && postsData.length > 0) {
-      const authorIds = [...new Set(postsData.map(p => p.author_id).filter(Boolean))];
+      const authorIds = [...new Set(postsData.map((p: any) => p.author_id).filter(Boolean))];
       if (authorIds.length > 0) {
         const { data: profiles } = await supabase
           .from('profiles')
@@ -85,10 +86,10 @@ export default async function BlogPage({
           .in('id', authorIds);
 
         // Create a map of profiles by id
-        const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+        const profileMap = new Map((profiles as any[] | null)?.map((p: any) => [p.id, p]) || []);
 
         // Attach profiles to posts
-        postsData = postsData.map(post => ({
+        postsData = postsData.map((post: any) => ({
           ...post,
           profiles: profileMap.get(post.author_id) || null
         }));
@@ -98,7 +99,7 @@ export default async function BlogPage({
     console.log('Query completed:', { success: !error, dataCount: postsData?.length || 0 });
 
     if (postsData && postsData.length > 0) {
-      console.log('Raw guide data retrieved:', postsData.map(p => ({
+      console.log('Raw guide data retrieved:', postsData.map((p: any) => ({
         id: p.id,
         title: p.title,
         slug: p.slug,
@@ -308,16 +309,7 @@ export default async function BlogPage({
             <p className="text-gray-600 mb-8 text-lg leading-relaxed">
               Get the latest mobile repair tips, product announcements, and exclusive offers delivered to your inbox.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-1 px-5 py-3.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00B140] focus:border-transparent bg-white shadow-sm"
-              />
-              <button className="px-7 py-3.5 bg-[#00B140] text-white rounded-lg font-semibold hover:bg-[#008631] transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 whitespace-nowrap">
-                Subscribe Now
-              </button>
-            </div>
+            <BlogNewsletterSubscribe />
             <p className="text-xs text-gray-500 mt-4">
               We value your privacy. No spam, unsubscribe anytime.
             </p>

@@ -8,10 +8,10 @@ export const metadata: Metadata = {
     title: 'Mobile Phone Batteries - High Capacity Lithium Replacements | PRSPARES',
     description: 'High-capacity mobile phone batteries for iPhone, Samsung, and Android devices. Original quality lithium-ion batteries with safety certifications.',
     type: 'website',
-    url: 'https://prspares.com/products/batteries',
+    url: '/products/batteries',
     images: [
       {
-        url: 'https://prspares.com/images/batteries-hero.jpg',
+        url: '/images/batteries-hero.jpg',
         width: 1200,
         height: 630,
         alt: 'Mobile Phone Batteries',
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mobile Phone Batteries - High Capacity Lithium Replacements | PRSPARES',
     description: 'High-capacity mobile phone batteries for iPhone, Samsung, and Android devices. Original quality lithium-ion batteries.',
-    images: ['https://prspares.com/images/batteries-hero.jpg'],
+    images: ['/images/batteries-hero.jpg'],
   },
   alternates: {
-    canonical: 'https://prspares.com/products/batteries',
+    canonical: '/products/batteries',
   },
 };
 

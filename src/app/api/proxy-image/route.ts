@@ -9,6 +9,15 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const supabaseHost = (() => {
+      try {
+        const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+        return base ? new URL(base).hostname : '';
+      } catch {
+        return '';
+      }
+    })();
+
     // 验证 URL 是否来自允许的域名
     const allowedDomains = [
       'pplx-res.cloudinary.com',
@@ -16,9 +25,16 @@ export async function GET(request: NextRequest) {
       'cloudinary.com',
       'images.unsplash.com',
       'unsplash.com',
+      // Supabase Storage / Zeabur Supabase gateway
+      ...(supabaseHost ? [supabaseHost] : []),
+      // legacy default host used in next.config.js fallback
+      'eiikisplpnbeiscunkap.supabase.co',
     ];
 
     const url = new URL(imageUrl);
+    if (url.protocol !== 'https:') {
+      return NextResponse.json({ error: 'Only https is allowed' }, { status: 400 });
+    }
     const isAllowed = allowedDomains.some(domain => 
       url.hostname === domain || url.hostname.endsWith(`.${domain}`)
     );
@@ -83,4 +99,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

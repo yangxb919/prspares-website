@@ -117,7 +117,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   
   try {
     // First, fetch the post without the relationship
-    const { data: post, error } = await supabase
+    const { data: postData, error } = await supabase
       .from('posts')
       .select(`
         id,
@@ -139,22 +139,23 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       throw error;
     }
 
-    if (!post) {
+    if (!postData) {
       notFound();
     }
 
+    const typedPost = postData as unknown as Post;
+
     // Then fetch the author profile separately if author_id exists
     let authorProfile: Profile | null = null;
-    if (post.author_id) {
+    if (typedPost.author_id) {
       const { data: profile } = await supabase
         .from('profiles')
         .select('id, display_name, avatar_url')
-        .eq('id', post.author_id)
+        .eq('id', typedPost.author_id)
         .single();
       authorProfile = profile as Profile | null;
     }
 
-    const typedPost = post as unknown as Post;
     // Attach the profile to the post object for compatibility
     if (authorProfile) {
       (typedPost as any).profiles = authorProfile;
@@ -184,6 +185,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     const coverImageRaw = typedPost.meta?.cover_image || getDefaultCoverImage(typedPost);
     const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
     const origin = (() => { try { return base ? new URL(base).origin : ''; } catch { return ''; } })();
+    const supabaseHost = (() => { try { return base ? new URL(base).hostname : ''; } catch { return ''; } })();
     const normalizeCover = (input: string) => {
       let url = String(input || '').trim();
       if (!url) return url;
@@ -194,7 +196,22 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       try { url = encodeURI(url); } catch {}
       return url;
     };
-    const coverImage = normalizeCover(coverImageRaw);
+    const coverImageNormalized = normalizeCover(coverImageRaw);
+    const shouldProxyCover = (input: string) => {
+      try {
+        const url = new URL(input);
+        if (
+          (supabaseHost && url.hostname === supabaseHost) ||
+          url.hostname === 'eiikisplpnbeiscunkap.supabase.co'
+        ) {
+          return url.pathname.startsWith('/storage/v1/object/public/');
+        }
+      } catch {}
+      return false;
+    };
+    const coverImage = shouldProxyCover(coverImageNormalized)
+      ? `/api/proxy-image?url=${encodeURIComponent(coverImageNormalized)}`
+      : coverImageNormalized;
     const authorName = authorProfile?.display_name || 'PRSPARES Team';
     const authorAvatar = authorProfile?.avatar_url;
 
@@ -202,7 +219,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       .from('posts')
       .select('id, title, slug, excerpt, published_at, meta')
       .eq('status', 'publish')
-      .neq('id', post.id)
+      .neq('id', typedPost.id)
       .limit(3)
       .order('published_at', { ascending: false });
 

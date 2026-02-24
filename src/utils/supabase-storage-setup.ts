@@ -12,7 +12,7 @@ export async function ensureStorageSetup() {
       return false
     }
     
-    const postImagesBucket = buckets?.find(bucket => bucket.id === 'post-images')
+    const postImagesBucket = buckets?.find((bucket: any) => bucket.id === 'post-images')
     
     if (!postImagesBucket) {
       console.log('post-images存储桶不存在，尝试创建...')
@@ -21,7 +21,7 @@ export async function ensureStorageSetup() {
       const { error: createError } = await supabase.storage.createBucket('post-images', {
         public: true,
         allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-        fileSizeLimit: 5 * 1024 * 1024 // 5MB
+        fileSizeLimit: 20 * 1024 * 1024 // 20MB (nginx limit aligned)
       })
       
       if (createError) {
@@ -54,7 +54,7 @@ export async function ensureProductImagesSetup() {
       return false
     }
     
-    const productImagesBucket = buckets?.find(bucket => bucket.id === 'product-images')
+    const productImagesBucket = buckets?.find((bucket: any) => bucket.id === 'product-images')
     
     if (!productImagesBucket) {
       console.log('product-images存储桶不存在，尝试创建...')
@@ -63,7 +63,7 @@ export async function ensureProductImagesSetup() {
       const { error: createError } = await supabase.storage.createBucket('product-images', {
         public: true,
         allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-        fileSizeLimit: 10 * 1024 * 1024 // 10MB for product images
+        fileSizeLimit: 20 * 1024 * 1024 // 20MB (nginx limit aligned)
       })
       
       if (createError) {

@@ -8,10 +8,10 @@ export const metadata: Metadata = {
     title: 'Mobile Phone Small Parts - Cameras, Speakers, Charging Ports | PRSPARES',
     description: 'Mobile phone small parts including cameras, speakers, charging ports, flex cables, and connectors. OEM quality components for all major brands.',
     type: 'website',
-    url: 'https://prspares.com/products/small-parts',
+    url: '/products/small-parts',
     images: [
       {
-        url: 'https://prspares.com/images/small-parts-hero.jpg',
+        url: '/images/small-parts-hero.jpg',
         width: 1200,
         height: 630,
         alt: 'Mobile Phone Small Parts',
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mobile Phone Small Parts - Cameras, Speakers, Charging Ports | PRSPARES',
     description: 'Mobile phone small parts including cameras, speakers, charging ports, flex cables, and connectors. OEM quality components.',
-    images: ['https://prspares.com/images/small-parts-hero.jpg'],
+    images: ['/images/small-parts-hero.jpg'],
   },
   alternates: {
-    canonical: 'https://prspares.com/products/small-parts',
+    canonical: '/products/small-parts',
   },
 };
 

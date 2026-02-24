@@ -78,14 +78,15 @@ export default function AdminDashboard() {
           fetchStats()
 
           // Verify session validity in background without blocking UI
-          supabase.auth.getSession().then(({ data: { session } }) => {
+          supabase.auth.getSession().then((result: any) => {
+            const session = result?.data?.session
             if (!session) {
               console.log('Session expired, need to re-login')
               localStorage.clear()
               setError('Login has expired, please login again. <a href="/auth/signin" class="font-bold text-blue-600 hover:underline">Click here to login</a>')
               setUser(null)
             }
-          }).catch(err => {
+          }).catch((err: any) => {
             console.error('Error verifying session:', err)
           })
 

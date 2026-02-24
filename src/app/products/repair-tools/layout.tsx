@@ -8,10 +8,10 @@ export const metadata: Metadata = {
     title: 'Mobile Phone Repair Tools - Professional Equipment & Programmers | PRSPARES',
     description: 'Professional mobile phone repair tools including screwdrivers, programmers, soldering stations, and testing equipment. Wholesale supplier for repair shops.',
     type: 'website',
-    url: 'https://prspares.com/products/repair-tools',
+    url: '/products/repair-tools',
     images: [
       {
-        url: 'https://prspares.com/images/repair-tools-hero.jpg',
+        url: '/images/repair-tools-hero.jpg',
         width: 1200,
         height: 630,
         alt: 'Mobile Phone Repair Tools',
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mobile Phone Repair Tools - Professional Equipment & Programmers | PRSPARES',
     description: 'Professional mobile phone repair tools including screwdrivers, programmers, soldering stations, and testing equipment.',
-    images: ['https://prspares.com/images/repair-tools-hero.jpg'],
+    images: ['/images/repair-tools-hero.jpg'],
   },
   alternates: {
-    canonical: 'https://prspares.com/products/repair-tools',
+    canonical: '/products/repair-tools',
   },
 };
 

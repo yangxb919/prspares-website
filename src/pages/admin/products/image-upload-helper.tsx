@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
+import { compressImage, COMPRESSION_PRESETS, supportsWebP } from '@/utils/imageCompression'
+import { readErrorMessage, readJsonResponse } from '@/utils/fetchResponse'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -62,12 +64,12 @@ export default function ImageUploadHelper() {
       alert(`${files.length - validFiles.length} 个文件格式不支持，已被过滤`)
     }
 
-    // 验证文件大小 (5MB)
-    const maxSize = 5 * 1024 * 1024
+    // 验证文件大小 (20MB，上传前会尝试压缩)
+    const maxSize = 20 * 1024 * 1024
     const sizeValidFiles = validFiles.filter(file => file.size <= maxSize)
 
     if (sizeValidFiles.length !== validFiles.length) {
-      alert(`${validFiles.length - sizeValidFiles.length} 个文件超过5MB大小限制，已被过滤`)
+      alert(`${validFiles.length - sizeValidFiles.length} 个文件超过20MB大小限制，已被过滤`)
     }
 
     setSelectedFiles(sizeValidFiles)
@@ -93,6 +95,22 @@ export default function ImageUploadHelper() {
 
     for (let i = 0; i < selectedFiles.length; i++) {
       const file = selectedFiles[i]
+      let uploadFile = file
+      if (file.type.startsWith('image/') && file.size > 300 * 1024) {
+        try {
+          const useWebP = await supportsWebP()
+          const preset = useWebP
+            ? { ...COMPRESSION_PRESETS.webp, maxWidth: 1400, maxHeight: 1400, maxSizeKB: 700 }
+            : { ...COMPRESSION_PRESETS.high, maxWidth: 1400, maxHeight: 1400, maxSizeKB: 700 }
+          const compressed = await compressImage(file, preset)
+          uploadFile = compressed.file
+        } catch (compressionError) {
+          console.warn('Image compression failed, uploading original file:', compressionError)
+        }
+      }
+      if (uploadFile.size > 900 * 1024) {
+        throw new Error('图片压缩后仍超过 1MB（可能会触发 413）。请换更小的图片或提高服务器上传限制。')
+      }
       const fileExt = file.name.split('.').pop()
       const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`
       // 注意：这里我们让API决定文件名，或者我们可以传递它。
@@ -111,7 +129,7 @@ export default function ImageUploadHelper() {
 
       try {
         const formData = new FormData()
-        formData.append('file', file)
+        formData.append('file', uploadFile)
         formData.append('bucket', 'product-images')
         // 我们不传递 path，让 API 生成文件名，或者如果我们需要保持特定路径结构，可以传递
         // 此处我们不传递 path，让 API 生成一个唯一的文件名，或者我们可以像之前一样生成
@@ -133,11 +151,10 @@ export default function ImageUploadHelper() {
         })
 
         if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.error)
+          throw new Error(await readErrorMessage(response))
         }
 
-        const data = await response.json()
+        const data = await readJsonResponse<{ url: string; fileName: string }>(response)
 
         uploadItem.url = data.url
         uploadItem.status = 'success'

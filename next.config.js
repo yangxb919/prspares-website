@@ -67,6 +67,11 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      { source: '/seo', destination: '/blog', permanent: true },
+    ];
+  },
 };
 
 module.exports = nextConfig;

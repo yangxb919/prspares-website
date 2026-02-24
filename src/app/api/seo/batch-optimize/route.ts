@@ -61,8 +61,10 @@ export async function POST(request: NextRequest) {
         canonical: seoData.canonical
       };
 
-      const { error } = await supabase
-        .from('posts')
+      // NOTE: current generated Supabase Database types do not include `posts`,
+      // so this update call is narrowed to `never` in strict build mode.
+      const { error } = await (supabase
+        .from('posts') as any)
         .update({ meta: updatedMeta })
         .eq('id', id);
 

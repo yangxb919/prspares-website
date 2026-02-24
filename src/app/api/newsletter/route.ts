@@ -1,22 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getAdminClient } from '@/lib/supabase/admin';
 
-interface NewsletterSubscription {
-  email: string;
-  clientIP?: string;
-  browserInfo?: string;
+type NewsletterSource = 'footer' | 'blog' | 'unknown';
+
+interface NewsletterSubscriptionPayload {
+  email?: string;
+  source?: string;
 }
 
-// 创建 Supabase 客户端
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+const NEWSLETTER_SOURCES: NewsletterSource[] = ['footer', 'blog', 'unknown'];
+
+const normalizeSource = (source?: string): NewsletterSource => {
+  if (!source) return 'unknown';
+  const normalized = source.trim().toLowerCase() as NewsletterSource;
+  return NEWSLETTER_SOURCES.includes(normalized) ? normalized : 'unknown';
+};
+
+const resolveClientIP = (request: NextRequest): string => {
+  const forwarded = request.headers.get('x-forwarded-for');
+  if (forwarded) return forwarded.split(',')[0].trim();
+
+  const realIP = request.headers.get('x-real-ip');
+  if (realIP) return realIP.trim();
+
+  const cfIP = request.headers.get('cf-connecting-ip');
+  if (cfIP) return cfIP.trim();
+
+  const clientIP = request.headers.get('x-client-ip');
+  if (clientIP) return clientIP.trim();
+
+  if (process.env.NODE_ENV === 'development') {
+    return '127.0.0.1 (localhost)';
+  }
+
+  return 'unknown';
+};
+
+const getNewsletterClient = () => getAdminClient();
 
 export async function POST(request: NextRequest) {
   try {
-    const body: NewsletterSubscription = await request.json();
-    const { email, clientIP: providedIP, browserInfo: providedBrowser } = body;
+    const body: NewsletterSubscriptionPayload = await request.json();
+    const email = String(body.email || '').trim().toLowerCase();
+    const source = normalizeSource(body.source);
 
     // Validate email
     if (!email) {
@@ -35,50 +61,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get client IP address - try multiple methods
-    const getClientIP = () => {
-      // Try x-forwarded-for header (most common in production)
-      const forwarded = request.headers.get('x-forwarded-for');
-      if (forwarded) {
-        return forwarded.split(',')[0].trim();
-      }
-
-      // Try x-real-ip header
-      const realIP = request.headers.get('x-real-ip');
-      if (realIP) {
-        return realIP.trim();
-      }
-
-      // Try cf-connecting-ip (Cloudflare)
-      const cfIP = request.headers.get('cf-connecting-ip');
-      if (cfIP) {
-        return cfIP.trim();
-      }
-
-      // Try x-client-ip
-      const clientIP = request.headers.get('x-client-ip');
-      if (clientIP) {
-        return clientIP.trim();
-      }
-
-      // For local development, try to get the actual IP or return localhost
-      if (process.env.NODE_ENV === 'development') {
-        // Check if we're getting IPv6 localhost
-        const host = request.headers.get('host');
-        if (host && host.includes('localhost')) {
-          return '127.0.0.1 (localhost)';
-        }
-        return '127.0.0.1 (localhost)';
-      }
-
-      return 'unknown';
-    };
-
-    // Use client-provided IP if available, otherwise try to get from headers
-    const clientIP = providedIP || getClientIP();
-
-    // Use client-provided browser info if available, otherwise get from headers
-    const userAgent = providedBrowser || request.headers.get('user-agent') || 'unknown';
+    const clientIP = resolveClientIP(request);
+    const userAgent = request.headers.get('user-agent') || 'unknown';
+    const supabase = getNewsletterClient();
 
     // Debug logging for development
     if (process.env.NODE_ENV === 'development') {
@@ -86,25 +71,35 @@ export async function POST(request: NextRequest) {
       console.log('Headers:', Object.fromEntries(request.headers.entries()));
       console.log('Detected IP:', clientIP);
       console.log('User Agent:', userAgent);
+      console.log('Source:', source);
     }
 
     // Check if email already exists
     const { data: existingSubscription, error: checkError } = await supabase
       .from('newsletter_subscriptions')
-      .select('id, status')
+      .select('id, status, source')
       .eq('email', email)
       .maybeSingle();
 
     if (checkError && checkError.code !== 'PGRST116') {
       console.error('Error checking existing subscription:', checkError);
       return NextResponse.json(
-        { error: 'Database error occurred' },
+        { error: checkError.code === 'PGRST205' ? 'Newsletter storage table is missing' : 'Database error occurred' },
         { status: 500 }
       );
     }
 
     if (existingSubscription) {
       if (existingSubscription.status === 'active') {
+        if (existingSubscription.source === 'unknown' && source !== 'unknown') {
+          const { error: sourceUpdateError } = await supabase
+            .from('newsletter_subscriptions')
+            .update({ source })
+            .eq('id', existingSubscription.id);
+          if (sourceUpdateError) {
+            console.error('Error updating unknown source:', sourceUpdateError);
+          }
+        }
         return NextResponse.json(
           { error: 'This email is already subscribed to our newsletter' },
           { status: 409 }
@@ -117,7 +112,8 @@ export async function POST(request: NextRequest) {
             status: 'active',
             resubscribed_at: new Date().toISOString(),
             ip_address: clientIP,
-            user_agent: userAgent
+            user_agent: userAgent,
+            source
           })
           .eq('id', existingSubscription.id);
 
@@ -145,6 +141,7 @@ export async function POST(request: NextRequest) {
     const subscriptionData = {
       email: email,
       status: 'active',
+      source,
       ip_address: clientIP,
       user_agent: userAgent,
       subscribed_at: new Date().toISOString()
@@ -196,7 +193,7 @@ export async function POST(request: NextRequest) {
 // GET method to retrieve subscription status (optional)
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const email = searchParams.get('email');
+  const email = searchParams.get('email')?.trim().toLowerCase();
 
   if (!email) {
     return NextResponse.json(
@@ -206,9 +203,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const supabase = getNewsletterClient();
     const { data, error } = await supabase
       .from('newsletter_subscriptions')
-      .select('email, status, subscribed_at')
+      .select('email, status, source, subscribed_at')
       .eq('email', email)
       .maybeSingle();
 

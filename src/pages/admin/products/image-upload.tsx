@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { createPublicClient } from '@/utils/supabase-public'
 import AdminLayout from '@/components/AdminLayout'
+import { compressImage, COMPRESSION_PRESETS, supportsWebP } from '@/utils/imageCompression'
+import { readErrorMessage, readJsonResponse } from '@/utils/fetchResponse'
 
 interface UploadedImage {
   fileName: string
@@ -58,6 +60,23 @@ export default function ImageUploadPage() {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i]
+        let uploadFile = file
+        if (file.type.startsWith('image/') && file.size > 300 * 1024) {
+          try {
+            const useWebP = await supportsWebP()
+            const preset = useWebP
+              ? { ...COMPRESSION_PRESETS.webp, maxWidth: 1400, maxHeight: 1400, maxSizeKB: 700 }
+              : { ...COMPRESSION_PRESETS.high, maxWidth: 1400, maxHeight: 1400, maxSizeKB: 700 }
+            const compressed = await compressImage(file, preset)
+            uploadFile = compressed.file
+          } catch (compressionError) {
+            console.warn('Image compression failed, uploading original file:', compressionError)
+          }
+        }
+        if (uploadFile.size > 900 * 1024) {
+          setError('图片压缩后仍超过 1MB（可能会触发 413）。请换更小的图片或提高服务器上传限制。')
+          continue
+        }
 
         // 验证文件类型
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
@@ -74,7 +93,7 @@ export default function ImageUploadPage() {
         }
 
         const formData = new FormData()
-        formData.append('file', file)
+        formData.append('file', uploadFile)
         formData.append('bucket', 'product-images')
 
         // 使用自定义API端点进行上传（包含sharp压缩）
@@ -86,13 +105,13 @@ export default function ImageUploadPage() {
         })
 
         if (!response.ok) {
-          const errorData = await response.json()
-          console.error('Upload error:', errorData.error)
-          setError(`上传失败: ${errorData.error}`)
+          const message = await readErrorMessage(response)
+          console.error('Upload error:', message)
+          setError(`上传失败: ${message}`)
           continue
         }
 
-        const data = await response.json()
+        const data = await readJsonResponse<{ url: string; fileName: string }>(response)
 
         uploadedUrls.push({
           fileName: data.fileName,

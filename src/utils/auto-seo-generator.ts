@@ -2,6 +2,12 @@
 
 import { analyzeSEO, SEOAnalysis } from './seo-analyzer';
 
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  'https://www.phonerepairspares.com'
+).replace(/\/$/, '');
+
 export interface AutoSEOResult {
   seo: {
     title: string;
@@ -66,7 +72,7 @@ export function generateAutoSEO(
     title: analysis.seoTitle,
     description: analysis.seoDescription,
     type: 'article',
-    url: `https://prspares.com/blog/${slug}`,
+    url: `${SITE_URL}/blog/${slug}`,
     image: coverImage || getDefaultSEOImage(analysis.keywords)
   };
 
@@ -94,7 +100,7 @@ export function generateAutoSEO(
     structuredData,
     openGraph,
     twitter,
-    canonical: `https://prspares.com/blog/${slug}`
+    canonical: `${SITE_URL}/blog/${slug}`
   };
 }
 
@@ -113,7 +119,7 @@ function generateStructuredData(data: {
   wordCount: number;
   readingTime: number;
 }) {
-  const baseUrl = 'https://prspares.com';
+  const baseUrl = SITE_URL;
   const articleUrl = `${baseUrl}/blog/${data.slug}`;
   
   return {
@@ -169,7 +175,7 @@ function generateStructuredData(data: {
  * 根据关键词选择默认SEO图片
  */
 function getDefaultSEOImage(keywords: string[]): string {
-  const baseUrl = 'https://prspares.com';
+  const baseUrl = SITE_URL;
   const keywordString = keywords.join(' ').toLowerCase();
 
   if (keywordString.includes('screen') || keywordString.includes('display') || 

@@ -65,7 +65,7 @@ export const compressImage = async (
 
             // 检查文件大小，如果还是太大，降低质量重试
             const sizeKB = blob.size / 1024;
-            if (sizeKB > maxSizeKB && quality > 0.3) {
+            if (sizeKB > maxSizeKB && quality > 0.2) {
               // 递归调用，降低质量
               const newOptions = { ...options, quality: quality - 0.1 };
               compressImage(file, newOptions)

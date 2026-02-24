@@ -8,10 +8,10 @@ export const metadata: Metadata = {
     title: 'Mobile Phone Screen Replacements - LCD & OLED Displays | PRSPARES',
     description: 'Premium mobile phone screen replacements for iPhone, Samsung, and Android devices. OEM quality LCD and OLED displays with True Tone support.',
     type: 'website',
-    url: 'https://prspares.com/products/screens',
+    url: '/products/screens',
     images: [
       {
-        url: 'https://prspares.com/images/screens-hero.jpg',
+        url: '/images/screens-hero.jpg',
         width: 1200,
         height: 630,
         alt: 'Mobile Phone Screen Replacements',
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mobile Phone Screen Replacements - LCD & OLED Displays | PRSPARES',
     description: 'Premium mobile phone screen replacements for iPhone, Samsung, and Android devices. OEM quality LCD and OLED displays with True Tone support.',
-    images: ['https://prspares.com/images/screens-hero.jpg'],
+    images: ['/images/screens-hero.jpg'],
   },
   alternates: {
-    canonical: 'https://prspares.com/products/screens',
+    canonical: '/products/screens',
   },
 };
 

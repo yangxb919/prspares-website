@@ -9,6 +9,7 @@ interface NewsletterSubscription {
   id: number
   email: string
   status: 'active' | 'unsubscribed'
+  source?: 'footer' | 'blog' | 'unknown'
   ip_address: string
   user_agent: string
   subscribed_at: string
@@ -20,7 +21,9 @@ interface NewsletterSubscription {
 
 export default function NewsletterAdmin() {
   const [subscriptions, setSubscriptions] = useState<NewsletterSubscription[]>([])
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [loading, setLoading] = useState(true)
+  const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [stats, setStats] = useState({
     total: 0,
@@ -53,10 +56,11 @@ export default function NewsletterAdmin() {
       
       // Calculate stats
       const total = data?.length || 0
-      const active = data?.filter(sub => sub.status === 'active').length || 0
-      const unsubscribed = data?.filter(sub => sub.status === 'unsubscribed').length || 0
+      const active = data?.filter((sub: any) => sub.status === 'active').length || 0
+      const unsubscribed = data?.filter((sub: any) => sub.status === 'unsubscribed').length || 0
       
       setStats({ total, active, unsubscribed })
+      setSelectedIds([])
 
     } catch (err: any) {
       console.error('Error fetching newsletter subscriptions:', err)
@@ -114,12 +118,86 @@ export default function NewsletterAdmin() {
     }
   }
 
+  const handleDeleteOne = async (id: number, email: string) => {
+    if (!confirm(`Are you sure you want to delete subscription record for ${email}? This cannot be undone.`)) {
+      return
+    }
+
+    try {
+      setDeleting(true)
+      const { data, error } = await supabase
+        .from('newsletter_subscriptions')
+        .delete()
+        .select('id')
+        .eq('id', String(id))
+
+      if (error) throw error
+      if (!data || data.length === 0) {
+        throw new Error('No rows were deleted. Check row-level security (RLS) delete policy.')
+      }
+
+      setSelectedIds(prev => prev.filter(itemId => itemId !== id))
+      await fetchSubscriptions()
+      alert('Subscription deleted successfully')
+    } catch (err: any) {
+      console.error('Error deleting subscription:', err)
+      alert('Failed to delete subscription: ' + err.message)
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  const handleDeleteSelected = async () => {
+    if (selectedIds.length === 0) return
+    if (!confirm(`Are you sure you want to delete ${selectedIds.length} selected subscription(s)? This cannot be undone.`)) {
+      return
+    }
+
+    try {
+      setDeleting(true)
+      const { data, error } = await supabase
+        .from('newsletter_subscriptions')
+        .delete()
+        .select('id')
+        .in('id', selectedIds)
+
+      if (error) throw error
+      if (!data || data.length === 0) {
+        throw new Error('No rows were deleted. Check row-level security (RLS) delete policy.')
+      }
+
+      await fetchSubscriptions()
+      alert(`Deleted ${data.length} subscription(s) successfully`)
+    } catch (err: any) {
+      console.error('Error deleting selected subscriptions:', err)
+      alert('Failed to delete selected subscriptions: ' + err.message)
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  const isAllSelected = subscriptions.length > 0 && selectedIds.length === subscriptions.length
+
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIds([])
+      return
+    }
+    setSelectedIds(subscriptions.map(item => item.id))
+  }
+
+  const toggleSelectOne = (id: number) => {
+    setSelectedIds(prev => (
+      prev.includes(id) ? prev.filter(itemId => itemId !== id) : [...prev, id]
+    ))
+  }
+
   const exportSubscriptions = () => {
     const activeSubscriptions = subscriptions.filter(sub => sub.status === 'active')
     const csvContent = [
-      'Email,Status,Subscribed Date,IP Address',
+      'Email,Status,Source,Subscribed Date,IP Address',
       ...activeSubscriptions.map(sub => 
-        `${sub.email},${sub.status},${new Date(sub.subscribed_at).toLocaleDateString()},${sub.ip_address}`
+        `${sub.email},${sub.status},${sub.source || 'unknown'},${new Date(sub.subscribed_at).toLocaleDateString()},${sub.ip_address}`
       )
     ].join('\n')
 
@@ -174,6 +252,13 @@ export default function NewsletterAdmin() {
     return 'Other Browser';
   }
 
+  const formatSource = (source?: string) => {
+    if (!source || source === 'unknown') return 'Unknown';
+    if (source === 'footer') return 'Footer';
+    if (source === 'blog') return 'Blog';
+    return source;
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -195,6 +280,14 @@ export default function NewsletterAdmin() {
               <p className="text-gray-900">Manage newsletter subscribers</p>
             </div>
             <div className="flex space-x-3">
+              <button
+                onClick={handleDeleteSelected}
+                disabled={selectedIds.length === 0 || deleting}
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Trash2 size={16} />
+                <span>{deleting ? 'Deleting...' : `Delete Selected (${selectedIds.length})`}</span>
+              </button>
               <button
                 onClick={exportSubscriptions}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center space-x-2"
@@ -265,6 +358,15 @@ export default function NewsletterAdmin() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
+                    <input
+                      type="checkbox"
+                      checked={isAllSelected}
+                      onChange={toggleSelectAll}
+                      className="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                      aria-label="Select all subscriptions"
+                    />
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     Email
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
@@ -272,6 +374,9 @@ export default function NewsletterAdmin() {
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     Subscribed Date
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
+                    Source
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                     IP Address
@@ -287,6 +392,15 @@ export default function NewsletterAdmin() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {subscriptions.map((subscription) => (
                   <tr key={subscription.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(subscription.id)}
+                        onChange={() => toggleSelectOne(subscription.id)}
+                        className="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                        aria-label={`Select ${subscription.email}`}
+                      />
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <Mail size={16} className="text-gray-900 mr-2" />
@@ -306,6 +420,9 @@ export default function NewsletterAdmin() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {formatDate(subscription.subscribed_at)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                      {formatSource(subscription.source)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                       {formatIPAddress(subscription.ip_address)}
@@ -331,6 +448,13 @@ export default function NewsletterAdmin() {
                           Reactivate
                         </button>
                       )}
+                      <button
+                        onClick={() => handleDeleteOne(subscription.id, subscription.email)}
+                        disabled={deleting}
+                        className="text-red-700 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}

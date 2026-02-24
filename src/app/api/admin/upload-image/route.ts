@@ -4,6 +4,8 @@ import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { createClient as createServerSupabaseClient } from '@/utils/supabase-server'
 import sharp from 'sharp'
 
+export const runtime = 'nodejs'
+
 export async function POST(req: NextRequest) {
     try {
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL

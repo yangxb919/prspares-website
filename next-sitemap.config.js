@@ -19,16 +19,34 @@ async function fetchProductSlugs() {
   }
 }
 
+const siteUrl =
+  process.env.SITE_URL ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  'https://www.phonerepairspares.com';
+
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://prspares.com',
-  generateRobotsTxt: true,
+  siteUrl: siteUrl,
+  generateRobotsTxt: false,
   sitemapSize: 7000,
   changefreq: 'daily',
   priority: 0.7,
   exclude: [
+    '/admin',
     '/admin/*',
+    '/auth',
     '/auth/*',
+    '/api',
     '/api/*',
+    '/demo-seo-scoring',
+    '/test-seo',
+    '/test-input',
+    '/test-markdown',
+    '/image-optimization-demo',
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+    '/logout',
     '/thank-you'
   ],
   additionalPaths: async (config) => {
@@ -51,6 +69,7 @@ module.exports = {
     return Promise.all(allPaths.map((p) => config.transform(config, p)));
   },
   robotsTxtOptions: {
+    includeHost: false,
     policies: [
       {
         userAgent: '*',
@@ -59,7 +78,7 @@ module.exports = {
       }
     ],
     additionalSitemaps: [
-      'https://prspares.com/sitemap.xml',
+      `${siteUrl}/sitemap.xml`,
     ],
   },
   transform: async (config, path) => {
