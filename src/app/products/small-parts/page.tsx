@@ -1,672 +1,270 @@
-'use client';
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import InquiryModal from '@/components/InquiryModal';
+import { CheckCircle, ArrowRight, MessageSquare, Wrench } from 'lucide-react';
 
-// Note: metadata export removed due to 'use client' directive
+export const metadata: Metadata = {
+  title: 'Wholesale Phone Small Parts — Camera, Flex Cable, Charging Port Supplier | PRSPARES',
+  description:
+    'B2B wholesale phone small parts supplier. Cameras, charging ports, speakers, buttons, flex cables, NFC modules for iPhone, Samsung, Android. Factory-direct from Shenzhen.',
+  alternates: {
+    canonical: '/products/small-parts',
+  },
+  openGraph: {
+    title: 'Wholesale Phone Small Parts — Camera, Flex Cable, Charging Port Supplier | PRSPARES',
+    description:
+      'B2B wholesale small parts: cameras, charging ports, speakers, buttons, flex cables. Factory-direct from Shenzhen.',
+    type: 'website',
+    url: '/products/small-parts',
+    images: ['/PRSPARES1.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Wholesale Phone Small Parts — Camera, Flex Cable, Charging Port Supplier | PRSPARES',
+    description:
+      'B2B wholesale small parts: cameras, charging ports, speakers, buttons, flex cables. Factory-direct from Shenzhen.',
+    images: ['/PRSPARES1.png'],
+  },
+};
+
+const PRODUCT_TYPES = [
+  { name: 'Front & Rear Cameras', desc: 'Camera modules for all iPhone, Samsung, and Android models. OEM and aftermarket grades available.' },
+  { name: 'Charging Ports & Flex', desc: 'Lightning, USB-C, and Micro USB charging assemblies with flex cables. Includes mic and antenna integration.' },
+  { name: 'Speakers & Earpieces', desc: 'Loudspeakers and earpiece modules. Drop-in replacements with original sound quality.' },
+  { name: 'Buttons & Flex Cables', desc: 'Power, volume, home buttons, and connecting flex cables. Touch ID and Face ID components.' },
+  { name: 'NFC & Wireless Charging', desc: 'NFC antenna modules and wireless charging coils for iPhone 8+ and compatible Android devices.' },
+  { name: 'Back Covers & Frames', desc: 'Glass back panels, mid-frames, and housing components. Multiple colors for popular models.' },
+];
+
+const BRANDS = [
+  { name: 'Apple iPhone', models: '6 / 7 / 8 / X / 11 / 12 / 13 / 14 / 15 / 16 series' },
+  { name: 'Samsung Galaxy', models: 'S / A / Note / Z Fold & Flip series' },
+  { name: 'Huawei', models: 'P / Mate / Nova series' },
+  { name: 'Xiaomi', models: 'Mi / Redmi / POCO series' },
+  { name: 'OPPO / Vivo / OnePlus', models: 'Reno, Find, V, iQOO, Nord series' },
+  { name: 'iPad & MacBook', models: 'Cameras, keyboards, trackpads, flex cables' },
+  { name: 'Game Consoles', models: 'Nintendo Switch, PlayStation controller parts' },
+  { name: 'Wearables', models: 'Apple Watch glass, bands, AirPods components' },
+];
+
+const PART_CATEGORIES = [
+  { title: 'Phone Small Parts', items: ['Front cameras', 'Rear cameras', 'Charging ports', 'Earpieces & loudspeakers', 'Power / volume / home buttons', 'NFC modules', 'Wireless charging coils', 'Back covers & frames'] },
+  { title: 'Tablet & Laptop Parts', items: ['iPad front glass & touch panels', 'iPad / Samsung Tab cameras', 'Tablet charging port flex cables', 'MacBook keyboards', 'MacBook trackpads', 'MacBook cameras & covers'] },
+  { title: 'Accessories & Wearables', items: ['Apple Watch glass', 'Apple Watch bands', 'AirPods case components', 'Nintendo Switch Joy-Con parts', 'PlayStation controller parts', 'Smart wearable modules'] },
+];
+
+const BUYERS = [
+  { title: 'Repair Shops', desc: 'One-stop sourcing for all small parts. Flexible MOQ, fast restocking, and mixed-category orders to keep your shop fully stocked.' },
+  { title: 'Wholesalers & Distributors', desc: 'Full catalog access with volume pricing. Dedicated account support and priority stock allocation for repeat orders.' },
+  { title: 'Refurbishment Centers', desc: 'Bulk small parts for device refurbishment lines. Custom kits and packaging options for high-volume operations.' },
+];
+
+const FAQ_ITEMS = [
+  { q: 'What types of small parts do you supply?', a: 'We supply a comprehensive range: cameras (front & rear), charging ports, speakers, earpieces, buttons, flex cables, NFC modules, wireless charging coils, back covers, frames, and more — for phones, tablets, laptops, and wearables.' },
+  { q: 'Can I mix small parts with screens and batteries in one order?', a: 'Absolutely. We encourage mixed-category orders. You can combine small parts with screens, batteries, and repair tools in a single shipment to save on shipping costs.' },
+  { q: 'What is the MOQ for small parts?', a: 'MOQ varies by part type — typically starting from 20-50 units per SKU. Contact us for specific MOQ details on the parts you need.' },
+  { q: 'Are your small parts tested before shipment?', a: 'Yes. Every part undergoes functional testing and visual inspection. Camera modules are tested for focus and image quality, charging ports for connectivity, speakers for audio output, etc.' },
+  { q: 'Do you supply parts for older phone models?', a: 'Yes. We maintain stock for models dating back to iPhone 6 and Samsung Galaxy S7 series. For less common models, we can source parts on request with 3-5 days lead time.' },
+];
+
+const GUIDES = [
+  { title: 'Phone Camera Module Guide', desc: 'How to identify and select the right camera replacement for iPhone and Android.', href: '/blog/phone-camera-module-guide' },
+  { title: 'Charging Port Replacement Tips', desc: 'Common issues and solutions when replacing charging port assemblies.', href: '/blog/charging-port-replacement-tips' },
+  { title: 'Back Cover Color Matching', desc: 'Guide to selecting the correct color and finish for back glass replacements.', href: '/blog/back-cover-color-matching-guide' },
+];
 
 export default function SmallPartsPage() {
-  const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-16 lg:py-24">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                  Small Parts Sourcing Solutions for <span className="text-blue-600">Repair Shops</span>
-                </h1>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  Looking for a reliable supplier of high-quality small parts for phone, tablet, and device repairs?
-                  PRSPARES offers a comprehensive sourcing solution tailored for overseas repair shops and procurement professionals.
-                  From iPhone replacement parts to Samsung components, we provide tested, quality-assured small parts with fast global shipping.
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-700">
-                  <div className="flex items-center">
-                    <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    Bulk Purchase
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    100% Tested
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    Low RMA Rate
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    Fast Shipping
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-center">
-                <button
-                  onClick={() => setIsInquiryModalOpen(true)}
-                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                  Get Wholesale Quote
-                </button>
-              </div>
+
+      {/* ═══ 1. HERO ═══ */}
+      <section className="bg-gradient-to-br from-[#1e3a5f] via-[#1a365d] to-[#0f2440] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="max-w-3xl">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+              Wholesale Phone Small Parts{' '}
+              <span className="text-orange-400">One-Stop Sourcing</span>
+            </h1>
+            <p className="text-lg text-blue-100 mb-8 leading-relaxed">
+              Cameras, charging ports, speakers, buttons, flex cables and more.
+              Complete small parts catalog for phone, tablet, and wearable repairs.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 mb-10">
+              <Link href="/wholesale-inquiry" className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-all">
+                <MessageSquare className="w-5 h-5" />
+                Get Wholesale Quote
+              </Link>
+              <a href="#products" className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3.5 px-8 rounded-lg border border-white/20 transition-all">
+                Browse Categories <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
-            <div className="relative">
-              <div className="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src="/images/small-parts-hero.jpg"
-                  alt="Small Parts for Phone Repair - Wholesale Supplier"
-                  width={600}
-                  height={400}
-                  className="object-cover w-full h-full"
-                  priority
-                />
-              </div>
+            <div className="flex flex-wrap gap-6 text-sm text-blue-200">
+              <span className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> 1000+ SKUs</span>
+              <span className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> 100% Tested</span>
+              <span className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-400" /> Mixed Orders OK</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Wide Range of Small Parts for Phones */}
-      <section className="py-16 lg:py-20">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="space-y-12">
-            <div className="text-center space-y-6">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                Wide Range of Small Parts for Phones
-              </h2>
-              <p className="text-lg text-gray-600 max-w-4xl mx-auto">
-                We supply a full selection of small parts for iPhone, Samsung, and Android phones, including front glass, frames,
-                touch panels, OCA, backlights, front and rear cameras, charging ports, NFC modules, earpiece and loudspeakers,
-                power/volume/home buttons, back covers, and more. All parts are available for bulk purchase and meet strict quality standards.
-              </p>
-              <div className="bg-blue-50 rounded-xl p-6 max-w-4xl mx-auto">
-                <p className="text-blue-800 font-medium">
-                  ✓ iPhone replacement small parts for repair shops &nbsp;|&nbsp;
-                  ✓ Android phone repair small parts supplier &nbsp;|&nbsp;
-                  ✓ High quality tested small parts for overseas repair shops
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/cameras.jpg"
-                    alt="Front and Rear Cameras"
-                    width={300}
-                    height={225}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Front & Rear Cameras</h3>
-                  <p className="text-gray-600 text-sm">High-quality camera modules for all phone models</p>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/charging-ports.jpg"
-                    alt="Charging Ports"
-                    width={300}
-                    height={225}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Charging Ports</h3>
-                  <p className="text-gray-600 text-sm">Lightning, USB-C, and Micro USB charging assemblies</p>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/speakers.jpg"
-                    alt="Speakers and Earpieces"
-                    width={300}
-                    height={225}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Speakers & Earpieces</h3>
-                  <p className="text-gray-600 text-sm">Audio components for clear sound reproduction</p>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/buttons.jpg"
-                    alt="Buttons and Flex Cables"
-                    width={300}
-                    height={225}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Buttons & Flex Cables</h3>
-                  <p className="text-gray-600 text-sm">Power, volume, home buttons and connecting cables</p>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/wireless-charging.jpg"
-                    alt="Wireless Charging Coils"
-                    width={300}
-                    height={225}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">NFC & Wireless Charging</h3>
-                  <p className="text-gray-600 text-sm">NFC antennas and wireless charging coils</p>
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/back-covers.jpg"
-                    alt="Back Covers and Frames"
-                    width={300}
-                    height={225}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Back Covers & Frames</h3>
-                  <p className="text-gray-600 text-sm">Housing components and structural frames</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tablet and MacBook Small Parts Wholesale */}
-      <section className="py-16 lg:py-20 bg-gray-50">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                Tablet and MacBook Small Parts Wholesale
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Tablet Repair Parts</h3>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    iPad and Samsung tablet front glass, touch panels, cameras, charging port flex cables, and more essential components for professional tablet repairs.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">MacBook Parts</h3>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    Keyboards, back covers, cameras, flex cables, and other essential MacBook components for comprehensive repair services.
-                  </p>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-green-800 font-medium">
-                    Source all your repair shop needs from one trusted supplier.
-                  </p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
-                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600">iPad front glass and touch panels</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
-                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600">Samsung tablet components</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
-                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600">Camera modules and flex cables</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
-                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600">Charging port assemblies</p>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/ipad-glass.jpg"
-                    alt="iPad Front Glass"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">iPad Front Glass</h4>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/tablet-camera.jpg"
-                    alt="Tablet Camera"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">Tablet Cameras</h4>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/tablet-charging.jpg"
-                    alt="Tablet Charging Port"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">Charging Ports</h4>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/tablet-flex.jpg"
-                    alt="Tablet Flex Cables"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">Flex Cables</h4>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* MacBook Parts */}
-      <section className="py-16 lg:py-20">
+      {/* ═══ 2. WHAT WE SUPPLY ═══ */}
+      <section id="products" className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="order-2 lg:order-1 grid grid-cols-2 gap-6">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/macbook-keyboard.jpg"
-                    alt="MacBook Keyboard"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">MacBook Keyboards</h4>
-                </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">What We Supply</h2>
+          <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+            Complete range of phone small parts — from cameras and charging ports to back covers and frames.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {PRODUCT_TYPES.map((item) => (
+              <div key={item.name} className="rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <Wrench className="w-8 h-8 text-[#1e3a5f] mb-4" />
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{item.name}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
               </div>
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/macbook-trackpad.jpg"
-                    alt="MacBook Trackpad"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">Trackpads</h4>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/macbook-camera.jpg"
-                    alt="MacBook Camera"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">Cameras</h4>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/macbook-cover.jpg"
-                    alt="MacBook Back Cover"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">Back Covers</h4>
-                </div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2 space-y-6">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                MacBook Parts
-              </h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                PRSPARES provides parts for MacBook, including keyboards, back cover, cameras, flex cables, etc.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
-                    <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600">Butterfly and Magic keyboards</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
-                    <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600">Force Touch trackpads</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
-                    <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600">FaceTime HD cameras</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
-                    <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600">Top case and bottom covers</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Game Console & Smart Wearable Device Parts */}
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="space-y-12">
-            <div className="text-center space-y-6">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                Game Console & Smart Wearable Device Parts
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Game Console Small Parts</h3>
-                  <p className="text-gray-600">
-                    Nintendo Switch, PlayStation, and other major gaming console brands. Complete your gaming device repair services with our comprehensive parts inventory.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Wearable Parts</h3>
-                  <p className="text-gray-600">
-                    Apple Watch glass, bands, and internal components. Expand your repair service offerings with our diverse smart wearable parts inventory.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/apple-watch-glass.jpg"
-                    alt="Apple Watch Glass"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">Apple Watch Glass</h4>
-                  <p className="text-gray-600 text-xs">Sapphire and Ion-X glass</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/switch-parts.jpg"
-                    alt="Nintendo Switch Parts"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">Nintendo Switch Parts</h4>
-                  <p className="text-gray-600 text-xs">Joy-Con and console components</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/playstation-parts.jpg"
-                    alt="PlayStation Parts"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">PlayStation Parts</h4>
-                  <p className="text-gray-600 text-xs">Controller and console components</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-w-4 aspect-h-3">
-                  <Image
-                    src="/images/parts/airpods-parts.jpg"
-                    alt="AirPods Parts"
-                    width={250}
-                    height={188}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900 text-sm">AirPods Parts</h4>
-                  <p className="text-gray-600 text-xs">Cases and internal components</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose PRSPARES for Small Parts? */}
-      <section className="py-16 lg:py-20 bg-gray-50">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="text-center space-y-6 mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-              Why Choose PRSPARES for Small Parts?
-            </h2>
-            <p className="text-lg text-gray-600 max-w-4xl mx-auto">
-              Your trusted partner for professional small parts wholesale solutions with comprehensive quality control and reliable sourcing expertise.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h4M9 7h6m-6 4h6m-6 4h6" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Centralized Sourcing & Inventory</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Through our centralized sourcing strategy and robust inventory management, we ensure stable supply and competitive pricing for all small parts.
-                Our classified supplier management and strategic inventory construction guarantee consistent availability.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">100% Quality Inspection & Testing</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Every part undergoes comprehensive testing and inspection using advanced equipment, guaranteeing reliability and a low RMA rate.
-                Our self-developed testing procedures ensure accuracy and efficiency through complete quality verification.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Fast Global Shipping & Support</h3>
-              <p className="text-gray-600 leading-relaxed">
-                With fast international shipping and dedicated customer support, PRSPARES is the preferred partner for overseas repair shops.
-                Our global logistics network ensures timely delivery and professional technical assistance.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Quality Control Process */}
-      <section className="py-16 lg:py-20 bg-gray-50">
+      {/* ═══ 3. COMPATIBLE BRANDS & DEVICES ═══ */}
+      <section className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-6 mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-              Quality Control Process
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Our rigorous quality control ensures every small part meets the highest standards before reaching our customers.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-2xl font-bold text-blue-600">1</span>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">Compatible Brands &amp; Devices</h2>
+          <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
+            Small parts for phones, tablets, laptops, game consoles, and wearable devices.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+            {BRANDS.map((brand) => (
+              <div key={brand.name} className="bg-white px-5 py-4 rounded-lg shadow-sm border border-gray-100">
+                <span className="font-semibold text-gray-900">{brand.name}</span>
+                <p className="text-gray-500 text-sm mt-1">{brand.models}</p>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Supplier Selection</h3>
-              <p className="text-gray-600 text-sm">Careful vetting of suppliers based on quality standards and reliability</p>
-            </div>
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-2xl font-bold text-green-600">2</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">Incoming Inspection</h3>
-              <p className="text-gray-600 text-sm">100% inspection of all incoming parts using specialized testing equipment</p>
-            </div>
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-2xl font-bold text-purple-600">3</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">Functional Testing</h3>
-              <p className="text-gray-600 text-sm">Comprehensive functionality tests to ensure proper operation</p>
-            </div>
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
-                <span className="text-2xl font-bold text-orange-600">4</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">Final Packaging</h3>
-              <p className="text-gray-600 text-sm">Secure packaging with anti-static protection for safe delivery</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 lg:py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <div className="space-y-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white">
-              Ready to Source Premium Small Parts for Your Repair Shop?
-            </h2>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Contact us today for a quote or to discuss your bulk small parts requirements!
-              Join thousands of repair shops worldwide who trust PRSPARES for reliable, tested small parts with fast global shipping.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => setIsInquiryModalOpen(true)}
-                className="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-                Get Bulk Parts Quote
-              </button>
-              <button
-                onClick={() => setIsInquiryModalOpen(true)}
-                className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-blue-600 transform hover:scale-105 transition-all duration-300"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Contact Sales Team
-              </button>
-            </div>
+      {/* ═══ 4. AVAILABLE OPTIONS ═══ */}
+      <section className="py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">Full Parts Catalog</h2>
+          <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+            Source all your repair shop needs from one trusted supplier.
+          </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {PART_CATEGORIES.map((cat) => (
+              <div key={cat.title} className="rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="bg-[#1e3a5f] text-white px-6 py-4">
+                  <h3 className="text-lg font-bold">{cat.title}</h3>
+                </div>
+                <div className="p-6">
+                  <ul className="space-y-2.5">
+                    {cat.items.map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-sm text-gray-600">
+                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Inquiry Modal */}
-      <InquiryModal
-        isOpen={isInquiryModalOpen}
-        onClose={() => setIsInquiryModalOpen(false)}
-        title="Get Small Parts Wholesale Quote"
-        subtitle="Tell us your small parts requirements and we'll provide competitive bulk pricing"
-        defaultMessage="I'm interested in small parts wholesale for my repair shop. Please provide pricing and availability for:"
-      />
+      {/* ═══ 5. BUYER TYPES ═══ */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">Who Buys Our Small Parts</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {BUYERS.map((buyer) => (
+              <div key={buyer.title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{buyer.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{buyer.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 6. MOQ / SHIPPING / WARRANTY ═══ */}
+      <section className="py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">MOQ, Shipping &amp; Warranty</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { title: 'Flexible MOQ', items: ['20-50 units per SKU', 'Mix across categories freely', 'Sample orders available', 'Combine with screens & batteries'] },
+              { title: 'Global Shipping', items: ['Same-day dispatch before 3PM CST', 'DHL / FedEx / UPS express', '3-7 days worldwide delivery', 'Full shipment insurance'] },
+              { title: '12-Month Warranty', items: ['All parts functionally tested', 'Free replacement for defects', 'Low RMA rate guarantee', 'Dedicated after-sales support'] },
+            ].map((block) => (
+              <div key={block.title} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">{block.title}</h3>
+                <ul className="space-y-3">
+                  {block.items.map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-sm text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 7. FAQ ═══ */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            {FAQ_ITEMS.map((item, i) => (
+              <details key={i} className="bg-white rounded-lg border border-gray-200 group" open={i < 2}>
+                <summary className="px-6 py-4 cursor-pointer font-semibold text-gray-900 list-none flex items-center justify-between">
+                  {item.q}
+                  <span className="text-gray-400 group-open:rotate-180 transition-transform">&#9662;</span>
+                </summary>
+                <div className="px-6 pb-4 text-gray-600 text-sm leading-relaxed">{item.a}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 8. RELATED GUIDES ═══ */}
+      <section className="py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">Related Guides</h2>
+          <div className="grid sm:grid-cols-3 gap-6">
+            {GUIDES.map((guide) => (
+              <Link key={guide.href} href={guide.href} className="group block rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#1e3a5f] transition-colors">{guide.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">{guide.desc}</p>
+                <span className="inline-flex items-center text-sm font-semibold text-orange-500">
+                  Read Guide <ArrowRight className="w-4 h-4 ml-1" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 9. CTA ═══ */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] text-white text-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold mb-4">Ready to Source Small Parts?</h2>
+          <p className="text-blue-200 mb-8 text-lg">
+            One-stop wholesale sourcing for all your repair shop needs. Free quote within 24 hours.
+          </p>
+          <Link
+            href="/wholesale-inquiry"
+            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
+          >
+            <MessageSquare className="w-5 h-5" />
+            Get Wholesale Quote
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }
