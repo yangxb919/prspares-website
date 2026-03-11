@@ -8,6 +8,15 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Contact PRSPARES - Mobile Repair Part Experts',
   description: 'Get in touch with PRSPARES for inquiries about mobile repair parts, OEM components, or expert repair advice. Located in Shenzhen Huaqiangbei.',
+  alternates: {
+    canonical: '/contact',
+  },
+  openGraph: {
+    title: 'Contact PRSPARES - Mobile Repair Part Experts',
+    description: 'Get in touch with PRSPARES for inquiries about mobile repair parts, OEM components, or expert repair advice. Located in Shenzhen Huaqiangbei.',
+    type: 'website',
+    url: '/contact',
+  },
 };
 
 export default function ContactPage() {

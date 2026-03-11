@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, Facebook, Instagram, Youtube, Menu, X } from 'lucide-react';
+import { Menu, X, MessageSquare } from 'lucide-react';
 import Navigation from '@/components/layout/Navigation';
 
 const Header = () => {
@@ -27,7 +27,7 @@ const Header = () => {
           <div className="flex-1 flex justify-center px-2">
             <Link href="/" className="hover:scale-105 transition-transform duration-200">
               <Image
-                src="/PRSPARES1 .png"
+                src="/PRSPARES1.png"
                 alt="PRSPARES"
                 width={140}
                 height={45}
@@ -37,20 +37,15 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Mobile Social Icons - compact */}
-          <div className="flex items-center space-x-1 flex-shrink-0">
-            <Link href="https://facebook.com" className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all duration-200" aria-label="Facebook">
-              <Facebook size={14} />
+          {/* Mobile CTA */}
+          <div className="flex-shrink-0">
+            <Link
+              href="/wholesale-inquiry"
+              className="inline-flex items-center gap-1 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+            >
+              <MessageSquare size={12} />
+              Quote
             </Link>
-            <Link href="https://instagram.com" className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-all duration-200" aria-label="Instagram">
-              <Instagram size={14} />
-            </Link>
-            <Link href="https://youtube.com" className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200" aria-label="YouTube">
-              <Youtube size={14} />
-            </Link>
-            <button className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 hover:text-gray-700 transition-all duration-200" aria-label="Search">
-              <Search size={14} />
-            </button>
           </div>
         </div>
 
@@ -60,7 +55,7 @@ const Header = () => {
           <div className="flex-shrink-0">
             <Link href="/" className="hover:scale-105 transition-transform duration-200">
               <Image
-                src="/PRSPARES1 .png"
+                src="/PRSPARES1.png"
                 alt="PRSPARES - Mobile Phone Repair Parts"
                 width={200}
                 height={65}
@@ -75,20 +70,15 @@ const Header = () => {
             <Navigation />
           </div>
 
-          {/* Desktop Social media icons and search button */}
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <Link href="https://facebook.com" className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-all duration-200" aria-label="Facebook">
-              <Facebook size={18} />
+          {/* Desktop CTA */}
+          <div className="flex-shrink-0">
+            <Link
+              href="/wholesale-inquiry"
+              className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm"
+            >
+              <MessageSquare size={16} />
+              Get Wholesale Quote
             </Link>
-            <Link href="https://instagram.com" className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-pink-50 hover:text-pink-600 transition-all duration-200" aria-label="Instagram">
-              <Instagram size={18} />
-            </Link>
-            <Link href="https://youtube.com" className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-red-50 hover:text-red-600 transition-all duration-200" aria-label="YouTube">
-              <Youtube size={18} />
-            </Link>
-            <button className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 hover:text-gray-700 transition-all duration-200 ml-2" aria-label="Search">
-              <Search size={18} />
-            </button>
           </div>
         </div>
 

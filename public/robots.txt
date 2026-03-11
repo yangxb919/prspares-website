@@ -3,4 +3,5 @@ Allow: /
 Disallow: /admin/
 Disallow: /auth/
 Disallow: /api/
+Disallow: /_next/static/
 Sitemap: https://www.phonerepairspares.com/sitemap.xml

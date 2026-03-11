@@ -28,11 +28,11 @@ export const metadata: Metadata = {
   keywords: "mobile phone repair parts, iPhone parts, Samsung parts, Android parts, OEM manufacturer, ODM supplier, wholesale, Shenzhen Huaqiangbei, screen replacement, battery, camera module",
   icons: {
     icon: [
-      { url: '/favicon .png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon .png', sizes: '16x16', type: 'image/png' }
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: '16x16', type: 'image/png' }
     ],
-    shortcut: '/favicon .png',
-    apple: '/favicon .png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
   openGraph: {
     title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     url: "/",
     images: [
       {
-        url: "/PRSPARES1%20.png",
+        url: "/PRSPARES1.png",
         width: 1200,
         height: 630,
         alt: "PRSPARES - Mobile Phone Repair Parts Factory",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
     description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
-    images: ["/PRSPARES1%20.png"],
+    images: ["/PRSPARES1.png"],
   },
   alternates: {
     canonical: "/",
@@ -70,7 +70,7 @@ export default function RootLayout({
     "name": "PRSPARES",
     "description": "Professional Mobile Phone Repair Parts Factory & OEM/ODM Manufacturer from Shenzhen Huaqiangbei",
     "url": SITE_URL,
-    "logo": `${SITE_URL}/PRSPARES1%20.png`,
+    "logo": `${SITE_URL}/PRSPARES1.png`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Shenzhen",
@@ -83,9 +83,7 @@ export default function RootLayout({
       "contactType": "customer service",
       "availableLanguage": ["English", "Chinese"]
     },
-    "sameAs": [
-      "https://github.com/yangxb919/moldall-website"
-    ]
+    "sameAs": []
   };
 
   return (

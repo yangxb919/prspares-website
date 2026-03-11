@@ -9,9 +9,15 @@ interface MarkdownRendererProps {
   content: string;
   articleTitle?: string;
   className?: string;
+  demoteH1ToH2?: boolean;
 }
 
-export default function MarkdownRenderer({ content, articleTitle, className = '' }: MarkdownRendererProps) {
+export default function MarkdownRenderer({
+  content,
+  articleTitle,
+  className = '',
+  demoteH1ToH2 = false,
+}: MarkdownRendererProps) {
   // 预处理内容，将特殊标记转换为组件
   const processContent = (markdown: string) => {
     return markdown
@@ -69,6 +75,9 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
         .trim();
+      if (demoteH1ToH2) {
+        return <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>;
+      }
       return <h1 id={id} className="text-3xl font-bold text-gray-900 mb-6 mt-8 scroll-mt-24" {...props}>{children}</h1>;
     },
     h2: ({ children, ...props }: any) => {
@@ -111,7 +120,7 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
       <li className="mb-1" {...props}>{children}</li>
     ),
     blockquote: ({ children, ...props }: any) => (
-      <blockquote className="border-l-4 border-blue-500 pl-4 py-2 my-4 bg-blue-50 text-gray-700 italic" {...props}>
+      <blockquote className="border-l-4 border-primary pl-4 py-2 my-4 bg-green-50 text-gray-700 italic" {...props}>
         {children}
       </blockquote>
     ),
@@ -128,7 +137,7 @@ export default function MarkdownRenderer({ content, articleTitle, className = ''
     a: ({ href, children, ...props }: any) => (
       <a
         href={href}
-        className="text-blue-600 hover:text-blue-800 underline decoration-2 underline-offset-2 font-medium transition-colors duration-200 hover:bg-blue-50 px-1 py-0.5 rounded"
+        className="text-primary hover:text-primary-dark underline decoration-2 underline-offset-2 font-medium transition-colors duration-200 hover:bg-green-50 px-1 py-0.5 rounded"
         target={href?.startsWith('http') ? '_blank' : undefined}
         rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
         {...props}

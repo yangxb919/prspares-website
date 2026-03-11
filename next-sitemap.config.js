@@ -53,14 +53,6 @@ module.exports = {
     const staticPaths = [
       '/products/iphone-rear-camera-wholesale',
       '/products/ipad-battery-replacement-factory',
-      '/products/samsung-phone-parts-oem',
-      '/products/phone-battery-replacement-manufacturer',
-      '/products/iphone-back-glass-repair-factory',
-      '/products/cell-phone-spare-parts-wholesale-manufacturer',
-      '/products/mobile-phone-parts-odm-supplier',
-      '/products/smartphone-screen-replacement-factory-oem',
-      '/products/iphone-spare-parts-wholesale-oem',
-      '/products/android-phone-parts-manufacturer-supplier',
     ];
 
     const dynamicSlugs = await fetchProductSlugs();

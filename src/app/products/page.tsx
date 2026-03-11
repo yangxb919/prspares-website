@@ -5,6 +5,22 @@ import Image from 'next/image';
 export const metadata: Metadata = {
   title: 'Mobile Repair Parts - PRSPARES',
   description: 'Browse our extensive catalog of high-quality mobile phone repair parts, including OEM screens, batteries, and components for all major brands.',
+  alternates: {
+    canonical: '/products',
+  },
+  openGraph: {
+    title: 'Mobile Repair Parts - PRSPARES',
+    description: 'Browse our extensive catalog of high-quality mobile phone repair parts, including OEM screens, batteries, and components for all major brands.',
+    type: 'website',
+    url: '/products',
+    images: ['/PRSPARES1.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mobile Repair Parts - PRSPARES',
+    description: 'Browse our extensive catalog of high-quality mobile phone repair parts, including OEM screens, batteries, and components for all major brands.',
+    images: ['/PRSPARES1.png'],
+  },
 };
 
 const productCategories = [

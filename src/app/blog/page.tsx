@@ -8,10 +8,55 @@ import Breadcrumb from '@/components/shared/Breadcrumb';
 import SafeImage from '@/components/SafeImage';
 import BlogNewsletterSubscribe from '@/components/features/BlogNewsletterSubscribe';
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: 'Repair Guides & Insights - PRSPARES',
   description: 'Explore expert mobile repair guides, tips, and the latest news in the mobile parts industry from PRSPARES.',
+  alternates: {
+    canonical: '/blog',
+  },
+  openGraph: {
+    title: 'Repair Guides & Insights - PRSPARES',
+    description: 'Explore expert mobile repair guides, tips, and the latest news in the mobile parts industry from PRSPARES.',
+    type: 'website',
+    url: '/blog',
+    images: ['/PRSPARES1.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Repair Guides & Insights - PRSPARES',
+    description: 'Explore expert mobile repair guides, tips, and the latest news in the mobile parts industry from PRSPARES.',
+    images: ['/PRSPARES1.png'],
+  },
 };
+
+type BlogSearchParams = {
+  category?: string;
+  tag?: string;
+};
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: BlogSearchParams;
+}): Promise<Metadata> {
+  const hasArchiveFilter = Boolean(searchParams?.category || searchParams?.tag);
+
+  if (!hasArchiveFilter) {
+    return baseMetadata;
+  }
+
+  return {
+    ...baseMetadata,
+    robots: {
+      index: false,
+      follow: true,
+      googleBot: {
+        index: false,
+        follow: true,
+      },
+    },
+  };
+}
 
 // Force revalidation on each request
 export const revalidate = 0;
@@ -20,7 +65,7 @@ export const revalidate = 0;
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams: { category?: string };
+  searchParams: BlogSearchParams;
 }) {
   // Gracefully handle missing Supabase envs in local dev to avoid runtime crash
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
 
 const Footer = () => {
@@ -29,15 +29,12 @@ const Footer = () => {
               Leading supplier of high-quality mobile repair parts and OEM components based in Shenzhen Huaqiangbei electronics hub.
             </p>
             <div className="flex space-x-4 mt-auto">
-              <Link href="https://facebook.com" className="hover:text-[#00B140] transition-colors" aria-label="Facebook">
-                <Facebook size={20} />
-              </Link>
-              <Link href="https://instagram.com" className="hover:text-[#00B140] transition-colors" aria-label="Instagram">
-                <Instagram size={20} />
-              </Link>
-              <Link href="https://youtube.com" className="hover:text-[#00B140] transition-colors" aria-label="YouTube">
-                <Youtube size={20} />
-              </Link>
+              <a href="mailto:parts.info@phonerepairspares.com" className="hover:text-[#00B140] transition-colors" aria-label="Email">
+                <Mail size={20} />
+              </a>
+              <a href="tel:+8618588999234" className="hover:text-[#00B140] transition-colors" aria-label="Phone">
+                <Phone size={20} />
+              </a>
             </div>
           </div>
 
@@ -71,11 +68,11 @@ const Footer = () => {
 
           {/* More links */}
           <div className="md:col-span-1 flex flex-col h-full">
-            <h3 className="text-xl font-bold mb-4">More Content</h3>
+            <h3 className="text-xl font-bold mb-4">More</h3>
             <ul className="space-y-3 flex-grow">
               <li>
-                <Link href="/podcast" className="text-sm hover:text-[#00B140] transition-colors">
-                  Podcast
+                <Link href="/wholesale-inquiry" className="text-sm hover:text-[#00B140] transition-colors">
+                  Get Wholesale Quote
                 </Link>
               </li>
               <li>
@@ -84,18 +81,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm hover:text-[#00B140] transition-colors">
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm hover:text-[#00B140] transition-colors">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm hover:text-[#00B140] transition-colors">
-                  Support
+                <Link href="/privacy-policy" className="text-sm hover:text-[#00B140] transition-colors">
+                  Privacy Policy
                 </Link>
               </li>
             </ul>
@@ -107,7 +94,7 @@ const Footer = () => {
             <ul className="space-y-3 mb-6 flex-grow">
               <li className="flex items-start space-x-2">
                 <Mail size={16} className="mt-0.5 flex-shrink-0" />
-                <span className="text-sm">service.team@phonerepairspares.com</span>
+                <span className="text-sm">parts.info@phonerepairspares.com</span>
               </li>
               <li className="flex items-start space-x-2">
                 <Phone size={16} className="mt-0.5 flex-shrink-0" />

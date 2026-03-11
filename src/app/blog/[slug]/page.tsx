@@ -8,6 +8,7 @@ import TableOfContents from '@/components/features/TableOfContents';
 import RelatedPosts from '@/components/features/RelatedPosts';
 import SafeImage from '@/components/SafeImage';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+import ReadingProgress from '@/components/ReadingProgress';
 
 // 定义Meta类型
 interface PostMeta {
@@ -19,6 +20,7 @@ interface PostMeta {
   open_graph?: any;
   twitter?: any;
   cover_image?: string;
+  canonical?: string;
 }
 
 // 定义查询返回的Post类型
@@ -38,6 +40,56 @@ interface RelatedPost {
   meta?: {
     cover_image?: string;
   };
+}
+
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  'https://www.phonerepairspares.com'
+).replace(/\/$/, '');
+
+function normalizeToSiteUrl(value: unknown, fallbackPath: string): string {
+  const fallbackUrl = `${SITE_URL}${fallbackPath}`;
+  if (typeof value !== 'string') return fallbackUrl;
+
+  const input = value.trim();
+  if (!input) return fallbackUrl;
+  if (input.startsWith('/')) return `${SITE_URL}${input}`;
+
+  try {
+    const parsed = new URL(input);
+    return `${SITE_URL}${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return fallbackUrl;
+  }
+}
+
+function normalizeMetaImage(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const image = value.trim();
+  if (!image) return undefined;
+  if (image.startsWith('/')) return `${SITE_URL}${image}`;
+
+  try {
+    const parsed = new URL(image);
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return undefined;
+    }
+
+    const hostname = parsed.hostname.toLowerCase();
+    if (
+      hostname === 'phonerepairspares.com' ||
+      hostname === 'www.phonerepairspares.com' ||
+      hostname === 'prspares.com' ||
+      hostname === 'www.prspares.com'
+    ) {
+      return `${SITE_URL}${parsed.pathname}${parsed.search}${parsed.hash}`;
+    }
+
+    return parsed.toString();
+  } catch {
+    return undefined;
+  }
 }
 
 // Generate dynamic metadata
@@ -76,26 +128,35 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     const seoData = meta?.seo;
     const openGraphData = meta?.open_graph;
     const twitterData = meta?.twitter;
+    const articlePath = `/blog/${params.slug}`;
+    const metadataTitle = seoData?.title || `${post.title} - PRSPARES Repair Guides`;
+    const metadataDescription = seoData?.description || post.excerpt || `Read our expert guide on ${post.title}`;
+    const canonicalUrl = normalizeToSiteUrl(meta?.canonical || post.meta?.canonical, articlePath);
+    const openGraphUrl = normalizeToSiteUrl(openGraphData?.url, articlePath);
+    const fallbackImage = `${SITE_URL}/PRSPARES1.png`;
+    const openGraphImage =
+      normalizeMetaImage(openGraphData?.image || meta?.cover_image) || fallbackImage;
+    const twitterImage = normalizeMetaImage(twitterData?.image) || openGraphImage;
 
     return {
-      title: seoData?.title || `${post.title} - PRSPARES Repair Guides`,
-      description: seoData?.description || post.excerpt || `Read our expert guide on ${post.title}`,
+      title: metadataTitle,
+      description: metadataDescription,
       keywords: seoData?.keywords?.join(', '),
-      openGraph: openGraphData ? {
-        title: openGraphData.title,
-        description: openGraphData.description,
+      openGraph: {
+        title: openGraphData?.title || metadataTitle,
+        description: openGraphData?.description || metadataDescription,
         type: 'article',
-        url: openGraphData.url,
-        images: openGraphData.image ? [{ url: openGraphData.image }] : undefined,
-      } : undefined,
-      twitter: twitterData ? {
+        url: openGraphUrl,
+        images: openGraphImage ? [{ url: openGraphImage }] : undefined,
+      },
+      twitter: {
         card: 'summary_large_image',
-        title: twitterData.title,
-        description: twitterData.description,
-        images: twitterData.image ? [twitterData.image] : undefined,
-      } : undefined,
+        title: twitterData?.title || metadataTitle,
+        description: twitterData?.description || metadataDescription,
+        images: twitterImage ? [twitterImage] : undefined,
+      },
       alternates: {
-        canonical: post.meta?.canonical
+        canonical: canonicalUrl
       }
     };
   } catch (error) {
@@ -231,6 +292,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
     return (
       <>
+        {/* 阅读进度条 */}
+        <ReadingProgress />
+
         {/* 结构化数据 */}
         {structuredData && (
           <script
@@ -337,6 +401,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                       <MarkdownRenderer
                         content={typedPost.content || 'Content not available.'}
                         articleTitle={typedPost.title}
+                        demoteH1ToH2
                       />
                     </div>
                   </article>

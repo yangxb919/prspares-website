@@ -6,6 +6,15 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'About PRSPARES - Your Mobile Repair Parts Specialist',
   description: 'Learn about PRSPARES, your trusted partner for high-quality mobile repair parts, with 10 years of experience in Shenzhen Huaqiangbei.',
+  alternates: {
+    canonical: '/about',
+  },
+  openGraph: {
+    title: 'About PRSPARES - Your Mobile Repair Parts Specialist',
+    description: 'Learn about PRSPARES, your trusted partner for high-quality mobile repair parts, with 10 years of experience in Shenzhen Huaqiangbei.',
+    type: 'website',
+    url: '/about',
+  },
 };
 
 export default function AboutPage() {

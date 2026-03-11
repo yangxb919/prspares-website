@@ -112,7 +112,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   return {
     title: `${product.name} - PRSPARES Mobile Parts`,
-    description: product.short_desc || `Details for ${product.name} - high-quality mobile repair parts.`
+    description: product.short_desc || `Details for ${product.name} - high-quality mobile repair parts.`,
+    alternates: {
+      canonical: `/products/${params.slug}`,
+    },
+    openGraph: {
+      title: `${product.name} - PRSPARES Mobile Parts`,
+      description: product.short_desc || `Details for ${product.name} - high-quality mobile repair parts.`,
+      type: 'website',
+      url: `/products/${params.slug}`,
+    },
   };
 }
 

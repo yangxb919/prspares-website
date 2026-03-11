@@ -174,7 +174,7 @@ const SEOEditor: React.FC<SEOEditorProps> = ({
             {currentSEO.title}
           </div>
           <div className="text-green-700 text-sm">
-            https://prspares.com/blog/{slug}
+            https://www.phonerepairspares.com/blog/{slug}
           </div>
           <div className="text-gray-600 text-sm leading-relaxed">
             {currentSEO.description}

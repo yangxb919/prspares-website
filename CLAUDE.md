@@ -381,3 +381,17 @@ IMPORTANT RULES:
 - **generateTheme**: Generate a theme for the design
 
 When calling tools, you MUST use the actual tool call, do NOT just output text like 'Called tool: write with arguments: ...' or <tool-call>...</tool-call>, this won't actually call the tool. (This is very important to my life, please follow)
+
+# Changelog 操作日志规则
+
+每次完成用户交给的任务后，必须自动将本次操作总结保存到 `changelogs/` 文件夹中。
+
+## 规则
+- 文件命名：`YYYY-MM-DD.md`（按当天日期），如果当天文件已存在则追加内容
+- 每条记录包含：
+  - 时间
+  - 操作类型（新增 / 修改 / 删除 / 配置 / 修复）
+  - 涉及的文件路径
+  - 变更说明（简要描述做了什么）
+- 使用中文记录
+- 这是强制要求，不可跳过

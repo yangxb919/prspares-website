@@ -17,6 +17,31 @@ const N8NChat = ({
   useEffect(() => {
     // Ensure it only runs on client side and initializes once
     if (typeof window !== 'undefined' && !isInitialized) {
+      let headingObserver: MutationObserver | null = null;
+
+      const downgradeChatHeadings = () => {
+        const root = document.getElementById('n8n-chat');
+        if (!root) return;
+
+        const headings = root.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        headings.forEach((heading) => {
+          const replacement = document.createElement('div');
+          replacement.innerHTML = heading.innerHTML;
+          replacement.className = heading.className;
+
+          for (const attr of Array.from(heading.attributes)) {
+            if (attr.name !== 'class') {
+              replacement.setAttribute(attr.name, attr.value);
+            }
+          }
+
+          replacement.setAttribute('role', 'heading');
+          replacement.setAttribute('aria-level', heading.tagName.slice(1));
+          replacement.setAttribute('data-seo-normalized-heading', '1');
+          heading.replaceWith(replacement);
+        });
+      };
+
       const initializeChat = async () => {
         try {
           console.log('🚀 Initializing N8N Chat with webhook:', webhookUrl);
@@ -41,6 +66,17 @@ const N8NChat = ({
               },
             },
           });
+
+          // n8n chat uses heading tags in the widget header. Downgrade them so
+          // they don't create duplicate page-level H1/H2 signals for SEO crawlers.
+          downgradeChatHeadings();
+          const chatRoot = document.getElementById('n8n-chat');
+          if (chatRoot) {
+            headingObserver = new MutationObserver(() => {
+              downgradeChatHeadings();
+            });
+            headingObserver.observe(chatRoot, { childList: true, subtree: true });
+          }
 
           // 创建全局函数来打开聊天
           (window as any).openN8NChat = () => {
@@ -136,6 +172,10 @@ const N8NChat = ({
 
       return () => {
         clearTimeout(timer);
+        if (headingObserver) {
+          headingObserver.disconnect();
+          headingObserver = null;
+        }
       };
     }
   }, [webhookUrl, isInitialized]);

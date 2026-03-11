@@ -32,7 +32,7 @@ export default function QuoteButton({
       <>
         <button
           onClick={handleClick}
-          className={`inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-105 ${className}`}
+          className={`inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-105 ${className}`}
         >
           {text}
           <ArrowRight size={18} />
@@ -52,12 +52,12 @@ export default function QuoteButton({
   if (variant === 'cta') {
     return (
       <>
-        <div className={`bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white my-8 ${className}`}>
+        <div className={`bg-gradient-to-r from-primary to-green-700 rounded-xl p-6 text-white my-8 ${className}`}>
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xl font-bold mb-2">Ready to Get Started?</h3>
-              <p className="text-blue-100 mb-4">Get your personalized quote in minutes</p>
-              <div className="flex items-center gap-4 text-sm text-blue-100">
+              <p className="text-green-100 mb-4">Get your personalized quote in minutes</p>
+              <div className="flex items-center gap-4 text-sm text-green-100">
                 <div className="flex items-center gap-1">
                   <Zap size={16} />
                   <span>Fast Response</span>
@@ -74,7 +74,7 @@ export default function QuoteButton({
             </div>
             <button
               onClick={handleClick}
-              className="bg-white text-blue-600 hover:bg-gray-50 font-bold px-8 py-4 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-105 whitespace-nowrap"
+              className="bg-white text-primary hover:bg-gray-50 font-bold px-8 py-4 rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-105 whitespace-nowrap"
             >
               {text}
             </button>
@@ -97,7 +97,7 @@ export default function QuoteButton({
       <>
         <button
           onClick={handleClick}
-          className={`text-blue-600 hover:text-blue-800 font-medium underline decoration-2 underline-offset-2 hover:decoration-blue-800 transition-colors ${className}`}
+          className={`text-primary hover:text-primary-dark font-medium underline decoration-2 underline-offset-2 hover:decoration-primary-dark transition-colors ${className}`}
         >
           {text}
         </button>

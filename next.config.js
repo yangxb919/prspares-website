@@ -69,6 +69,60 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: '/:path*',
+        has: [
+          { type: 'host', value: 'www.phonerepairspares.com' },
+          { type: 'header', key: 'x-forwarded-proto', value: 'http' },
+        ],
+        destination: 'https://www.phonerepairspares.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'phonerepairspares.com' }],
+        destination: 'https://www.phonerepairspares.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/product-category/for-iwatch-reapir-parts',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/product-category/for-ipad-repair-parts',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/product-category/:path*',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/product/for-ipad-mini-2-repair-parts',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/product/:slug*',
+        destination: '/products/:slug*',
+        permanent: true,
+      },
+      {
+        source:
+          '/blog/top-10-best-selling-repair-parts-in-2024-a-must-have-guide-for-mobile-phone-repair-shops-and-wholesalers',
+        destination:
+          '/blog/best-cell-phone-parts-supplier-checklist-2025',
+        permanent: true,
+      },
+      {
+        source:
+          '/blog/10-best-selling-repair-parts-in-2024-a-must-have-guide-for-mobile-phone-repair-shops-and-wholesalers',
+        destination:
+          '/blog/best-cell-phone-parts-supplier-checklist-2025',
+        permanent: true,
+      },
       { source: '/seo', destination: '/blog', permanent: true },
     ];
   },
