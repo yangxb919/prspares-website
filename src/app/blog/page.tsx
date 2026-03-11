@@ -9,22 +9,22 @@ import SafeImage from '@/components/SafeImage';
 import BlogNewsletterSubscribe from '@/components/features/BlogNewsletterSubscribe';
 
 const baseMetadata: Metadata = {
-  title: 'Repair Guides & Insights - PRSPARES',
-  description: 'Explore expert mobile repair guides, tips, and the latest news in the mobile parts industry from PRSPARES.',
+  title: 'Phone Repair Guides & Wholesale Sourcing Tips | PRSPARES Blog',
+  description: 'Expert guides on phone repair parts sourcing, quality testing, and wholesale buying. Learn how to choose OEM vs aftermarket screens, source batteries safely, and grow your repair business.',
   alternates: {
     canonical: '/blog',
   },
   openGraph: {
-    title: 'Repair Guides & Insights - PRSPARES',
-    description: 'Explore expert mobile repair guides, tips, and the latest news in the mobile parts industry from PRSPARES.',
+    title: 'Phone Repair Guides & Wholesale Sourcing Tips | PRSPARES Blog',
+    description: 'Expert guides on phone repair parts sourcing, quality testing, and wholesale buying from Shenzhen.',
     type: 'website',
     url: '/blog',
     images: ['/PRSPARES1.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Repair Guides & Insights - PRSPARES',
-    description: 'Explore expert mobile repair guides, tips, and the latest news in the mobile parts industry from PRSPARES.',
+    title: 'Phone Repair Guides & Wholesale Sourcing Tips | PRSPARES Blog',
+    description: 'Expert guides on phone repair parts sourcing, quality testing, and wholesale buying from Shenzhen.',
     images: ['/PRSPARES1.png'],
   },
 };
@@ -347,17 +347,22 @@ export default async function BlogPage({
         )}
       </div>
 
-      <div className="bg-gradient-to-br from-green-50 via-teal-50 to-cyan-50 border-t border-gray-100">
+      {/* Wholesale CTA Section */}
+      <div className="bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] border-t border-gray-100">
         <div className="max-w-[1200px] mx-auto px-4 py-16">
           <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Stay Updated with PRSPARES</h2>
-            <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-              Get the latest mobile repair tips, product announcements, and exclusive offers delivered to your inbox.
+            <h2 className="text-3xl font-bold text-white mb-4">Ready to Source Phone Repair Parts?</h2>
+            <p className="text-blue-200 mb-8 text-lg leading-relaxed">
+              Factory-direct from Shenzhen. OEM quality, flexible MOQ, 12-month warranty. Get a free quote within 24 hours.
             </p>
-            <BlogNewsletterSubscribe />
-            <p className="text-xs text-gray-500 mt-4">
-              We value your privacy. No spam, unsubscribe anytime.
-            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+              <Link href="/wholesale-inquiry" className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-colors shadow-lg text-lg">
+                Get Wholesale Quote
+              </Link>
+              <Link href="/products" className="inline-flex items-center justify-center gap-2 border-2 border-white/30 hover:bg-white/10 text-white font-semibold py-3.5 px-8 rounded-lg transition-colors text-lg">
+                Browse Products
+              </Link>
+            </div>
           </div>
         </div>
       </div>

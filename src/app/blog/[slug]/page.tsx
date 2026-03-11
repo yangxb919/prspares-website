@@ -440,18 +440,18 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </div>
         
         {/* Call to Action */}
-        <div className="bg-gradient-to-br from-green-500 via-[#00B140] to-teal-600 py-16 md:py-20">
+        <div className="bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] py-16 md:py-20">
           <div className="max-w-[1200px] mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-5">Need Specific Parts or Expert Advice?</h2>
-            <p className="text-white/90 mb-8 max-w-xl mx-auto text-lg">
-              Can't find what you're looking for or need professional help? Contact PRSPARES today!
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-5">Need Wholesale Phone Repair Parts?</h2>
+            <p className="text-blue-200 mb-8 max-w-xl mx-auto text-lg">
+              Factory-direct pricing from Shenzhen. OEM quality screens, batteries, and small parts with 12-month warranty.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Link href="/products" className="bg-white hover:bg-gray-100 text-[#00B140] font-semibold py-3.5 px-8 rounded-lg transition-colors duration-200 shadow-md text-lg">
-                Browse All Parts
+              <Link href="/wholesale-inquiry" className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-colors duration-200 shadow-lg text-lg">
+                Get Wholesale Quote
               </Link>
-              <Link href="/contact" className="border-2 border-white hover:bg-white/10 text-white font-semibold py-3.5 px-8 rounded-lg transition-colors duration-200 text-lg">
-                Contact Our Experts
+              <Link href="/products" className="border-2 border-white/30 hover:bg-white/10 text-white font-semibold py-3.5 px-8 rounded-lg transition-colors duration-200 text-lg">
+                Browse All Parts
               </Link>
             </div>
           </div>

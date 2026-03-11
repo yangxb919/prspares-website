@@ -5,6 +5,16 @@ import { ArrowLeft, Shield, Clock, Award } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'iPhone Rear Camera Wholesale | OEM Factory Direct Supplier - PRSPARES',
   description: 'Professional iPhone rear camera wholesale supplier. OEM quality camera modules for iPhone 11, 12, 13, 14, 15 series. Factory direct pricing, bulk orders welcome.',
+  alternates: {
+    canonical: '/products/iphone-rear-camera-wholesale',
+  },
+  openGraph: {
+    title: 'iPhone Rear Camera Wholesale | OEM Factory Direct Supplier - PRSPARES',
+    description: 'iPhone rear camera wholesale: OEM quality modules for iPhone 11-15. Factory direct from Shenzhen.',
+    type: 'website',
+    url: '/products/iphone-rear-camera-wholesale',
+    images: ['/PRSPARES1.png'],
+  },
 };
 
 export default function iPhoneRearCameraWholesalePage() {
@@ -14,9 +24,9 @@ export default function iPhoneRearCameraWholesalePage() {
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
           <nav className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-[#00B140]">Home</Link>
+            <Link href="/" className="text-gray-500 hover:text-[#1e3a5f]">Home</Link>
             <span className="text-gray-400">/</span>
-            <Link href="/products" className="text-gray-500 hover:text-[#00B140]">Products</Link>
+            <Link href="/products" className="text-gray-500 hover:text-[#1e3a5f]">Products</Link>
             <span className="text-gray-400">/</span>
             <span className="text-gray-900">iPhone Rear Camera Wholesale</span>
           </nav>
@@ -24,7 +34,7 @@ export default function iPhoneRearCameraWholesalePage() {
       </div>
 
       {/* Header */}
-      <section className="bg-gradient-to-br from-[#00B140] to-[#00D155] text-white py-16">
+      <section className="bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
             <h1 className="text-4xl md:text-5xl font-black mb-6">
@@ -86,7 +96,7 @@ export default function iPhoneRearCameraWholesalePage() {
                   'iPhone XS Max Rear Camera'
                 ].map((model, index) => (
                   <div key={index} className="flex items-center p-4 bg-gray-50 rounded-lg">
-                    <div className="w-2 h-2 bg-[#00B140] rounded-full mr-3"></div>
+                    <div className="w-2 h-2 bg-[#1e3a5f] rounded-full mr-3"></div>
                     <span className="font-medium">{model}</span>
                   </div>
                 ))}
@@ -95,17 +105,17 @@ export default function iPhoneRearCameraWholesalePage() {
               <h3 className="text-2xl font-bold mb-4 text-gray-900">Wholesale Advantages</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center p-6 bg-gray-50 rounded-lg">
-                  <Shield className="w-12 h-12 text-[#00B140] mx-auto mb-4" />
+                  <Shield className="w-12 h-12 text-[#1e3a5f] mx-auto mb-4" />
                   <h4 className="font-bold mb-2">OEM Quality</h4>
                   <p className="text-gray-600">Original specifications and quality standards</p>
                 </div>
                 <div className="text-center p-6 bg-gray-50 rounded-lg">
-                  <Clock className="w-12 h-12 text-[#00B140] mx-auto mb-4" />
+                  <Clock className="w-12 h-12 text-[#1e3a5f] mx-auto mb-4" />
                   <h4 className="font-bold mb-2">Fast Shipping</h4>
                   <p className="text-gray-600">Quick wholesale delivery worldwide</p>
                 </div>
                 <div className="text-center p-6 bg-gray-50 rounded-lg">
-                  <Award className="w-12 h-12 text-[#00B140] mx-auto mb-4" />
+                  <Award className="w-12 h-12 text-[#1e3a5f] mx-auto mb-4" />
                   <h4 className="font-bold mb-2">Factory Direct</h4>
                   <p className="text-gray-600">Best wholesale pricing from manufacturer</p>
                 </div>
@@ -114,8 +124,8 @@ export default function iPhoneRearCameraWholesalePage() {
 
             <div className="text-center">
               <Link
-                href="/contact"
-                className="inline-flex items-center bg-gradient-to-r from-[#00B140] to-[#00D155] text-white font-bold py-4 px-8 rounded-xl hover:shadow-lg transition-all duration-300"
+                href="/wholesale-inquiry"
+                className="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-xl hover:shadow-lg transition-all duration-300"
               >
                 Request Wholesale Quote
               </Link>
