@@ -4,6 +4,7 @@ import ThankYouClient from './ThankYouClient';
 export const metadata: Metadata = {
   title: 'Thank You - PRSPARES',
   description: 'Thank you for contacting PRSPARES. We will get back to you within 24 hours.',
+  robots: { index: false, follow: true },
 };
 
 export default function ThankYou() {

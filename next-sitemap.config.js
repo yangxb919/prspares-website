@@ -47,12 +47,19 @@ module.exports = {
     '/forgot-password',
     '/reset-password',
     '/logout',
-    '/thank-you'
+    '/thank-you',
+    '/pricing',
+    '/news',
+    '/news/*',
+    '/industry-insights',
   ],
   additionalPaths: async (config) => {
     const staticPaths = [
       '/products/iphone-rear-camera-wholesale',
       '/products/ipad-battery-replacement-factory',
+      '/wholesale-inquiry',
+      '/blog',
+      '/privacy-policy',
     ];
 
     const dynamicSlugs = await fetchProductSlugs();

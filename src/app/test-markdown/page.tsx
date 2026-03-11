@@ -1,4 +1,9 @@
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+};
 
 export default function TestMarkdownPage() {
   const md = `# Image URL Normalization Test

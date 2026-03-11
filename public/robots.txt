@@ -4,4 +4,16 @@ Disallow: /admin/
 Disallow: /auth/
 Disallow: /api/
 Disallow: /_next/static/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /logout
+Disallow: /thank-you
+Disallow: /pricing
+Disallow: /test-input
+Disallow: /test-markdown
+Disallow: /test-seo
+Disallow: /demo-seo-scoring
+Disallow: /image-optimization-demo
 Sitemap: https://www.phonerepairspares.com/sitemap.xml
