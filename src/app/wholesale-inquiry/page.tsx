@@ -15,8 +15,11 @@ interface FormData {
   name: string;
   email: string;
   phone: string;
+  country: string;
   products: string;
+  models: string;
   quantity: string;
+  quality: string;
   message: string;
 }
 
@@ -29,7 +32,7 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 const FAQ_ITEMS = [
   {
     q: "What's your minimum order quantity (MOQ)?",
-    a: "Our MOQ is flexible starting from 50 units. We serve businesses of all sizes — from small repair shops to large distributors.",
+    a: "Our MOQ is flexible — starting from just 10 units for screens and 20 units for batteries/small parts. We serve businesses of all sizes — from small repair shops to large distributors.",
   },
   {
     q: "Do you offer sample orders?",
@@ -131,8 +134,8 @@ export default function WholesaleInquiryPage() {
   const router = useRouter();
   const formRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<FormData>({
-    company: '', name: '', email: '', phone: '',
-    products: '', quantity: '', message: '',
+    company: '', name: '', email: '', phone: '', country: '',
+    products: '', models: '', quantity: '', quality: '', message: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -197,9 +200,14 @@ export default function WholesaleInquiryPage() {
     try {
       const productLabel = formData.products;
       const qtyLabel = formData.quantity ? ` | Qty: ${formData.quantity}` : '';
+      const qualityLabel = formData.quality ? ` | Quality: ${formData.quality}` : '';
+      const modelsLabel = formData.models ? `\nModels/Brands: ${formData.models}` : '';
+      const countryLabel = formData.country ? `\nCountry: ${formData.country}` : '';
       const msgParts = [
         `[Wholesale Inquiry]`,
-        `Products: ${productLabel}${qtyLabel}`,
+        `Products: ${productLabel}${qtyLabel}${qualityLabel}`,
+        modelsLabel,
+        countryLabel,
         formData.message ? `\nDetails: ${formData.message}` : '',
       ].filter(Boolean).join('\n');
 
@@ -347,7 +355,7 @@ export default function WholesaleInquiryPage() {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {PRODUCT_CATEGORIES.map(cat => (
-                <div key={cat.name} className="group relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-gray-100">
+                <a key={cat.name} href={cat.href} className="group relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-gray-100">
                   <div className="relative h-48 overflow-hidden">
                     <Image
                       src={cat.image}
@@ -369,6 +377,38 @@ export default function WholesaleInquiryPage() {
                       ))}
                     </ul>
                   </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ MOQ / PAYMENT / SHIPPING / WARRANTY ═══ */}
+        <section className="py-16 md:py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
+              How We Work With You
+            </h2>
+            <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+              Transparent terms designed for B2B partners — no hidden fees, no surprises.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { title: 'Flexible MOQ', items: ['From 10 units (screens)', 'From 20 units (batteries/parts)', 'Mix across categories', 'Sample orders welcome'] },
+                { title: 'Payment Methods', items: ['T/T (bank transfer)', 'PayPal', 'Western Union', 'Alibaba Trade Assurance'] },
+                { title: 'Fast Shipping', items: ['Same-day dispatch', 'DHL / FedEx / UPS', '3-7 days worldwide', 'Sea freight for bulk'] },
+                { title: '12-Month Warranty', items: ['All products covered', '<1% RMA rate', 'Free defect replacement', '24h response guarantee'] },
+              ].map(block => (
+                <div key={block.title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                  <h3 className="text-lg font-bold text-[#1e3a5f] mb-4">{block.title}</h3>
+                  <ul className="space-y-2.5">
+                    {block.items.map(item => (
+                      <li key={item} className="flex items-center gap-2 text-sm text-gray-600">
+                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>
@@ -376,7 +416,7 @@ export default function WholesaleInquiryPage() {
         </section>
 
         {/* ═══ INQUIRY FORM + TRUST SIGNALS ═══ */}
-        <section ref={formRef} className="py-16 md:py-20 bg-gray-50" id="quote-form">
+        <section ref={formRef} className="py-16 md:py-20" id="quote-form">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-5 gap-10">
               {/* Left: Form (3 cols) */}
@@ -404,9 +444,15 @@ export default function WholesaleInquiryPage() {
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">Phone / WhatsApp</label>
                         <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+1 (555) 123-4567" />
                       </div>
+                      <div>
+                        <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1.5">Country / Region</label>
+                        <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="United States" />
+                      </div>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="products" className="block text-sm font-medium text-gray-700 mb-1.5">Products Interested <span className="text-red-500">*</span></label>
                         <select id="products" name="products" value={formData.products} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.products ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}>
@@ -419,16 +465,33 @@ export default function WholesaleInquiryPage() {
                         </select>
                         {errors.products && <p className="mt-1 text-sm text-red-500">{errors.products}</p>}
                       </div>
+                      <div>
+                        <label htmlFor="models" className="block text-sm font-medium text-gray-700 mb-1.5">Model / Brand</label>
+                        <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="iPhone 15 Pro, Samsung S24..." />
+                      </div>
                     </div>
-                    <div>
-                      <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1.5">Estimated Monthly Order Quantity</label>
-                      <select id="quantity" name="quantity" value={formData.quantity} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="">Select quantity range</option>
-                        <option value="50-100 units">50-100 units</option>
-                        <option value="100-500 units">100-500 units</option>
-                        <option value="500-1000 units">500-1,000 units</option>
-                        <option value="1000+ units">1,000+ units</option>
-                      </select>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1.5">Estimated Order Quantity</label>
+                        <select id="quantity" name="quantity" value={formData.quantity} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                          <option value="">Select quantity range</option>
+                          <option value="10-50 units">10-50 units</option>
+                          <option value="50-100 units">50-100 units</option>
+                          <option value="100-500 units">100-500 units</option>
+                          <option value="500-1000 units">500-1,000 units</option>
+                          <option value="1000+ units">1,000+ units</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label htmlFor="quality" className="block text-sm font-medium text-gray-700 mb-1.5">Quality Requirement</label>
+                        <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                          <option value="">Select quality grade</option>
+                          <option value="OEM Original">OEM Original</option>
+                          <option value="Premium Aftermarket">Premium Aftermarket</option>
+                          <option value="Standard Aftermarket">Standard Aftermarket</option>
+                          <option value="Mixed Grades">Mixed Grades</option>
+                        </select>
+                      </div>
                     </div>
                     <div>
                       <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">Additional Requirements</label>
