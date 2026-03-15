@@ -521,6 +521,21 @@
         const footerWa = document.getElementById('footer-whatsapp');
         if (footerWa) footerWa.href = waLink;
 
+        // ==================== BEGIN FORM TRACKING ====================
+        (function() {
+            var formStarted = false;
+            var fields = document.querySelectorAll('#lp-form input, #lp-form select, #lp-form textarea');
+            fields.forEach(function(field) {
+                field.addEventListener('focus', function() {
+                    if (!formStarted) {
+                        formStarted = true;
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({ event: 'begin_form', form_name: 'lp_inquiry' });
+                    }
+                });
+            });
+        })();
+
         // ==================== FORM SUBMISSION ====================
         async function handleFormSubmit(e) {
             e.preventDefault();

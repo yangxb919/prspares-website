@@ -100,16 +100,8 @@ const TRUST_STATS = [
   { value: '24h', label: 'Response Time', icon: Clock },
 ];
 
-// ─── GA4 helper (via GTM dataLayer) ─────────────────────────────
-function trackEvent(eventName: string, params?: Record<string, unknown>) {
-  if (typeof window !== 'undefined') {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: eventName,
-      ...params,
-    });
-  }
-}
+// ─── GA4 helper ─────────────────────────────────────────────────
+import { trackEvent } from '@/lib/analytics';
 
 // ─── FAQ Accordion Item ──────────────────────────────────────────
 function FaqItem({ item, defaultOpen }: { item: typeof FAQ_ITEMS[0]; defaultOpen?: boolean }) {
@@ -167,7 +159,7 @@ export default function WholesaleInquiryPage() {
 
   const scrollToForm = () => {
     formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    trackEvent('click', { event_category: 'CTA', event_label: 'Request Quote Button' });
+    trackEvent('quote_cta_click', { event_label: 'Request Quote Button' });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -560,9 +552,9 @@ export default function WholesaleInquiryPage() {
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                   <h3 className="font-bold text-gray-900 mb-4">Prefer to Talk Directly?</h3>
                   <div className="space-y-3">
-                    <a href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-700 hover:text-green-600 transition-colors" onClick={() => trackEvent('click', { event_category: 'Contact', event_label: 'WhatsApp' })}><MessageSquare className="w-4 h-4" /> WhatsApp: +86 185 8899 9234</a>
-                    <a href="mailto:parts.info@phonerepairspares.com" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('click', { event_category: 'Contact', event_label: 'Email' })}><Mail className="w-4 h-4" /> parts.info@phonerepairspares.com</a>
-                    <a href="tel:+8618588999234" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('click', { event_category: 'Contact', event_label: 'Phone' })}><Phone className="w-4 h-4" /> +86 185 8899 9234</a>
+                    <a href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-700 hover:text-green-600 transition-colors" onClick={() => trackEvent('whatsapp_click')}><MessageSquare className="w-4 h-4" /> WhatsApp: +86 185 8899 9234</a>
+                    <a href="mailto:parts.info@phonerepairspares.com" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('contact_click', { method: 'email' })}><Mail className="w-4 h-4" /> parts.info@phonerepairspares.com</a>
+                    <a href="tel:+8618588999234" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('contact_click', { method: 'phone' })}><Phone className="w-4 h-4" /> +86 185 8899 9234</a>
                   </div>
                 </div>
                 <div className="relative rounded-xl overflow-hidden h-48">

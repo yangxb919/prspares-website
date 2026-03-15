@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 import Image from 'next/image';
 import { Menu, X, MessageSquare } from 'lucide-react';
 import Navigation from '@/components/layout/Navigation';
@@ -42,6 +43,7 @@ const Header = () => {
             <Link
               href="/wholesale-inquiry"
               className="inline-flex items-center gap-1 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+              onClick={() => trackEvent('quote_cta_click', { event_label: 'Header Mobile' })}
             >
               <MessageSquare size={12} />
               Quote
@@ -75,6 +77,7 @@ const Header = () => {
             <Link
               href="/wholesale-inquiry"
               className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm"
+              onClick={() => trackEvent('quote_cta_click', { event_label: 'Header Desktop' })}
             >
               <MessageSquare size={16} />
               Get Wholesale Quote

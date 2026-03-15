@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Clock, ArrowRight, MessageSquare } from 'lucide-react';
+import { TrackedLink } from '@/components/TrackedLink';
 
 export const metadata: Metadata = {
   title: 'Contact PRSPARES — Phone Repair Parts Wholesale Support',
@@ -72,21 +73,24 @@ export default function ContactPage() {
               Have questions about orders, shipping, or technical specs? Our team in Shenzhen is ready to help. Free quote within 24 hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link
+              <TrackedLink
                 href="/wholesale-inquiry"
+                event="quote_cta_click"
+                params={{ event_label: 'Contact Hero CTA' }}
                 className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-all"
               >
                 <MessageSquare className="w-5 h-5" />
                 Get Wholesale Quote
-              </Link>
-              <a
+              </TrackedLink>
+              <TrackedLink
                 href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                event="whatsapp_click"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3.5 px-8 rounded-lg border border-white/20 transition-all"
               >
                 WhatsApp Sales
-              </a>
+              </TrackedLink>
             </div>
           </div>
         </div>
@@ -103,13 +107,15 @@ export default function ContactPage() {
                 <p className="text-sm text-gray-600">Use our dedicated inquiry form for faster response with pricing and MOQ details.</p>
               </div>
             </div>
-            <Link
+            <TrackedLink
               href="/wholesale-inquiry"
+              event="quote_cta_click"
+              params={{ event_label: 'Contact Banner CTA' }}
               className="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 whitespace-nowrap"
             >
               Get Wholesale Quote
               <ArrowRight className="ml-2" size={16} />
-            </Link>
+            </TrackedLink>
           </div>
         </div>
       </section>
@@ -160,9 +166,9 @@ export default function ContactPage() {
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2">Inquiry Form</h4>
                   <p className="text-sm text-gray-600">For wholesale quotes, bulk pricing, and new product sourcing. Free quote within 24 hours.</p>
-                  <Link href="/wholesale-inquiry" className="inline-flex items-center text-sm font-semibold text-orange-500 mt-3">
+                  <TrackedLink href="/wholesale-inquiry" event="quote_cta_click" params={{ event_label: 'Contact Channel Card' }} className="inline-flex items-center text-sm font-semibold text-orange-500 mt-3">
                     Get Quote <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                  </Link>
+                  </TrackedLink>
                 </div>
                 <div className="border border-gray-100 rounded-xl p-5">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
@@ -170,9 +176,9 @@ export default function ContactPage() {
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2">WhatsApp</h4>
                   <p className="text-sm text-gray-600">For urgent sourcing, quick questions, or real-time negotiation. Fastest response.</p>
-                  <a href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-green-600 mt-3">
+                  <TrackedLink href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" event="whatsapp_click" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-green-600 mt-3">
                     Chat Now <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                  </a>
+                  </TrackedLink>
                 </div>
                 <div className="border border-gray-100 rounded-xl p-5">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
@@ -238,13 +244,15 @@ export default function ContactPage() {
                     <span>12-month warranty on all products</span>
                   </li>
                 </ul>
-                <Link
+                <TrackedLink
                   href="/wholesale-inquiry"
+                  event="quote_cta_click"
+                  params={{ event_label: 'Contact Quote Section CTA' }}
                   className="mt-6 inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300"
                 >
                   Go to Wholesale Inquiry
                   <ArrowRight className="ml-2" size={16} />
-                </Link>
+                </TrackedLink>
               </div>
             </div>
           </div>

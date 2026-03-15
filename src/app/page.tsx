@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle, Shield, Clock, Award, Users, Factory, Truck, Package, MessageSquare, Zap, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { trackEvent } from '@/lib/analytics';
 
 // Fade-in animation on scroll
 const FadeIn = ({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) => {
@@ -57,6 +58,7 @@ export default function Home() {
                 <Link
                   href="/wholesale-inquiry"
                   className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
+                  onClick={() => trackEvent('quote_cta_click', { event_label: 'Hero CTA' })}
                 >
                   <MessageSquare className="w-5 h-5" />
                   Get Wholesale Quote
@@ -66,6 +68,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
+                  onClick={() => trackEvent('whatsapp_click')}
                 >
                   WhatsApp Sales
                 </a>
@@ -272,6 +275,7 @@ export default function Home() {
               <Link
                 href="/wholesale-inquiry"
                 className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-lg transition-all"
+                onClick={() => trackEvent('quote_cta_click', { event_label: 'Why PRSPARES CTA' })}
               >
                 <MessageSquare className="w-5 h-5" />
                 Start Your Inquiry
@@ -359,6 +363,7 @@ export default function Home() {
               <Link
                 href="/wholesale-inquiry"
                 className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
+                onClick={() => trackEvent('quote_cta_click', { event_label: 'Footer CTA' })}
               >
                 <MessageSquare className="w-5 h-5" />
                 Get Wholesale Quote
@@ -368,6 +373,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
+                onClick={() => trackEvent('whatsapp_click')}
               >
                 WhatsApp Sales
               </a>

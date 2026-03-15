@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CheckCircle, ArrowRight, MessageSquare, Monitor } from 'lucide-react';
+import { TrackedLink } from '@/components/TrackedLink';
 
 export const metadata: Metadata = {
   title: 'Wholesale Phone Screens — LCD & OLED Display Supplier | PRSPARES',
@@ -86,10 +87,10 @@ export default function ScreensPage() {
               Trusted by repair shops and distributors in 50+ countries.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <Link href="/wholesale-inquiry" className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-all">
+              <TrackedLink href="/wholesale-inquiry" event="quote_cta_click" params={{ event_label: 'Screens Hero CTA' }} className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-all">
                 <MessageSquare className="w-5 h-5" />
                 Get Wholesale Quote
-              </Link>
+              </TrackedLink>
               <a href="#products" className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3.5 px-8 rounded-lg border border-white/20 transition-all">
                 Browse Categories <ArrowRight className="w-4 h-4" />
               </a>
@@ -248,21 +249,25 @@ export default function ScreensPage() {
             Get factory-direct pricing on OEM and aftermarket display replacements. Free quote within 24 hours.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
+            <TrackedLink
               href="/wholesale-inquiry"
+              event="quote_cta_click"
+              params={{ event_label: 'Screens Footer CTA' }}
               className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
             >
               <MessageSquare className="w-5 h-5" />
               Get Wholesale Quote
-            </Link>
-            <a
+            </TrackedLink>
+            <TrackedLink
               href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20screens"
+              event="whatsapp_click"
+              params={{ event_label: 'Screens Footer WhatsApp' }}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
             >
               WhatsApp Sales
-            </a>
+            </TrackedLink>
           </div>
         </div>
       </section>
