@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  PRSPARES — Google Ads: Factory Direct Landing Page          ║
+  ║  Campaign: B2B Search — wholesale phone parts factory direct ║
+  ║  Based on: _template.html v2.0                              ║
+  ╚══════════════════════════════════════════════════════════════╝
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factory Direct Wholesale Phone Parts — Shenzhen Huaqiangbei | PRSPARES</title>
+    <meta name="description" content="Buy wholesale phone repair parts factory direct from Shenzhen Huaqiangbei. OEM-quality screens, batteries, cameras for repair shops, wholesalers & distributors. Flexible MOQ, 24h quote.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "PRSPARES",
+        "description": "Factory-direct wholesale phone repair parts from Shenzhen Huaqiangbei. OEM quality for repair shops and distributors worldwide.",
+        "url": "https://phonerepairspares.com",
+        "telephone": "+8618588999234",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Shenzhen",
+            "addressRegion": "Guangdong",
+            "addressCountry": "CN"
+        },
+        "priceRange": "$$",
+        "openingHours": "Mo-Sa 09:00-18:00"
+    }
+    </script>
+
+    <!-- Campaign Config -->
+    <script>
+        const LP_CONFIG = {
+            source: "google-ads-factory-direct-2026",
+            whatsapp: "8618588999234",
+            apiEndpoint: "/api/lp-inquiry",
+        };
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TTBMN854');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google tag (gtag.js) — GA4 + Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GT-TQS9VZ7Z"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GT-TQS9VZ7Z');gtag('config','AW-1000630085');</script>
+
+    <!-- Preconnect & Preload -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preload" as="image" href="/images/wholesale/vid_04_poster.jpg" fetchpriority="high">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons (pinned version for caching) -->
+    <script src="https://unpkg.com/lucide@0.468.0"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#fff7ed', 100: '#ffedd5', 400: '#fb923c',
+                            500: '#f97316', 600: '#ea580c', 700: '#c2410c', 900: '#7c2d12',
+                        },
+                        navy: { 700: '#1e3a5f', 800: '#162d4a', 900: '#0f2440' },
+                        surface: { 50: '#fafafa', 100: '#f8fafc', 200: '#e2e8f0', 800: '#1e293b', 900: '#0f172a' }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'hover': '0 10px 40px -4px rgba(0, 0, 0, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #fafafa; color: #1e293b; }
+
+        /* Nav */
+        .glass-nav { background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(226,232,240,0.8); }
+
+        /* Cards */
+        .proof-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.25s ease; }
+        .proof-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px -4px rgba(0,0,0,0.08); }
+
+        /* Hero */
+        .hero-bg { background: linear-gradient(135deg, #0f2440 0%, #1e3a5f 60%, #234e78 100%); }
+
+        /* Trust bar */
+        .trust-item { transition: transform 0.2s ease; }
+        .trust-item:hover { transform: scale(1.05); }
+
+        /* Form */
+        .form-loading { opacity: 0.6; pointer-events: none; }
+        .form-success { background: #059669 !important; }
+        .form-error { animation: shake 0.4s ease-in-out; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-4px)} 40%,80%{transform:translateX(4px)} }
+
+        /* Sticky mobile CTA */
+        .sticky-cta { display: none; }
+        @media (max-width: 768px) {
+            .sticky-cta {
+                display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
+                padding: 10px 16px; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+                border-top: 1px solid #e2e8f0; box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
+            }
+            /* Extra bottom padding so footer isn't hidden by sticky CTA */
+            footer { padding-bottom: 70px !important; }
+        }
+
+        /* Video poster */
+        video { background: #1e293b; }
+
+        /* WhatsApp proof cards */
+        .chat-proof { border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- GTM noscript -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TTBMN854"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <!-- ==================== NAVIGATION (minimal for conversion) ==================== -->
+    <nav class="fixed w-full z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                    <div class="w-8 h-8 bg-brand-600 rounded flex items-center justify-center text-white font-bold text-lg">P</div>
+                    <span class="font-bold text-xl tracking-tight text-surface-900">PRSPARES</span>
+                </div>
+                <div class="hidden sm:flex items-center gap-6 text-sm font-medium text-slate-500">
+                    <a href="#why-us" class="hover:text-surface-900 transition-colors">Why Us</a>
+                    <a href="#warehouse" class="hover:text-surface-900 transition-colors">Warehouse</a>
+                </div>
+                <a href="#quote-form"
+                    class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-soft hover:shadow-hover">
+                    Request Wholesale Quote
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO — VIDEO + SEARCH-INTENT COPY ==================== -->
+    <section class="hero-bg relative pt-24 pb-14 lg:pt-32 lg:pb-24 overflow-hidden">
+        <!-- Subtle grid pattern -->
+        <div class="absolute inset-0 opacity-[0.04]" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0id2hpdGUiLz48L3N2Zz4=')"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <!-- Copy -->
+                <div class="max-w-xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-brand-400 text-xs font-bold uppercase tracking-wider mb-5">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                        </span>
+                        Factory Direct — Shenzhen Huaqiangbei
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl lg:text-[2.8rem] font-extrabold text-white leading-[1.15] mb-5">
+                        Wholesale Phone Repair Parts <span class="text-brand-400">Direct From the Factory</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-blue-100/90 mb-7 leading-relaxed">
+                        OEM-quality LCD screens, batteries & flex cables sourced and QC'd from Shenzhen Huaqiangbei — for <strong class="text-white">repair shops, wholesalers & distributors</strong>. Skip the middleman, boost your margins.
+                    </p>
+
+                    <a href="#quote-form" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-7 py-3.5 rounded-xl font-bold text-lg transition-all shadow-lg shadow-brand-500/25 hover:shadow-xl hover:shadow-brand-500/30 hover:-translate-y-0.5">
+                        Request Wholesale Quote <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <p class="mt-3 text-sm text-blue-200/70">Free quote within 24 hours — No commitment</p>
+                </div>
+
+                <!-- Video -->
+                <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/10 ring-1 ring-white/5">
+                    <video class="w-full h-full object-cover" autoplay muted loop playsinline preload="auto" poster="/images/wholesale/vid_04_poster.jpg">
+                        <source src="/images/wholesale/vid_04.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-white/20 backdrop-blur rounded-full flex items-center justify-center text-white">
+                                <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-white">Direct From Source</p>
+                                <p class="text-xs text-white/70">Huaqiangbei, Shenzhen, China</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TRUST BAR ==================== -->
+    <section class="py-5 bg-white border-b border-slate-100 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="trust-item flex flex-col items-center gap-1.5 py-2">
+                    <div class="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600">
+                        <i data-lucide="package-check" class="w-5 h-5"></i>
+                    </div>
+                    <p class="text-sm font-bold text-surface-800">Flexible MOQ</p>
+                    <p class="text-xs text-slate-500">From 10 pcs mix & match</p>
+                </div>
+                <div class="trust-item flex flex-col items-center gap-1.5 py-2">
+                    <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
+                        <i data-lucide="clock-3" class="w-5 h-5"></i>
+                    </div>
+                    <p class="text-sm font-bold text-surface-800">24h Quote Response</p>
+                    <p class="text-xs text-slate-500">Fast & transparent pricing</p>
+                </div>
+                <div class="trust-item flex flex-col items-center gap-1.5 py-2">
+                    <div class="w-10 h-10 bg-amber-50 rounded-full flex items-center justify-center text-amber-600">
+                        <i data-lucide="plane" class="w-5 h-5"></i>
+                    </div>
+                    <p class="text-sm font-bold text-surface-800">DHL / FedEx Shipping</p>
+                    <p class="text-xs text-slate-500">3–7 days worldwide</p>
+                </div>
+                <div class="trust-item flex flex-col items-center gap-1.5 py-2">
+                    <div class="w-10 h-10 bg-violet-50 rounded-full flex items-center justify-center text-violet-600">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <p class="text-sm font-bold text-surface-800">12-Month Warranty</p>
+                    <p class="text-xs text-slate-500">Hassle-free replacements</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== WHY CHOOSE US ==================== -->
+    <section id="why-us" class="py-16 lg:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-surface-900 mb-3">Why Repair Shops & Distributors Choose PRSPARES</h2>
+                <p class="text-slate-600">Direct access to Shenzhen Huaqiangbei — the world's #1 electronics market — with zero middleman markup.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="proof-card p-7">
+                    <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 mb-5 border border-brand-100">
+                        <i data-lucide="badge-dollar-sign" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-surface-900 mb-2">Factory-Direct Pricing</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">We source and QC every part from Huaqiangbei factories — no middlemen, no extra markup. Save 30–40% vs. US distributors.</p>
+                </div>
+                <div class="proof-card p-7">
+                    <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 mb-5 border border-emerald-100">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-surface-900 mb-2">OEM Quality, Guaranteed</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">Triple QC on every batch. Original, OEM & high-copy grades available. Only 1% RMA rate — True Tone support for iPhones.</p>
+                </div>
+                <div class="proof-card p-7">
+                    <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-5 border border-blue-100">
+                        <i data-lucide="package-search" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-surface-900 mb-2">500+ SKUs In Stock</h3>
+                    <p class="text-slate-600 leading-relaxed text-sm">iPhone 6–16, Samsung Galaxy, Xiaomi, OPPO & more. LCD/OLED screens, batteries, cameras & flex cables — ship same day.</p>
+                </div>
+            </div>
+
+            <!-- Who we serve -->
+            <div class="mt-12 pt-10 border-t border-slate-100">
+                <p class="text-center text-sm font-semibold text-slate-400 uppercase tracking-widest mb-6">Built for B2B — Who We Serve</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+                    <div class="flex items-center gap-2.5 bg-surface-50 rounded-lg px-4 py-3 border border-slate-100">
+                        <i data-lucide="wrench" class="w-5 h-5 text-brand-500"></i>
+                        <span class="text-sm font-semibold text-surface-800">Repair Shops</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 bg-surface-50 rounded-lg px-4 py-3 border border-slate-100">
+                        <i data-lucide="warehouse" class="w-5 h-5 text-brand-500"></i>
+                        <span class="text-sm font-semibold text-surface-800">Wholesalers</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 bg-surface-50 rounded-lg px-4 py-3 border border-slate-100">
+                        <i data-lucide="truck" class="w-5 h-5 text-brand-500"></i>
+                        <span class="text-sm font-semibold text-surface-800">Distributors</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 bg-surface-50 rounded-lg px-4 py-3 border border-slate-100">
+                        <i data-lucide="globe" class="w-5 h-5 text-brand-500"></i>
+                        <span class="text-sm font-semibold text-surface-800">Online Sellers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== WAREHOUSE / INVENTORY PROOF ==================== -->
+    <section id="warehouse" class="py-16 lg:py-20 bg-surface-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-surface-900 mb-2">See Our Real Warehouse Stock</h2>
+                    <p class="text-slate-600">Live from Huaqiangbei — every part organized, QC'd, and ready to ship.</p>
+                </div>
+                <a href="#quote-form" class="flex items-center gap-2 text-brand-600 font-semibold hover:text-brand-700 transition-colors whitespace-nowrap">
+                    Request Wholesale Quote <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Product showcase grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="proof-card p-2.5 aspect-square overflow-hidden">
+                    <img src="/images/wholesale/img_02.jpg" class="w-full h-full object-cover rounded-lg" alt="LCD screens wholesale inventory" loading="lazy">
+                </div>
+                <div class="proof-card p-2.5 aspect-square overflow-hidden">
+                    <img src="/images/wholesale/img_10.jpg" class="w-full h-full object-cover rounded-lg" alt="OLED screens bulk stock" loading="lazy">
+                </div>
+                <div class="proof-card p-2.5 aspect-square overflow-hidden">
+                    <img src="/images/wholesale/img_09.jpg" class="w-full h-full object-cover rounded-lg" alt="Phone batteries wholesale" loading="lazy">
+                </div>
+                <div class="proof-card p-2.5 bg-navy-800 flex flex-col items-center justify-center text-center text-white aspect-square rounded-xl">
+                    <h4 class="font-bold text-xl mb-2">500+ SKUs</h4>
+                    <p class="text-sm text-slate-300 px-4">Original, OEM & high-copy grades — all models covered.</p>
+                    <a href="#quote-form" class="mt-4 text-brand-400 text-sm font-semibold hover:text-brand-300 transition-colors flex items-center gap-1">
+                        Get Quote <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Warehouse video strip -->
+            <div class="mt-8">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Live From Our Huaqiangbei Warehouse</p>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3">
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                        <video class="w-full h-full object-cover lazy-video" muted loop playsinline preload="none" poster="/images/wholesale/vid_02_poster.jpg">
+                            <source src="/images/wholesale/vid_02.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                        <video class="w-full h-full object-cover lazy-video" muted loop playsinline preload="none" poster="/images/wholesale/vid_03_poster.jpg">
+                            <source src="/images/wholesale/vid_03.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                        <video class="w-full h-full object-cover lazy-video" muted loop playsinline preload="none" poster="/images/wholesale/vid_05_poster.jpg">
+                            <source src="/images/wholesale/vid_05.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                        <img src="/images/wholesale/img_23.jpg" class="w-full h-full object-cover" alt="Warehouse stock" loading="lazy">
+                    </div>
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                        <img src="/images/wholesale/img_24.jpg" class="w-full h-full object-cover" alt="QC inspection" loading="lazy">
+                    </div>
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                        <img src="/images/wholesale/img_20.jpg" class="w-full h-full object-cover" alt="Packing and shipping" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SOCIAL PROOF — WhatsApp Chats ==================== -->
+    <section class="py-14 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">What Our B2B Clients Say</p>
+            <div class="grid md:grid-cols-3 gap-5">
+                <div class="chat-proof border border-slate-100">
+                    <img src="/images/wholesale/whatsapp_chat_bulk_order.png" class="w-full h-auto" alt="WhatsApp chat — bulk order from repair shop" loading="lazy">
+                </div>
+                <div class="chat-proof border border-slate-100">
+                    <img src="/images/wholesale/whatsapp_chat_fast_shipping.png" class="w-full h-auto" alt="WhatsApp chat — fast shipping feedback" loading="lazy">
+                </div>
+                <div class="chat-proof border border-slate-100">
+                    <img src="/images/wholesale/whatsapp_chat_quality_feedback.png" class="w-full h-auto" alt="WhatsApp chat — quality feedback from distributor" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== QUOTE FORM ==================== -->
+    <section id="quote-form" class="py-16 lg:py-20 hero-bg relative">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-3">Request Wholesale Quote</h2>
+                <p class="text-blue-100/80 text-base sm:text-lg max-w-xl mx-auto">
+                    Tell us what you need — we'll reply with factory-direct pricing within 24 hours.
+                </p>
+            </div>
+
+            <form id="lp-form" class="bg-white rounded-2xl p-5 sm:p-8 shadow-2xl border border-slate-200" onsubmit="return handleFormSubmit(event)">
+                <div class="grid sm:grid-cols-2 gap-4 sm:gap-5">
+                    <!-- Name * -->
+                    <div>
+                        <label for="f-name" class="block text-sm font-semibold text-surface-800 mb-1.5">Full Name <span class="text-red-500">*</span></label>
+                        <input id="f-name" type="text" name="name" required placeholder="John Smith"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none text-surface-900 text-sm transition">
+                    </div>
+                    <!-- Email * -->
+                    <div>
+                        <label for="f-email" class="block text-sm font-semibold text-surface-800 mb-1.5">Business Email <span class="text-red-500">*</span></label>
+                        <input id="f-email" type="email" name="email" required placeholder="you@company.com"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none text-surface-900 text-sm transition">
+                    </div>
+                    <!-- Phone / WhatsApp -->
+                    <div>
+                        <label for="f-phone" class="block text-sm font-semibold text-surface-800 mb-1.5">Phone / WhatsApp</label>
+                        <input id="f-phone" type="tel" name="phone" placeholder="+1 555-000-0000"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none text-surface-900 text-sm transition">
+                    </div>
+                    <!-- Company -->
+                    <div>
+                        <label for="f-company" class="block text-sm font-semibold text-surface-800 mb-1.5">Company Name</label>
+                        <input id="f-company" type="text" name="company" placeholder="Your Business LLC"
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none text-surface-900 text-sm transition">
+                    </div>
+                    <!-- Product Interest * -->
+                    <div class="sm:col-span-2">
+                        <label for="f-product" class="block text-sm font-semibold text-surface-800 mb-1.5">Product Interest <span class="text-red-500">*</span></label>
+                        <select id="f-product" name="productInterest" required
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none text-surface-900 text-sm transition bg-white">
+                            <option value="" disabled selected>Select product category</option>
+                            <option value="LCD & OLED Screens">LCD & OLED Screens</option>
+                            <option value="Phone Batteries">Phone Batteries</option>
+                            <option value="Cameras & Flex Cables">Cameras & Flex Cables</option>
+                            <option value="Charging Ports & Small Parts">Charging Ports & Small Parts</option>
+                            <option value="Mixed / Full Catalog">Mixed / Full Catalog</option>
+                        </select>
+                    </div>
+                    <!-- Message -->
+                    <div class="sm:col-span-2">
+                        <label for="f-message" class="block text-sm font-semibold text-surface-800 mb-1.5">Message <span class="text-slate-400 font-normal">(optional)</span></label>
+                        <textarea id="f-message" name="message" rows="3" placeholder="e.g. I need 50x iPhone 15 Pro OLED screens, original grade..."
+                            class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none text-surface-900 text-sm transition resize-none"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn"
+                    class="mt-5 w-full bg-brand-600 hover:bg-brand-700 text-white py-4 rounded-xl font-bold text-lg transition-colors shadow-soft hover:shadow-hover flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-5 h-5"></i> Request Wholesale Quote
+                </button>
+
+                <!-- Status -->
+                <div id="form-status" class="mt-3 text-sm font-medium text-center hidden"></div>
+
+                <p class="mt-3 text-center text-xs text-slate-400 flex items-center justify-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    Your information is secure. No spam, ever.
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <!-- ==================== STICKY MOBILE CTA ==================== -->
+    <div class="sticky-cta">
+        <a href="#quote-form" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-lg font-bold text-center transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="send" class="w-4 h-4"></i> Request Wholesale Quote
+        </a>
+    </div>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-surface-900 pt-10 pb-6 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-5">
+                <div class="flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity">
+                    <div class="w-7 h-7 bg-brand-600 rounded flex items-center justify-center text-white font-bold text-base">P</div>
+                    <span class="font-bold text-lg tracking-tight text-white">PRSPARES</span>
+                </div>
+                <div class="text-slate-400 text-sm flex gap-6">
+                    <a href="https://phonerepairspares.com/" class="hover:text-white transition-colors">Main Website</a>
+                    <a href="https://phonerepairspares.com/products" class="hover:text-white transition-colors">Products</a>
+                    <a id="footer-whatsapp" href="#" target="_blank" class="hover:text-white transition-colors">WhatsApp Us</a>
+                </div>
+            </div>
+            <div class="mt-6 text-center text-slate-500 text-xs">
+                &copy; 2026 PRSPARES. All rights reserved. Shenzhen Huaqiangbei, China.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // Init icons
+        lucide.createIcons();
+
+        // Lazy-load below-fold videos via IntersectionObserver
+        (function() {
+            var lazyVideos = document.querySelectorAll('video.lazy-video');
+            if ('IntersectionObserver' in window) {
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            var video = entry.target;
+                            video.preload = 'auto';
+                            video.play().catch(function(){});
+                            observer.unobserve(video);
+                        }
+                    });
+                }, { rootMargin: '200px' });
+                lazyVideos.forEach(function(v) { observer.observe(v); });
+            } else {
+                lazyVideos.forEach(function(v) { v.autoplay = true; v.preload = 'auto'; });
+            }
+        })();
+
+        // WhatsApp link
+        const waLink = 'https://wa.me/' + LP_CONFIG.whatsapp;
+        const footerWa = document.getElementById('footer-whatsapp');
+        if (footerWa) footerWa.href = waLink;
+
+        // ==================== FORM SUBMISSION ====================
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('lp-form');
+            const btn = document.getElementById('submit-btn');
+            const status = document.getElementById('form-status');
+            const fd = new FormData(form);
+
+            const name = fd.get('name')?.toString().trim();
+            const email = fd.get('email')?.toString().trim();
+            const phone = fd.get('phone')?.toString().trim() || '';
+            const company = fd.get('company')?.toString().trim() || '';
+            const productInterest = fd.get('productInterest')?.toString().trim();
+            const message = fd.get('message')?.toString().trim() || '';
+
+            if (!name || !email || !productInterest) return false;
+
+            // Loading state
+            btn.innerHTML = '<svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Sending...';
+            form.classList.add('form-loading');
+            status.classList.add('hidden');
+
+            try {
+                const response = await fetch(LP_CONFIG.apiEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        phone,
+                        company,
+                        productInterest,
+                        message,
+                        source: LP_CONFIG.source,
+                        pageUrl: window.location.href,
+                    }),
+                });
+
+                if (!response.ok) {
+                    const err = await response.json().catch(() => ({}));
+                    throw new Error(err.error || 'Submission failed');
+                }
+
+                // Success — fire GA4 conversion event, then redirect
+                btn.innerHTML = '<i data-lucide="check" class="w-5 h-5"></i> Quote Requested!';
+                btn.classList.add('form-success');
+                form.reset();
+                lucide.createIcons();
+
+                // GA4 conversion event
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: 'generate_lead',
+                    currency: 'USD',
+                    value: 100,
+                    lp_source: LP_CONFIG.source,
+                });
+
+                // Google Ads conversion tracking
+                if (typeof gtag === 'function') {
+                    gtag('event', 'conversion', {
+                        send_to: 'AW-1000630085/WkULCKmYx6UZEMXOkd0D',
+                    });
+                }
+
+                // Redirect to thank-you page (delay to allow tracking events to send)
+                setTimeout(function() {
+                    window.location.href = '/thank-you';
+                }, 500);
+
+            } catch (error) {
+                btn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i> Request Wholesale Quote';
+                form.classList.remove('form-loading');
+                form.classList.add('form-error');
+                lucide.createIcons();
+
+                status.textContent = 'Something went wrong. Please try again or WhatsApp us directly.';
+                status.className = 'mt-3 text-sm font-medium text-center text-red-500';
+
+                setTimeout(() => form.classList.remove('form-error'), 400);
+                console.error('[LP Form]', error);
+            }
+
+            form.classList.remove('form-loading');
+            return false;
+        }
+    </script>
+</body>
+</html>
