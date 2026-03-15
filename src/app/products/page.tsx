@@ -61,11 +61,11 @@ const BRANDS = [
 ];
 
 const FAQ_ITEMS = [
-  { q: "What's your minimum order quantity?", a: 'Our MOQ is flexible starting from 50 units. We serve businesses of all sizes — from small repair shops to large distributors.' },
+  { q: "What's your minimum order quantity?", a: 'Our MOQ is flexible — starting from 10 units for screens and 20 units for batteries and small parts. We serve businesses of all sizes — from small repair shops to large distributors.' },
   { q: 'What quality grades do you offer?', a: 'We offer multiple grades: OEM Original, Premium Aftermarket, and Standard. Each batch undergoes TQC quality inspection before shipping.' },
   { q: 'Do you support True Tone for iPhone screens?', a: 'Yes, our iPhone screens support True Tone functionality. We also supply True Tone programmers for repair shops.' },
   { q: 'What are your shipping options?', a: 'We ship worldwide via DHL, FedEx, and UPS. Same-day dispatch for orders placed before 3PM CST. Delivery in 3-7 business days.' },
-  { q: 'What is your warranty policy?', a: '12-month warranty on all products. Our RMA rate is below 1%. Defective items are replaced free of charge.' },
+  { q: 'What is your warranty policy?', a: '12-month warranty on all products. Our RMA rate is below 1%. Defective items are replaced free of charge. Sample orders available before bulk purchase.' },
   { q: 'Can I get samples before ordering in bulk?', a: 'Yes, we offer sample orders for quality testing. Contact us for sample pricing and shipping details.' },
 ];
 
@@ -90,8 +90,13 @@ export default function ProductsPage() {
                 <MessageSquare className="w-5 h-5" />
                 Get Wholesale Quote
               </Link>
-              <a href="#categories" className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3.5 px-8 rounded-lg border border-white/20 transition-all">
-                Browse Categories <ArrowRight className="w-4 h-4" />
+              <a
+                href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3.5 px-8 rounded-lg border border-white/20 transition-all"
+              >
+                WhatsApp Sales
               </a>
             </div>
           </div>
@@ -209,8 +214,8 @@ export default function ProductsPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">MOQ, Shipping & Warranty</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: 'Flexible MOQ', items: ['Starting from 50 units', 'Mix & match across models', 'Sample orders available', 'No minimum order value'] },
-              { title: 'Global Shipping', items: ['Same-day dispatch before 3PM', 'DHL / FedEx / UPS express', '3-7 days worldwide delivery', 'Full shipment insurance'] },
+              { title: 'Flexible MOQ', items: ['From 10 units for screens', 'From 20 units for batteries & small parts', 'Sample orders available', 'Mixed models and categories supported'] },
+              { title: 'Global Shipping', items: ['Same-day dispatch for in-stock items', 'DHL / FedEx / UPS express', '3-7 days worldwide delivery', 'Full shipment insurance'] },
               { title: '12-Month Warranty', items: ['All products warranted', 'RMA rate below 1%', 'Free replacement for defects', 'Dedicated after-sales support'] },
             ].map((block, i) => (
               <div key={i} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
@@ -254,13 +259,23 @@ export default function ProductsPage() {
           <p className="text-blue-200 mb-8 text-lg">
             Get factory-direct pricing on OEM-quality phone repair parts. Free quote within 24 hours.
           </p>
-          <Link
-            href="/wholesale-inquiry"
-            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
-          >
-            <MessageSquare className="w-5 h-5" />
-            Get Wholesale Quote
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/wholesale-inquiry"
+              className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
+            >
+              <MessageSquare className="w-5 h-5" />
+              Get Wholesale Quote
+            </Link>
+            <a
+              href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
+            >
+              WhatsApp Sales
+            </a>
+          </div>
         </div>
       </section>
     </main>

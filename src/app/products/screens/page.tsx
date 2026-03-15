@@ -185,7 +185,7 @@ export default function ScreensPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { title: 'Flexible MOQ', items: ['Starting from 10 units for screens', 'Mix across models & grades', 'Sample orders available', 'No minimum order value'] },
-              { title: 'Global Shipping', items: ['Same-day dispatch before 3PM CST', 'DHL / FedEx / UPS express', '3-7 days worldwide delivery', 'Full shipment insurance'] },
+              { title: 'Global Shipping', items: ['Same-day dispatch for in-stock items', 'DHL / FedEx / UPS express', '3-7 days worldwide delivery', 'Full shipment insurance'] },
               { title: '12-Month Warranty', items: ['All screens warranted', 'RMA rate below 1%', 'Free replacement for defects', 'Dedicated after-sales support'] },
             ].map((block) => (
               <div key={block.title} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
@@ -247,13 +247,23 @@ export default function ScreensPage() {
           <p className="text-blue-200 mb-8 text-lg">
             Get factory-direct pricing on OEM and aftermarket display replacements. Free quote within 24 hours.
           </p>
-          <Link
-            href="/wholesale-inquiry"
-            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
-          >
-            <MessageSquare className="w-5 h-5" />
-            Get Wholesale Quote
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/wholesale-inquiry"
+              className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
+            >
+              <MessageSquare className="w-5 h-5" />
+              Get Wholesale Quote
+            </Link>
+            <a
+              href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20screens"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
+            >
+              WhatsApp Sales
+            </a>
+          </div>
         </div>
       </section>
     </main>

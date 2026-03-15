@@ -68,9 +68,26 @@ export default function ContactPage() {
             <h1 className="text-4xl md:text-5xl font-black mb-6">
               Get in Touch
             </h1>
-            <p className="text-xl text-white/90 leading-relaxed">
-              Have questions about orders, shipping, or technical specs? Our team in Shenzhen is ready to help.
+            <p className="text-xl text-white/90 leading-relaxed mb-8">
+              Have questions about orders, shipping, or technical specs? Our team in Shenzhen is ready to help. Free quote within 24 hours.
             </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                href="/wholesale-inquiry"
+                className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-all"
+              >
+                <MessageSquare className="w-5 h-5" />
+                Get Wholesale Quote
+              </Link>
+              <a
+                href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3.5 px-8 rounded-lg border border-white/20 transition-all"
+              >
+                WhatsApp Sales
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -133,6 +150,43 @@ export default function ContactPage() {
               })}
             </div>
 
+            {/* Which Channel Should I Use? */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm mb-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-6">Which Channel Should I Use?</h3>
+              <div className="grid sm:grid-cols-3 gap-6">
+                <div className="border border-gray-100 rounded-xl p-5">
+                  <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-3">
+                    <MessageSquare className="w-5 h-5 text-orange-600" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 mb-2">Inquiry Form</h4>
+                  <p className="text-sm text-gray-600">For wholesale quotes, bulk pricing, and new product sourcing. Free quote within 24 hours.</p>
+                  <Link href="/wholesale-inquiry" className="inline-flex items-center text-sm font-semibold text-orange-500 mt-3">
+                    Get Quote <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  </Link>
+                </div>
+                <div className="border border-gray-100 rounded-xl p-5">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
+                    <Phone className="w-5 h-5 text-green-600" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 mb-2">WhatsApp</h4>
+                  <p className="text-sm text-gray-600">For urgent sourcing, quick questions, or real-time negotiation. Fastest response.</p>
+                  <a href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-green-600 mt-3">
+                    Chat Now <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  </a>
+                </div>
+                <div className="border border-gray-100 rounded-xl p-5">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                    <Mail className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 mb-2">Email</h4>
+                  <p className="text-sm text-gray-600">For after-sales support, order tracking, warranty claims, and technical questions.</p>
+                  <a href="mailto:parts.info@phonerepairspares.com" className="inline-flex items-center text-sm font-semibold text-blue-600 mt-3">
+                    Send Email <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
             {/* When to Contact Us vs Inquiry */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-white rounded-2xl p-8 shadow-sm">
@@ -169,15 +223,19 @@ export default function ContactPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-orange-400 font-bold mt-0.5">•</span>
-                    <span>Custom MOQ and payment terms</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-400 font-bold mt-0.5">•</span>
-                    <span>New product sourcing requests</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-400 font-bold mt-0.5">•</span>
                     <span>Sample orders before bulk purchase</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-400 font-bold mt-0.5">•</span>
+                    <span>Mixed models and categories supported</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-400 font-bold mt-0.5">•</span>
+                    <span>Same-day dispatch for in-stock items</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-400 font-bold mt-0.5">•</span>
+                    <span>12-month warranty on all products</span>
                   </li>
                 </ul>
                 <Link

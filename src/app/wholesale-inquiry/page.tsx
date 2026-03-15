@@ -56,7 +56,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "What's your return/warranty policy?",
-    a: "We offer a 12-month warranty on all products. Our RMA rate is only 1%. Defective items are replaced free of charge.",
+    a: "We offer a 12-month warranty on all products. Our RMA rate is below 1%. Defective items are replaced free of charge.",
   },
   {
     q: "Can I visit your factory?",
@@ -96,14 +96,18 @@ const PRODUCT_CATEGORIES = [
 const TRUST_STATS = [
   { value: '10+', label: 'Years in Business', icon: Award },
   { value: '1000+', label: 'B2B Clients Served', icon: Users },
-  { value: '1%', label: 'Low RMA Rate', icon: Shield },
+  { value: '<1%', label: 'Low RMA Rate', icon: Shield },
   { value: '24h', label: 'Response Time', icon: Clock },
 ];
 
-// ─── GA4 helper ──────────────────────────────────────────────────
+// ─── GA4 helper (via GTM dataLayer) ─────────────────────────────
 function trackEvent(eventName: string, params?: Record<string, unknown>) {
-  if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-    (window as any).gtag('event', eventName, params);
+  if (typeof window !== 'undefined') {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: eventName,
+      ...params,
+    });
   }
 }
 
@@ -252,12 +256,12 @@ export default function WholesaleInquiryPage() {
                   <span className="text-orange-400">Direct from Shenzhen Factory</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-blue-100 mb-6 leading-relaxed">
-                  OEM Quality at <strong className="text-white">40% Below Distributor Prices</strong> — 10-Year Manufacturer Serving 1000+ B2B Clients Worldwide
+                  OEM Quality — <strong className="text-white">Save 30–40% Compared to Regional Distributors</strong>. 10-Year Manufacturer Serving 1000+ B2B Clients Worldwide
                 </p>
 
                 {/* Trust badges */}
                 <div className="flex flex-wrap gap-3 mb-8">
-                  {['1% Low RMA Rate', 'Same-Day Shipping', 'Flexible MOQ', '12-Month Warranty'].map(badge => (
+                  {['<1% RMA Rate', 'Same-Day Dispatch', 'MOQ from 10 Units', '12-Month Warranty'].map(badge => (
                     <span key={badge} className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1.5 text-sm">
                       <CheckCircle className="w-4 h-4 text-green-400" />
                       {badge}
@@ -266,13 +270,23 @@ export default function WholesaleInquiryPage() {
                 </div>
 
                 {/* CTA */}
-                <button
-                  onClick={scrollToForm}
-                  className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg shadow-orange-500/30 transition-all hover:shadow-xl hover:shadow-orange-500/40 hover:-translate-y-0.5"
-                >
-                  <MessageSquare className="w-5 h-5" />
-                  Request Wholesale Quote
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={scrollToForm}
+                    className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg shadow-orange-500/30 transition-all hover:shadow-xl hover:shadow-orange-500/40 hover:-translate-y-0.5"
+                  >
+                    <MessageSquare className="w-5 h-5" />
+                    Request Wholesale Quote
+                  </button>
+                  <a
+                    href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
+                  >
+                    WhatsApp Sales
+                  </a>
+                </div>
                 <p className="mt-3 text-sm text-blue-200">Free quote within 24 hours — No commitment required</p>
               </div>
 
@@ -314,7 +328,7 @@ export default function WholesaleInquiryPage() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Factory Direct Pricing</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Buy directly from our Shenzhen Huaqiangbei factory. No middlemen markup — save 30-40% compared to US distributors.
+                  Buy directly from our Shenzhen Huaqiangbei factory. No middlemen markup — save 30–40% compared to regional distributors.
                 </p>
               </div>
 
@@ -325,7 +339,7 @@ export default function WholesaleInquiryPage() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Premium OEM Quality</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  TQC quality control with only 1% RMA rate. True Tone support for iPhone screens. CE/RoHS certified components.
+                  TQC quality control with &lt;1% RMA rate. True Tone support for iPhone screens. CE/RoHS certified components.
                 </p>
               </div>
 
@@ -336,7 +350,7 @@ export default function WholesaleInquiryPage() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Fast &amp; Flexible Service</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Same-day shipping. Flexible MOQ from 50 units. Serving repair shops to large distributors worldwide.
+                  Same-day dispatch for in-stock items. Flexible MOQ — from 10 units for screens, 20 units for batteries and small parts.
                 </p>
               </div>
             </div>
@@ -423,7 +437,13 @@ export default function WholesaleInquiryPage() {
               <div className="lg:col-span-3">
                 <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-gray-100">
                   <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Get Your Wholesale Quote in 24 Hours</h2>
-                  <p className="text-gray-600 mb-8">Fill out the form and our sales team will send you a customized quote.</p>
+                  <p className="text-gray-600 mb-4">Fill out the form and our sales team will send you a customized quote.</p>
+                  <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-500 mb-8">
+                    <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> Free quote within 24 hours</span>
+                    <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> Sample orders available</span>
+                    <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> Mixed models &amp; categories supported</span>
+                    <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> 12-month warranty</span>
+                  </div>
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
                       <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1.5">Company Name <span className="text-red-500">*</span></label>
@@ -533,6 +553,7 @@ export default function WholesaleInquiryPage() {
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                   <h3 className="font-bold text-gray-900 mb-4">Prefer to Talk Directly?</h3>
                   <div className="space-y-3">
+                    <a href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-700 hover:text-green-600 transition-colors" onClick={() => trackEvent('click', { event_category: 'Contact', event_label: 'WhatsApp' })}><MessageSquare className="w-4 h-4" /> WhatsApp: +86 185 8899 9234</a>
                     <a href="mailto:parts.info@phonerepairspares.com" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('click', { event_category: 'Contact', event_label: 'Email' })}><Mail className="w-4 h-4" /> parts.info@phonerepairspares.com</a>
                     <a href="tel:+8618588999234" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('click', { event_category: 'Contact', event_label: 'Phone' })}><Phone className="w-4 h-4" /> +86 185 8899 9234</a>
                   </div>
@@ -590,13 +611,23 @@ export default function WholesaleInquiryPage() {
             <p className="text-blue-200 mb-8 text-lg">
               Join 1000+ businesses that trust PRSPARES for quality phone repair parts at factory-direct prices.
             </p>
-            <button
-              onClick={scrollToForm}
-              className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg shadow-orange-500/30 transition-all hover:shadow-xl hover:shadow-orange-500/40 hover:-translate-y-0.5"
-            >
-              <MessageSquare className="w-5 h-5" />
-              Request Wholesale Quote
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={scrollToForm}
+                className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg shadow-orange-500/30 transition-all hover:shadow-xl hover:shadow-orange-500/40 hover:-translate-y-0.5"
+              >
+                <MessageSquare className="w-5 h-5" />
+                Request Wholesale Quote
+              </button>
+              <a
+                href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
+              >
+                WhatsApp Sales
+              </a>
+            </div>
           </div>
         </section>
       </div>

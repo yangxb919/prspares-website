@@ -61,7 +61,7 @@ const BUYERS = [
 const FAQ_ITEMS = [
   { q: 'What types of small parts do you supply?', a: 'We supply a comprehensive range: cameras (front & rear), charging ports, speakers, earpieces, buttons, flex cables, NFC modules, wireless charging coils, back covers, frames, and more — for phones, tablets, laptops, and wearables.' },
   { q: 'Can I mix small parts with screens and batteries in one order?', a: 'Absolutely. We encourage mixed-category orders. You can combine small parts with screens, batteries, and repair tools in a single shipment to save on shipping costs.' },
-  { q: 'What is the MOQ for small parts?', a: 'MOQ varies by part type — typically starting from 20-50 units per SKU. Contact us for specific MOQ details on the parts you need.' },
+  { q: 'What is the MOQ for small parts?', a: 'Our MOQ for small parts starts from 20 units. You can mix across different part types, models, and categories in a single order.' },
   { q: 'Are your small parts tested before shipment?', a: 'Yes. Every part undergoes functional testing and visual inspection. Camera modules are tested for focus and image quality, charging ports for connectivity, speakers for audio output, etc.' },
   { q: 'Do you supply parts for older phone models?', a: 'Yes. We maintain stock for models dating back to iPhone 6 and Samsung Galaxy S7 series. For less common models, we can source parts on request with 3-5 days lead time.' },
 ];
@@ -193,9 +193,9 @@ export default function SmallPartsPage() {
           <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">MOQ, Shipping &amp; Warranty</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: 'Flexible MOQ', items: ['20-50 units per SKU', 'Mix across categories freely', 'Sample orders available', 'Combine with screens & batteries'] },
-              { title: 'Global Shipping', items: ['Same-day dispatch before 3PM CST', 'DHL / FedEx / UPS express', '3-7 days worldwide delivery', 'Full shipment insurance'] },
-              { title: '12-Month Warranty', items: ['All parts functionally tested', 'Free replacement for defects', 'Low RMA rate guarantee', 'Dedicated after-sales support'] },
+              { title: 'Flexible MOQ', items: ['Starting from 20 units for small parts', 'Mix across categories freely', 'Sample orders available', 'Mixed models and categories supported'] },
+              { title: 'Global Shipping', items: ['Same-day dispatch for in-stock items', 'DHL / FedEx / UPS express', '3-7 days worldwide delivery', 'Full shipment insurance'] },
+              { title: '12-Month Warranty', items: ['All parts functionally tested', 'Free replacement for defects', '<1% RMA rate', 'Dedicated after-sales support'] },
             ].map((block) => (
               <div key={block.title} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
                 <h3 className="text-lg font-bold text-gray-900 mb-4">{block.title}</h3>
@@ -256,13 +256,23 @@ export default function SmallPartsPage() {
           <p className="text-blue-200 mb-8 text-lg">
             One-stop wholesale sourcing for all your repair shop needs. Free quote within 24 hours.
           </p>
-          <Link
-            href="/wholesale-inquiry"
-            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
-          >
-            <MessageSquare className="w-5 h-5" />
-            Get Wholesale Quote
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/wholesale-inquiry"
+              className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg transition-all hover:-translate-y-0.5"
+            >
+              <MessageSquare className="w-5 h-5" />
+              Get Wholesale Quote
+            </Link>
+            <a
+              href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20small%20parts"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
+            >
+              WhatsApp Sales
+            </a>
+          </div>
         </div>
       </section>
     </main>

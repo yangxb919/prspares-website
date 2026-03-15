@@ -8,6 +8,12 @@ export default function ThankYouClient() {
 
   useEffect(() => {
     setIsLoaded(true);
+    // Track thank-you page view via GTM dataLayer
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'thank_you_page_view',
+      page_path: '/thank-you',
+    });
   }, []);
 
   return (

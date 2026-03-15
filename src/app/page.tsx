@@ -10,12 +10,20 @@ const FadeIn = ({ children, delay = 0, className = '' }: { children: React.React
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (!ref) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setTimeout(() => setVisible(true), delay); },
-      { threshold: 0.1 }
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setVisible(true), delay);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0, rootMargin: '0px 0px 200px 0px' }
     );
-    if (ref) observer.observe(ref);
-    return () => observer.disconnect();
+    observer.observe(ref);
+    // Fallback: ensure content is visible even if observer doesn't fire
+    const fallback = setTimeout(() => setVisible(true), delay + 2000);
+    return () => { observer.disconnect(); clearTimeout(fallback); };
   }, [ref, delay]);
 
   return (
@@ -53,17 +61,18 @@ export default function Home() {
                   <MessageSquare className="w-5 h-5" />
                   Get Wholesale Quote
                 </Link>
-                <Link
-                  href="/products"
+                <a
+                  href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
                 >
-                  Browse Products
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
+                  WhatsApp Sales
+                </a>
               </div>
 
               <div className="flex flex-wrap gap-4">
-                {['Flexible MOQ', 'Same-Day Shipping', '12-Month Warranty', '1% RMA Rate'].map(badge => (
+                {['MOQ from 10 Units', 'Same-Day Dispatch', '12-Month Warranty', '<1% RMA Rate'].map(badge => (
                   <span key={badge} className="inline-flex items-center gap-1.5 text-sm text-blue-200">
                     <CheckCircle className="w-4 h-4 text-green-400" />
                     {badge}
@@ -205,12 +214,12 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Factory, title: 'Factory Direct Pricing', desc: 'Source directly from Shenzhen Huaqiangbei. No middlemen — save 30-40% compared to regional distributors.' },
+              { icon: Factory, title: 'Factory Direct Pricing', desc: 'Source directly from Shenzhen Huaqiangbei. No middlemen — save 30–40% compared to regional distributors.' },
               { icon: Shield, title: 'OEM Quality Guarantee', desc: 'TQC quality control on every batch. True Tone support for iPhone screens. CE/RoHS certified components.' },
-              { icon: Zap, title: 'Same-Day Shipping', desc: 'Order before 3PM CST, ship the same day. DHL/FedEx express delivery to 50+ countries in 3-7 days.' },
-              { icon: Package, title: 'Flexible MOQ', desc: 'Start from just 50 units. Mix & match across models and categories. Small shop friendly.' },
-              { icon: Award, title: '1% RMA Rate', desc: 'Industry-leading low return rate. 12-month warranty on all products. Free replacement for defective items.' },
-              { icon: Clock, title: '24h Quote Response', desc: 'Dedicated sales team responds within 24 hours. WhatsApp support for real-time communication.' },
+              { icon: Zap, title: 'Same-Day Dispatch', desc: 'Order before 3PM CST, dispatch the same day. DHL/FedEx express delivery to 50+ countries in 3-7 days.' },
+              { icon: Package, title: 'Flexible MOQ', desc: 'Starting from 10 units for screens, 20 units for batteries and small parts. Mix & match across models and categories.' },
+              { icon: Award, title: '<1% RMA Rate', desc: 'Industry-leading low return rate. 12-month warranty on all products. Free replacement for defective items.' },
+              { icon: Clock, title: '24h Quote Response', desc: 'Free quote within 24 hours. Dedicated sales team via WhatsApp for real-time communication.' },
             ].map((item, i) => (
               <FadeIn key={i} delay={i * 100}>
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow h-full">
