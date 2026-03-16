@@ -17,7 +17,7 @@ interface ContactInfoProps {
 const ContactInfo = ({
   companyName = "PRSPARES",
   address = "Huaqiangbei, Shenzhen, China",
-  phone = "+8618588999234",
+  phone = "+8618312589439",
   email = "parts.info@phonerepairspares.com",
   description = "Your trusted source for mobile repair parts and expert advice. We are committed to providing quality components and excellent customer service.",
   workingHours = "Monday to Friday: 9:00 - 18:00",

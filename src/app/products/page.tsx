@@ -92,7 +92,7 @@ export default function ProductsPage() {
                 Get Wholesale Quote
               </TrackedLink>
               <TrackedLink
-                href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
                 event="whatsapp_click"
                 params={{ event_label: 'Products Hero WhatsApp' }}
                 target="_blank"
@@ -273,7 +273,7 @@ export default function ProductsPage() {
               Get Wholesale Quote
             </TrackedLink>
             <TrackedLink
-              href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+              href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
               event="whatsapp_click"
               params={{ event_label: 'Products Footer WhatsApp' }}
               target="_blank"

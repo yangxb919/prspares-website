@@ -278,7 +278,7 @@ export default function WholesaleInquiryPage() {
                     Request Wholesale Quote
                   </button>
                   <a
-                    href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                    href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
@@ -552,9 +552,9 @@ export default function WholesaleInquiryPage() {
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                   <h3 className="font-bold text-gray-900 mb-4">Prefer to Talk Directly?</h3>
                   <div className="space-y-3">
-                    <a href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-700 hover:text-green-600 transition-colors" onClick={() => trackEvent('whatsapp_click')}><MessageSquare className="w-4 h-4" /> WhatsApp: +86 185 8899 9234</a>
+                    <a href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-700 hover:text-green-600 transition-colors" onClick={() => trackEvent('whatsapp_click')}><MessageSquare className="w-4 h-4" /> WhatsApp: +853 6390 2425</a>
                     <a href="mailto:parts.info@phonerepairspares.com" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('contact_click', { method: 'email' })}><Mail className="w-4 h-4" /> parts.info@phonerepairspares.com</a>
-                    <a href="tel:+8618588999234" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('contact_click', { method: 'phone' })}><Phone className="w-4 h-4" /> +86 185 8899 9234</a>
+                    <a href="tel:+8618312589439" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('contact_click', { method: 'phone' })}><Phone className="w-4 h-4" /> +86 183 1258 9439</a>
                   </div>
                 </div>
                 <div className="relative rounded-xl overflow-hidden h-48">
@@ -619,7 +619,7 @@ export default function WholesaleInquiryPage() {
                 Request Wholesale Quote
               </button>
               <a
-                href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"

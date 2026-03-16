@@ -32,7 +32,7 @@ const Footer = () => {
               <a href="mailto:parts.info@phonerepairspares.com" className="hover:text-[#00B140] transition-colors" aria-label="Email">
                 <Mail size={20} />
               </a>
-              <a href="tel:+8618588999234" className="hover:text-[#00B140] transition-colors" aria-label="Phone">
+              <a href="tel:+8618312589439" className="hover:text-[#00B140] transition-colors" aria-label="Phone">
                 <Phone size={20} />
               </a>
             </div>
@@ -98,7 +98,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start space-x-2">
                 <Phone size={16} className="mt-0.5 flex-shrink-0" />
-                <span className="text-sm">+8618588999234</span>
+                <span className="text-sm">+86 183 1258 9439</span>
               </li>
               <li className="flex items-start space-x-2">
                 <MapPin size={16} className="mt-0.5 flex-shrink-0" />

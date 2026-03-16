@@ -34,8 +34,8 @@ const CONTACT_METHODS = [
   {
     icon: Phone,
     title: 'Phone / WhatsApp',
-    primary: '+86 185 8899 9234',
-    href: 'https://wa.me/8618588999234',
+    primary: '+86 183 1258 9439',
+    href: 'https://wa.me/85363902425',
     note: 'WhatsApp preferred for international',
   },
   {
@@ -83,7 +83,7 @@ export default function ContactPage() {
                 Get Wholesale Quote
               </TrackedLink>
               <TrackedLink
-                href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
                 event="whatsapp_click"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -176,7 +176,7 @@ export default function ContactPage() {
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2">WhatsApp</h4>
                   <p className="text-sm text-gray-600">For urgent sourcing, quick questions, or real-time negotiation. Fastest response.</p>
-                  <TrackedLink href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" event="whatsapp_click" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-green-600 mt-3">
+                  <TrackedLink href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" event="whatsapp_click" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm font-semibold text-green-600 mt-3">
                     Chat Now <ArrowRight className="w-3.5 h-3.5 ml-1" />
                   </TrackedLink>
                 </div>

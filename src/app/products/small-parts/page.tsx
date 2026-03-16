@@ -268,7 +268,7 @@ export default function SmallPartsPage() {
               Get Wholesale Quote
             </TrackedLink>
             <TrackedLink
-              href="https://wa.me/8618588999234?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20small%20parts"
+              href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20small%20parts"
               event="whatsapp_click"
               params={{ event_label: 'Small Parts Footer WhatsApp' }}
               target="_blank"
