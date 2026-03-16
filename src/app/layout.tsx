@@ -3,7 +3,7 @@ import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import N8NChat from "@/components/N8NChat";
+
 
 const inter = Inter({
   variable: "--font-inter",
@@ -136,8 +136,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {children}
         <Footer />
 
-        {/* N8N Chat - Intelligent Customer Service */}
-        <N8NChat />
+
       </body>
     </html>
   );

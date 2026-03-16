@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, MessageCircle, FileText, Phone, Mail, User } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Phone, Mail, User } from 'lucide-react';
 import InquiryModal from '@/components/InquiryModal';
-import ChatModal from '@/components/ChatModal';
 
 // 前端组件专用的Product接口
 export interface ClientProduct {
@@ -29,7 +28,6 @@ interface ProductDetailClientProps {
 const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
-  const [showChatModal, setShowChatModal] = useState(false);
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => 
@@ -194,12 +192,6 @@ const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
                   Request Quote
                 </button>
 
-                <button
-                  onClick={() => setShowChatModal(true)}
-                  className="flex-1 bg-white border border-green-600 text-green-600 hover:bg-green-50 py-2.5 px-4 rounded-lg font-medium transition-colors duration-200 text-sm"
-                >
-                  Ask a Question
-                </button>
               </div>
 
               {/* Guarantee Section */}
@@ -222,11 +214,6 @@ const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
         onClose={() => setShowInquiryModal(false)}
       />
 
-      {/* AI Chat Modal */}
-      <ChatModal
-        isOpen={showChatModal}
-        onClose={() => setShowChatModal(false)}
-      />
     </div>
   );
 };
