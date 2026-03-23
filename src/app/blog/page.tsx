@@ -109,7 +109,7 @@ export default async function BlogPage({
       `)
       .eq('status', 'publish')
       .order('published_at', { ascending: false })
-      .limit(20);
+      .limit(100);
 
     if (category && category !== 'all') {
       query = query.contains('meta', JSON.stringify({ category: category }));
@@ -203,7 +203,7 @@ export default async function BlogPage({
       slug: post.slug,
       title: post.title,
       excerpt: post.excerpt || (post.content ? post.content.substring(0, 150) + '...' : ''),
-      category: post.meta?.category || 'Parts Knowledge',
+      category: post.meta?.category || 'parts-knowledge',
       author: authorName,
       date: publishDate,
       readTime: `${readTimeMin} min read`,
@@ -211,6 +211,14 @@ export default async function BlogPage({
       content: post.content
     };
   });
+
+  const categoryLabels: Record<string, string> = {
+    'sourcing-suppliers': 'Sourcing & Suppliers',
+    'repair-guides': 'Repair Guides',
+    'parts-knowledge': 'Parts Knowledge',
+    'business-tips': 'Business Tips',
+    'industry-insights': 'Industry Insights',
+  };
 
   const tabs = [
     { id: 'all', label: '📚 All Articles', href: '/blog' },
@@ -288,7 +296,7 @@ export default async function BlogPage({
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="absolute top-4 left-4 z-10">
                         <span className="inline-flex items-center px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-700 rounded-full text-xs font-medium shadow-sm">
-                          {article.category}
+                          {categoryLabels[article.category] || article.category}
                         </span>
                       </div>
                     </div>
