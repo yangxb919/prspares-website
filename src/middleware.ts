@@ -1,7 +1,52 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// --- Bot Detection ---
+const BOT_UA_PATTERNS = [
+  /bot/i, /crawl/i, /spider/i, /slurp/i, /mediapartners/i,
+  /headlesschrome/i, /phantomjs/i, /puppet/i, /selenium/i,
+  /webdriver/i, /scrapy/i, /wget/i, /curl/i, /httpx/i,
+  /python-requests/i, /go-http-client/i, /java\//i,
+  /ahrefsbot/i, /semrushbot/i, /dotbot/i, /mj12bot/i,
+  /bytespider/i, /petalbot/i,
+  /dataforseo/i, /gptbot/i, /claudebot/i, /ccbot/i,
+]
+
+// Known datacenter / bot IP ranges (Singapore datacenter observed in analytics)
+// These are CIDR-style prefixes — we match the start of the IP string
+const BLOCKED_IP_PREFIXES: string[] = [
+  // Add specific IPs or prefixes as they are identified from GA4 logs
+  // e.g. '13.215.', '18.140.' for AWS ap-southeast-1
+]
+
+function isBot(request: NextRequest): boolean {
+  const ua = request.headers.get('user-agent') || ''
+
+  // 1. No User-Agent at all
+  if (!ua || ua.length < 10) return true
+
+  // 2. Known bot UA patterns
+  if (BOT_UA_PATTERNS.some(p => p.test(ua))) return true
+
+  // 3. Blocked IP prefixes
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    || request.headers.get('x-real-ip')
+    || ''
+  if (ip && BLOCKED_IP_PREFIXES.some(prefix => ip.startsWith(prefix))) return true
+
+  return false
+}
+
 export async function middleware(request: NextRequest) {
+  // --- Bot blocking (before any other logic) ---
+  // Allow search engine crawlers that are good for SEO (Googlebot, Bingbot, etc.)
+  const ua = request.headers.get('user-agent') || ''
+  const isGoodCrawler = /googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp/i.test(ua)
+
+  if (!isGoodCrawler && isBot(request)) {
+    return new NextResponse('Forbidden', { status: 403 })
+  }
+
   // Create a simple response object
   let response = NextResponse.next()
 
@@ -130,5 +175,14 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/pricing', '/pricing/:path*', '/dashboard', '/profile', '/settings', '/user/:path*'], // Added /pricing protection
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization)
+     * - favicon.ico, favicon.png
+     * - public assets (images, fonts, etc.)
+     */
+    '/((?!_next/static|_next/image|favicon\\.ico|favicon\\.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot)).*)',
+  ],
 }
