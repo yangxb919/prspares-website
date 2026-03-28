@@ -222,13 +222,6 @@ export default function WholesaleInquiryPage() {
       // GA4 conversion
       trackEvent('generate_lead', { currency: 'USD', value: 100 });
 
-      // Google Ads conversion tracking
-      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-        window.gtag('event', 'conversion', {
-          send_to: 'AW-1000630085/WkULCKmYx6UZEMXOkd0D',
-        });
-      }
-
       router.push('/thank-you');
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';

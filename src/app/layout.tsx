@@ -105,7 +105,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <script async src="https://www.googletagmanager.com/gtag/js?id=GT-TQS9VZ7Z" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GT-TQS9VZ7Z');gtag('config','AW-1000630085');`
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GT-TQS9VZ7Z');gtag('config','AW-18045108063');`
           }}
         />
 
