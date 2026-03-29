@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 // --- Bot Detection ---
 const BOT_UA_PATTERNS = [
-  /bot/i, /crawl/i, /spider/i, /slurp/i, /mediapartners/i,
+  /bot/i, /crawl/i, /spider/i, /slurp/i,
   /headlesschrome/i, /phantomjs/i, /puppet/i, /selenium/i,
   /webdriver/i, /scrapy/i, /wget/i, /curl/i, /httpx/i,
   /python-requests/i, /go-http-client/i, /java\//i,
@@ -12,12 +12,52 @@ const BOT_UA_PATTERNS = [
   /dataforseo/i, /gptbot/i, /claudebot/i, /ccbot/i,
 ]
 
-// Known datacenter / bot IP ranges (Singapore datacenter observed in analytics)
-// These are CIDR-style prefixes — we match the start of the IP string
+// Known datacenter / bot IP ranges — we match the start of the IP string
 const BLOCKED_IP_PREFIXES: string[] = [
-  // Add specific IPs or prefixes as they are identified from GA4 logs
-  // e.g. '13.215.', '18.140.' for AWS ap-southeast-1
+  // AWS ap-southeast-1 (Singapore)
+  '13.212.', '13.213.', '13.214.', '13.215.',
+  '18.136.', '18.138.', '18.139.', '18.140.', '18.141.', '18.142.', '18.143.',
+  '54.151.', '54.179.', '54.251.', '54.252.', '54.254.', '54.255.',
+  '52.74.', '52.76.', '52.77.',
+  '3.0.', '3.1.',
+  // DigitalOcean SGP1
+  '128.199.', '159.65.', '167.71.', '188.166.', '206.189.',
 ]
+
+// --- Rate Limiter (in-memory, per IP, 60s sliding window, max 30 requests) ---
+const RATE_LIMIT_WINDOW_MS = 60_000
+const RATE_LIMIT_MAX = 30
+const RATE_LIMIT_CLEANUP_INTERVAL_MS = 5 * 60_000
+
+const rateLimitMap = new Map<string, number[]>()
+
+// Periodic cleanup to prevent memory leak
+let lastCleanup = Date.now()
+function cleanupRateLimitMap() {
+  const now = Date.now()
+  if (now - lastCleanup < RATE_LIMIT_CLEANUP_INTERVAL_MS) return
+  lastCleanup = now
+  const cutoff = now - RATE_LIMIT_WINDOW_MS
+  for (const [ip, timestamps] of rateLimitMap) {
+    const valid = timestamps.filter(t => t > cutoff)
+    if (valid.length === 0) {
+      rateLimitMap.delete(ip)
+    } else {
+      rateLimitMap.set(ip, valid)
+    }
+  }
+}
+
+function isRateLimited(ip: string): boolean {
+  cleanupRateLimitMap()
+  const now = Date.now()
+  const cutoff = now - RATE_LIMIT_WINDOW_MS
+  const timestamps = rateLimitMap.get(ip) || []
+  const valid = timestamps.filter(t => t > cutoff)
+  valid.push(now)
+  rateLimitMap.set(ip, valid)
+  return valid.length > RATE_LIMIT_MAX
+}
 
 function isBot(request: NextRequest): boolean {
   const ua = request.headers.get('user-agent') || ''
@@ -41,10 +81,20 @@ export async function middleware(request: NextRequest) {
   // --- Bot blocking (before any other logic) ---
   // Allow search engine crawlers that are good for SEO (Googlebot, Bingbot, etc.)
   const ua = request.headers.get('user-agent') || ''
-  const isGoodCrawler = /googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp/i.test(ua)
+  const isGoodCrawler = /googlebot|adsbot-google|mediapartners-google|google-adsbot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp/i.test(ua)
 
   if (!isGoodCrawler && isBot(request)) {
     return new NextResponse('Forbidden', { status: 403 })
+  }
+
+  // --- Rate limiting (skip for good crawlers) ---
+  if (!isGoodCrawler) {
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+      || request.headers.get('x-real-ip')
+      || 'unknown'
+    if (ip !== 'unknown' && isRateLimited(ip)) {
+      return new NextResponse('Too Many Requests', { status: 429 })
+    }
   }
 
   // Create a simple response object
