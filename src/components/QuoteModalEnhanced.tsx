@@ -9,6 +9,8 @@ import { quoteFormSchema, type QuoteFormData } from '@/lib/form-schemas';
 import { FormInput, FormTextarea, FormErrorSummary, FormStatus } from '@/components/common/FormComponents';
 import { useFormAutoSave, useFormRecovery, useFormChanges, useFormSubmission, usePreventDataLoss } from '@/lib/form-utils';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
+import { useTurnstile } from '@/components/common/Turnstile';
+import { markAsHumanVerified } from '@/lib/analytics';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -29,6 +31,10 @@ const defaultValues: QuoteFormData = {
 
 export default function QuoteModalEnhanced({ isOpen, onClose, productName, articleTitle }: QuoteModalProps) {
   const router = useRouter();
+
+  // Turnstile human verification
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+  const { token: turnstileToken, isVerified: isTurnstileVerified, TurnstileWidget } = useTurnstile(turnstileSiteKey);
 
   // 获取保存的表单数据
   const { savedData, hasSavedData, clearSavedData } = useFormRecovery<QuoteFormData>(
@@ -67,8 +73,38 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
   // 防止数据丢失
   usePreventDataLoss(isDirty);
 
+  // Mark analytics as human when Turnstile passes
+  useEffect(() => {
+    if (isTurnstileVerified) {
+      markAsHumanVerified();
+    }
+  }, [isTurnstileVerified]);
+
   // 处理表单提交
   const onSubmit = async (data: QuoteFormData) => {
+    // Turnstile verification
+    if (turnstileSiteKey && !isTurnstileVerified) {
+      setError('Please complete the verification challenge.');
+      return;
+    }
+    if (turnstileSiteKey && turnstileToken) {
+      try {
+        const verifyRes = await fetch('/api/turnstile/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: turnstileToken }),
+        });
+        const verifyData = await verifyRes.json();
+        if (!verifyData.success) {
+          setError('Verification failed. Please refresh and try again.');
+          return;
+        }
+      } catch {
+        setError('Verification check failed. Please try again.');
+        return;
+      }
+    }
+
     setSubmitting(true);
 
     try {
@@ -320,9 +356,16 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
                 取消
               </button>
 
+              {/* Turnstile verification */}
+              {turnstileSiteKey && (
+                <div className="flex justify-center">
+                  <TurnstileWidget />
+                </div>
+              )}
+
               <button
                 type="submit"
-                disabled={state.isSubmitting || !isValid}
+                disabled={state.isSubmitting || !isValid || (!!turnstileSiteKey && !isTurnstileVerified)}
                 className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {state.isSubmitting ? (

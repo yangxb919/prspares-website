@@ -8,6 +8,8 @@ import {
   Phone, Mail, MessageSquare, Send, Zap, Users,
 } from 'lucide-react';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
+import { useTurnstile } from '@/components/common/Turnstile';
+import { markAsHumanVerified } from '@/lib/analytics';
 
 // ─── Types ───────────────────────────────────────────────────────
 interface FormData {
@@ -139,6 +141,17 @@ export default function WholesaleInquiryPage() {
   const [userIP, setUserIP] = useState('');
   const [formStarted, setFormStarted] = useState(false);
 
+  // Turnstile human verification
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+  const { token: turnstileToken, isVerified: isTurnstileVerified, TurnstileWidget } = useTurnstile(turnstileSiteKey);
+
+  // When Turnstile verifies, also mark analytics as human
+  useEffect(() => {
+    if (isTurnstileVerified) {
+      markAsHumanVerified();
+    }
+  }, [isTurnstileVerified]);
+
   // Get user IP
   useEffect(() => {
     (async () => {
@@ -190,6 +203,32 @@ export default function WholesaleInquiryPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
+
+    // Turnstile verification (skip if no site key configured)
+    if (turnstileSiteKey && !isTurnstileVerified) {
+      setSubmitError('Please complete the verification challenge.');
+      return;
+    }
+
+    // Server-side Turnstile token validation
+    if (turnstileSiteKey && turnstileToken) {
+      try {
+        const verifyRes = await fetch('/api/turnstile/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: turnstileToken }),
+        });
+        const verifyData = await verifyRes.json();
+        if (!verifyData.success) {
+          setSubmitError('Verification failed. Please refresh and try again.');
+          return;
+        }
+      } catch {
+        setSubmitError('Verification check failed. Please try again.');
+        return;
+      }
+    }
+
     setIsSubmitting(true);
     setSubmitError('');
 
@@ -509,8 +548,14 @@ export default function WholesaleInquiryPage() {
                       <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">Additional Requirements</label>
                       <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="Specify models, quality requirements, shipping preferences..." />
                     </div>
+                    {/* Turnstile human verification */}
+                    {turnstileSiteKey && (
+                      <div className="flex justify-center">
+                        <TurnstileWidget />
+                      </div>
+                    )}
                     {submitError && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{submitError}</p>}
-                    <button type="submit" disabled={isSubmitting} className={`w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-2 text-lg shadow-md shadow-orange-500/20 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-orange-500/30'}`}>
+                    <button type="submit" disabled={isSubmitting || (!!turnstileSiteKey && !isTurnstileVerified)} className={`w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-2 text-lg shadow-md shadow-orange-500/20 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-orange-500/30'}`}>
                       {isSubmitting ? (
                         <><svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg> Submitting...</>
                       ) : (

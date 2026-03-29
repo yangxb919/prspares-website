@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { checkRateLimit } from '@/lib/rate-limit'
 
 // --- Bot Detection ---
 const BOT_UA_PATTERNS = [
@@ -23,41 +24,6 @@ const BLOCKED_IP_PREFIXES: string[] = [
   // DigitalOcean SGP1
   '128.199.', '159.65.', '167.71.', '188.166.', '206.189.',
 ]
-
-// --- Rate Limiter (in-memory, per IP, 60s sliding window, max 30 requests) ---
-const RATE_LIMIT_WINDOW_MS = 60_000
-const RATE_LIMIT_MAX = 30
-const RATE_LIMIT_CLEANUP_INTERVAL_MS = 5 * 60_000
-
-const rateLimitMap = new Map<string, number[]>()
-
-// Periodic cleanup to prevent memory leak
-let lastCleanup = Date.now()
-function cleanupRateLimitMap() {
-  const now = Date.now()
-  if (now - lastCleanup < RATE_LIMIT_CLEANUP_INTERVAL_MS) return
-  lastCleanup = now
-  const cutoff = now - RATE_LIMIT_WINDOW_MS
-  for (const [ip, timestamps] of rateLimitMap) {
-    const valid = timestamps.filter(t => t > cutoff)
-    if (valid.length === 0) {
-      rateLimitMap.delete(ip)
-    } else {
-      rateLimitMap.set(ip, valid)
-    }
-  }
-}
-
-function isRateLimited(ip: string): boolean {
-  cleanupRateLimitMap()
-  const now = Date.now()
-  const cutoff = now - RATE_LIMIT_WINDOW_MS
-  const timestamps = rateLimitMap.get(ip) || []
-  const valid = timestamps.filter(t => t > cutoff)
-  valid.push(now)
-  rateLimitMap.set(ip, valid)
-  return valid.length > RATE_LIMIT_MAX
-}
 
 function isBot(request: NextRequest): boolean {
   const ua = request.headers.get('user-agent') || ''
@@ -90,10 +56,13 @@ export async function middleware(request: NextRequest) {
   // --- Rate limiting (skip for good crawlers) ---
   if (!isGoodCrawler) {
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-      || request.headers.get('x-real-ip')
-      || 'unknown'
-    if (ip !== 'unknown' && isRateLimited(ip)) {
-      return new NextResponse('Too Many Requests', { status: 429 })
+      || request.headers.get('x-real-ip') || 'unknown'
+    const { allowed } = checkRateLimit(ip, 30, 60000)
+    if (!allowed) {
+      return new NextResponse('Too Many Requests', {
+        status: 429,
+        headers: { 'Retry-After': '60' },
+      })
     }
   }
 
