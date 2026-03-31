@@ -166,7 +166,7 @@ export default function WholesaleInquiryPage() {
 
   // Turnstile human verification
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
-  const { token: turnstileToken, isVerified: isTurnstileVerified, TurnstileWidget } = useTurnstile(turnstileSiteKey);
+  const { token: turnstileToken, isVerified: isTurnstileVerified, hasError: turnstileError, TurnstileWidget } = useTurnstile(turnstileSiteKey);
 
   // When Turnstile verifies, also mark analytics as human
   useEffect(() => {
@@ -226,14 +226,15 @@ export default function WholesaleInquiryPage() {
     e.preventDefault();
     if (!validate()) return;
 
-    // Turnstile verification (skip if no site key configured)
-    if (turnstileSiteKey && !isTurnstileVerified) {
+    // Turnstile verification (skip if no site key, or if Turnstile failed to load)
+    const turnstileAvailable = turnstileSiteKey && !turnstileError && typeof window !== 'undefined' && !!window.turnstile;
+    if (turnstileAvailable && !isTurnstileVerified) {
       setSubmitError('Please complete the verification challenge.');
       return;
     }
 
     // Server-side Turnstile token validation
-    if (turnstileSiteKey && turnstileToken) {
+    if (turnstileAvailable && turnstileToken) {
       try {
         const verifyRes = await fetch('/api/turnstile/verify', {
           method: 'POST',
