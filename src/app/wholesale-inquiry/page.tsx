@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
@@ -129,7 +129,7 @@ function FaqItem({ item, defaultOpen }: { item: typeof FAQ_ITEMS[0]; defaultOpen
 }
 
 // ─── Main Page Component ─────────────────────────────────────────
-export default function WholesaleInquiryPage() {
+function WholesaleInquiryContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const formRef = useRef<HTMLDivElement>(null);
@@ -726,5 +726,13 @@ export default function WholesaleInquiryPage() {
         </section>
       </div>
     </>
+  );
+}
+
+export default function WholesaleInquiryPage() {
+  return (
+    <Suspense>
+      <WholesaleInquiryContent />
+    </Suspense>
   );
 }
