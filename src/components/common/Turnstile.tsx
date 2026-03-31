@@ -28,8 +28,8 @@ interface TurnstileProps {
   onVerify: (token: string) => void;
   onError?: () => void;
   onExpire?: () => void;
-  /** 'managed' shows a checkbox when needed; 'invisible' is fully hidden */
-  appearance?: 'managed' | 'invisible' | 'always';
+  /** 'interaction-only' shows when needed; 'always' always shows; 'execute' for invisible */
+  appearance?: 'always' | 'execute' | 'interaction-only';
   /** Theme */
   theme?: 'light' | 'dark' | 'auto';
   /** Size */
@@ -72,7 +72,7 @@ export default function Turnstile({
   onVerify,
   onError,
   onExpire,
-  appearance = 'managed',
+  appearance = 'interaction-only',
   theme = 'light',
   size = 'normal',
   className = '',
