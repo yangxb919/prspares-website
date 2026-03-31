@@ -72,7 +72,7 @@ export default function Turnstile({
   onVerify,
   onError,
   onExpire,
-  appearance = 'interaction-only',
+  appearance = 'always',
   theme = 'light',
   size = 'normal',
   className = '',
