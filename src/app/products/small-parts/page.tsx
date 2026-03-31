@@ -116,11 +116,14 @@ export default function SmallPartsPage() {
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PRODUCT_TYPES.map((item) => (
-              <div key={item.name} className="rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <Link key={item.name} href="/wholesale-inquiry?product=Small+Parts" className="group rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all block">
                 <Wrench className="w-8 h-8 text-[#1e3a5f] mb-4" />
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{item.name}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
-              </div>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">{item.desc}</p>
+                <span className="inline-flex items-center text-sm font-semibold text-orange-500 group-hover:gap-2 gap-1 transition-all">
+                  Get Quote <ArrowRight className="w-4 h-4" />
+                </span>
+              </Link>
             ))}
           </div>
         </div>
@@ -135,10 +138,13 @@ export default function SmallPartsPage() {
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
             {BRANDS.map((brand) => (
-              <div key={brand.name} className="bg-white px-5 py-4 rounded-lg shadow-sm border border-gray-100">
-                <span className="font-semibold text-gray-900">{brand.name}</span>
-                <p className="text-gray-500 text-sm mt-1">{brand.models}</p>
-              </div>
+              <Link key={brand.name} href={`/wholesale-inquiry?product=${encodeURIComponent(brand.name)}+Parts`} className="group bg-white px-5 py-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all flex items-center justify-between block">
+                <div>
+                  <span className="font-semibold text-gray-900">{brand.name}</span>
+                  <p className="text-gray-500 text-sm mt-1">{brand.models}</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+              </Link>
             ))}
           </div>
         </div>
@@ -153,7 +159,7 @@ export default function SmallPartsPage() {
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             {PART_CATEGORIES.map((cat) => (
-              <div key={cat.title} className="rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+              <Link key={cat.title} href={`/wholesale-inquiry?product=${encodeURIComponent(cat.title)}`} className="group rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all block">
                 <div className="bg-[#1e3a5f] text-white px-6 py-4">
                   <h3 className="text-lg font-bold">{cat.title}</h3>
                 </div>
@@ -166,8 +172,11 @@ export default function SmallPartsPage() {
                       </li>
                     ))}
                   </ul>
+                  <span className="inline-flex items-center text-sm font-semibold text-orange-500 mt-4 group-hover:gap-2 gap-1 transition-all">
+                    Get Quote <ArrowRight className="w-4 h-4" />
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -249,6 +258,17 @@ export default function SmallPartsPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══ FLOATING QUOTE BUTTON ═══ */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+        <Link
+          href="/wholesale-inquiry?product=Small+Parts"
+          className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-5 rounded-full shadow-lg shadow-orange-500/30 hover:shadow-xl transition-all hover:-translate-y-0.5 text-sm"
+        >
+          <MessageSquare className="w-4 h-4" />
+          Get Quote
+        </Link>
+      </div>
 
       {/* ═══ 9. CTA ═══ */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] text-white text-center">

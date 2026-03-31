@@ -103,54 +103,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══ 2. WHO WE SERVE ═══ */}
-      <section className="py-16 md:py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Who We Serve</h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                We supply phone repair parts to businesses of all sizes — from local repair shops to international distributors.
-              </p>
-            </div>
-          </FadeIn>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Users,
-                title: 'Repair Shops',
-                description: 'Independent and chain repair shops that need reliable parts with fast turnaround and flexible MOQ.',
-                color: 'bg-blue-100 text-blue-600',
-              },
-              {
-                icon: Package,
-                title: 'Wholesalers & Distributors',
-                description: 'Regional distributors looking for consistent supply, competitive pricing, and large-volume fulfillment.',
-                color: 'bg-green-100 text-green-600',
-              },
-              {
-                icon: Globe,
-                title: 'Sourcing Managers & Buyers',
-                description: 'Procurement professionals seeking a certified, factory-direct supplier with quality guarantees and global shipping.',
-                color: 'bg-orange-100 text-orange-600',
-              },
-            ].map((item, i) => (
-              <FadeIn key={i} delay={i * 150}>
-                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 h-full">
-                  <div className={`w-14 h-14 ${item.color} rounded-xl flex items-center justify-center mb-5`}>
-                    <item.icon className="w-7 h-7" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{item.description}</p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ 3. PRODUCT CATEGORIES ═══ */}
+      {/* ═══ 2. PRODUCT CATEGORIES (moved up — users want to see products first) ═══ */}
       <section className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
@@ -200,6 +153,74 @@ export default function Home() {
               </Link>
             </div>
           </FadeIn>
+        </div>
+      </section>
+
+      {/* ═══ 3. SOCIAL PROOF STATS ═══ */}
+      <section className="py-10 bg-gradient-to-r from-[#1e3a5f] to-[#0f2440]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
+            {[
+              { value: '10+', label: 'Years in Business' },
+              { value: '1,000+', label: 'B2B Clients Served' },
+              { value: '50+', label: 'Countries Shipped' },
+              { value: '<1%', label: 'RMA Rate' },
+            ].map((stat, i) => (
+              <FadeIn key={i} delay={i * 100}>
+                <div>
+                  <p className="text-3xl md:text-4xl font-extrabold text-orange-400">{stat.value}</p>
+                  <p className="text-sm text-blue-200 mt-1">{stat.label}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 3b. WHO WE SERVE (moved down from position 2) ═══ */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Who We Serve</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                We supply phone repair parts to businesses of all sizes — from local repair shops to international distributors.
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Users,
+                title: 'Repair Shops',
+                description: 'Independent and chain repair shops that need reliable parts with fast turnaround and flexible MOQ.',
+                color: 'bg-blue-100 text-blue-600',
+              },
+              {
+                icon: Package,
+                title: 'Wholesalers & Distributors',
+                description: 'Regional distributors looking for consistent supply, competitive pricing, and large-volume fulfillment.',
+                color: 'bg-green-100 text-green-600',
+              },
+              {
+                icon: Globe,
+                title: 'Sourcing Managers & Buyers',
+                description: 'Procurement professionals seeking a certified, factory-direct supplier with quality guarantees and global shipping.',
+                color: 'bg-orange-100 text-orange-600',
+              },
+            ].map((item, i) => (
+              <FadeIn key={i} delay={i * 150}>
+                <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 h-full">
+                  <div className={`w-14 h-14 ${item.color} rounded-xl flex items-center justify-center mb-5`}>
+                    <item.icon className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
         </div>
       </section>
 

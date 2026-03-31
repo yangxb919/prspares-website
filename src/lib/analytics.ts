@@ -114,11 +114,55 @@ function passesEngagementGate(eventName: string): boolean {
   return true;
 }
 
+// ─── UTM parameter tracking ─────────────────────────────────────
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+const UTM_STORAGE_KEY = 'prspares_utm';
+
+type UtmParams = Partial<Record<typeof UTM_KEYS[number], string>>;
+
+let _utmParams: UtmParams | null = null;
+
+function captureUtmParams(): UtmParams {
+  if (_utmParams) return _utmParams;
+  if (typeof window === 'undefined') return {};
+
+  const url = new URL(window.location.href);
+  const fromUrl: UtmParams = {};
+  let hasUrlUtm = false;
+
+  for (const key of UTM_KEYS) {
+    const val = url.searchParams.get(key);
+    if (val) { fromUrl[key] = val; hasUrlUtm = true; }
+  }
+
+  if (hasUrlUtm) {
+    _utmParams = fromUrl;
+    try { sessionStorage.setItem(UTM_STORAGE_KEY, JSON.stringify(fromUrl)); } catch {}
+    return _utmParams;
+  }
+
+  try {
+    const stored = sessionStorage.getItem(UTM_STORAGE_KEY);
+    if (stored) { _utmParams = JSON.parse(stored); return _utmParams!; }
+  } catch {}
+
+  _utmParams = {};
+  return _utmParams;
+}
+
+/** Get current UTM parameters (from URL or sessionStorage). */
+export function getUtmParams(): UtmParams {
+  return captureUtmParams();
+}
+
+if (typeof window !== 'undefined') captureUtmParams();
+
 // ─── Public API ──────────────────────────────────────────────────
 
 /**
  * Track a GA4 event via GTM dataLayer.
  * Events are gated by engagement requirements to filter bot traffic.
+ * UTM parameters are automatically attached to all events.
  * Returns true if the event was fired, false if blocked.
  */
 export function trackEvent(eventName: string, params?: Record<string, unknown>): boolean {
@@ -144,10 +188,18 @@ export function trackEvent(eventName: string, params?: Record<string, unknown>):
     return false;
   }
 
+  // Collect UTM params (only non-empty values)
+  const utm = captureUtmParams();
+  const utmData: Record<string, string> = {};
+  for (const key of UTM_KEYS) {
+    if (utm[key]) utmData[key] = utm[key]!;
+  }
+
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
     event: eventName,
     ...params,
+    ...utmData,
     // Enrich with engagement metadata (useful for debugging in GA4)
     _engagement: {
       human: _humanVerified,
@@ -157,7 +209,7 @@ export function trackEvent(eventName: string, params?: Record<string, unknown>):
   });
 
   if (process.env.NODE_ENV === 'development') {
-    console.log(`[analytics] Event "${eventName}" fired`, params);
+    console.log(`[analytics] Event "${eventName}" fired`, params, utmData);
   }
 
   return true;

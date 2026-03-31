@@ -28,10 +28,10 @@ export const metadata: Metadata = {
 };
 
 const PRODUCT_TYPES = [
-  { name: 'iPhone OLED/LCD', desc: 'Full range from iPhone 6 to iPhone 16 series. Supports True Tone with programmer.' },
-  { name: 'Samsung AMOLED', desc: 'Galaxy S, A, Note, and Z Fold/Flip series. Original and aftermarket options.' },
-  { name: 'Huawei/Xiaomi/OPPO Displays', desc: 'P, Mate, Nova, Mi, Redmi, POCO, Reno, and Find series screens.' },
-  { name: 'iPad Screens', desc: 'iPad, iPad Air, iPad Pro, and iPad Mini LCD and digitizer assemblies.' },
+  { name: 'iPhone OLED/LCD', desc: 'Full range from iPhone 6 to iPhone 16 series. Supports True Tone with programmer.', query: 'iPhone+Screens' },
+  { name: 'Samsung AMOLED', desc: 'Galaxy S, A, Note, and Z Fold/Flip series. Original and aftermarket options.', query: 'Samsung+Screens' },
+  { name: 'Huawei/Xiaomi/OPPO Displays', desc: 'P, Mate, Nova, Mi, Redmi, POCO, Reno, and Find series screens.', query: 'Android+Screens' },
+  { name: 'iPad Screens', desc: 'iPad, iPad Air, iPad Pro, and iPad Mini LCD and digitizer assemblies.', query: 'iPad+Screens' },
 ];
 
 const BRANDS = [
@@ -113,11 +113,14 @@ export default function ScreensPage() {
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {PRODUCT_TYPES.map((item) => (
-              <div key={item.name} className="rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <Link key={item.name} href={`/wholesale-inquiry?product=${item.query}`} className="group rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all">
                 <Monitor className="w-8 h-8 text-[#1e3a5f] mb-4" />
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{item.name}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
-              </div>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">{item.desc}</p>
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-orange-500 group-hover:text-orange-600">
+                  Get Quote <ArrowRight className="w-4 h-4" />
+                </span>
+              </Link>
             ))}
           </div>
         </div>
@@ -132,10 +135,13 @@ export default function ScreensPage() {
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
             {BRANDS.map((brand) => (
-              <div key={brand.name} className="bg-white px-5 py-4 rounded-lg shadow-sm border border-gray-100">
-                <span className="font-semibold text-gray-900">{brand.name}</span>
+              <Link key={brand.name} href={`/wholesale-inquiry?product=${encodeURIComponent(brand.name + ' Screens')}`} className="group bg-white px-5 py-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-orange-200 transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-gray-900">{brand.name}</span>
+                  <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-orange-500 transition-colors" />
+                </div>
                 <p className="text-gray-500 text-sm mt-1">{brand.models}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -150,15 +156,18 @@ export default function ScreensPage() {
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             {GRADES.map((grade) => (
-              <div key={grade.title} className="rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+              <Link key={grade.title} href={`/wholesale-inquiry?product=${encodeURIComponent(grade.title + ' Screens')}`} className="group rounded-xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all">
                 <div className="bg-[#1e3a5f] text-white px-6 py-4 flex items-center justify-between">
                   <h3 className="text-lg font-bold">{grade.title}</h3>
                   <span className="text-xs bg-orange-500 px-2.5 py-1 rounded-full font-medium">{grade.badge}</span>
                 </div>
                 <div className="p-6">
-                  <p className="text-gray-600 text-sm leading-relaxed">{grade.desc}</p>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{grade.desc}</p>
+                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-orange-500 group-hover:text-orange-600">
+                    Request {grade.title} Pricing <ArrowRight className="w-4 h-4" />
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -240,6 +249,17 @@ export default function ScreensPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══ FLOATING QUOTE BUTTON ═══ */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+        <Link
+          href="/wholesale-inquiry?product=Screens"
+          className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-5 rounded-full shadow-lg shadow-orange-500/30 hover:shadow-xl transition-all hover:-translate-y-0.5 text-sm"
+        >
+          <MessageSquare className="w-4 h-4" />
+          Get Quote
+        </Link>
+      </div>
 
       {/* ═══ 9. CTA ═══ */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] text-white text-center">

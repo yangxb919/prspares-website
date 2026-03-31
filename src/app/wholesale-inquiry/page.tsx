@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
   CheckCircle, Factory, Shield, Clock, Award, ChevronDown, ChevronUp,
-  Phone, Mail, MessageSquare, Send, Zap, Users,
+  Phone, Mail, MessageSquare, Send, Zap, Users, Plus, Minus,
 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
 import { useTurnstile } from '@/components/common/Turnstile';
 import { markAsHumanVerified } from '@/lib/analytics';
@@ -130,6 +131,7 @@ function FaqItem({ item, defaultOpen }: { item: typeof FAQ_ITEMS[0]; defaultOpen
 // ─── Main Page Component ─────────────────────────────────────────
 export default function WholesaleInquiryPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const formRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<FormData>({
     company: '', name: '', email: '', phone: '', country: '',
@@ -140,6 +142,29 @@ export default function WholesaleInquiryPage() {
   const [submitError, setSubmitError] = useState('');
   const [userIP, setUserIP] = useState('');
   const [formStarted, setFormStarted] = useState(false);
+  const [showOptional, setShowOptional] = useState(false);
+
+  // Pre-fill product from URL params (e.g. ?product=Screens)
+  useEffect(() => {
+    const productParam = searchParams?.get('product');
+    if (productParam) {
+      // Map URL param to select option value
+      const mapping: Record<string, string> = {
+        'Screens': 'LCD/OLED Screens',
+        'LCD/OLED Screens': 'LCD/OLED Screens',
+        'Batteries': 'Batteries',
+        'Small Parts': 'Small Parts',
+        'Small+Parts': 'Small Parts',
+        'Repair Tools': 'Repair Tools',
+        'Repair+Tools': 'Repair Tools',
+        'Multiple': 'Multiple Categories',
+      };
+      const matched = mapping[productParam] || mapping[productParam.replace(/\+/g, ' ')] || '';
+      if (matched) {
+        setFormData(prev => ({ ...prev, products: matched }));
+      }
+    }
+  }, [searchParams]);
 
   // Turnstile human verification
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
@@ -191,11 +216,10 @@ export default function WholesaleInquiryPage() {
 
   const validate = (): boolean => {
     const errs: FormErrors = {};
-    if (!formData.company.trim()) errs.company = 'Company name is required';
-    if (!formData.name.trim()) errs.name = 'Contact person is required';
     if (!formData.email.trim()) errs.email = 'Email is required';
     else if (!/^\S+@\S+\.\S+$/.test(formData.email)) errs.email = 'Please enter a valid email';
     if (!formData.products) errs.products = 'Please select a product category';
+    if (!formData.quantity) errs.quantity = 'Please select a quantity range';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -476,32 +500,11 @@ export default function WholesaleInquiryPage() {
                     <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> 12-month warranty</span>
                   </div>
                   <form onSubmit={handleSubmit} className="space-y-5">
+                    {/* ── Required fields (3 only) ── */}
                     <div>
-                      <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1.5">Company Name <span className="text-red-500">*</span></label>
-                      <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.company ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="Your Company Ltd." />
-                      {errors.company && <p className="mt-1 text-sm text-red-500">{errors.company}</p>}
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">Contact Person <span className="text-red-500">*</span></label>
-                        <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="John Smith" />
-                        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email Address <span className="text-red-500">*</span></label>
-                        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="john@company.com" />
-                        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-                      </div>
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">Phone / WhatsApp</label>
-                        <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+1 (555) 123-4567" />
-                      </div>
-                      <div>
-                        <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1.5">Country / Region</label>
-                        <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="United States" />
-                      </div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email Address <span className="text-red-500">*</span></label>
+                      <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="john@company.com" />
+                      {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
@@ -517,14 +520,8 @@ export default function WholesaleInquiryPage() {
                         {errors.products && <p className="mt-1 text-sm text-red-500">{errors.products}</p>}
                       </div>
                       <div>
-                        <label htmlFor="models" className="block text-sm font-medium text-gray-700 mb-1.5">Model / Brand</label>
-                        <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="iPhone 15 Pro, Samsung S24..." />
-                      </div>
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1.5">Estimated Order Quantity</label>
-                        <select id="quantity" name="quantity" value={formData.quantity} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1.5">Estimated Quantity <span className="text-red-500">*</span></label>
+                        <select id="quantity" name="quantity" value={formData.quantity} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.quantity ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}>
                           <option value="">Select quantity range</option>
                           <option value="10-50 units">10-50 units</option>
                           <option value="50-100 units">50-100 units</option>
@@ -532,22 +529,66 @@ export default function WholesaleInquiryPage() {
                           <option value="500-1000 units">500-1,000 units</option>
                           <option value="1000+ units">1,000+ units</option>
                         </select>
-                      </div>
-                      <div>
-                        <label htmlFor="quality" className="block text-sm font-medium text-gray-700 mb-1.5">Quality Requirement</label>
-                        <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                          <option value="">Select quality grade</option>
-                          <option value="OEM Original">OEM Original</option>
-                          <option value="Premium Aftermarket">Premium Aftermarket</option>
-                          <option value="Standard Aftermarket">Standard Aftermarket</option>
-                          <option value="Mixed Grades">Mixed Grades</option>
-                        </select>
+                        {errors.quantity && <p className="mt-1 text-sm text-red-500">{errors.quantity}</p>}
                       </div>
                     </div>
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">Additional Requirements</label>
-                      <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="Specify models, quality requirements, shipping preferences..." />
+
+                    {/* ── Collapsible optional fields ── */}
+                    <div className="border border-gray-200 rounded-lg overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => setShowOptional(!showOptional)}
+                        className="w-full flex items-center justify-between px-4 py-3 text-left bg-gray-50 hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700"
+                      >
+                        <span>More Details (Optional) — helps us prepare a better quote</span>
+                        {showOptional ? <Minus className="w-4 h-4 text-gray-500" /> : <Plus className="w-4 h-4 text-gray-500" />}
+                      </button>
+                      {showOptional && (
+                        <div className="p-4 space-y-4 bg-white border-t border-gray-200">
+                          <div className="grid sm:grid-cols-2 gap-4">
+                            <div>
+                              <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1.5">Company Name</label>
+                              <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Your Company Ltd." />
+                            </div>
+                            <div>
+                              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">Contact Person</label>
+                              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="John Smith" />
+                            </div>
+                          </div>
+                          <div className="grid sm:grid-cols-2 gap-4">
+                            <div>
+                              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">Phone / WhatsApp</label>
+                              <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+1 (555) 123-4567" />
+                            </div>
+                            <div>
+                              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1.5">Country / Region</label>
+                              <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="United States" />
+                            </div>
+                          </div>
+                          <div className="grid sm:grid-cols-2 gap-4">
+                            <div>
+                              <label htmlFor="models" className="block text-sm font-medium text-gray-700 mb-1.5">Model / Brand</label>
+                              <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="iPhone 15 Pro, Samsung S24..." />
+                            </div>
+                            <div>
+                              <label htmlFor="quality" className="block text-sm font-medium text-gray-700 mb-1.5">Quality Requirement</label>
+                              <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Select quality grade</option>
+                                <option value="OEM Original">OEM Original</option>
+                                <option value="Premium Aftermarket">Premium Aftermarket</option>
+                                <option value="Standard Aftermarket">Standard Aftermarket</option>
+                                <option value="Mixed Grades">Mixed Grades</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div>
+                            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">Additional Requirements</label>
+                            <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="Specify models, quality requirements, shipping preferences..." />
+                          </div>
+                        </div>
+                      )}
                     </div>
+
                     {/* Turnstile human verification */}
                     {turnstileSiteKey && (
                       <div className="flex justify-center">
@@ -563,6 +604,22 @@ export default function WholesaleInquiryPage() {
                       )}
                     </button>
                     <p className="text-xs text-gray-500 text-center">We&apos;ll respond within 24 hours. Your information is kept confidential.</p>
+
+                    {/* WhatsApp alternative */}
+                    <div className="relative flex items-center justify-center py-2">
+                      <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
+                      <span className="relative bg-white px-4 text-sm text-gray-400">or</span>
+                    </div>
+                    <a
+                      href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackEvent('whatsapp_click', { event_label: 'form_whatsapp_alt' })}
+                      className="w-full inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3.5 px-6 rounded-lg transition-all text-base"
+                    >
+                      <MessageSquare className="w-5 h-5" />
+                      Chat on WhatsApp — Get Instant Reply
+                    </a>
                   </form>
                 </div>
               </div>
