@@ -97,7 +97,7 @@ export default function iPhoneRearCameraWholesalePage() {
                 ].map((model, index) => (
                   <div key={index} className="flex items-center p-4 bg-gray-50 rounded-lg">
                     <div className="w-2 h-2 bg-[#1e3a5f] rounded-full mr-3"></div>
-                    <span className="font-medium">{model}</span>
+                    <span className="font-medium text-gray-900">{model}</span>
                   </div>
                 ))}
               </div>
@@ -106,17 +106,17 @@ export default function iPhoneRearCameraWholesalePage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center p-6 bg-gray-50 rounded-lg">
                   <Shield className="w-12 h-12 text-[#1e3a5f] mx-auto mb-4" />
-                  <h4 className="font-bold mb-2">OEM Quality</h4>
+                  <h4 className="font-bold mb-2 text-gray-900">OEM Quality</h4>
                   <p className="text-gray-600">Original specifications and quality standards</p>
                 </div>
                 <div className="text-center p-6 bg-gray-50 rounded-lg">
                   <Clock className="w-12 h-12 text-[#1e3a5f] mx-auto mb-4" />
-                  <h4 className="font-bold mb-2">Fast Shipping</h4>
+                  <h4 className="font-bold mb-2 text-gray-900">Fast Shipping</h4>
                   <p className="text-gray-600">Quick wholesale delivery worldwide</p>
                 </div>
                 <div className="text-center p-6 bg-gray-50 rounded-lg">
                   <Award className="w-12 h-12 text-[#1e3a5f] mx-auto mb-4" />
-                  <h4 className="font-bold mb-2">Factory Direct</h4>
+                  <h4 className="font-bold mb-2 text-gray-900">Factory Direct</h4>
                   <p className="text-gray-600">Best wholesale pricing from manufacturer</p>
                 </div>
               </div>
