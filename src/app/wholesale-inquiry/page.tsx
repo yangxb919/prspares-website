@@ -1,13 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
   CheckCircle, Factory, Shield, Clock, Award, ChevronDown, ChevronUp,
   Phone, Mail, MessageSquare, Send, Zap, Users, Plus, Minus,
 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
 import { useTurnstile } from '@/components/common/Turnstile';
 import { markAsHumanVerified } from '@/lib/analytics';
@@ -129,9 +128,8 @@ function FaqItem({ item, defaultOpen }: { item: typeof FAQ_ITEMS[0]; defaultOpen
 }
 
 // ─── Main Page Component ─────────────────────────────────────────
-function WholesaleInquiryContent() {
+export default function WholesaleInquiryPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const formRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<FormData>({
     company: '', name: '', email: '', phone: '', country: '',
@@ -146,9 +144,9 @@ function WholesaleInquiryContent() {
 
   // Pre-fill product from URL params (e.g. ?product=Screens)
   useEffect(() => {
-    const productParam = searchParams?.get('product');
+    const url = new URL(window.location.href);
+    const productParam = url.searchParams.get('product');
     if (productParam) {
-      // Map URL param to select option value
       const mapping: Record<string, string> = {
         'Screens': 'LCD/OLED Screens',
         'LCD/OLED Screens': 'LCD/OLED Screens',
@@ -164,7 +162,7 @@ function WholesaleInquiryContent() {
         setFormData(prev => ({ ...prev, products: matched }));
       }
     }
-  }, [searchParams]);
+  }, []);
 
   // Turnstile human verification
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
@@ -726,13 +724,5 @@ function WholesaleInquiryContent() {
         </section>
       </div>
     </>
-  );
-}
-
-export default function WholesaleInquiryPage() {
-  return (
-    <Suspense>
-      <WholesaleInquiryContent />
-    </Suspense>
   );
 }
