@@ -97,8 +97,8 @@ const EVENT_GATES: Record<string, EngagementGate> = {
   browse_products: { requireHuman: true, minScrollDepth: 15 },
   begin_form:      { requireHuman: true },
 
-  // Page view — lightweight gate (just time)
-  page_view:       { minTimeOnPage: 2 },
+  // Page view — delayed send (3s), no hard block, marks engagement signal
+  page_view:       { minTimeOnPage: 3 },
 };
 
 function passesEngagementGate(eventName: string): boolean {
@@ -232,4 +232,47 @@ export function getEngagementState() {
     timeOnPage: _timeOnPage,
     scrollDepth: _scrollDepth,
   };
+}
+
+// ─── Delayed page_view (controlled send) ────────────────────────
+// Fires page_view after 3s delay. Does NOT block — always sends,
+// but attaches `engagement_signals` flag for GA4 analysis.
+// This replaces the automatic gtag page_view (disabled via send_page_view:false).
+let _delayedPageViewFired = false;
+
+function fireDelayedPageView() {
+  if (_delayedPageViewFired) return;
+  if (typeof window === 'undefined') return;
+  _delayedPageViewFired = true;
+
+  // Update time on page
+  if (_pageLoadTime > 0) {
+    _timeOnPage = Math.round((Date.now() - _pageLoadTime) / 1000);
+  }
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'page_view',
+    page_location: window.location.href,
+    page_title: document.title,
+    engagement_signals: _humanVerified,
+    _engagement: {
+      human: _humanVerified,
+      timeOnPage: _timeOnPage,
+      scrollDepth: _scrollDepth,
+    },
+  });
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[analytics] Delayed page_view fired`, {
+      engagement_signals: _humanVerified,
+      timeOnPage: _timeOnPage,
+      scrollDepth: _scrollDepth,
+    });
+  }
+}
+
+if (typeof window !== 'undefined') {
+  // Fire page_view after 3 seconds — gives time to collect engagement signals
+  setTimeout(fireDelayedPageView, 3000);
 }
