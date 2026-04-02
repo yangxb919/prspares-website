@@ -603,6 +603,15 @@
                     lp_source: LP_CONFIG.source,
                 }, LP_UTM));
 
+                // Google Ads conversion - 直接调用，不依赖 GTM 配置
+                if (typeof gtag === 'function') {
+                    gtag('event', 'conversion', {
+                        send_to: 'AW-18045108063/Ev3VCLzXwZAcEN_-yZxD',
+                        value: 725.0,
+                        currency: 'CNY'
+                    });
+                }
+
                 // Redirect to thank-you page (delay to allow tracking events to send)
                 setTimeout(function() {
                     window.location.href = '/thank-you';

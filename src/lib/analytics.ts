@@ -83,8 +83,8 @@ interface EngagementGate {
 
 const EVENT_GATES: Record<string, EngagementGate> = {
   // High-value conversion events — require strong engagement proof
-  generate_lead:   { requireHuman: true, minTimeOnPage: 10 },
-  form_submit:     { requireHuman: true, minTimeOnPage: 10 },
+  generate_lead:   { requireHuman: true, minTimeOnPage: 5 },
+  form_submit:     { requireHuman: true, minTimeOnPage: 5 },
   request_quote:   { requireHuman: true, minTimeOnPage: 5 },
 
   // Interaction events — require basic human proof
