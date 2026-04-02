@@ -90,17 +90,22 @@ export async function POST(request: NextRequest) {
       submittedAt: now,
     };
 
-    const origin = request.headers.get('origin') || request.nextUrl.origin;
-    const emailResponse = await fetch(`${origin}/api/send-rfq-email`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(emailPayload),
-    });
+    // Use localhost for internal API call to avoid external DNS/SSL issues
+    const internalOrigin = `http://localhost:${process.env.PORT || 3000}`;
+    try {
+      const emailResponse = await fetch(`${internalOrigin}/api/send-rfq-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emailPayload),
+      });
 
-    if (!emailResponse.ok) {
-      const errorData = await emailResponse.json().catch(() => ({}));
-      console.error('[LP Inquiry] Email notification failed:', errorData);
-      // Still return success since data is saved to Supabase
+      if (!emailResponse.ok) {
+        const errorData = await emailResponse.json().catch(() => ({}));
+        console.error('[LP Inquiry] Email notification failed:', errorData);
+      }
+    } catch (emailError) {
+      // Log but don't fail — Supabase insert already succeeded
+      console.error('[LP Inquiry] Email fetch failed:', emailError);
     }
 
     return NextResponse.json({ success: true });
