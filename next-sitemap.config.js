@@ -19,6 +19,24 @@ async function fetchProductSlugs() {
   }
 }
 
+async function fetchPostSlugs() {
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !anon) return [];
+    const supabase = createClient(url, anon, { auth: { persistSession: false } });
+    const { data, error } = await supabase
+      .from('posts')
+      .select('slug')
+      .eq('status', 'publish')
+      .not('slug', 'is', null);
+    if (error) return [];
+    return (data || []).map((r) => r.slug).filter(Boolean);
+  } catch (_) {
+    return [];
+  }
+}
+
 const siteUrl =
   process.env.SITE_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -64,7 +82,11 @@ module.exports = {
 
     const dynamicSlugs = await fetchProductSlugs();
     const dynamicPaths = dynamicSlugs.map((slug) => `/products/${slug}`);
-    const allPaths = [...new Set([...staticPaths, ...dynamicPaths])];
+
+    const postSlugs = await fetchPostSlugs();
+    const blogPaths = postSlugs.map((slug) => `/blog/${slug}`);
+
+    const allPaths = [...new Set([...staticPaths, ...dynamicPaths, ...blogPaths])];
     return Promise.all(allPaths.map((p) => config.transform(config, p)));
   },
   transform: async (config, path) => {

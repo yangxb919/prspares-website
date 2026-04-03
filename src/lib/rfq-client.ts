@@ -48,33 +48,28 @@ function validate(payload: RfqPayload) {
   }
 }
 
-export function notifyRfqByEmail(payload: RfqPayload): void {
-  void fetch('/api/send-rfq-email', {
+export async function notifyRfqByEmail(payload: RfqPayload): Promise<void> {
+  const response = await fetch('/api/send-rfq-email', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
     keepalive: true,
-  })
-    .then(async (response) => {
-      if (response.ok) return;
+  });
 
-      let errorText = `HTTP ${response.status}`;
-      try {
-        const result = await response.json();
-        if (result?.error) {
-          errorText = result.error;
-        }
-      } catch {
-        // Keep fallback error text.
+  if (!response.ok) {
+    let errorText = `HTTP ${response.status}`;
+    try {
+      const result = await response.json();
+      if (result?.error) {
+        errorText = result.error;
       }
-
-      console.error('[RFQ] Email notification failed:', errorText);
-    })
-    .catch((error) => {
-      console.error('[RFQ] Email notification request failed:', error);
-    });
+    } catch {
+      // Keep fallback error text.
+    }
+    throw new Error(`Email notification failed: ${errorText}`);
+  }
 }
 
 export async function submitRfqAndNotify(input: RfqInput): Promise<RfqPayload> {
@@ -92,25 +87,31 @@ export async function submitRfqAndNotify(input: RfqInput): Promise<RfqPayload> {
 
   validate(payload);
 
-  const supabase = getBrowserClient();
-  const { error } = await supabase
-    .from('rfqs')
-    .insert({
-      name: payload.name,
-      email: payload.email,
-      company: payload.company || null,
-      phone: payload.phone || null,
-      product_interest: payload.productInterest || null,
-      message: payload.message,
-      page_url: payload.pageUrl || null,
-      ip: payload.ip || null,
-      submitted_at: payload.submittedAt,
-    });
+  // Save to Supabase if configured, but don't block on failure
+  try {
+    const supabase = getBrowserClient();
+    const { error } = await supabase
+      .from('rfqs')
+      .insert({
+        name: payload.name,
+        email: payload.email,
+        company: payload.company || null,
+        phone: payload.phone || null,
+        product_interest: payload.productInterest || null,
+        message: payload.message,
+        page_url: payload.pageUrl || null,
+        ip: payload.ip || null,
+        submitted_at: payload.submittedAt,
+      });
 
-  if (error) {
-    throw new Error(error.message || 'Failed to save inquiry');
+    if (error) {
+      console.warn('[RFQ] Supabase save failed (non-blocking):', error.message);
+    }
+  } catch (err) {
+    console.warn('[RFQ] Supabase unavailable (non-blocking):', err instanceof Error ? err.message : err);
   }
 
-  notifyRfqByEmail(payload);
+  // Send email notification — await so callers see failures
+  await notifyRfqByEmail(payload);
   return payload;
 }

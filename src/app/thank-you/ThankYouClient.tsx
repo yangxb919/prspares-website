@@ -15,14 +15,13 @@ export default function ThankYouClient() {
       page_path: '/thank-you',
     });
 
-    // Google Ads conversion tracking - 直接硬编码，不依赖 GTM
-    if (typeof (window as any).gtag === 'function') {
-      (window as any).gtag('event', 'conversion', {
-        send_to: 'AW-18045108063/Ev3VCLzXwZAcEN_-yZxD',
-        value: 725.0,
-        currency: 'CNY',
-      });
-    }
+    // Google Ads conversion tracking — via GTM dataLayer
+    window.dataLayer.push({
+      event: 'ads_conversion',
+      send_to: 'AW-18045108063/Ev3VCLzXwZAcEN_-yZxD',
+      value: 725.0,
+      currency: 'CNY',
+    });
   }, []);
 
   return (

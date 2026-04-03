@@ -23,9 +23,11 @@ const Navigation = ({ orientation = 'horizontal', onMenuItemClick }: NavigationP
 
   const productCategories = [
     { name: 'Screens', path: '/products/screens' },
-    { name: 'Repair Tools', path: '/products/repair-tools' },
     { name: 'Batteries', path: '/products/batteries' },
     { name: 'Small Parts', path: '/products/small-parts' },
+    { name: 'Repair Tools', path: '/products/repair-tools' },
+    { name: 'iPad Batteries', path: '/products/ipad-battery-replacement-factory' },
+    { name: 'iPhone Cameras', path: '/products/iphone-rear-camera-wholesale' },
   ];
 
   const isProductsActive = pathname?.startsWith('/products') ?? false;

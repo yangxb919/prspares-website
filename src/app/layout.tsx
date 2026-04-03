@@ -23,9 +23,9 @@ const SITE_URL = (
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | OEM·ODM Manufacturer – PRSPARES",
-  description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale, global shipping, sufficient stock, 12-month warranty.",
-  keywords: "mobile phone repair parts, iPhone parts, Samsung parts, Android parts, OEM manufacturer, ODM supplier, wholesale, Shenzhen Huaqiangbei, screen replacement, battery, camera module",
+  title: "Wholesale Phone Repair Parts | iPhone Screens, Batteries & Tools — Factory Direct | PRSPARES",
+  description: "Wholesale phone repair parts from Shenzhen: iPhone & Samsung screens from $19, batteries from $5, cameras, charging ports & repair tools. 500+ SKUs, MOQ 10 pcs, 12-month warranty. Factory-direct B2B supplier serving 1,000+ repair shops in 50+ countries.",
+  keywords: "wholesale phone repair parts, iphone screen wholesale, phone parts supplier, wholesale phone screens, cell phone parts wholesale, phone repair parts wholesale, iphone battery wholesale, samsung screen wholesale, phone repair tools wholesale",
   icons: {
     icon: [
       { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     apple: '/favicon.png',
   },
   openGraph: {
-    title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
-    description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
+    title: "Wholesale Phone Repair Parts — Screens, Batteries & Tools | PRSPARES",
+    description: "Factory-direct phone repair parts: iPhone & Samsung screens from $19, batteries from $5. 500+ SKUs, 12-month warranty. B2B wholesale from Shenzhen.",
     type: "website",
     url: "/",
     images: [
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mobile Phone Repair Parts Factory & Wholesale Supplier | PRSPARES",
-    description: "PRSPARES is a 10-year mobile phone parts manufacturer from Shenzhen Huaqiangbei, providing iPhone/Android screens, batteries, cameras OEM • ODM wholesale.",
+    title: "Wholesale Phone Repair Parts — Screens, Batteries & Tools | PRSPARES",
+    description: "Factory-direct phone repair parts from Shenzhen. 500+ SKUs, MOQ 10 pcs, 12-month warranty. Serving 1,000+ repair shops worldwide.",
     images: ["/PRSPARES1.png"],
   },
   alternates: {
@@ -100,14 +100,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
         {/* End Google Tag Manager */}
-
-        {/* Google tag (gtag.js) — GA4 + Google Ads */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=GT-TQS9VZ7Z" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GT-TQS9VZ7Z',{send_page_view:false});gtag('config','AW-18045108063');`
-          }}
-        />
 
         <script
           type="application/ld+json"

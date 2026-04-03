@@ -51,10 +51,6 @@
     })(window,document,'script','dataLayer','GTM-TTBMN854');</script>
     <!-- End Google Tag Manager -->
 
-    <!-- Google tag (gtag.js) — GA4 + Google Ads -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GT-TQS9VZ7Z"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GT-TQS9VZ7Z');gtag('config','AW-18045108063');</script>
-
     <!-- Preconnect & Preload -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -603,14 +599,14 @@
                     lp_source: LP_CONFIG.source,
                 }, LP_UTM));
 
-                // Google Ads conversion - 直接调用，不依赖 GTM 配置
-                if (typeof gtag === 'function') {
-                    gtag('event', 'conversion', {
-                        send_to: 'AW-18045108063/Ev3VCLzXwZAcEN_-yZxD',
-                        value: 725.0,
-                        currency: 'CNY'
-                    });
-                }
+                // Google Ads conversion — via GTM dataLayer
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: 'ads_conversion',
+                    send_to: 'AW-18045108063/Ev3VCLzXwZAcEN_-yZxD',
+                    value: 725.0,
+                    currency: 'CNY'
+                });
 
                 // Redirect to thank-you page (delay to allow tracking events to send)
                 setTimeout(function() {
