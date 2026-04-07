@@ -158,7 +158,7 @@ jobs:
 
             # Health check
             echo "🏥 健康检查..."
-            HTTP_STATUS=$(curl -I -sS http://127.0.0.1:3000/ 2>&1 | head -n 1)
+            HTTP_STATUS=$(curl -I -sS -A "Mozilla/5.0 (compatible; HealthCheck/1.0)" http://127.0.0.1:3000/ 2>&1 | head -n 1)
             if echo "$HTTP_STATUS" | grep -q "200\|301\|302"; then
               echo "✅ 应用运行正常: $HTTP_STATUS"
             else
