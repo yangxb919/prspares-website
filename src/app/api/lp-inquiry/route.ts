@@ -77,7 +77,12 @@ export async function POST(request: NextRequest) {
       const { error } = await supabase.from('contact_submissions').insert({
         name,
         email,
-        message: structuredMessage,
+        message: structuredMessage, // keep structured text for back-compat
+        company: company || null,
+        phone: phone || null,
+        product_interest: productInterest || null,
+        source: source || null,
+        page_url: pageUrl || null,
         ip_address: ip || null,
         user_agent: userAgent || null,
       });
