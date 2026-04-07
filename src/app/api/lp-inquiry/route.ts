@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAdminClient } from '@/lib/supabase/admin';
+import { sendRfqEmail } from '@/lib/email/sendRfqEmail';
 
 export const runtime = 'nodejs';
 
@@ -11,7 +12,7 @@ interface LpInquiryPayload {
   productInterest?: string;
   message?: string;
   pageUrl?: string;
-  source?: string; // landing page identifier, e.g. "wholesale-2024"
+  source?: string;
 }
 
 function isValidEmail(email: string): boolean {
@@ -34,23 +35,16 @@ export async function POST(request: NextRequest) {
 
     const name = body.name?.trim();
     const email = body.email?.trim();
-
     if (!name || !email) {
-      return NextResponse.json(
-        { error: 'name and email are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'name and email are required' }, { status: 400 });
     }
-
     if (!isValidEmail(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
     const now = new Date().toISOString();
     const ip = getClientIP(request);
+    const userAgent = request.headers.get('user-agent') || '';
     const message = body.message?.trim() || '';
     const source = body.source?.trim() || '';
     const pageUrl = body.pageUrl?.trim() || '';
@@ -58,57 +52,75 @@ export async function POST(request: NextRequest) {
     const phone = body.phone?.trim() || '';
     const productInterest = body.productInterest?.trim() || '';
 
-    // 1. Save to Supabase (same rfqs table as main site)
+    // Build a structured message that preserves all fields, since contact_submissions
+    // only has name/email/message columns.
+    const structuredMessage = [
+      message || `[Landing Page Inquiry] ${source || pageUrl}`,
+      '',
+      '--- Lead details ---',
+      `company: ${company || 'N/A'}`,
+      `phone: ${phone || 'N/A'}`,
+      `productInterest: ${productInterest || 'N/A'}`,
+      `source: ${source || 'N/A'}`,
+      `pageUrl: ${pageUrl || 'N/A'}`,
+      `submittedAt: ${now}`,
+    ].join('\n');
+
+    let dbOk = false;
+    let emailOk = false;
+    let dbError: string | null = null;
+    let emailError: string | null = null;
+
+    // 1. Persist to Supabase contact_submissions (service-role bypasses RLS)
     try {
-      const supabase = createClient();
-      await supabase.from('rfqs').insert({
+      const supabase = getAdminClient();
+      const { error } = await supabase.from('contact_submissions').insert({
         name,
         email,
-        company: company || null,
-        phone: phone || null,
-        product_interest: productInterest || source || null,
-        message: message || `[Landing Page Inquiry] ${source}`,
-        page_url: pageUrl || null,
-        ip: ip || null,
-        submitted_at: now,
+        message: structuredMessage,
+        ip_address: ip || null,
+        user_agent: userAgent || null,
       });
-    } catch (dbError) {
-      // Log but don't fail - email notification is more important
+      if (error) throw error;
+      dbOk = true;
+    } catch (err) {
+      dbError = err instanceof Error ? err.message : String(err);
       console.error('[LP Inquiry] Supabase insert failed:', dbError);
     }
 
-    // 2. Send email notification via existing SMTP endpoint (internal call)
-    const emailPayload = {
-      name,
-      email,
-      company,
-      phone,
-      productInterest: productInterest || source,
-      message: message || `Landing page inquiry from: ${source || pageUrl}`,
-      pageUrl,
-      ip,
-      submittedAt: now,
-    };
-
-    // Use localhost for internal API call to avoid external DNS/SSL issues
-    const internalOrigin = `http://localhost:${process.env.PORT || 3000}`;
+    // 2. Send email notification directly (no internal HTTP fetch — middleware would 403 it)
     try {
-      const emailResponse = await fetch(`${internalOrigin}/api/send-rfq-email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emailPayload),
+      await sendRfqEmail({
+        name,
+        email,
+        company,
+        phone,
+        productInterest: productInterest || source,
+        message: message || `Landing page inquiry from: ${source || pageUrl}`,
+        pageUrl,
+        ip,
+        submittedAt: now,
       });
-
-      if (!emailResponse.ok) {
-        const errorData = await emailResponse.json().catch(() => ({}));
-        console.error('[LP Inquiry] Email notification failed:', errorData);
-      }
-    } catch (emailError) {
-      // Log but don't fail — Supabase insert already succeeded
-      console.error('[LP Inquiry] Email fetch failed:', emailError);
+      emailOk = true;
+    } catch (err) {
+      emailError = err instanceof Error ? err.message : String(err);
+      console.error('[LP Inquiry] Email send failed:', emailError);
     }
 
-    return NextResponse.json({ success: true });
+    // If at least one channel succeeded the lead is captured -> success.
+    // If BOTH failed, surface a 5xx so the frontend stops firing fake conversions.
+    if (!dbOk && !emailOk) {
+      return NextResponse.json(
+        {
+          error: 'Failed to record inquiry',
+          dbError,
+          emailError,
+        },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true, dbOk, emailOk });
   } catch (error) {
     console.error('[LP Inquiry] Failed:', error);
     return NextResponse.json(
