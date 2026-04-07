@@ -83,9 +83,9 @@ export async function POST(request: NextRequest) {
       });
       if (error) throw error;
       dbOk = true;
-    } catch (err) {
-      dbError = err instanceof Error ? err.message : String(err);
-      console.error('[LP Inquiry] Supabase insert failed:', dbError);
+    } catch (err: any) {
+      dbError = err?.message || err?.code || JSON.stringify(err) || String(err);
+      console.error('[LP Inquiry] Supabase insert failed:', dbError, err);
     }
 
     // 2. Send email notification directly (no internal HTTP fetch — middleware would 403 it)
