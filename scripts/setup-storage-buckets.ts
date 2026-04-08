@@ -1,7 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
+import * as path from 'path'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+try { require('@next/env').loadEnvConfig(path.resolve(__dirname, '..')) } catch (_) {}
 
-const supabaseUrl = 'https://prspares.zeabur.app'
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE || process.env.SUPABASE_SERVICE_ROLE_KEY)!
+if (!supabaseUrl || !supabaseServiceKey) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE in env')
+}
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey)
 

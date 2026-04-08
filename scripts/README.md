@@ -42,7 +42,7 @@ cat scripts/setup-storage-policies.sql
 
 ```bash
 curl -H "Authorization: Bearer YOUR_SERVICE_ROLE_KEY" \
-  https://prspares.zeabur.app/storage/v1/bucket | jq .
+  https://eiikisplpnbeiscunkap.supabase.co/storage/v1/bucket | jq .
 ```
 
 ## 注意事项

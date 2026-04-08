@@ -1,4 +1,9 @@
-# Supabase 数据迁移指南
+# Supabase 数据迁移指南（已归档 · 2026-04-08）
+
+> ⚠️ **历史文档** — 本指南描述的是早期从官方 Supabase 迁移到自建 zeabur 实例的流程。
+> 目前已反向迁移回官方 Supabase (`https://eiikisplpnbeiscunkap.supabase.co`)，
+> zeabur 实例已废弃。本文件仅作历史参考，下文中出现的 `prspares.zeabur.app`
+> 均指已下线的旧实例，不再代表现网配置。
 
 本指南将帮助你将当前 Supabase 数据库迁移到新的自部署 Supabase 实例。
 
@@ -18,7 +23,7 @@
 ### 1. 获取当前数据库信息
 
 当前数据库配置：
-- **URL**: `https://prspares.zeabur.app`
+- **URL**: `https://eiikisplpnbeiscunkap.supabase.co`
 - **数据库主机**: `prspares.zeabur.app`
 - **端口**: `5432`
 - **数据库名**: `postgres`

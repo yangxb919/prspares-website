@@ -4,7 +4,7 @@
 
 密码重置邮件中的链接指向了错误的域名：
 ```
-https://prspares.zeabur.app/reset-password?token=...
+https://eiikisplpnbeiscunkap.supabase.co/reset-password?token=...
 ```
 
 但你的网站实际运行在：
@@ -21,7 +21,7 @@ https://prspares.zeabur.app/reset-password?token=...
 
 1. **访问 Supabase Dashboard**
    ```
-   https://prspares.zeabur.app
+   https://eiikisplpnbeiscunkap.supabase.co
    ```
 
 2. **进入 Authentication 设置**
@@ -195,7 +195,7 @@ http://localhost:3005/reset-password?token=xxx&type=recovery
 
 **错误格式：**
 ```
-https://prspares.zeabur.app/reset-password?token=xxx&type=recovery
+https://eiikisplpnbeiscunkap.supabase.co/reset-password?token=xxx&type=recovery
 ```
 
 ### **检查浏览器控制台**
@@ -288,7 +288,7 @@ https://prspares.xyz/auth/reset-password
 
 ```bash
 NEXT_PUBLIC_SITE_URL=http://localhost:3005
-NEXT_PUBLIC_SUPABASE_URL=https://prspares.zeabur.app
+NEXT_PUBLIC_SUPABASE_URL=https://eiikisplpnbeiscunkap.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...
 ```
 

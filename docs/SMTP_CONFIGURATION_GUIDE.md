@@ -2,7 +2,7 @@
 
 ## 🚨 问题
 
-自部署的 Supabase 实例（`https://prspares.zeabur.app`）没有配置 SMTP 邮件服务，导致密码重置邮件无法发送。
+自部署的 Supabase 实例（`https://eiikisplpnbeiscunkap.supabase.co`）没有配置 SMTP 邮件服务，导致密码重置邮件无法发送。
 
 **错误信息**:
 ```
@@ -38,7 +38,7 @@ Code: unexpected_failure
 
 1. **访问 Supabase Dashboard**
    ```
-   https://prspares.zeabur.app
+   https://eiikisplpnbeiscunkap.supabase.co
    ```
 
 2. **进入 Authentication 设置**
@@ -160,7 +160,7 @@ npm run dev
 
 **注释掉新数据库配置：**
 ```bash
-# NEXT_PUBLIC_SUPABASE_URL=https://prspares.zeabur.app
+# NEXT_PUBLIC_SUPABASE_URL=https://eiikisplpnbeiscunkap.supabase.co
 # NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGc...
 # SUPABASE_SERVICE_ROLE=eyJhbGc...
 ```
