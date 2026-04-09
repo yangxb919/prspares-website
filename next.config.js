@@ -124,6 +124,48 @@ const nextConfig = {
         permanent: true,
       },
       { source: '/seo', destination: '/blog', permanent: true },
+      // 旧 SEO 落地页 → /products
+      {
+        source: '/products/android-phone-parts-manufacturer-supplier',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/products/iphone-spare-parts-wholesale-oem',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/products/samsung-phone-parts-oem',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/products/mobile-phone-parts-odm-supplier',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/products/for-ipad-pro-11-2st-repair-parts',
+        destination: '/products',
+        permanent: true,
+      },
+      // 已废弃的旧 blog 文章 → 相关替代或 /blog
+      {
+        source: '/blog/oled-vs-lcd-ultimate-technical-comparison',
+        destination: '/blog/lcd-vs-oled-hard-soft-oled-repair-shops',
+        permanent: true,
+      },
+      {
+        source: '/blog/what-are-the-key-standards-for-injection-molded-electronic-casings',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/what-challenges-do-startups-face-in-injection-molding',
+        destination: '/blog',
+        permanent: true,
+      },
     ];
   },
 };
