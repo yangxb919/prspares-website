@@ -97,8 +97,8 @@ const EVENT_GATES: Record<string, EngagementGate> = {
   browse_products: { requireHuman: true, minScrollDepth: 15 },
   begin_form:      { requireHuman: true },
 
-  // Page view — delayed send (3s), no hard block, marks engagement signal
-  page_view:       { minTimeOnPage: 3 },
+  // Page view — requires human proof to filter bot traffic
+  page_view:       { requireHuman: true, minTimeOnPage: 3 },
 };
 
 function passesEngagementGate(eventName: string): boolean {
@@ -243,12 +243,30 @@ let _delayedPageViewFired = false;
 function fireDelayedPageView() {
   if (_delayedPageViewFired) return;
   if (typeof window === 'undefined') return;
-  _delayedPageViewFired = true;
+
+  // Ensure listeners are running
+  attachEngagementListeners();
 
   // Update time on page
   if (_pageLoadTime > 0) {
     _timeOnPage = Math.round((Date.now() - _pageLoadTime) / 1000);
   }
+
+  // Must pass engagement gate — blocks bots without human signals
+  if (!passesEngagementGate('page_view')) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[analytics] Delayed page_view blocked — engagement gate not met`, {
+        humanVerified: _humanVerified,
+        timeOnPage: _timeOnPage,
+        scrollDepth: _scrollDepth,
+      });
+    }
+    // Retry after 2 more seconds (total 5s) — gives real users more time
+    setTimeout(fireDelayedPageView, 2000);
+    return;
+  }
+
+  _delayedPageViewFired = true;
 
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
@@ -273,6 +291,6 @@ function fireDelayedPageView() {
 }
 
 if (typeof window !== 'undefined') {
-  // Fire page_view after 3 seconds — gives time to collect engagement signals
+  // First attempt at 3s, retries at 5s, 7s, 9s... until human verified or page unloads
   setTimeout(fireDelayedPageView, 3000);
 }
