@@ -97,7 +97,8 @@
 
         /* Cards */
         .proof-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; transition: all 0.25s ease; }
-        .proof-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px -4px rgba(0,0,0,0.08); }
+        a.proof-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px -4px rgba(0,0,0,0.08); }
+        div.proof-card { cursor: default; }
 
         /* Hero */
         .hero-bg { background: linear-gradient(135deg, #0f2440 0%, #1e3a5f 60%, #234e78 100%); }
@@ -129,6 +130,17 @@
 
         /* WhatsApp proof cards */
         .chat-proof { border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+
+        /* Who We Serve tabs */
+        .serve-tab { background: #fafafa; border-color: #e2e8f0; color: #475569; cursor: pointer; }
+        .serve-tab:hover { background: #f1f5f9; }
+        .serve-tab.active { background: #fff7ed; border-color: #f97316; color: #c2410c; }
+        .serve-tab .lucide { flex-shrink: 0; }
+
+        /* Lightbox cursor hint on images */
+        .lb-trigger { cursor: zoom-in; }
+        .lb-trigger img { transition: transform 0.2s ease; }
+        .lb-trigger:hover img { transform: scale(1.02); }
     </style>
 </head>
 
@@ -250,48 +262,63 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="proof-card p-7">
+                <a href="#quote-form" class="proof-card p-7 block no-underline">
                     <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center text-brand-600 mb-5 border border-brand-100">
                         <i data-lucide="badge-dollar-sign" class="w-6 h-6"></i>
                     </div>
                     <h3 class="text-lg font-bold text-surface-900 mb-2">Factory-Direct Pricing</h3>
                     <p class="text-slate-600 leading-relaxed text-sm">We source and QC every part from Huaqiangbei factories — no middlemen, no extra markup. Save 30–40% vs. US distributors.</p>
-                </div>
-                <div class="proof-card p-7">
+                    <p class="text-xs text-brand-500 font-semibold mt-3">e.g. iPhone 15 Pro OLED — US $38 → PRSPARES $22 <span class="text-emerald-600">(save 42%)</span></p>
+                </a>
+                <a href="#quote-form" class="proof-card p-7 block no-underline">
                     <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 mb-5 border border-emerald-100">
                         <i data-lucide="shield-check" class="w-6 h-6"></i>
                     </div>
                     <h3 class="text-lg font-bold text-surface-900 mb-2">OEM Quality, Guaranteed</h3>
                     <p class="text-slate-600 leading-relaxed text-sm">Triple QC on every batch. Original, OEM & high-copy grades available. Only 1% RMA rate — True Tone support for iPhones.</p>
-                </div>
-                <div class="proof-card p-7">
+                    <p class="text-xs text-emerald-600 font-semibold mt-3">3-step QC: visual → functional → packaging — 99% pass rate</p>
+                </a>
+                <a href="#quote-form" class="proof-card p-7 block no-underline">
                     <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-5 border border-blue-100">
                         <i data-lucide="package-search" class="w-6 h-6"></i>
                     </div>
                     <h3 class="text-lg font-bold text-surface-900 mb-2">500+ SKUs In Stock</h3>
                     <p class="text-slate-600 leading-relaxed text-sm">iPhone 6–16, Samsung Galaxy, Xiaomi, OPPO & more. LCD/OLED screens, batteries, cameras & flex cables — ship same day.</p>
-                </div>
+                    <p class="text-xs text-blue-600 font-semibold mt-3">Top sellers: iPhone 13/14/15 screens, Samsung A-series batteries</p>
+                </a>
             </div>
 
             <!-- Who we serve -->
             <div class="mt-12 pt-10 border-t border-slate-100">
                 <p class="text-center text-sm font-semibold text-slate-400 uppercase tracking-widest mb-6">Built for B2B — Who We Serve</p>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-                    <div class="flex items-center gap-2.5 bg-surface-50 rounded-lg px-4 py-3 border border-slate-100">
-                        <i data-lucide="wrench" class="w-5 h-5 text-brand-500"></i>
-                        <span class="text-sm font-semibold text-surface-800">Repair Shops</span>
+                <div class="max-w-3xl mx-auto">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" id="serve-tabs">
+                        <button data-tab="repair" class="serve-tab active flex items-center gap-2.5 rounded-lg px-4 py-3 border text-sm font-semibold transition-all">
+                            <i data-lucide="wrench" class="w-5 h-5"></i> Repair Shops
+                        </button>
+                        <button data-tab="wholesale" class="serve-tab flex items-center gap-2.5 rounded-lg px-4 py-3 border text-sm font-semibold transition-all">
+                            <i data-lucide="warehouse" class="w-5 h-5"></i> Wholesalers
+                        </button>
+                        <button data-tab="distributor" class="serve-tab flex items-center gap-2.5 rounded-lg px-4 py-3 border text-sm font-semibold transition-all">
+                            <i data-lucide="truck" class="w-5 h-5"></i> Distributors
+                        </button>
+                        <button data-tab="online" class="serve-tab flex items-center gap-2.5 rounded-lg px-4 py-3 border text-sm font-semibold transition-all">
+                            <i data-lucide="globe" class="w-5 h-5"></i> Online Sellers
+                        </button>
                     </div>
-                    <div class="flex items-center gap-2.5 bg-surface-50 rounded-lg px-4 py-3 border border-slate-100">
-                        <i data-lucide="warehouse" class="w-5 h-5 text-brand-500"></i>
-                        <span class="text-sm font-semibold text-surface-800">Wholesalers</span>
-                    </div>
-                    <div class="flex items-center gap-2.5 bg-surface-50 rounded-lg px-4 py-3 border border-slate-100">
-                        <i data-lucide="truck" class="w-5 h-5 text-brand-500"></i>
-                        <span class="text-sm font-semibold text-surface-800">Distributors</span>
-                    </div>
-                    <div class="flex items-center gap-2.5 bg-surface-50 rounded-lg px-4 py-3 border border-slate-100">
-                        <i data-lucide="globe" class="w-5 h-5 text-brand-500"></i>
-                        <span class="text-sm font-semibold text-surface-800">Online Sellers</span>
+                    <div id="serve-panels" class="bg-surface-50 rounded-xl border border-slate-100 p-5 text-sm text-slate-700 leading-relaxed">
+                        <div data-panel="repair" class="serve-panel">
+                            <strong class="text-surface-900">Independent & chain repair shops</strong> — 80% of our clients. Typical order: 10–50 pcs per model, mixed screens + batteries. Most popular combo: iPhone 13/14/15 OLED + battery packs. Flexible MOQ starts at 10 pcs.
+                        </div>
+                        <div data-panel="wholesale" class="serve-panel hidden">
+                            <strong class="text-surface-900">Regional wholesalers</strong> — bulk buyers restocking 200–1,000 pcs per order. We offer tiered pricing: higher volume = lower unit cost. Dedicated account manager for repeat orders.
+                        </div>
+                        <div data-panel="distributor" class="serve-panel hidden">
+                            <strong class="text-surface-900">National & cross-border distributors</strong> — container-level orders with custom packaging and private labeling available. Payment terms: T/T, PayPal, or Letter of Credit for large orders.
+                        </div>
+                        <div data-panel="online" class="serve-panel hidden">
+                            <strong class="text-surface-900">eBay, Amazon & Shopify sellers</strong> — dropship-friendly with blind shipping. Individual SKU barcoding and product photography available. Fast restocking with 48h dispatch.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -313,42 +340,51 @@
 
             <!-- Product showcase grid -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="proof-card p-2.5 aspect-square overflow-hidden">
+                <a href="#" class="proof-card p-2.5 aspect-square overflow-hidden block lb-trigger" data-lb-src="/images/wholesale/img_02.jpg" data-lb-alt="LCD screens wholesale inventory">
                     <img src="/images/wholesale/img_02.jpg" class="w-full h-full object-cover rounded-lg" alt="LCD screens wholesale inventory" loading="lazy">
-                </div>
-                <div class="proof-card p-2.5 aspect-square overflow-hidden">
+                </a>
+                <a href="#" class="proof-card p-2.5 aspect-square overflow-hidden block lb-trigger" data-lb-src="/images/wholesale/img_10.jpg" data-lb-alt="OLED screens bulk stock">
                     <img src="/images/wholesale/img_10.jpg" class="w-full h-full object-cover rounded-lg" alt="OLED screens bulk stock" loading="lazy">
-                </div>
-                <div class="proof-card p-2.5 aspect-square overflow-hidden">
+                </a>
+                <a href="#" class="proof-card p-2.5 aspect-square overflow-hidden block lb-trigger" data-lb-src="/images/wholesale/img_09.jpg" data-lb-alt="Phone batteries wholesale">
                     <img src="/images/wholesale/img_09.jpg" class="w-full h-full object-cover rounded-lg" alt="Phone batteries wholesale" loading="lazy">
-                </div>
-                <div class="proof-card p-2.5 bg-navy-800 flex flex-col items-center justify-center text-center text-white aspect-square rounded-xl">
+                </a>
+                <a href="#quote-form" class="proof-card p-2.5 bg-navy-800 flex flex-col items-center justify-center text-center text-white aspect-square rounded-xl no-underline">
                     <h4 class="font-bold text-xl mb-2">500+ SKUs</h4>
                     <p class="text-sm text-slate-300 px-4">Original, OEM & high-copy grades — all models covered.</p>
-                    <a href="#quote-form" class="mt-4 text-brand-400 text-sm font-semibold hover:text-brand-300 transition-colors flex items-center gap-1">
+                    <span class="mt-4 text-brand-400 text-sm font-semibold hover:text-brand-300 transition-colors flex items-center gap-1">
                         Get Quote <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                    </a>
-                </div>
+                    </span>
+                </a>
             </div>
 
             <!-- Warehouse video strip -->
             <div class="mt-8">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Live From Our Huaqiangbei Warehouse</p>
                 <div class="grid grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3">
-                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200 relative group cursor-pointer video-cell">
                         <video class="w-full h-full object-cover lazy-video" muted loop playsinline preload="none" poster="/images/wholesale/vid_02_poster.jpg">
                             <source src="/images/wholesale/vid_02.mp4" type="video/mp4">
                         </video>
+                        <div class="video-play-hint absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors pointer-events-none">
+                            <i data-lucide="play" class="w-8 h-8 text-white drop-shadow"></i>
+                        </div>
                     </div>
-                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200 relative group cursor-pointer video-cell">
                         <video class="w-full h-full object-cover lazy-video" muted loop playsinline preload="none" poster="/images/wholesale/vid_03_poster.jpg">
                             <source src="/images/wholesale/vid_03.mp4" type="video/mp4">
                         </video>
+                        <div class="video-play-hint absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors pointer-events-none">
+                            <i data-lucide="play" class="w-8 h-8 text-white drop-shadow"></i>
+                        </div>
                     </div>
-                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
+                    <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200 relative group cursor-pointer video-cell">
                         <video class="w-full h-full object-cover lazy-video" muted loop playsinline preload="none" poster="/images/wholesale/vid_05_poster.jpg">
                             <source src="/images/wholesale/vid_05.mp4" type="video/mp4">
                         </video>
+                        <div class="video-play-hint absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors pointer-events-none">
+                            <i data-lucide="play" class="w-8 h-8 text-white drop-shadow"></i>
+                        </div>
                     </div>
                     <div class="aspect-video bg-white rounded-lg overflow-hidden border border-slate-200">
                         <img src="/images/wholesale/img_23.jpg" class="w-full h-full object-cover" alt="Warehouse stock" loading="lazy">
@@ -369,15 +405,18 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <p class="text-center text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">What Our B2B Clients Say</p>
             <div class="grid md:grid-cols-3 gap-5">
-                <div class="chat-proof border border-slate-100">
+                <a href="#" class="chat-proof border border-slate-100 lb-trigger block" data-lb-src="/images/wholesale/whatsapp_chat_bulk_order.png" data-lb-alt="WhatsApp chat — bulk order from repair shop">
                     <img src="/images/wholesale/whatsapp_chat_bulk_order.png" class="w-full h-auto" alt="WhatsApp chat — bulk order from repair shop" loading="lazy">
-                </div>
-                <div class="chat-proof border border-slate-100">
+                    <p class="text-xs text-slate-500 text-center py-2 px-3">Dubai repair shop — 200 pcs iPhone screens — delivered in 5 days</p>
+                </a>
+                <a href="#" class="chat-proof border border-slate-100 lb-trigger block" data-lb-src="/images/wholesale/whatsapp_chat_fast_shipping.png" data-lb-alt="WhatsApp chat — fast shipping feedback">
                     <img src="/images/wholesale/whatsapp_chat_fast_shipping.png" class="w-full h-auto" alt="WhatsApp chat — fast shipping feedback" loading="lazy">
-                </div>
-                <div class="chat-proof border border-slate-100">
+                    <p class="text-xs text-slate-500 text-center py-2 px-3">UK wholesaler — express shipping received in 4 days via DHL</p>
+                </a>
+                <a href="#" class="chat-proof border border-slate-100 lb-trigger block" data-lb-src="/images/wholesale/whatsapp_chat_quality_feedback.png" data-lb-alt="WhatsApp chat — quality feedback from distributor">
                     <img src="/images/wholesale/whatsapp_chat_quality_feedback.png" class="w-full h-auto" alt="WhatsApp chat — quality feedback from distributor" loading="lazy">
-                </div>
+                    <p class="text-xs text-slate-500 text-center py-2 px-3">US distributor — OEM quality confirmed, reordered 3x</p>
+                </a>
             </div>
         </div>
     </section>
@@ -484,6 +523,20 @@
             </div>
         </div>
     </footer>
+
+    <!-- ==================== LIGHTBOX OVERLAY ==================== -->
+    <div id="lightbox" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/80 backdrop-blur-sm" style="display:none;">
+        <button id="lb-close" class="absolute top-4 right-4 text-white/80 hover:text-white z-10 p-2">
+            <i data-lucide="x" class="w-7 h-7"></i>
+        </button>
+        <div class="max-w-3xl max-h-[85vh] mx-4 relative">
+            <img id="lb-img" src="" alt="" class="max-w-full max-h-[75vh] rounded-lg shadow-2xl object-contain">
+            <p id="lb-caption" class="text-white/80 text-sm text-center mt-3"></p>
+            <a id="lb-cta" href="#quote-form" class="mt-4 mx-auto block w-fit bg-brand-500 hover:bg-brand-600 text-white px-6 py-2.5 rounded-lg font-semibold text-sm transition-colors shadow-lg">
+                <i data-lucide="send" class="w-4 h-4 inline mr-1"></i> Request Quote
+            </a>
+        </div>
+    </div>
 
     <!-- ==================== SCRIPTS ==================== -->
     <script>
@@ -629,6 +682,87 @@
             form.classList.remove('form-loading');
             return false;
         }
+
+        // ==================== LIGHTBOX ====================
+        (function() {
+            var lb = document.getElementById('lightbox');
+            var lbImg = document.getElementById('lb-img');
+            var lbCaption = document.getElementById('lb-caption');
+            var lbClose = document.getElementById('lb-close');
+            var lbCta = document.getElementById('lb-cta');
+
+            function openLightbox(src, alt) {
+                lbImg.src = src;
+                lbImg.alt = alt || '';
+                lbCaption.textContent = alt || '';
+                lb.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                // Track
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({ event: 'gallery_open', image_alt: alt });
+            }
+            function closeLightbox() {
+                lb.style.display = 'none';
+                lbImg.src = '';
+                document.body.style.overflow = '';
+            }
+
+            // Bind triggers
+            document.querySelectorAll('.lb-trigger').forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openLightbox(el.getAttribute('data-lb-src'), el.getAttribute('data-lb-alt'));
+                });
+            });
+
+            // Close handlers
+            lbClose.addEventListener('click', closeLightbox);
+            lb.addEventListener('click', function(e) { if (e.target === lb) closeLightbox(); });
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
+
+            // CTA inside lightbox — track + close
+            lbCta.addEventListener('click', function() {
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({ event: 'gallery_cta_click' });
+                closeLightbox();
+            });
+        })();
+
+        // ==================== WHO WE SERVE TABS ====================
+        (function() {
+            var tabs = document.querySelectorAll('.serve-tab');
+            var panels = document.querySelectorAll('.serve-panel');
+            tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    var target = tab.getAttribute('data-tab');
+                    tabs.forEach(function(t) { t.classList.remove('active'); });
+                    tab.classList.add('active');
+                    panels.forEach(function(p) {
+                        p.classList.toggle('hidden', p.getAttribute('data-panel') !== target);
+                    });
+                });
+            });
+        })();
+
+        // ==================== VIDEO CLICK TO PLAY/PAUSE ====================
+        (function() {
+            document.querySelectorAll('.video-cell').forEach(function(cell) {
+                var video = cell.querySelector('video');
+                var hint = cell.querySelector('.video-play-hint');
+                cell.addEventListener('click', function() {
+                    if (video.paused) {
+                        video.play().catch(function(){});
+                        if (hint) hint.style.display = 'none';
+                    } else {
+                        video.pause();
+                        if (hint) hint.style.display = 'flex';
+                    }
+                });
+                // Hide hint when auto-play via intersection observer starts
+                video.addEventListener('play', function() { if (hint) hint.style.display = 'none'; });
+                video.addEventListener('pause', function() { if (hint) hint.style.display = 'flex'; });
+            });
+        })();
     </script>
 </body>
 </html>
