@@ -10,6 +10,8 @@ import SafeImage from '@/components/SafeImage';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import ReadingProgress from '@/components/ReadingProgress';
 
+export const revalidate = 0;
+
 // 定义Meta类型
 interface PostMeta {
   seo?: {
