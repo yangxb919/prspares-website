@@ -214,6 +214,7 @@ export default function WholesaleInquiryPage() {
 
   const validate = (): boolean => {
     const errs: FormErrors = {};
+    if (!formData.name.trim()) errs.name = 'Name is required';
     if (!formData.email.trim()) errs.email = 'Email is required';
     else if (!/^\S+@\S+\.\S+$/.test(formData.email)) errs.email = 'Please enter a valid email';
     if (!formData.products) errs.products = 'Please select a product category';
@@ -499,11 +500,18 @@ export default function WholesaleInquiryPage() {
                     <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> 12-month warranty</span>
                   </div>
                   <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* ── Required fields (3 only) ── */}
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email Address <span className="text-red-500">*</span></label>
-                      <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="john@company.com" />
-                      {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                    {/* ── Required fields ── */}
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">Contact Person <span className="text-red-500">*</span></label>
+                        <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="John Smith" />
+                        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+                      </div>
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email Address <span className="text-red-500">*</span></label>
+                        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="john@company.com" />
+                        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                      </div>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
@@ -550,8 +558,8 @@ export default function WholesaleInquiryPage() {
                               <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Your Company Ltd." />
                             </div>
                             <div>
-                              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">Contact Person</label>
-                              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="John Smith" />
+                              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1.5">Country / Region</label>
+                              <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="United States" />
                             </div>
                           </div>
                           <div className="grid sm:grid-cols-2 gap-4">
@@ -560,15 +568,11 @@ export default function WholesaleInquiryPage() {
                               <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+1 (555) 123-4567" />
                             </div>
                             <div>
-                              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1.5">Country / Region</label>
-                              <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="United States" />
-                            </div>
-                          </div>
-                          <div className="grid sm:grid-cols-2 gap-4">
-                            <div>
                               <label htmlFor="models" className="block text-sm font-medium text-gray-700 mb-1.5">Model / Brand</label>
                               <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="iPhone 15 Pro, Samsung S24..." />
                             </div>
+                          </div>
+                          <div className="grid sm:grid-cols-2 gap-4">
                             <div>
                               <label htmlFor="quality" className="block text-sm font-medium text-gray-700 mb-1.5">Quality Requirement</label>
                               <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
