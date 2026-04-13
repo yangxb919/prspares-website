@@ -109,7 +109,7 @@ export default async function BlogPage({
       `)
       .eq('status', 'publish')
       .order('published_at', { ascending: false })
-      .limit(100);
+      .limit(200);
 
     if (category && category !== 'all') {
       query = query.contains('meta', JSON.stringify({ category: category }));
