@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle, Shield, Clock, Award, Users, Factory, Truck, P
 import FadeIn from './FadeIn';
 import HomeQuoteButton from './HomeQuoteButton';
 import BestSellerCard from './BestSellerCard';
+import LightboxImage from '@/components/LightboxImage';
 
 /* ─── Best Sellers Data ─── */
 const BEST_SELLERS = [
@@ -76,7 +77,7 @@ export default function Home() {
 
             <div className="hidden lg:block">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <Image
+                <LightboxImage
                   src="/images/oem-quality-iphone-screen-wholesale-collection.jpg"
                   alt="OEM quality phone repair parts wholesale collection from PRSPARES"
                   width={600}
@@ -84,7 +85,7 @@ export default function Home() {
                   className="w-full h-auto object-cover"
                   priority
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6 pointer-events-none">
                   <p className="text-white font-semibold">Shenzhen Huaqiangbei — World&apos;s Largest Electronics Market</p>
                 </div>
               </div>
@@ -286,7 +287,7 @@ export default function Home() {
                   </ul>
                 </div>
                 <div className="relative rounded-xl overflow-hidden h-64 md:h-80">
-                  <Image
+                  <LightboxImage
                     src="/images/oem-quality-iphone-screen-wholesale-collection.jpg"
                     alt="PRSPARES warehouse and quality inspection in Shenzhen"
                     fill

@@ -1,9 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import 'yet-another-react-lightbox/styles.css';
 import { QuoteButtonDefault, QuoteButtonCTA, QuoteButtonInline, QuoteButtonBanner } from './QuoteButton';
+import { toCloudinaryHighRes } from './LightboxImage';
 
 interface MarkdownRendererProps {
   content: string;
@@ -18,6 +23,8 @@ export default function MarkdownRenderer({
   className = '',
   demoteH1ToH2 = false,
 }: MarkdownRendererProps) {
+  const [openImage, setOpenImage] = useState<{ src: string; alt: string } | null>(null);
+
   // 预处理内容，将特殊标记转换为组件
   const processContent = (markdown: string) => {
     return markdown
@@ -219,6 +226,11 @@ export default function MarkdownRenderer({
         console.debug('[MarkdownRenderer img] raw=', src, ' normalized=', safeSrc);
       }
 
+      const openLightbox = () => {
+        const big = toCloudinaryHighRes(safeSrc) || safeSrc;
+        setOpenImage({ src: big, alt: alt || '' });
+      };
+
       return (
         <img
           src={safeSrc}
@@ -227,6 +239,17 @@ export default function MarkdownRenderer({
           referrerPolicy="no-referrer"
           crossOrigin="anonymous"
           loading="lazy"
+          role="button"
+          tabIndex={0}
+          aria-label={`Click to enlarge: ${alt || 'image'}`}
+          style={{ cursor: 'zoom-in' }}
+          onClick={openLightbox}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openLightbox();
+            }
+          }}
           onError={(e) => {
             console.error('[MarkdownRenderer] Image failed to load:', safeSrc);
             // 显示占位符
@@ -273,6 +296,15 @@ export default function MarkdownRenderer({
       >
         {processContent(content)}
       </ReactMarkdown>
+      <Lightbox
+        open={openImage !== null}
+        close={() => setOpenImage(null)}
+        slides={openImage ? [openImage] : []}
+        plugins={[Zoom]}
+        carousel={{ finite: true }}
+        controller={{ closeOnBackdropClick: true }}
+        render={{ buttonPrev: () => null, buttonNext: () => null }}
+      />
     </div>
   );
 }
