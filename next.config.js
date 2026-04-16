@@ -152,6 +152,11 @@ const nextConfig = {
       },
       // 已废弃的旧 blog 文章 → 相关替代或 /blog
       {
+        source: '/blog/replacement-parts-repeat-orders-repair-shops',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
         source: '/blog/oled-vs-lcd-ultimate-technical-comparison',
         destination: '/blog/lcd-vs-oled-hard-soft-oled-repair-shops',
         permanent: true,
