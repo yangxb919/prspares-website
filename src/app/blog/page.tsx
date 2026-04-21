@@ -60,6 +60,7 @@ export async function generateMetadata({
 
 // ISR: regenerate the list page at most every hour
 export const revalidate = 3600;
+export const fetchCache = 'force-no-store';
 
 // Get article data from Supabase
 export default async function BlogPage({

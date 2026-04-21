@@ -12,6 +12,7 @@ import ReadingProgress from '@/components/ReadingProgress';
 
 export const revalidate = 3600;
 export const dynamicParams = true;
+export const fetchCache = 'force-no-store';
 
 export async function generateStaticParams() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
