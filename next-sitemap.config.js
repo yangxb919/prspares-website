@@ -76,6 +76,8 @@ module.exports = {
       '/products/iphone-rear-camera-wholesale',
       '/products/ipad-battery-replacement-factory',
       '/wholesale-inquiry',
+      // '/id/wholesale', // TODO: 部署后恢复（SEA landing — Bahasa Indonesia）
+      // '/th/wholesale', // TODO: 部署后恢复（SEA landing — ภาษาไทย）
       '/blog',
       '/privacy-policy',
     ];

@@ -16,4 +16,8 @@ Disallow: /test-markdown
 Disallow: /test-seo
 Disallow: /demo-seo-scoring
 Disallow: /image-optimization-demo
+Disallow: /blog?
+Disallow: /*?category=
+Disallow: /*?tag=
+Disallow: /*?page=
 Sitemap: https://www.phonerepairspares.com/sitemap.xml
