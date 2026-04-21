@@ -22,9 +22,13 @@ export function extractFAQs(content: string | null | undefined): FAQ[] {
 
   const startIdx = content.indexOf(header[0]) + header[0].length;
   const afterSection = content.slice(startIdx);
-  const nextH2Match = afterSection.match(/^#{1,2}\s+(?!.*(FAQ|Question))/m);
+  // Use exec().index so we get the true match position (not a substring
+  // occurrence — "## " is a substring of "### " and indexOf would find the
+  // wrong spot).
+  const nextH2Re = /^(#{1,2})(?!#)\s+(?!.*(FAQ|Question))/m;
+  const nextH2Match = nextH2Re.exec(afterSection);
   const faqBlock = nextH2Match
-    ? afterSection.slice(0, afterSection.indexOf(nextH2Match[0]))
+    ? afterSection.slice(0, nextH2Match.index)
     : afterSection;
 
   // Primary pattern: H3/H4 question followed by paragraph answer
