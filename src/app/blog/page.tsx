@@ -58,8 +58,8 @@ export async function generateMetadata({
   };
 }
 
-// Force revalidation on each request
-export const revalidate = 0;
+// ISR: regenerate the list page at most every hour
+export const revalidate = 3600;
 
 // Get article data from Supabase
 export default async function BlogPage({

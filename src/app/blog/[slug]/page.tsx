@@ -10,7 +10,28 @@ import SafeImage from '@/components/SafeImage';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import ReadingProgress from '@/components/ReadingProgress';
 
-export const revalidate = 0;
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnon) return [];
+  try {
+    const supabase = createPublicClient();
+    const { data } = await supabase
+      .from('posts')
+      .select('slug')
+      .eq('status', 'publish')
+      .not('slug', 'is', null);
+    return (data || [])
+      .map((row: any) => row?.slug)
+      .filter((s: any): s is string => typeof s === 'string' && s.length > 0)
+      .map((slug: string) => ({ slug }));
+  } catch {
+    return [];
+  }
+}
 
 // 定义Meta类型
 interface PostMeta {
@@ -289,23 +310,67 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     // 类型断言确保数据类型正确
     const relatedPosts = relatedPostsData as RelatedPost[] | null;
     
-    // 获取结构化数据
-    const structuredData = typedPost.meta?.structured_data;
+    // 结构化数据：优先使用 meta.structured_data（编辑器自定义），否则生成默认 Article + BreadcrumbList
+    const customStructuredData = typedPost.meta?.structured_data;
+    const articleUrl = `${SITE_URL}/blog/${typedPost.slug}`;
+    const articleImage =
+      normalizeMetaImage(typedPost.meta?.cover_image) ||
+      `${SITE_URL}${getDefaultCoverImage(typedPost)}`;
+    const defaultArticleLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: typedPost.title,
+      description: typedPost.excerpt || (typedPost.meta as PostMeta | null)?.seo?.description || '',
+      image: articleImage ? [articleImage] : undefined,
+      datePublished: typedPost.published_at || undefined,
+      dateModified: (typedPost as any).updated_at || typedPost.published_at || undefined,
+      author: {
+        '@type': 'Person',
+        name: authorName,
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'PRSPARES',
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE_URL}/PRSPARES1.png`,
+        },
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': articleUrl,
+      },
+      url: articleUrl,
+      wordCount: wordCount || undefined,
+      inLanguage: 'en',
+    };
+    const breadcrumbLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE_URL}/blog` },
+        { '@type': 'ListItem', position: 3, name: typedPost.title, item: articleUrl },
+      ],
+    };
 
     return (
       <>
         {/* 阅读进度条 */}
         <ReadingProgress />
 
-        {/* 结构化数据 */}
-        {structuredData && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(structuredData)
-            }}
-          />
-        )}
+        {/* 结构化数据：Article + Breadcrumb（或编辑器自定义的覆盖） */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(customStructuredData || defaultArticleLd),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+        />
+
 
         <main className="min-h-screen bg-gray-50">
         {/* Hero Section */}
