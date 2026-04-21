@@ -109,6 +109,70 @@ const nextConfig = {
         destination: '/products/:slug*',
         permanent: true,
       },
+
+      // --- Duplicate post merges (T8, 2026-04-21) ---
+      {
+        source: '/blog/iphone-screen-replacement-cost-uk-complete-price-guide-by-model-2026',
+        destination: '/blog/iphone-screen-replacement-cost-uk-guide-2026',
+        permanent: true,
+      },
+      {
+        source: '/blog/phone-lcd-parts-wholesale-the-complete-guide-to-quality-grades-pricing-choosing-the-right-supplier',
+        destination: '/blog/phone-lcd-parts-wholesale-quality-grades-pricing-supplier-guide',
+        permanent: true,
+      },
+      {
+        source: '/blog/samsung-a-series-repair-parts-small-buyers-source-first',
+        destination: '/blog/samsung-a-series-repair-parts-stock-guide',
+        permanent: true,
+      },
+
+      // --- Long slug shortenings (T9, 2026-04-21) ---
+      {
+        source: '/blog/are-substandard-mobile-batteries-killing-your-repair-business-the-complete-guide-to-sourcing-certified-mobile-phone-batteries-for-professional-success',
+        destination: '/blog/substandard-battery-sourcing-certified-repair-shops',
+        permanent: true,
+      },
+      {
+        source: '/blog/how-can-you-find-trustworthy-wholesale-suppliers-for-mobile-phone-repair-parts-the-complete-quality-control-guide',
+        destination: '/blog/trustworthy-wholesale-phone-parts-suppliers-qc',
+        permanent: true,
+      },
+      {
+        source: '/blog/why-are-mobile-phone-battery-replacement-safety-standards-critical-for-your-device-and-personal-safety',
+        destination: '/blog/phone-battery-replacement-safety-standards',
+        permanent: true,
+      },
+      {
+        source: '/blog/are-chinese-phone-parts-suppliers-really-worth-the-risk-the-truth-about-quality-vs-cost-trade-offs',
+        destination: '/blog/china-phone-parts-suppliers-quality-vs-cost',
+        permanent: true,
+      },
+      {
+        source: '/blog/iphone-15-screen-replacement-the-real-cost-quality-grades-what-repair-shops-wont-tell-you',
+        destination: '/blog/iphone-15-screen-replacement-cost-quality',
+        permanent: true,
+      },
+      {
+        source: '/blog/how-can-you-capitalize-on-the-4552b-mobile-repair-boom-with-premium-wholesale-strategies',
+        destination: '/blog/mobile-repair-wholesale-growth-strategies',
+        permanent: true,
+      },
+      {
+        source: '/blog/how-are-mobile-phone-screens-made-complete-production-process-analysis-from-lcd-to-oled',
+        destination: '/blog/how-phone-screens-are-made-lcd-oled',
+        permanent: true,
+      },
+      {
+        source: '/blog/iphone-14-screen-replacement-the-design-change-that-breaks-screens-and-how-to-avoid-it',
+        destination: '/blog/iphone-14-screen-replacement-design-fix',
+        permanent: true,
+      },
+      {
+        source: '/blog/cell-phone-screen-replacement-wholesale-oem-vs-aftermarket-quality-the-insiders-guide',
+        destination: '/blog/phone-screen-wholesale-oem-vs-aftermarket',
+        permanent: true,
+      },
       {
         source:
           '/blog/top-10-best-selling-repair-parts-in-2024-a-must-have-guide-for-mobile-phone-repair-shops-and-wholesalers',

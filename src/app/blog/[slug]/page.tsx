@@ -9,6 +9,8 @@ import RelatedPosts from '@/components/features/RelatedPosts';
 import SafeImage from '@/components/SafeImage';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import ReadingProgress from '@/components/ReadingProgress';
+import { extractFAQs, buildFaqSchema } from '@/lib/extract-faqs';
+import { pickRelatedByTitle } from '@/lib/related-posts';
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -300,16 +302,21 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     const authorName = authorProfile?.display_name || 'PRSPARES Team';
     const authorAvatar = authorProfile?.avatar_url;
 
-    const { data: relatedPostsData } = await supabase
+    // Pull a wider candidate set so we can pick by topic similarity (title
+    // keyword overlap) instead of just the newest 3 posts.
+    const { data: candidateData } = await supabase
       .from('posts')
       .select('id, title, slug, excerpt, published_at, meta')
       .eq('status', 'publish')
       .neq('id', typedPost.id)
-      .limit(3)
-      .order('published_at', { ascending: false });
+      .order('published_at', { ascending: false })
+      .limit(60);
 
-    // 类型断言确保数据类型正确
-    const relatedPosts = relatedPostsData as RelatedPost[] | null;
+    const relatedPosts = pickRelatedByTitle(
+      typedPost.title,
+      (candidateData || []) as RelatedPost[],
+      3
+    );
     
     // 结构化数据：优先使用 meta.structured_data（编辑器自定义），否则生成默认 Article + BreadcrumbList
     const customStructuredData = typedPost.meta?.structured_data;
@@ -355,6 +362,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       ],
     };
 
+    const faqs = extractFAQs(typedPost.content);
+    const faqSchema = buildFaqSchema(faqs);
+
     return (
       <>
         {/* 阅读进度条 */}
@@ -371,6 +381,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
         />
+        {faqSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          />
+        )}
 
 
         <main className="min-h-screen bg-gray-50">
