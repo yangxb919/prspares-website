@@ -11,6 +11,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 import ReadingProgress from '@/components/ReadingProgress';
 import { extractFAQs, buildFaqSchema } from '@/lib/extract-faqs';
 import { pickRelatedByTitle } from '@/lib/related-posts';
+import { pickPostDescription } from '@/lib/post-description';
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -312,10 +313,18 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       .order('published_at', { ascending: false })
       .limit(60);
 
+    // Prefer meta.seo.description over raw excerpt for card previews — some
+    // legacy posts have Chinese excerpts despite English SEO descriptions.
+    const candidatePosts = (candidateData || []).map((c: any) => ({
+      ...c,
+      excerpt: pickPostDescription(c.meta, c.excerpt),
+    }));
+
     const relatedPosts = pickRelatedByTitle(
       typedPost.title,
-      (candidateData || []) as RelatedPost[],
-      3
+      candidatePosts as RelatedPost[],
+      3,
+      typedPost.meta?.category || null,
     );
     
     // 结构化数据：优先使用 meta.structured_data（编辑器自定义），否则生成默认 Article + BreadcrumbList
@@ -328,7 +337,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       '@context': 'https://schema.org',
       '@type': 'Article',
       headline: typedPost.title,
-      description: typedPost.excerpt || (typedPost.meta as PostMeta | null)?.seo?.description || '',
+      description: pickPostDescription(typedPost.meta as any, typedPost.excerpt),
       image: articleImage ? [articleImage] : undefined,
       datePublished: typedPost.published_at || undefined,
       dateModified: (typedPost as any).updated_at || typedPost.published_at || undefined,

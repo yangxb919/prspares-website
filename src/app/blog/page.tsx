@@ -7,24 +7,27 @@ import BlogHeader from '@/components/features/BlogHeader';
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import SafeImage from '@/components/SafeImage';
 import BlogNewsletterSubscribe from '@/components/features/BlogNewsletterSubscribe';
+import { BLOG_CATEGORIES } from '@/lib/blog-categories';
+import { pickPostDescription } from '@/lib/post-description';
 
 const baseMetadata: Metadata = {
-  title: 'Phone Repair Guides & Wholesale Sourcing Tips | PRSPARES Blog',
-  description: 'Expert guides on phone repair parts sourcing, quality testing, and wholesale buying. Learn how to choose OEM vs aftermarket screens, source batteries safely, and grow your repair business.',
+  title: 'Phone Repair Guides & Wholesale Parts Sourcing Tips | PRSPARES',
+  description: 'Phone repair guides, wholesale sourcing tips, and parts quality insights for repair shops and distributors — from a Shenzhen factory-direct supplier.',
   alternates: {
     canonical: '/blog',
   },
   openGraph: {
-    title: 'Phone Repair Guides & Wholesale Sourcing Tips | PRSPARES Blog',
-    description: 'Expert guides on phone repair parts sourcing, quality testing, and wholesale buying from Shenzhen.',
+    title: 'Phone Repair Guides & Wholesale Parts Sourcing Tips | PRSPARES',
+    description: 'Phone repair guides, wholesale sourcing tips, and parts quality insights for repair shops and distributors — from a Shenzhen factory-direct supplier.',
     type: 'website',
     url: '/blog',
+    siteName: 'PRSPARES',
     images: ['/PRSPARES1.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Phone Repair Guides & Wholesale Sourcing Tips | PRSPARES Blog',
-    description: 'Expert guides on phone repair parts sourcing, quality testing, and wholesale buying from Shenzhen.',
+    title: 'Phone Repair Guides & Wholesale Parts Sourcing Tips | PRSPARES',
+    description: 'Phone repair guides, wholesale sourcing tips, and parts quality insights for repair shops and distributors — from a Shenzhen factory-direct supplier.',
     images: ['/PRSPARES1.png'],
   },
 };
@@ -203,7 +206,11 @@ export default async function BlogPage({
       id: post.id.toString(),
       slug: post.slug,
       title: post.title,
-      excerpt: post.excerpt || (post.content ? post.content.substring(0, 150) + '...' : ''),
+      excerpt: pickPostDescription(
+        post.meta,
+        post.excerpt,
+        post.content ? post.content.substring(0, 150) + '...' : '',
+      ),
       category: post.meta?.category || 'parts-knowledge',
       author: authorName,
       date: publishDate,
@@ -213,21 +220,20 @@ export default async function BlogPage({
     };
   });
 
-  const categoryLabels: Record<string, string> = {
-    'sourcing-suppliers': 'Sourcing & Suppliers',
-    'repair-guides': 'Repair Guides',
-    'parts-knowledge': 'Parts Knowledge',
-    'business-tips': 'Business Tips',
-    'industry-insights': 'Industry Insights',
-  };
+  const categoryLabels: Record<string, string> = Object.fromEntries(
+    BLOG_CATEGORIES.map((c) => [c.slug, c.label]),
+  );
 
+  // Tabs now link to the indexable hub routes (/blog/category/<slug>) rather than
+  // the non-indexed `?category=` filter. Keeping the query-string filter working
+  // for deep links but internal navigation stays SEO-clean.
   const tabs = [
     { id: 'all', label: '📚 All Articles', href: '/blog' },
-    { id: 'sourcing-suppliers', label: '📦 Sourcing & Suppliers', href: '/blog?category=sourcing-suppliers' },
-    { id: 'repair-guides', label: '🔧 Repair Guides', href: '/blog?category=repair-guides' },
-    { id: 'parts-knowledge', label: '📱 Parts Knowledge', href: '/blog?category=parts-knowledge' },
-    { id: 'business-tips', label: '💼 Business Tips', href: '/blog?category=business-tips' },
-    { id: 'industry-insights', label: '🏭 Industry Insights', href: '/blog?category=industry-insights' },
+    ...BLOG_CATEGORIES.map((c) => ({
+      id: c.slug,
+      label: `${c.emoji} ${c.label}`,
+      href: `/blog/category/${c.slug}`,
+    })),
   ];
 
   // Breadcrumb navigation data
@@ -269,6 +275,56 @@ export default async function BlogPage({
       </div>
 
       <div className="max-w-[1200px] mx-auto px-4 py-12">
+        <section className="mb-10 max-w-3xl">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            Built for Repair Shops and Wholesale Buyers
+          </h2>
+          <p className="text-gray-600 leading-relaxed">
+            In-depth content for people who actually stock and fix phones. Expect screen
+            replacement guides, battery and charging diagnostics, parts sourcing and QC
+            playbooks, supplier evaluation checklists, and real pricing and repair-business
+            decisions — all written from a factory-direct wholesale perspective.
+          </p>
+        </section>
+
+        {/* Browse by Topic — hub cards for SEO + internal linking */}
+        {!searchParams.category && (
+          <section className="mb-12" aria-labelledby="browse-by-topic">
+            <div className="flex items-end justify-between mb-5">
+              <h2 id="browse-by-topic" className="text-2xl font-bold text-gray-900">
+                Browse by Topic
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {BLOG_CATEGORIES.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/blog/category/${c.slug}`}
+                  className="group block rounded-xl border border-gray-100 bg-white p-5 hover:border-[#00B140] hover:shadow-md transition-all"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="text-2xl flex-shrink-0">{c.emoji}</div>
+                    <div className="min-w-0">
+                      <div className="font-semibold text-gray-900 group-hover:text-[#00B140] mb-1">
+                        {c.label}
+                      </div>
+                      <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
+                        {c.card}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          {searchParams.category
+            ? `${categoryLabels[searchParams.category] || 'Articles'}`
+            : 'Latest Articles'}
+        </h2>
+
         {articles.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
             <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">

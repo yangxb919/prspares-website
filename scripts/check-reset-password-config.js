@@ -53,8 +53,8 @@ console.log('\n2. Redirect URLs:');
 console.log('   - Add these URLs to Redirect URLs list:');
 console.log('     • http://localhost:3005/reset-password');
 console.log('     • http://localhost:3005/auth/reset-password');
-console.log('     • https://prspares.xyz/reset-password');
-console.log('     • https://prspares.xyz/auth/reset-password');
+console.log('     • https://www.phonerepairspares.com/reset-password');
+console.log('     • https://www.phonerepairspares.com/auth/reset-password');
 
 console.log('\n3. Email Template:');
 console.log('   - Go to: Authentication → Email Templates → Reset Password');

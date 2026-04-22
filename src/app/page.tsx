@@ -46,10 +46,12 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <p className="text-orange-400 font-semibold text-sm uppercase tracking-wide mb-4">Shenzhen Huaqiangbei — 10+ Years Factory Direct</p>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-                Wholesale Phone Repair Parts{' '}
-                <span className="text-orange-400">— Screens from $19, Batteries from $5</span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">
+                Wholesale Phone Repair Parts Supplier for Repair Shops and Distributors
               </h1>
+              <p className="text-orange-400 font-semibold text-lg md:text-xl mb-6">
+                Screens from $19 · Batteries from $5 · Factory-direct from Shenzhen
+              </p>
               <p className="text-lg text-blue-100 mb-8 leading-relaxed max-w-xl">
                 OEM-quality iPhone &amp; Samsung screens, batteries, cameras, and repair tools
                 at factory-direct prices. Serving 1,000+ repair shops in 50+ countries.

@@ -1,8 +1,20 @@
 import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+
+// Route-prefix-based locale for SEA landing pages (plan A MVP).
+// Keeps the site's single-root-layout architecture while giving /id and /th:
+//   - correct <html lang> for accessibility + SEO
+//   - a "naked" layout without English Header/Footer (so SEA ad traffic
+//     cannot click their way back into the English site)
+function localeForPath(pathname: string): { lang: string; chrome: boolean } {
+  if (pathname.startsWith('/id/')) return { lang: 'id', chrome: false };
+  if (pathname.startsWith('/th/')) return { lang: 'th', chrome: false };
+  return { lang: 'en', chrome: true };
+}
 
 
 const inter = Inter({
@@ -23,9 +35,8 @@ const SITE_URL = (
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Wholesale Phone Repair Parts | iPhone Screens, Batteries & Tools — Factory Direct | PRSPARES",
-  description: "Wholesale phone repair parts from Shenzhen: iPhone & Samsung screens from $19, batteries from $5, cameras, charging ports & repair tools. 500+ SKUs, MOQ 10 pcs, 12-month warranty. Factory-direct B2B supplier serving 1,000+ repair shops in 50+ countries.",
-  keywords: "wholesale phone repair parts, iphone screen wholesale, phone parts supplier, wholesale phone screens, cell phone parts wholesale, phone repair parts wholesale, iphone battery wholesale, samsung screen wholesale, phone repair tools wholesale",
+  title: "Wholesale Phone Repair Parts Supplier | Factory Direct — PRSPARES",
+  description: "Factory-direct wholesale phone repair parts from Shenzhen. OEM iPhone & Samsung screens, batteries, and tools for repair shops and distributors.",
   icons: {
     icon: [
       { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
@@ -35,23 +46,24 @@ export const metadata: Metadata = {
     apple: '/favicon.png',
   },
   openGraph: {
-    title: "Wholesale Phone Repair Parts — Screens, Batteries & Tools | PRSPARES",
-    description: "Factory-direct phone repair parts: iPhone & Samsung screens from $19, batteries from $5. 500+ SKUs, 12-month warranty. B2B wholesale from Shenzhen.",
+    title: "Wholesale Phone Repair Parts Supplier | Factory Direct — PRSPARES",
+    description: "Factory-direct wholesale phone repair parts from Shenzhen. OEM iPhone & Samsung screens, batteries, and tools for repair shops and distributors.",
     type: "website",
     url: "/",
+    siteName: "PRSPARES",
     images: [
       {
         url: "/PRSPARES1.png",
         width: 1200,
         height: 630,
-        alt: "PRSPARES - Mobile Phone Repair Parts Factory",
+        alt: "PRSPARES - Wholesale Phone Repair Parts Supplier",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wholesale Phone Repair Parts — Screens, Batteries & Tools | PRSPARES",
-    description: "Factory-direct phone repair parts from Shenzhen. 500+ SKUs, MOQ 10 pcs, 12-month warranty. Serving 1,000+ repair shops worldwide.",
+    title: "Wholesale Phone Repair Parts Supplier | Factory Direct — PRSPARES",
+    description: "Factory-direct wholesale phone repair parts from Shenzhen. OEM iPhone & Samsung screens, batteries, and tools for repair shops and distributors.",
     images: ["/PRSPARES1.png"],
   },
   alternates: {
@@ -64,6 +76,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = headers().get('x-pathname') || '/';
+  const { lang, chrome } = localeForPath(pathname);
+
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -87,7 +102,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en">
+    <html lang={lang}>
       <head>
         {/* Google Tag Manager */}
         <script
@@ -124,9 +139,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         {/* End Google Tag Manager (noscript) */}
 
-        <Header />
+        {chrome && <Header />}
         {children}
-        <Footer />
+        {chrome && <Footer />}
 
 
       </body>

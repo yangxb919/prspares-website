@@ -4,7 +4,7 @@ export interface CandidatePost {
   slug: string;
   excerpt: string | null;
   published_at: string | null;
-  meta?: { cover_image?: string } | null;
+  meta?: { cover_image?: string; category?: string } | null;
 }
 
 const STOPWORDS = new Set([
@@ -38,23 +38,36 @@ function jaccard(a: Set<string>, b: Set<string>): number {
 /**
  * Pick the N posts whose titles share the most keyword overlap with `current`.
  * Falls back to the newest `n` candidates if no similarity signal is found.
+ *
+ * When `currentCategory` is provided, same-category candidates get a 1.5x score
+ * boost so the cluster/hub a post belongs to dominates the recommendation,
+ * while cross-category overlap still wins when the keyword match is strong.
  */
 export function pickRelatedByTitle<T extends CandidatePost>(
   currentTitle: string,
   candidates: T[],
-  n = 3
+  n = 3,
+  currentCategory?: string | null,
 ): T[] {
   if (!candidates || candidates.length === 0) return [];
   const currentKws = tokenize(currentTitle);
+  const curCat = currentCategory ? String(currentCategory).trim() : '';
 
-  const scored = candidates.map((c) => ({
-    post: c,
-    score: jaccard(currentKws, tokenize(c.title)),
-  }));
+  const scored = candidates.map((c) => {
+    const base = jaccard(currentKws, tokenize(c.title));
+    const sameCat =
+      curCat && c.meta?.category && String(c.meta.category).trim() === curCat;
+    return {
+      post: c,
+      score: sameCat ? base * 1.5 : base,
+      sameCat: !!sameCat,
+    };
+  });
 
-  // Primary: sort by similarity desc, then by recency
+  // Primary: sort by similarity desc, then same-category first, then recency
   scored.sort((x, y) => {
     if (y.score !== x.score) return y.score - x.score;
+    if (x.sameCat !== y.sameCat) return x.sameCat ? -1 : 1;
     const xt = x.post.published_at ? new Date(x.post.published_at).getTime() : 0;
     const yt = y.post.published_at ? new Date(y.post.published_at).getTime() : 0;
     return yt - xt;
@@ -66,8 +79,20 @@ export function pickRelatedByTitle<T extends CandidatePost>(
 
   const fillCount = n - withOverlap.length;
   const taken = new Set(withOverlap.map((s) => s.post.id));
+
+  // Fallback fillers: prefer same-category first, then recency
   const fillers = scored
     .filter((s) => !taken.has(s.post.id))
+    .sort((x, y) => {
+      if (x.sameCat !== y.sameCat) return x.sameCat ? -1 : 1;
+      const xt = x.post.published_at
+        ? new Date(x.post.published_at).getTime()
+        : 0;
+      const yt = y.post.published_at
+        ? new Date(y.post.published_at).getTime()
+        : 0;
+      return yt - xt;
+    })
     .slice(0, fillCount)
     .map((s) => s.post);
 

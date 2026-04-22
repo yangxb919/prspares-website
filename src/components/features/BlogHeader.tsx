@@ -12,9 +12,11 @@ const BlogHeader = () => {
       />
       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
         <div className="text-center text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Repair Guides & Industry Insights</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 max-w-4xl mx-auto px-4 leading-tight">
+            Phone Repair Guides and Wholesale Sourcing Tips for Repair Shops
+          </h1>
           <p className="text-xl max-w-2xl mx-auto px-4">
-            Your source for expert mobile phone repair tutorials, troubleshooting tips, and the latest news from PRSPARES
+            Practical guides and sourcing insights for repair shops, distributors, and phone parts buyers.
           </p>
         </div>
       </div>
