@@ -70,6 +70,14 @@ module.exports = {
     '/news',
     '/news/*',
     '/industry-insights',
+    // Pages that 301 to a pillar — sourced from src/lib/blog-301-candidates.ts
+    // (status=ready_for_301). Posts stay published in DB so a botched 301
+    // deploy degrades gracefully, but they must not appear in sitemap.
+    '/blog/whats-the-real-difference-between-oled-and-lcd-phone-screens',
+    '/blog/oled-vs-lcd-comparison-guide',
+    '/blog/substandard-battery-sourcing-certified-repair-shops',
+    // Slug-rename source — old URL 301s to the renamed post.
+    '/blog/2025-iphone-battery-wholesale-sourcing-guide-factory-direct-from-shenzhen',
   ],
   additionalPaths: async (config) => {
     const staticPaths = [
@@ -79,6 +87,12 @@ module.exports = {
       // '/id/wholesale', // TODO: 部署后恢复（SEA landing — Bahasa Indonesia）
       // '/th/wholesale', // TODO: 部署后恢复（SEA landing — ภาษาไทย）
       '/blog',
+      // Blog category hubs — kept in sync with src/lib/blog-categories.ts
+      '/blog/category/repair-guides',
+      '/blog/category/parts-knowledge',
+      '/blog/category/sourcing-suppliers',
+      '/blog/category/business-tips',
+      '/blog/category/industry-insights',
       '/privacy-policy',
     ];
 
@@ -88,7 +102,15 @@ module.exports = {
     const postSlugs = await fetchPostSlugs();
     const blogPaths = postSlugs.map((slug) => `/blog/${slug}`);
 
-    const allPaths = [...new Set([...staticPaths, ...dynamicPaths, ...blogPaths])];
+    // Filter out excluded paths — `exclude` only filters next-sitemap's own
+    // page-tree walk, not URLs we feed in via additionalPaths. The two
+    // canonical sources of truth (next.config.js redirects and the exclude
+    // list above) must agree, but we still apply the filter here so the two
+    // do not silently drift.
+    const excluded = new Set(config.exclude || []);
+    const allPaths = [
+      ...new Set([...staticPaths, ...dynamicPaths, ...blogPaths]),
+    ].filter((p) => !excluded.has(p));
     return Promise.all(allPaths.map((p) => config.transform(config, p)));
   },
   transform: async (config, path) => {

@@ -128,9 +128,14 @@ const nextConfig = {
       },
 
       // --- Long slug shortenings (T9, 2026-04-21) ---
+      // NOTE: this long-form was originally shortened to
+      // `substandard-battery-sourcing-certified-repair-shops`. That short slug
+      // is itself now 301-ed to the wholesale-buyer pillar (see P7 block
+      // below), so this long-form redirect now points directly at the pillar
+      // to avoid a redirect chain.
       {
         source: '/blog/are-substandard-mobile-batteries-killing-your-repair-business-the-complete-guide-to-sourcing-certified-mobile-phone-batteries-for-professional-success',
-        destination: '/blog/substandard-battery-sourcing-certified-repair-shops',
+        destination: '/blog/buying-iphone-batteries-bulk-repair-business',
         permanent: true,
       },
       {
@@ -233,6 +238,44 @@ const nextConfig = {
       {
         source: '/blog/what-challenges-do-startups-face-in-injection-molding',
         destination: '/blog',
+        permanent: true,
+      },
+
+      // --- Cluster consolidation 301s (P7, 2026-04-22) ---
+      // Sources tracked in src/lib/blog-301-candidates.ts. Each entry below
+      // graduated from `canonical-to-pillar` (observation period) to a hard
+      // 301 after content review confirmed no salvageable unique value.
+
+      // 2 OLED/LCD legacy generics → repair-shop OLED/LCD pillar
+      {
+        source: '/blog/whats-the-real-difference-between-oled-and-lcd-phone-screens',
+        destination: '/blog/lcd-vs-oled-hard-soft-oled-repair-shops',
+        permanent: true,
+      },
+      {
+        source: '/blog/oled-vs-lcd-comparison-guide',
+        destination: '/blog/lcd-vs-oled-hard-soft-oled-repair-shops',
+        permanent: true,
+      },
+
+      // Substandard-battery legacy → wholesale-buyer pillar
+      // (Safety-standards intent now lives at `phone-battery-replacement-safety-standards`,
+      // so consolidating this one to the buyer pillar does not lose the cert angle.)
+      {
+        source: '/blog/substandard-battery-sourcing-certified-repair-shops',
+        destination: '/blog/buying-iphone-batteries-bulk-repair-business',
+        permanent: true,
+      },
+
+      // --- Slug-rename housekeeping (P7, 2026-04-22) ---
+      // The post itself was renamed in Supabase from
+      //   2025-iphone-battery-wholesale-sourcing-guide-factory-direct-from-shenzhen
+      //   → iphone-battery-wholesale-sourcing-guide-shenzhen
+      // because the title and content had already been updated to "2026" in P4.
+      // This 301 catches the old URL.
+      {
+        source: '/blog/2025-iphone-battery-wholesale-sourcing-guide-factory-direct-from-shenzhen',
+        destination: '/blog/iphone-battery-wholesale-sourcing-guide-shenzhen',
         permanent: true,
       },
     ];
