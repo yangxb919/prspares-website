@@ -178,6 +178,15 @@ const nextConfig = {
         destination: '/blog/phone-screen-wholesale-oem-vs-aftermarket',
         permanent: true,
       },
+      // P7 follow-up — `oled-vs-lcd-comprehensive-comparison` (38 imp / 0 clk)
+      // was missed in the original P7 block. Same merge pattern as
+      // `oled-vs-lcd-comparison-guide` (above) — both are generic OLED/LCD
+      // overviews now consolidated into the repair-shop pillar.
+      {
+        source: '/blog/oled-vs-lcd-comprehensive-comparison',
+        destination: '/blog/lcd-vs-oled-hard-soft-oled-repair-shops',
+        permanent: true,
+      },
       {
         source:
           '/blog/top-10-best-selling-repair-parts-in-2024-a-must-have-guide-for-mobile-phone-repair-shops-and-wholesalers',

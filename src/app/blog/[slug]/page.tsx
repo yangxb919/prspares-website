@@ -165,21 +165,56 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       normalizeMetaImage(openGraphData?.image || meta?.cover_image) || fallbackImage;
     const twitterImage = normalizeMetaImage(twitterData?.image) || openGraphImage;
 
+    // DB-stored og:title / og:description from older posts have known
+    // pathologies: titles truncated mid-word with "..." (the editor's
+    // 60-char auto-cutter ran on title input), and descriptions that are
+    // template fragments like "iphone: ... Learn more from PRSPARES experts".
+    // We treat both as untrustworthy and fall back to metadataTitle / -Description
+    // unless the OG value clearly looks intentional.
+    const isHealthyOgTitle = (s: unknown): s is string => {
+      if (typeof s !== 'string') return false;
+      const v = s.trim();
+      if (v.length < 10) return false;
+      // Trailing ellipsis = mid-word truncation artifact
+      if (/[…]$|\.\.\.$/.test(v)) return false;
+      return true;
+    };
+    const TEMPLATE_DESCRIPTION_FRAGMENTS = [
+      'Learn more from PRSPARES experts',
+      'Read our expert guide on',
+    ];
+    const isHealthyOgDescription = (s: unknown): s is string => {
+      if (typeof s !== 'string') return false;
+      const v = s.trim();
+      if (v.length < 50) return false;
+      if (TEMPLATE_DESCRIPTION_FRAGMENTS.some((frag) => v.includes(frag))) return false;
+      return true;
+    };
+
+    const ogTitle = isHealthyOgTitle(openGraphData?.title) ? (openGraphData!.title as string) : metadataTitle;
+    const ogDescription = isHealthyOgDescription(openGraphData?.description)
+      ? (openGraphData!.description as string)
+      : metadataDescription;
+    const twTitle = isHealthyOgTitle(twitterData?.title) ? (twitterData!.title as string) : metadataTitle;
+    const twDescription = isHealthyOgDescription(twitterData?.description)
+      ? (twitterData!.description as string)
+      : metadataDescription;
+
     return {
       title: metadataTitle,
       description: metadataDescription,
       keywords: seoData?.keywords?.join(', '),
       openGraph: {
-        title: openGraphData?.title || metadataTitle,
-        description: openGraphData?.description || metadataDescription,
+        title: ogTitle,
+        description: ogDescription,
         type: 'article',
         url: openGraphUrl,
         images: openGraphImage ? [{ url: openGraphImage }] : undefined,
       },
       twitter: {
         card: 'summary_large_image',
-        title: twitterData?.title || metadataTitle,
-        description: twitterData?.description || metadataDescription,
+        title: twTitle,
+        description: twDescription,
         images: twitterImage ? [twitterImage] : undefined,
       },
       alternates: {
@@ -327,13 +362,15 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       typedPost.meta?.category || null,
     );
     
-    // 结构化数据：优先使用 meta.structured_data（编辑器自定义），否则生成默认 Article + BreadcrumbList
-    const customStructuredData = typedPost.meta?.structured_data;
+    // 结构化数据：以代码计算的 defaultArticleLd 为权威基线，从 meta.structured_data
+    // 仅 cherry-pick 安全的扩展字段。DB 中编辑器存的 structured_data 历史上含
+    // 不可信数据（blob: image URL、旧 slug 残留、CN 地址等），不能整体覆盖。
+    const customStructuredData = typedPost.meta?.structured_data as Record<string, unknown> | undefined;
     const articleUrl = `${SITE_URL}/blog/${typedPost.slug}`;
     const articleImage =
       normalizeMetaImage(typedPost.meta?.cover_image) ||
       `${SITE_URL}${getDefaultCoverImage(typedPost)}`;
-    const defaultArticleLd = {
+    const defaultArticleLd: Record<string, unknown> = {
       '@context': 'https://schema.org',
       '@type': 'Article',
       headline: typedPost.title,
@@ -361,6 +398,29 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       wordCount: wordCount || undefined,
       inLanguage: 'en',
     };
+
+    // Safe cherry-pick from customStructuredData. Anything that affects URL
+    // identity, image rendering, publisher identity, or schema type is OFF the
+    // safe list — those must come from defaultArticleLd to avoid SERP-breaking
+    // legacy values (e.g. blob: image URLs, slug-rename leftovers).
+    const STRUCTURED_DATA_SAFE_KEYS = new Set([
+      'about',
+      'articleSection',
+      'isPartOf',
+      'keywords',
+      'mentions',
+      'wordCount',
+      'inLanguage',
+      'timeRequired',
+    ]);
+    const articleLd: Record<string, unknown> = { ...defaultArticleLd };
+    if (customStructuredData && typeof customStructuredData === 'object') {
+      for (const [k, v] of Object.entries(customStructuredData)) {
+        if (STRUCTURED_DATA_SAFE_KEYS.has(k) && v != null) {
+          articleLd[k] = v;
+        }
+      }
+    }
     const breadcrumbLd = {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
@@ -379,11 +439,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         {/* 阅读进度条 */}
         <ReadingProgress />
 
-        {/* 结构化数据：Article + Breadcrumb（或编辑器自定义的覆盖） */}
+        {/* 结构化数据：Article + Breadcrumb（DB 自定义字段已被 sanitize） */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(customStructuredData || defaultArticleLd),
+            __html: JSON.stringify(articleLd),
           }}
         />
         <script

@@ -75,6 +75,7 @@ module.exports = {
     // deploy degrades gracefully, but they must not appear in sitemap.
     '/blog/whats-the-real-difference-between-oled-and-lcd-phone-screens',
     '/blog/oled-vs-lcd-comparison-guide',
+    '/blog/oled-vs-lcd-comprehensive-comparison',
     '/blog/substandard-battery-sourcing-certified-repair-shops',
     // Slug-rename source — old URL 301s to the renamed post.
     '/blog/2025-iphone-battery-wholesale-sourcing-guide-factory-direct-from-shenzhen',

@@ -326,6 +326,21 @@ export const CONTENT_DECISIONS: ContentDecision[] = [
   },
   {
     cluster: 'oled-lcd-grades',
+    slug: 'oled-vs-lcd-comprehensive-comparison',
+    title: 'OLED vs LCD: Comprehensive Mobile Display Technology Comparison',
+    current_category: 'parts-knowledge',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: 'third generic OLED vs LCD overview — same pattern as the two siblings already 301-ed in P7',
+    target_keyword_theme: 'oled vs lcd comparison',
+    recommended_action: 'recommend-301',
+    target_pillar_slug: 'lcd-vs-oled-hard-soft-oled-repair-shops',
+    notes:
+      'P7 follow-up (2026-04-25): missed in the original P7 sweep due to differing slug naming. GSC shows 38 imp / 0 clk / pos ~? over 90 days — same pattern as the two siblings. Hard 301 added; sitemap exclude added.',
+    round: 'P7-followup',
+    status_this_round: 'applied',
+  },
+  {
+    cluster: 'oled-lcd-grades',
     slug: 'how-phone-screens-are-made-lcd-oled',
     title: 'How Are Mobile Phone Screens Made? Complete Production Process Analysis from LCD to OLED',
     current_category: '(none)',
@@ -1257,6 +1272,391 @@ export const CONTENT_DECISIONS: ContentDecision[] = [
       'Slug-rename housekeeping in P7. Renamed in Supabase from `2025-iphone-battery-wholesale-sourcing-guide-factory-direct-from-shenzhen` to drop the year prefix. Old slug 301-ed in next.config.js. meta.canonical updated to new URL.',
     round: 'P7',
     status_this_round: 'applied',
+  },
+
+  // ═════════════════════════════════════════════════════════════════════
+  // Cluster — wholesaler-verify-sourcing (P8, 2026-04-25)
+  //
+  // Identified via GSC analysis: 27 articles overlap on "how to vet/verify
+  // wholesale phone parts suppliers" intent. Top variants pulled 128+ combined
+  // impressions over 90 days at ranks 4-7 with 0 CTR — biggest validated
+  // long-tail opportunity in the site, but currently fragmented.
+  //
+  // Pillar choice: `how-to-choose-phone-parts-supplier` (87 imp / pos 4.3 /
+  // already indexed / quality 8/10). Strongest organic signal in the cluster.
+  //
+  // Secondary pillar (kept temporarily): `trustworthy-wholesale-phone-parts-
+  // suppliers-qc` is a P7 redirect target. Do NOT 301 it now — would create a
+  // chain (`how-can-you-find-trustworthy...` → `trustworthy-wholesale-...` →
+  // `how-to-choose-...`). Re-evaluate after 6 weeks: if `trustworthy-wholesale`
+  // accumulates no signal, fold it into `how-to-choose` and rewrite the P7
+  // redirect to point directly at `how-to-choose`.
+  //
+  // Status disclaimer: 4 articles read in detail; remaining 22 classified by
+  // slug/GSC desk judgement. Anything below marked `needs-human-review` should
+  // be content-read before executing the recommended action.
+  // ═════════════════════════════════════════════════════════════════════
+
+  // --- Pillar ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'how-to-choose-phone-parts-supplier',
+    title: 'How to Choose a Reliable Phone Parts Supplier: 10 Questions Every Buyer Should Ask',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'pillar',
+    primary_intent: 'broad supplier vetting framework — 10 questions + ROI math + scorecard',
+    target_keyword_theme: 'how to choose phone parts supplier / verify wholesaler',
+    recommended_action: 'keep-as-pillar',
+    target_pillar_slug: null,
+    notes:
+      'Strongest organic signal in cluster (87 imp, pos 4.3). 2,800-word body with defect-rate math, weighted scorecard, and red-flags section — pillar-quality content. Anchor for cluster.',
+    round: 'P8',
+    status_this_round: 'applied',
+  },
+  // --- Secondary pillar (observation) ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'trustworthy-wholesale-phone-parts-suppliers-qc',
+    title: 'Trustworthy Wholesale Phone Parts Suppliers: Complete QC Guide',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'distinct-intent',
+    primary_intent: 'P7 redirect target — overlaps `how-to-choose-...` but kept to avoid chain',
+    target_keyword_theme: 'trustworthy wholesale phone parts suppliers',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'P7 created this as the 301 target for `how-can-you-find-trustworthy-wholesale-suppliers-...` (185 imp). Body overlaps `how-to-choose-...` heavily (4,200 vs 2,800 words, same intent). 301-ing it now would create a chain. Observe 6 weeks; if no signal accumulates, fold into `how-to-choose-...` and rewrite P7 redirect direct.',
+    round: 'P8',
+    status_this_round: 'observation-pending',
+  },
+
+  // --- Supporting (kept — distinct angle) ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'how-repair-shops-should-use-technical-questions-to-screen-suppliers',
+    title: 'How Repair Shops Should Use Technical Questions to Screen Suppliers',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: '10 specific technical questions (IC chip names, defect rates, voltage) — distinct from generic 10-questions framework',
+    target_keyword_theme: 'technical questions to screen phone parts supplier',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'Truly distinct angle (specific IC/nit/voltage questions vs generic vetting). 8/10 quality. Keep as supporting; ensure internal link from pillar.',
+    round: 'P8',
+    status_this_round: 'applied',
+  },
+
+  // --- Cannibalization-risk → recommend-301 to pillar ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'best-cell-phone-parts-supplier-checklist-2025',
+    title: 'Best Cell Phone Parts Supplier Checklist - Quality & Reliability Guide',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: '2025 supplier evaluation checklist — overlaps pillar significantly',
+    target_keyword_theme: 'best cell phone parts supplier checklist',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      '2,100-word checklist with weighted scorecard — same shape as pillar without unique data. discovered_not_crawled by GSC. Set canonical to pillar; observe 4-6 weeks before hard 301.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'cell-phone-parts-wholesale-sourcing-guide',
+    title: 'Cell Phone Parts Wholesale Sourcing Guide',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: 'generic wholesale sourcing overview — needs-human-review',
+    target_keyword_theme: 'cell phone parts wholesale sourcing',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Sample read in earlier audit (4,200 words, mid AI-feel, generic sourcing buyer journey). Canonical to pillar. needs-human-review before hard 301.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+
+  // --- Sub-intent: verification / anti-fraud (keep both — distinct from generic vetting) ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'spot-fake-phone-screens',
+    title: 'How to Spot Fake Phone Screens',
+    current_category: 'parts-knowledge',
+    recommended_role: 'distinct-intent',
+    primary_intent: 'product-level fake detection (visual / functional tests on a screen) — not the same as supplier-level vetting',
+    target_keyword_theme: 'spot fake phone screens / fake screen detection',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Sub-intent is product-inspection (after part arrives), not supplier-vetting (before order). Keep distinct. needs-human-review of body to confirm it actually delivers product-level guidance vs generic.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'how-to-verify-original-phone-screens-without-trusting-supplier-labels',
+    title: 'How to Verify Original Phone Screens Without Trusting Supplier Labels',
+    current_category: 'parts-knowledge',
+    recommended_role: 'distinct-intent',
+    primary_intent: 'physical verification of "original" claims — overlap with `spot-fake-phone-screens` likely high',
+    target_keyword_theme: 'verify original phone screen / supplier label trust',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'spot-fake-phone-screens',
+    notes:
+      'discovered_not_crawled. Title overlap with `spot-fake-phone-screens` is heavy. Pick one as the verification-anti-fraud pillar; canonical the other. needs-human-review which has stronger body content.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+
+  // --- Sub-intent: first order / test order / MOQ ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'test-order-evaluate-phone-parts-supplier',
+    title: 'Test Order: How to Evaluate a Phone Parts Supplier Before Bulk',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: 'test-order workflow — plausibly distinct from generic vetting',
+    target_keyword_theme: 'test order phone parts supplier',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Test-order angle is a specific tactical step — could be a useful satellite. needs-human-review to confirm body delivers tactical detail.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'moq-sample-orders-lead-time-wholesale',
+    title: 'MOQ, Sample Orders, and Lead Time in Phone Parts Wholesale',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: 'MOQ + sample + lead time mechanics — distinct tactical topic',
+    target_keyword_theme: 'phone parts wholesale moq sample lead time',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. MOQ/lead-time is its own searchable topic — keep as supporting. needs-human-review.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'first-wholesale-order-templates-repair-shop',
+    title: 'First Wholesale Order Templates for Repair Shops',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: 'first-order templates — overlaps `test-order-evaluate-phone-parts-supplier`',
+    target_keyword_theme: 'first wholesale order template repair shop',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'test-order-evaluate-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Sub-cluster overlap with `test-order-...`. Canonical to that as sub-pillar; observe.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'how-repair-shops-should-structure-the-first-real-order-after-a-test-order',
+    title: 'How Repair Shops Should Structure the First Real Order After a Test Order',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: 'transition from test-order to first real order',
+    target_keyword_theme: 'first real order after test order phone parts',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'test-order-evaluate-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Direct sequel to `test-order-...`. Better consolidated than fragmented. needs-human-review.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'prepare-mixed-order-list-before-contacting-supplier',
+    title: 'Prepare a Mixed-Order List Before Contacting a Phone Parts Supplier',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: 'order-preparation tactic — narrow, low standalone signal expected',
+    target_keyword_theme: 'mixed order list phone parts supplier',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Narrow tactical post — better as a section in pillar. Canonical now; observe.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+
+  // --- Sub-intent: supplier management (DOA / dispute / delays / relationship) ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'doa-parts-policy-repair-shop-checklist',
+    title: 'DOA Parts Policy: Repair Shop Checklist',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: 'dead-on-arrival parts policy — distinct operational topic',
+    target_keyword_theme: 'doa parts policy / phone parts return',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. DOA policy is a real operational topic — keep. needs-human-review.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'phone-parts-dispute-resolution',
+    title: 'Phone Parts Dispute Resolution',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: 'dispute handling with supplier — distinct operational topic',
+    target_keyword_theme: 'phone parts dispute resolution / supplier conflict',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Dispute resolution is a real operational topic. Keep. needs-human-review for overlap with `doa-parts-policy-...`.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'phone-parts-supplier-delays',
+    title: 'Phone Parts Supplier Delays',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: 'supplier delay handling — likely overlaps with dispute / relationship articles',
+    target_keyword_theme: 'phone parts supplier delays / lead time issues',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'indexed_no_traffic. Narrow topic, better as section in pillar or dispute article. Canonical; observe.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'phone-parts-supplier-relationship',
+    title: 'Phone Parts Supplier Relationship',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: 'long-term supplier relationship management — generic',
+    target_keyword_theme: 'phone parts supplier relationship',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Generic relationship-management framing — likely AI-template. Canonical; observe; lean toward 301 if review confirms no unique value.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'check-before-repeat-order-phone-parts-supplier',
+    title: 'Check Before Repeat Order: Phone Parts Supplier',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'cannibalization-risk',
+    primary_intent: 'reorder QC checklist — narrow',
+    target_keyword_theme: 'check before reorder phone parts',
+    recommended_action: 'canonical-to-pillar',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Narrow tactical post about repeat orders. Canonical to pillar.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+
+  // --- Sub-intent: geographic sourcing (China / UK / Huaqiangbei) ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'huaqiangbei-vs-online-sourcing',
+    title: 'Huaqiangbei vs Online Sourcing for Phone Parts',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: 'Huaqiangbei market vs online platforms (Alibaba/AliExpress)',
+    target_keyword_theme: 'huaqiangbei vs online sourcing phone parts',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Geographic angle is searchable and distinct. PRSPARES has authentic Huaqiangbei perspective — opportunity to add real first-hand data. Keep + UPGRADE candidate.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'china-phone-parts-suppliers-quality-vs-cost',
+    title: 'China Phone Parts Suppliers: Quality vs Cost Trade-offs',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: 'China-specific quality/cost trade-off framing',
+    target_keyword_theme: 'china phone parts suppliers quality vs cost',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'indexed_no_traffic. P7 already 301-ed the long-form variant `are-chinese-phone-parts-suppliers-really-worth-the-risk-...` to this. Keep. UPGRADE candidate (Shenzhen first-hand data).',
+    round: 'P8',
+    status_this_round: 'applied',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'paying-china-phone-parts-supplier',
+    title: 'Paying a China Phone Parts Supplier (T/T, Alipay, Trade Assurance)',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: 'payment methods + trade assurance — narrow but searchable',
+    target_keyword_theme: 'pay china phone parts supplier / T/T alipay',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Payment-mechanics is a real searchable topic for first-time China buyers. Keep.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'local-supplier-vs-china-direct-when-paying-more-saves-money',
+    title: 'Local Supplier vs China Direct: When Paying More Saves Money',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'distinct-intent',
+    primary_intent: 'local vs China decision framework — counter-intuitive angle',
+    target_keyword_theme: 'local supplier vs china direct phone parts',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. Counter-intuitive framing ("when paying more saves money") — distinct angle. Keep.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'wholesale-phone-parts-supplier-uk',
+    title: 'Wholesale Phone Parts Supplier in the UK',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'supporting',
+    primary_intent: 'UK-specific sourcing — important for UK GSC traffic surge in Mar-Apr',
+    target_keyword_theme: 'wholesale phone parts supplier uk',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'discovered_not_crawled. UK angle is timely (UK queries are PRSPARES top non-brand impressions in 28d). UPGRADE candidate — add real UK shipping/VAT/import data.',
+    round: 'P8',
+    status_this_round: 'code-only',
+  },
+
+  // --- Sub-intent: risk management ---
+  {
+    cluster: 'wholesaler-verify-sourcing',
+    slug: 'why-risk-your-business-on-single-source-display-suppliers',
+    title: 'Why Risk Your Business on Single-Source Display Suppliers?',
+    current_category: 'sourcing-suppliers',
+    recommended_role: 'distinct-intent',
+    primary_intent: 'single-source vs multi-source supplier risk',
+    target_keyword_theme: 'single-source supplier risk / supplier diversification',
+    recommended_action: 'keep-as-supporting',
+    target_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    notes:
+      'indexed_no_traffic. Already in `blog-301-candidates.ts` as observe_longer (canonical-to-pillar set). Distinct angle (diversification). Pillar should add a "single-source vs multi-source" section before considering 301.',
+    round: 'P8',
+    status_this_round: 'observation-pending',
   },
 ];
 

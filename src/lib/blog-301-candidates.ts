@@ -110,6 +110,23 @@ export const CANDIDATES_301: Candidate301[] = [
       'Redirect added to next.config.js (P7 block) — also bypasses the long-form redirect at line 132 of next.config.js so we go directly long → pillar without a chain.',
   },
   {
+    from_slug: 'oled-vs-lcd-comprehensive-comparison',
+    current_title: 'OLED vs LCD: Comprehensive Mobile Display Technology Comparison',
+    to_pillar_slug: 'lcd-vs-oled-hard-soft-oled-repair-shops',
+    why_recommended_for_301:
+      'Generic OLED vs LCD overview duplicating the repair-shop pillar (same body shape as `oled-vs-lcd-comparison-guide` and `whats-the-real-difference-between-oled-and-lcd-phone-screens`, which were already 301-ed in P7). 38 GSC imp / 0 clk over 90 days — 0 unique value vs pillar.',
+    prerequisite_before_301:
+      'None — same pattern as the other two OLED/LCD generic overviews already merged in P7 (2026-04-22).',
+    suggested_observation_window: 'observation period bypassed — clear consolidation case (P7 pattern)',
+    canonical_applied_on: '2026-04-25',
+    recheck_after: '2026-06-06',
+    status: 'ready_for_301',
+    decision_reason:
+      'P7 follow-up — the third "oled-vs-lcd generic overview" article that should have been swept up with the other two but was missed (different slug naming). Same merge target as the other two.',
+    review_date: '2026-04-25',
+    next_action: 'Redirect added to next.config.js immediately after the P7 block; ship with next deploy.',
+  },
+  {
     from_slug: '2025-iphone-battery-wholesale-sourcing-guide-factory-direct-from-shenzhen',
     current_title: 'iPhone Battery Wholesale Sourcing Guide 2026: Factory Direct from Shenzhen',
     to_pillar_slug: 'iphone-battery-wholesale-sourcing-guide-shenzhen',
