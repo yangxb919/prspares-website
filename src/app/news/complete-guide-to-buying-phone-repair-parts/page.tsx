@@ -594,7 +594,7 @@ export default function PhoneRepairPartsGuide() {
               href="/products"
               className="inline-flex items-center bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
-              Browse Products
+              Browse Catalog
               <ArrowRight className="w-5 h-5 ml-2" />
             </Link>
             <Link

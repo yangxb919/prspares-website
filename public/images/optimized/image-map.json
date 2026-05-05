@@ -431,6 +431,198 @@
       ]
     }
   },
+  "home-redesign/category-batteries.png": {
+    "original": "home-redesign/category-batteries.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/category-batteries-800w.webp",
+        "images/optimized/category-batteries-600w.webp",
+        "images/optimized/category-batteries-400w.webp",
+        "images/optimized/category-batteries-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/category-batteries-800w.avif",
+        "images/optimized/category-batteries-600w.avif",
+        "images/optimized/category-batteries-400w.avif",
+        "images/optimized/category-batteries-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/category-batteries-800w.jpeg",
+        "images/optimized/category-batteries-600w.jpeg",
+        "images/optimized/category-batteries-400w.jpeg",
+        "images/optimized/category-batteries-300w.jpeg"
+      ]
+    }
+  },
+  "home-redesign/category-repair-tools.png": {
+    "original": "home-redesign/category-repair-tools.png",
+    "type": "tool",
+    "formats": {
+      "webp": [
+        "images/optimized/category-repair-tools-600w.webp",
+        "images/optimized/category-repair-tools-400w.webp",
+        "images/optimized/category-repair-tools-300w.webp",
+        "images/optimized/category-repair-tools-200w.webp"
+      ],
+      "avif": [
+        "images/optimized/category-repair-tools-600w.avif",
+        "images/optimized/category-repair-tools-400w.avif",
+        "images/optimized/category-repair-tools-300w.avif",
+        "images/optimized/category-repair-tools-200w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/category-repair-tools-600w.jpeg",
+        "images/optimized/category-repair-tools-400w.jpeg",
+        "images/optimized/category-repair-tools-300w.jpeg",
+        "images/optimized/category-repair-tools-200w.jpeg"
+      ]
+    }
+  },
+  "home-redesign/category-screens.png": {
+    "original": "home-redesign/category-screens.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/category-screens-800w.webp",
+        "images/optimized/category-screens-600w.webp",
+        "images/optimized/category-screens-400w.webp",
+        "images/optimized/category-screens-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/category-screens-800w.avif",
+        "images/optimized/category-screens-600w.avif",
+        "images/optimized/category-screens-400w.avif",
+        "images/optimized/category-screens-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/category-screens-800w.jpeg",
+        "images/optimized/category-screens-600w.jpeg",
+        "images/optimized/category-screens-400w.jpeg",
+        "images/optimized/category-screens-300w.jpeg"
+      ]
+    }
+  },
+  "home-redesign/category-small-parts.png": {
+    "original": "home-redesign/category-small-parts.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/category-small-parts-800w.webp",
+        "images/optimized/category-small-parts-600w.webp",
+        "images/optimized/category-small-parts-400w.webp",
+        "images/optimized/category-small-parts-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/category-small-parts-800w.avif",
+        "images/optimized/category-small-parts-600w.avif",
+        "images/optimized/category-small-parts-400w.avif",
+        "images/optimized/category-small-parts-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/category-small-parts-800w.jpeg",
+        "images/optimized/category-small-parts-600w.jpeg",
+        "images/optimized/category-small-parts-400w.jpeg",
+        "images/optimized/category-small-parts-300w.jpeg"
+      ]
+    }
+  },
+  "home-redesign/hero-warehouse-stock.png": {
+    "original": "home-redesign/hero-warehouse-stock.png",
+    "type": "hero",
+    "formats": {
+      "webp": [
+        "images/optimized/hero-warehouse-stock-1200w.webp",
+        "images/optimized/hero-warehouse-stock-800w.webp",
+        "images/optimized/hero-warehouse-stock-600w.webp",
+        "images/optimized/hero-warehouse-stock-400w.webp"
+      ],
+      "avif": [
+        "images/optimized/hero-warehouse-stock-1200w.avif",
+        "images/optimized/hero-warehouse-stock-800w.avif",
+        "images/optimized/hero-warehouse-stock-600w.avif",
+        "images/optimized/hero-warehouse-stock-400w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/hero-warehouse-stock-1200w.jpeg",
+        "images/optimized/hero-warehouse-stock-800w.jpeg",
+        "images/optimized/hero-warehouse-stock-600w.jpeg",
+        "images/optimized/hero-warehouse-stock-400w.jpeg"
+      ]
+    }
+  },
+  "home-redesign/proof-packing-station.png": {
+    "original": "home-redesign/proof-packing-station.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/proof-packing-station-800w.webp",
+        "images/optimized/proof-packing-station-600w.webp",
+        "images/optimized/proof-packing-station-400w.webp",
+        "images/optimized/proof-packing-station-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/proof-packing-station-800w.avif",
+        "images/optimized/proof-packing-station-600w.avif",
+        "images/optimized/proof-packing-station-400w.avif",
+        "images/optimized/proof-packing-station-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/proof-packing-station-800w.jpeg",
+        "images/optimized/proof-packing-station-600w.jpeg",
+        "images/optimized/proof-packing-station-400w.jpeg",
+        "images/optimized/proof-packing-station-300w.jpeg"
+      ]
+    }
+  },
+  "home-redesign/proof-sku-coverage.png": {
+    "original": "home-redesign/proof-sku-coverage.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/proof-sku-coverage-800w.webp",
+        "images/optimized/proof-sku-coverage-600w.webp",
+        "images/optimized/proof-sku-coverage-400w.webp",
+        "images/optimized/proof-sku-coverage-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/proof-sku-coverage-800w.avif",
+        "images/optimized/proof-sku-coverage-600w.avif",
+        "images/optimized/proof-sku-coverage-400w.avif",
+        "images/optimized/proof-sku-coverage-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/proof-sku-coverage-800w.jpeg",
+        "images/optimized/proof-sku-coverage-600w.jpeg",
+        "images/optimized/proof-sku-coverage-400w.jpeg",
+        "images/optimized/proof-sku-coverage-300w.jpeg"
+      ]
+    }
+  },
+  "home-redesign/proof-stock-shelves.png": {
+    "original": "home-redesign/proof-stock-shelves.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/proof-stock-shelves-800w.webp",
+        "images/optimized/proof-stock-shelves-600w.webp",
+        "images/optimized/proof-stock-shelves-400w.webp",
+        "images/optimized/proof-stock-shelves-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/proof-stock-shelves-800w.avif",
+        "images/optimized/proof-stock-shelves-600w.avif",
+        "images/optimized/proof-stock-shelves-400w.avif",
+        "images/optimized/proof-stock-shelves-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/proof-stock-shelves-800w.jpeg",
+        "images/optimized/proof-stock-shelves-600w.jpeg",
+        "images/optimized/proof-stock-shelves-400w.jpeg",
+        "images/optimized/proof-stock-shelves-300w.jpeg"
+      ]
+    }
+  },
   "industry_chain_structure.jpg": {
     "original": "industry_chain_structure.jpg",
     "type": "product",
@@ -6644,6 +6836,438 @@
         "images/optimized/visionox_oled-600w.jpeg",
         "images/optimized/visionox_oled-400w.jpeg",
         "images/optimized/visionox_oled-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_02.jpg": {
+    "original": "wholesale/img_02.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_02-800w.webp",
+        "images/optimized/img_02-600w.webp",
+        "images/optimized/img_02-400w.webp",
+        "images/optimized/img_02-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_02-800w.avif",
+        "images/optimized/img_02-600w.avif",
+        "images/optimized/img_02-400w.avif",
+        "images/optimized/img_02-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_02-800w.jpeg",
+        "images/optimized/img_02-600w.jpeg",
+        "images/optimized/img_02-400w.jpeg",
+        "images/optimized/img_02-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_04.jpg": {
+    "original": "wholesale/img_04.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_04-800w.webp",
+        "images/optimized/img_04-600w.webp",
+        "images/optimized/img_04-400w.webp",
+        "images/optimized/img_04-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_04-800w.avif",
+        "images/optimized/img_04-600w.avif",
+        "images/optimized/img_04-400w.avif",
+        "images/optimized/img_04-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_04-800w.jpeg",
+        "images/optimized/img_04-600w.jpeg",
+        "images/optimized/img_04-400w.jpeg",
+        "images/optimized/img_04-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_09.jpg": {
+    "original": "wholesale/img_09.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_09-800w.webp",
+        "images/optimized/img_09-600w.webp",
+        "images/optimized/img_09-400w.webp",
+        "images/optimized/img_09-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_09-800w.avif",
+        "images/optimized/img_09-600w.avif",
+        "images/optimized/img_09-400w.avif",
+        "images/optimized/img_09-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_09-800w.jpeg",
+        "images/optimized/img_09-600w.jpeg",
+        "images/optimized/img_09-400w.jpeg",
+        "images/optimized/img_09-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_10.jpg": {
+    "original": "wholesale/img_10.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_10-800w.webp",
+        "images/optimized/img_10-600w.webp",
+        "images/optimized/img_10-400w.webp",
+        "images/optimized/img_10-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_10-800w.avif",
+        "images/optimized/img_10-600w.avif",
+        "images/optimized/img_10-400w.avif",
+        "images/optimized/img_10-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_10-800w.jpeg",
+        "images/optimized/img_10-600w.jpeg",
+        "images/optimized/img_10-400w.jpeg",
+        "images/optimized/img_10-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_12.jpg": {
+    "original": "wholesale/img_12.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_12-800w.webp",
+        "images/optimized/img_12-600w.webp",
+        "images/optimized/img_12-400w.webp",
+        "images/optimized/img_12-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_12-800w.avif",
+        "images/optimized/img_12-600w.avif",
+        "images/optimized/img_12-400w.avif",
+        "images/optimized/img_12-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_12-800w.jpeg",
+        "images/optimized/img_12-600w.jpeg",
+        "images/optimized/img_12-400w.jpeg",
+        "images/optimized/img_12-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_16.jpg": {
+    "original": "wholesale/img_16.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_16-800w.webp",
+        "images/optimized/img_16-600w.webp",
+        "images/optimized/img_16-400w.webp",
+        "images/optimized/img_16-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_16-800w.avif",
+        "images/optimized/img_16-600w.avif",
+        "images/optimized/img_16-400w.avif",
+        "images/optimized/img_16-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_16-800w.jpeg",
+        "images/optimized/img_16-600w.jpeg",
+        "images/optimized/img_16-400w.jpeg",
+        "images/optimized/img_16-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_17.jpg": {
+    "original": "wholesale/img_17.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_17-800w.webp",
+        "images/optimized/img_17-600w.webp",
+        "images/optimized/img_17-400w.webp",
+        "images/optimized/img_17-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_17-800w.avif",
+        "images/optimized/img_17-600w.avif",
+        "images/optimized/img_17-400w.avif",
+        "images/optimized/img_17-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_17-800w.jpeg",
+        "images/optimized/img_17-600w.jpeg",
+        "images/optimized/img_17-400w.jpeg",
+        "images/optimized/img_17-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_20.jpg": {
+    "original": "wholesale/img_20.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_20-800w.webp",
+        "images/optimized/img_20-600w.webp",
+        "images/optimized/img_20-400w.webp",
+        "images/optimized/img_20-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_20-800w.avif",
+        "images/optimized/img_20-600w.avif",
+        "images/optimized/img_20-400w.avif",
+        "images/optimized/img_20-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_20-800w.jpeg",
+        "images/optimized/img_20-600w.jpeg",
+        "images/optimized/img_20-400w.jpeg",
+        "images/optimized/img_20-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_23.jpg": {
+    "original": "wholesale/img_23.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_23-800w.webp",
+        "images/optimized/img_23-600w.webp",
+        "images/optimized/img_23-400w.webp",
+        "images/optimized/img_23-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_23-800w.avif",
+        "images/optimized/img_23-600w.avif",
+        "images/optimized/img_23-400w.avif",
+        "images/optimized/img_23-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_23-800w.jpeg",
+        "images/optimized/img_23-600w.jpeg",
+        "images/optimized/img_23-400w.jpeg",
+        "images/optimized/img_23-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_24.jpg": {
+    "original": "wholesale/img_24.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_24-800w.webp",
+        "images/optimized/img_24-600w.webp",
+        "images/optimized/img_24-400w.webp",
+        "images/optimized/img_24-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_24-800w.avif",
+        "images/optimized/img_24-600w.avif",
+        "images/optimized/img_24-400w.avif",
+        "images/optimized/img_24-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_24-800w.jpeg",
+        "images/optimized/img_24-600w.jpeg",
+        "images/optimized/img_24-400w.jpeg",
+        "images/optimized/img_24-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/img_30.jpg": {
+    "original": "wholesale/img_30.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/img_30-800w.webp",
+        "images/optimized/img_30-600w.webp",
+        "images/optimized/img_30-400w.webp",
+        "images/optimized/img_30-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/img_30-800w.avif",
+        "images/optimized/img_30-600w.avif",
+        "images/optimized/img_30-400w.avif",
+        "images/optimized/img_30-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/img_30-800w.jpeg",
+        "images/optimized/img_30-600w.jpeg",
+        "images/optimized/img_30-400w.jpeg",
+        "images/optimized/img_30-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/vid_02_poster.jpg": {
+    "original": "wholesale/vid_02_poster.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/vid_02_poster-800w.webp",
+        "images/optimized/vid_02_poster-600w.webp",
+        "images/optimized/vid_02_poster-400w.webp",
+        "images/optimized/vid_02_poster-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/vid_02_poster-800w.avif",
+        "images/optimized/vid_02_poster-600w.avif",
+        "images/optimized/vid_02_poster-400w.avif",
+        "images/optimized/vid_02_poster-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/vid_02_poster-800w.jpeg",
+        "images/optimized/vid_02_poster-600w.jpeg",
+        "images/optimized/vid_02_poster-400w.jpeg",
+        "images/optimized/vid_02_poster-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/vid_03_poster.jpg": {
+    "original": "wholesale/vid_03_poster.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/vid_03_poster-800w.webp",
+        "images/optimized/vid_03_poster-600w.webp",
+        "images/optimized/vid_03_poster-400w.webp",
+        "images/optimized/vid_03_poster-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/vid_03_poster-800w.avif",
+        "images/optimized/vid_03_poster-600w.avif",
+        "images/optimized/vid_03_poster-400w.avif",
+        "images/optimized/vid_03_poster-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/vid_03_poster-800w.jpeg",
+        "images/optimized/vid_03_poster-600w.jpeg",
+        "images/optimized/vid_03_poster-400w.jpeg",
+        "images/optimized/vid_03_poster-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/vid_04_poster.jpg": {
+    "original": "wholesale/vid_04_poster.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/vid_04_poster-800w.webp",
+        "images/optimized/vid_04_poster-600w.webp",
+        "images/optimized/vid_04_poster-400w.webp",
+        "images/optimized/vid_04_poster-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/vid_04_poster-800w.avif",
+        "images/optimized/vid_04_poster-600w.avif",
+        "images/optimized/vid_04_poster-400w.avif",
+        "images/optimized/vid_04_poster-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/vid_04_poster-800w.jpeg",
+        "images/optimized/vid_04_poster-600w.jpeg",
+        "images/optimized/vid_04_poster-400w.jpeg",
+        "images/optimized/vid_04_poster-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/vid_05_poster.jpg": {
+    "original": "wholesale/vid_05_poster.jpg",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/vid_05_poster-800w.webp",
+        "images/optimized/vid_05_poster-600w.webp",
+        "images/optimized/vid_05_poster-400w.webp",
+        "images/optimized/vid_05_poster-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/vid_05_poster-800w.avif",
+        "images/optimized/vid_05_poster-600w.avif",
+        "images/optimized/vid_05_poster-400w.avif",
+        "images/optimized/vid_05_poster-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/vid_05_poster-800w.jpeg",
+        "images/optimized/vid_05_poster-600w.jpeg",
+        "images/optimized/vid_05_poster-400w.jpeg",
+        "images/optimized/vid_05_poster-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/whatsapp_chat_bulk_order.png": {
+    "original": "wholesale/whatsapp_chat_bulk_order.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/whatsapp_chat_bulk_order-800w.webp",
+        "images/optimized/whatsapp_chat_bulk_order-600w.webp",
+        "images/optimized/whatsapp_chat_bulk_order-400w.webp",
+        "images/optimized/whatsapp_chat_bulk_order-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/whatsapp_chat_bulk_order-800w.avif",
+        "images/optimized/whatsapp_chat_bulk_order-600w.avif",
+        "images/optimized/whatsapp_chat_bulk_order-400w.avif",
+        "images/optimized/whatsapp_chat_bulk_order-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/whatsapp_chat_bulk_order-800w.jpeg",
+        "images/optimized/whatsapp_chat_bulk_order-600w.jpeg",
+        "images/optimized/whatsapp_chat_bulk_order-400w.jpeg",
+        "images/optimized/whatsapp_chat_bulk_order-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/whatsapp_chat_fast_shipping.png": {
+    "original": "wholesale/whatsapp_chat_fast_shipping.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/whatsapp_chat_fast_shipping-800w.webp",
+        "images/optimized/whatsapp_chat_fast_shipping-600w.webp",
+        "images/optimized/whatsapp_chat_fast_shipping-400w.webp",
+        "images/optimized/whatsapp_chat_fast_shipping-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/whatsapp_chat_fast_shipping-800w.avif",
+        "images/optimized/whatsapp_chat_fast_shipping-600w.avif",
+        "images/optimized/whatsapp_chat_fast_shipping-400w.avif",
+        "images/optimized/whatsapp_chat_fast_shipping-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/whatsapp_chat_fast_shipping-800w.jpeg",
+        "images/optimized/whatsapp_chat_fast_shipping-600w.jpeg",
+        "images/optimized/whatsapp_chat_fast_shipping-400w.jpeg",
+        "images/optimized/whatsapp_chat_fast_shipping-300w.jpeg"
+      ]
+    }
+  },
+  "wholesale/whatsapp_chat_quality_feedback.png": {
+    "original": "wholesale/whatsapp_chat_quality_feedback.png",
+    "type": "product",
+    "formats": {
+      "webp": [
+        "images/optimized/whatsapp_chat_quality_feedback-800w.webp",
+        "images/optimized/whatsapp_chat_quality_feedback-600w.webp",
+        "images/optimized/whatsapp_chat_quality_feedback-400w.webp",
+        "images/optimized/whatsapp_chat_quality_feedback-300w.webp"
+      ],
+      "avif": [
+        "images/optimized/whatsapp_chat_quality_feedback-800w.avif",
+        "images/optimized/whatsapp_chat_quality_feedback-600w.avif",
+        "images/optimized/whatsapp_chat_quality_feedback-400w.avif",
+        "images/optimized/whatsapp_chat_quality_feedback-300w.avif"
+      ],
+      "jpeg": [
+        "images/optimized/whatsapp_chat_quality_feedback-800w.jpeg",
+        "images/optimized/whatsapp_chat_quality_feedback-600w.jpeg",
+        "images/optimized/whatsapp_chat_quality_feedback-400w.jpeg",
+        "images/optimized/whatsapp_chat_quality_feedback-300w.jpeg"
       ]
     }
   }

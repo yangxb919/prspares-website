@@ -38,33 +38,44 @@ interface TurnstileProps {
 }
 
 let scriptLoaded = false;
-let scriptLoading = false;
-const pendingCallbacks: (() => void)[] = [];
+let scriptLoadPromise: Promise<void> | null = null;
+
+const SCRIPT_LOAD_TIMEOUT_MS = 10_000;
 
 function loadTurnstileScript(): Promise<void> {
   if (scriptLoaded) return Promise.resolve();
+  if (scriptLoadPromise) return scriptLoadPromise;
 
-  return new Promise((resolve) => {
-    if (scriptLoading) {
-      pendingCallbacks.push(resolve);
-      return;
-    }
-    scriptLoading = true;
+  scriptLoadPromise = new Promise<void>((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      if (!scriptLoaded) {
+        reject(new Error('Turnstile script load timeout'));
+      }
+    }, SCRIPT_LOAD_TIMEOUT_MS);
 
     window.onTurnstileLoad = () => {
       scriptLoaded = true;
-      scriptLoading = false;
+      clearTimeout(timeoutId);
       resolve();
-      pendingCallbacks.forEach((cb) => cb());
-      pendingCallbacks.length = 0;
     };
 
     const script = document.createElement('script');
     script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad';
     script.async = true;
     script.defer = true;
+    script.onerror = () => {
+      clearTimeout(timeoutId);
+      reject(new Error('Turnstile script failed to load'));
+    };
     document.head.appendChild(script);
   });
+
+  // Reset cached promise on failure so future mounts can retry.
+  scriptLoadPromise.catch(() => {
+    scriptLoadPromise = null;
+  });
+
+  return scriptLoadPromise;
 }
 
 export default function Turnstile({
@@ -111,10 +122,14 @@ export default function Turnstile({
   }, [siteKey, onVerify, onError, onExpire, appearance, theme, size]);
 
   useEffect(() => {
-    loadTurnstileScript().then(() => {
-      setIsReady(true);
-      renderWidget();
-    });
+    loadTurnstileScript()
+      .then(() => {
+        setIsReady(true);
+        renderWidget();
+      })
+      .catch(() => {
+        onError?.();
+      });
 
     return () => {
       if (widgetIdRef.current && window.turnstile) {
@@ -125,7 +140,7 @@ export default function Turnstile({
         }
       }
     };
-  }, [renderWidget]);
+  }, [renderWidget, onError]);
 
   // Re-render if siteKey changes
   useEffect(() => {

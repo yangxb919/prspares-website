@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { X, Send, User, Mail, Phone, Building2, Package, MessageSquare, CheckCircle } from 'lucide-react';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
 import { trackEvent } from '@/lib/analytics';
+import { useTurnstile } from '@/components/common/Turnstile';
+import Honeypot from '@/components/common/Honeypot';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -35,8 +37,25 @@ export default function QuoteModal({ isOpen, onClose, productName, articleTitle 
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+  const {
+    token: turnstileToken,
+    isVerified: isTurnstileVerified,
+    hasError: turnstileError,
+    TurnstileWidget,
+  } = useTurnstile(turnstileSiteKey);
+  const honeypotRef = useRef<HTMLInputElement>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const turnstileRequired = turnstileSiteKey && !turnstileError;
+    if (turnstileRequired && !isTurnstileVerified) {
+      setErrorMsg('Please complete the verification challenge.');
+      setSubmitStatus('error');
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
     setErrorMsg('');
@@ -61,6 +80,8 @@ export default function QuoteModal({ isOpen, onClose, productName, articleTitle 
         message: msgParts,
         pageUrl,
         submittedAt: new Date().toISOString(),
+        turnstileToken: turnstileToken || undefined,
+        honeypot: honeypotRef.current?.value,
       });
 
       // GA4 conversion
@@ -123,6 +144,7 @@ export default function QuoteModal({ isOpen, onClose, productName, articleTitle 
         ) : (
           /* Form */
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
+            <Honeypot ref={honeypotRef} />
             {/* Product — pre-filled, editable */}
             {(productName || formData.product) && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg px-4 py-3 flex items-center gap-3">
@@ -256,6 +278,13 @@ export default function QuoteModal({ isOpen, onClose, productName, articleTitle 
               </div>
             </div>
 
+            {/* Turnstile verification */}
+            {turnstileSiteKey && (
+              <div className="flex justify-center">
+                <TurnstileWidget />
+              </div>
+            )}
+
             {/* Error message */}
             {submitStatus === 'error' && (
               <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-red-700 text-sm">
@@ -266,7 +295,7 @@ export default function QuoteModal({ isOpen, onClose, productName, articleTitle 
             {/* Submit */}
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || (!!turnstileSiteKey && !turnstileError && !isTurnstileVerified)}
               className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 text-base shadow-lg shadow-orange-500/20 hover:shadow-xl hover:-translate-y-0.5"
             >
               {isSubmitting ? (

@@ -2,11 +2,29 @@ import type { Metadata } from 'next';
 import { createPublicClient } from '@/utils/supabase-public';
 import Link from 'next/link';
 import Image from 'next/image';
+import type { CSSProperties } from 'react';
+import {
+  ArrowRight,
+  BadgeCheck,
+  BookOpen,
+  Briefcase,
+  Clock,
+  Factory,
+  Layers3,
+  ListChecks,
+  Mail,
+  MessageSquare,
+  Newspaper,
+  PackageCheck,
+  Search,
+  Smartphone,
+  Wrench,
+  type LucideIcon,
+} from 'lucide-react';
 import { ArticleCard } from '@/types/blog';
-import BlogHeader from '@/components/features/BlogHeader';
-import Breadcrumb from '@/components/shared/Breadcrumb';
 import SafeImage from '@/components/SafeImage';
 import BlogNewsletterSubscribe from '@/components/features/BlogNewsletterSubscribe';
+import ScrollAnimator from '@/components/ScrollAnimator';
 import { BLOG_CATEGORIES } from '@/lib/blog-categories';
 import { pickPostDescription } from '@/lib/post-description';
 
@@ -22,15 +40,47 @@ const baseMetadata: Metadata = {
     type: 'website',
     url: '/blog',
     siteName: 'PRSPARES',
-    images: ['/PRSPARES1.png'],
+    images: ['/hero/products.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Phone Repair Guides & Wholesale Parts Sourcing Tips | PRSPARES',
     description: 'Phone repair guides, wholesale sourcing tips, and parts quality insights for repair shops and distributors — from a Shenzhen factory-direct supplier.',
-    images: ['/PRSPARES1.png'],
+    images: ['/hero/products.jpg'],
   },
 };
+
+const topicIcons: Record<string, LucideIcon> = {
+  'repair-guides': Wrench,
+  'parts-knowledge': Smartphone,
+  'sourcing-suppliers': PackageCheck,
+  'business-tips': Briefcase,
+  'industry-insights': Factory,
+};
+
+function revealStyle(delay: number): CSSProperties {
+  return { '--reveal-delay': `${delay}ms` } as CSSProperties;
+}
+
+function SectionTitle({
+  eyebrow,
+  title,
+  text,
+}: {
+  eyebrow: string;
+  title: string;
+  text?: string;
+}) {
+  return (
+    <div className="mb-8 grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+      <div>
+        <p className="text-sm font-bold text-[#0b6b45]">{eyebrow}</p>
+        <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-5xl">{title}</h2>
+      </div>
+      {text && <p className="text-base leading-7 text-[#52606d] md:text-lg">{text}</p>}
+    </div>
+  );
+}
 
 type BlogSearchParams = {
   category?: string;
@@ -228,209 +278,287 @@ export default async function BlogPage({
   // the non-indexed `?category=` filter. Keeping the query-string filter working
   // for deep links but internal navigation stays SEO-clean.
   const tabs = [
-    { id: 'all', label: '📚 All Articles', href: '/blog' },
+    { id: 'all', label: 'All Articles', href: '/blog', icon: BookOpen },
     ...BLOG_CATEGORIES.map((c) => ({
       id: c.slug,
-      label: `${c.emoji} ${c.label}`,
+      label: c.label,
       href: `/blog/category/${c.slug}`,
+      icon: topicIcons[c.slug] || ListChecks,
     })),
   ];
 
-  // Breadcrumb navigation data
-  const breadcrumbItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Blog', href: '/blog', isCurrent: true },
-  ];
+  const activeTopicLabel = searchParams.category
+    ? categoryLabels[searchParams.category] || 'Articles'
+    : 'Latest Articles';
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <BlogHeader />
-      
-      <section className="py-8">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} />
+    <main className="min-h-screen bg-[#f5f3ee] text-[#18212c]">
+      <ScrollAnimator />
+
+      <section className="relative overflow-hidden bg-[#101820] text-white">
+        <Image
+          src="/hero/products.jpg"
+          alt="PRSPARES repair parts editorial workbench"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,16,24,0.95),rgba(10,16,24,0.78)_48%,rgba(10,16,24,0.32))]" />
+        <div className="relative mx-auto grid min-h-[520px] max-w-7xl items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[0.96fr_1.04fr] lg:px-8">
+          <div>
+            <div className="mb-5 inline-flex items-center gap-2 border border-white/25 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur">
+              <BadgeCheck className="h-4 w-4 text-[#51d88a]" />
+              PRSPARES repair parts knowledge base
+            </div>
+            <h1 className="max-w-4xl text-4xl font-black leading-[1.05] text-white sm:text-5xl lg:text-6xl">
+              Phone Repair Guides for Wholesale Buyers
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100">
+              Practical sourcing notes, QC checklists and repair-shop buying guides for teams that stock screens, batteries, small parts, IC chips and tools.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="#latest-guides"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-[#ff8a2a] px-6 py-4 text-base font-bold text-white shadow-lg shadow-black/25 transition hover:bg-[#e97313]"
+              >
+                Read Latest Guides
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 bg-white/10 px-6 py-4 text-base font-bold text-white backdrop-blur transition hover:bg-white/20"
+              >
+                Browse Catalog
+              </Link>
+            </div>
+          </div>
+
+          <div className="hidden lg:block">
+            <div className="border border-white/20 bg-black/30 p-5 backdrop-blur">
+              <div className="flex items-center justify-between gap-4 border-b border-white/15 pb-4">
+                <div>
+                  <div className="text-sm font-bold text-[#bff2d0]">Editorial map</div>
+                  <div className="mt-1 text-2xl font-black text-white">Repair · QC · Sourcing</div>
+                </div>
+                <Newspaper className="h-9 w-9 text-[#ffb36b]" />
+              </div>
+              <div className="mt-4 space-y-3">
+                {[
+                  ['Screen quality', 'OLED, Incell, frame fit and callback risk'],
+                  ['Battery buying', 'Capacity, packing, route and MOQ notes'],
+                  ['Supplier checks', 'Factory-direct sourcing and QC questions'],
+                ].map(([title, text]) => (
+                  <div key={title} className="border border-white/12 bg-white/[0.07] p-3">
+                    <div className="text-sm font-black text-white">{title}</div>
+                    <div className="mt-1 text-xs leading-5 text-slate-300">{text}</div>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-sm font-semibold text-white/60">Built for repair shops, distributors and sourcing teams.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="bg-white sticky top-[70px] z-10 shadow-sm">
-        <div className="max-w-[1200px] mx-auto px-4">
-          <div className="flex items-center justify-center py-6">
-            <div className="flex items-center space-x-1 bg-gray-100 p-1 rounded-lg overflow-x-auto">
-              {tabs.map(tab => (
+      <section className="border-b border-[#d9d2c4] bg-[#fffaf0]">
+        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-5 sm:px-6 md:grid-cols-4 lg:px-8">
+          {[
+            [String(articles.length), 'published guides', 'Live repair and sourcing articles'],
+            [String(BLOG_CATEGORIES.length), 'topic hubs', 'Repair, sourcing and shop operations'],
+            ['24h', 'quote context', 'Content tied to wholesale buying workflows'],
+            ['B2B', 'reader focus', 'Repair shops, wholesalers and distributors'],
+          ].map(([value, label, detail]) => (
+            <div key={label} className="border border-[#e4d8c2] bg-white px-4 py-4">
+              <div className="font-mono text-2xl font-black text-[#ff8a2a]">{value}</div>
+              <div className="mt-1 text-sm font-black text-[#18212c]">{label}</div>
+              <div className="mt-1 text-xs leading-5 text-[#52606d]">{detail}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="sticky top-[70px] z-20 border-b border-[#ded6c8] bg-[#FBF7F0]/95 backdrop-blur">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 overflow-x-auto">
+            {tabs.map((tab) => {
+              const active = (!searchParams.category && tab.id === 'all') || searchParams.category === tab.id;
+              const Icon = tab.icon;
+              return (
                 <Link
                   key={tab.id}
                   href={tab.href}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 whitespace-nowrap ${
-                    (!searchParams.category && tab.id === 'all') || searchParams.category === tab.id
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  className={`inline-flex shrink-0 items-center gap-2 rounded-md border px-3 py-2 text-sm font-black transition ${
+                    active
+                      ? 'border-[#0b6b45] bg-[#0b6b45] text-white'
+                      : 'border-[#e4d8c2] bg-white text-[#27313c] hover:border-[#ff8a2a] hover:text-[#0b6b45]'
                   }`}
                 >
+                  <Icon className="h-4 w-4" />
                   {tab.label}
                 </Link>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-[1200px] mx-auto px-4 py-12">
-        <section className="mb-10 max-w-3xl">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
-            Built for Repair Shops and Wholesale Buyers
-          </h2>
-          <p className="text-gray-600 leading-relaxed">
-            In-depth content for people who actually stock and fix phones. Expect screen
-            replacement guides, battery and charging diagnostics, parts sourcing and QC
-            playbooks, supplier evaluation checklists, and real pricing and repair-business
-            decisions — all written from a factory-direct wholesale perspective.
-          </p>
-        </section>
-
-        {/* Browse by Topic — hub cards for SEO + internal linking */}
-        {!searchParams.category && (
-          <section className="mb-12" aria-labelledby="browse-by-topic">
-            <div className="flex items-end justify-between mb-5">
-              <h2 id="browse-by-topic" className="text-2xl font-bold text-gray-900">
-                Browse by Topic
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {BLOG_CATEGORIES.map((c) => (
-                <Link
-                  key={c.slug}
-                  href={`/blog/category/${c.slug}`}
-                  className="group block rounded-xl border border-gray-100 bg-white p-5 hover:border-[#00B140] hover:shadow-md transition-all"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="text-2xl flex-shrink-0">{c.emoji}</div>
-                    <div className="min-w-0">
-                      <div className="font-semibold text-gray-900 group-hover:text-[#00B140] mb-1">
-                        {c.label}
-                      </div>
-                      <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
-                        {c.card}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          {searchParams.category
-            ? `${categoryLabels[searchParams.category] || 'Articles'}`
-            : 'Latest Articles'}
-        </h2>
-
-        {articles.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-            <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wrench text-gray-400"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.4 1.4a1 1 0 0 0 1.4 0l3.5-3.5a1 1 0 0 0 0-1.4l-1.4-1.4a1 1 0 0 0-1.4 0L14.7 6.3z"/><path d="M9.5 12.5 3 19l-2-2 6.5-6.5"/><path d="m12.5 9.5 6.5 6.5"/><path d="M18 13.5V18c0 1.1.9 2 2 2h1.5"/><path d="M6 6.5h1.5c1.1 0 2 .9 2 2V18"/></svg>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">No Repair Guides Found</h2>
-            <p className="text-gray-500 mb-8">We are currently working on new guides and tips. Please check back soon!</p>
-            <Link href="/" className="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors">
-              Return to Home
-            </Link>
+      <section className="bg-white py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div data-scroll-reveal>
+            <SectionTitle
+              eyebrow="Editorial purpose"
+              title="Built for repair shops and wholesale buyers."
+              text="The blog is organized around real decisions: how to compare screen grades, avoid callback risk, buy batteries safely, qualify suppliers and prepare better mixed-parts quote lists."
+            />
           </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {articles.map((article) => (
+
+          {!searchParams.category && (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {BLOG_CATEGORIES.map((categoryItem, index) => {
+                const Icon = topicIcons[categoryItem.slug] || ListChecks;
+                return (
+                  <Link
+                    key={categoryItem.slug}
+                    href={`/blog/category/${categoryItem.slug}`}
+                    data-scroll-reveal="scale"
+                    style={revealStyle(index * 55)}
+                    className="group min-h-full rounded-lg border border-[#ded6c8] bg-[#fbfaf7] p-5 shadow-sm transition hover:border-[#ff8a2a] hover:shadow-md"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white text-[#0b6b45] shadow-sm">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-black text-[#18212c] group-hover:text-[#0b6b45]">{categoryItem.label}</h3>
+                        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#52606d]">{categoryItem.card}</p>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section id="latest-guides" className="scroll-mt-36 bg-[#f5f3ee] py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div data-scroll-reveal>
+            <SectionTitle
+              eyebrow="Latest articles"
+              title={activeTopicLabel}
+              text="Scan current repair guides, sourcing notes and wholesale buying playbooks from the PRSPARES content library."
+            />
+          </div>
+
+          {articles.length === 0 ? (
+            <div className="border border-[#ded6c8] bg-white px-6 py-16 text-center shadow-sm">
+              <Search className="mx-auto h-10 w-10 text-[#0b6b45]" />
+              <h2 className="mt-5 text-2xl font-black text-[#18212c]">No repair guides found</h2>
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#52606d]">
+                New guides and sourcing notes are being prepared. Check another topic hub or return to the full article list.
+              </p>
+              <Link href="/blog" className="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-[#18212c] px-5 py-3 text-sm font-black text-white transition hover:bg-[#27313c]">
+                View All Articles
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {articles.map((article, index) => (
                 <Link key={article.id} href={`/blog/${article.slug}`} className="group block h-full">
-                  <article className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-gray-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer h-full flex flex-col">
-                    <div className="relative h-52 overflow-hidden flex-shrink-0">
+                  <article
+                    data-scroll-reveal="scale"
+                    style={revealStyle(index < 9 ? index * 45 : 0)}
+                    className="flex h-full flex-col overflow-hidden rounded-lg border border-[#ded6c8] bg-white shadow-sm transition hover:border-[#ff8a2a] hover:shadow-lg"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden bg-[#18212c]">
                       <SafeImage
                         src={article.imageSrc}
                         alt={article.title}
                         fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        className="object-cover transition duration-500 group-hover:scale-[1.03]"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <div className="absolute top-4 left-4 z-10">
-                        <span className="inline-flex items-center px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-700 rounded-full text-xs font-medium shadow-sm">
-                          {categoryLabels[article.category] || article.category}
-                        </span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/8 to-transparent" />
+                      <div className="absolute left-4 top-4 rounded-md bg-white px-3 py-1 text-xs font-black text-[#18212c] shadow-sm">
+                        {categoryLabels[article.category] || article.category}
                       </div>
                     </div>
 
-                    <div className="p-6 flex flex-col flex-grow">
-                      <h2 className="text-xl font-bold mb-3 line-clamp-2 text-gray-900 group-hover:text-[#00B140] transition-colors duration-300 min-h-[3.5rem] leading-tight">
+                    <div className="flex flex-1 flex-col p-5">
+                      <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-[#52606d]">
+                        <span className="inline-flex items-center gap-1">
+                          <BookOpen className="h-3.5 w-3.5" />
+                          {article.author}
+                        </span>
+                        {article.date && <span>{article.date}</span>}
+                        <span className="inline-flex items-center gap-1 rounded-md bg-[#fffaf0] px-2 py-1 text-[#0b6b45]">
+                          <Clock className="h-3.5 w-3.5" />
+                          {article.readTime}
+                        </span>
+                      </div>
+                      <h2 className="mt-4 min-h-[3.5rem] text-xl font-black leading-7 text-[#18212c] transition group-hover:text-[#0b6b45]">
                         {article.title}
                       </h2>
-
-                      <p className="text-gray-600 mb-6 line-clamp-3 group-hover:text-gray-700 transition-colors duration-300 flex-grow leading-relaxed">
-                        {article.excerpt}
-                      </p>
-
-                      <div className="flex items-center justify-between text-sm text-gray-500 group-hover:text-gray-600 transition-colors duration-300 mt-auto">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center border border-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user text-gray-500"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                          </div>
-                          <span className="font-medium">{article.author}</span>
-                          <span>·</span>
-                          <span>{article.date}</span>
-                        </div>
-                        <span className="text-xs bg-gray-100 px-2 py-1 rounded-full border border-gray-200">{article.readTime}</span>
-                      </div>
-
-                      <div className="mt-5 flex items-center text-[#00B140] opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
-                        <span className="text-sm font-semibold">Read Guide</span>
-                        <svg className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
+                      <p className="mt-3 line-clamp-3 flex-1 text-sm leading-6 text-[#52606d]">{article.excerpt}</p>
+                      <div className="mt-5 inline-flex items-center gap-2 text-sm font-black text-[#ff8a2a]">
+                        Read Guide
+                        <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
                       </div>
                     </div>
                   </article>
                 </Link>
               ))}
             </div>
+          )}
+        </div>
+      </section>
 
-            {/* Pagination (Simplified, assuming more complex logic if many articles) */}
-            <div className="mt-16 flex justify-center">
-              <div className="flex items-center space-x-2">
-                <button className="p-2.5 text-gray-400 hover:text-gray-700 transition-colors rounded-lg hover:bg-gray-100 disabled:opacity-50" disabled>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button className="w-10 h-10 bg-[#00B140] text-white rounded-lg font-semibold text-sm shadow-md">1</button>
-                {/* Add more page numbers if necessary */}
-                <button className="p-2.5 text-gray-400 hover:text-gray-700 transition-colors rounded-lg hover:bg-gray-100">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  </button>
+      <section className="bg-[#18212c] py-14 text-white md:py-20">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+          <div data-scroll-reveal="left">
+            <p className="text-sm font-bold text-[#ffb36b]">Buyer notes by email</p>
+            <h2 className="mt-3 text-3xl font-black md:text-5xl">Keep sourcing decisions close to the quote workflow.</h2>
+            <p className="mt-5 text-base leading-7 text-slate-200">
+              Get repair-parts buying notes, QC reminders and sourcing ideas written for B2B repair businesses.
+            </p>
+          </div>
+          <div data-scroll-reveal="right" className="rounded-lg border border-white/15 bg-white/[0.06] p-6">
+            <div className="mb-5 flex items-center gap-3">
+              <Mail className="h-7 w-7 text-[#51d88a]" />
+              <div>
+                <h3 className="text-xl font-black text-white">PRSPARES field notes</h3>
+                <p className="mt-1 text-sm text-slate-300">Occasional practical updates, no fake urgency.</p>
               </div>
             </div>
-          </>
-        )}
-      </div>
-
-      {/* Wholesale CTA Section */}
-      <div className="bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] border-t border-gray-100">
-        <div className="max-w-[1200px] mx-auto px-4 py-16">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-4">Ready to Source Phone Repair Parts?</h2>
-            <p className="text-blue-200 mb-8 text-lg leading-relaxed">
-              Factory-direct from Shenzhen. OEM quality, flexible MOQ, 12-month warranty. Get a free quote within 24 hours.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-              <Link href="/wholesale-inquiry" className="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-colors shadow-lg text-lg">
-                Get Wholesale Quote
-              </Link>
-              <Link href="/products" className="inline-flex items-center justify-center gap-2 border-2 border-white/30 hover:bg-white/10 text-white font-semibold py-3.5 px-8 rounded-lg transition-colors text-lg">
-                Browse Products
-              </Link>
-            </div>
+            <BlogNewsletterSubscribe />
           </div>
         </div>
-      </div>
+      </section>
+
+      <section data-scroll-reveal className="bg-[#0b6b45] py-14 text-white md:py-16">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:px-6 md:flex-row md:items-center lg:px-8">
+          <div>
+            <p className="text-sm font-bold text-[#bff2d0]">Ready for next step</p>
+            <h2 className="mt-2 text-3xl font-black md:text-5xl">Turn the guide into a quote list.</h2>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-[#e4fff0]">
+              Send model, category, grade and quantity. PRSPARES can reply with price tiers, stock status and shipping route.
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+            <Link href="/wholesale-inquiry" className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-6 py-4 text-base font-black text-[#0b6b45] transition hover:bg-[#fff0dd]">
+              Get Wholesale Quote
+              <MessageSquare className="h-5 w-5" />
+            </Link>
+            <Link href="/products" className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 bg-white/10 px-6 py-4 text-base font-black text-white transition hover:bg-white/20">
+              Browse Catalog
+              <Layers3 className="h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

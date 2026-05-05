@@ -1,8 +1,20 @@
 'use client';
 
 import Link from 'next/link';
+import { useRef } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
+import Honeypot from '@/components/common/Honeypot';
+
+const productCategoryLinks = [
+  { label: 'Screens', href: '/products/screens' },
+  { label: 'Batteries', href: '/products/batteries' },
+  { label: 'Small Parts', href: '/products/small-parts' },
+  { label: 'Repair Tools', href: '/products/repair-tools' },
+  { label: 'Tablet & Watch', href: '/products/tablet-watch' },
+  { label: 'iPhone Rear Camera', href: '/products/iphone-rear-camera-wholesale' },
+  { label: 'iPad Battery', href: '/products/ipad-battery-replacement-factory' },
+] as const;
 
 const Footer = () => {
   const {
@@ -14,14 +26,16 @@ const Footer = () => {
     submit: submitNewsletter,
   } = useNewsletterSubscription({ source: 'footer' });
 
+  const honeypotRef = useRef<HTMLInputElement>(null);
+
   const handleSubscribe = async (e: React.FormEvent) => {
-    await submitNewsletter(e);
+    await submitNewsletter(e, { honeypot: honeypotRef.current?.value });
   };
 
   return (
     <footer className="bg-[#1A1A1A] text-white py-12">
       <div className="max-w-[1200px] mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
           {/* Company information */}
           <div className="md:col-span-1 flex flex-col h-full">
             <h3 className="text-xl font-bold mb-4">PRSPARES</h3>
@@ -63,6 +77,20 @@ const Footer = () => {
                   Products
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* Product category links */}
+          <div className="md:col-span-1 flex flex-col h-full">
+            <h3 className="text-xl font-bold mb-4">Product Categories</h3>
+            <ul className="space-y-3 flex-grow">
+              {productCategoryLinks.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="text-sm hover:text-[#00B140] transition-colors">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -112,6 +140,7 @@ const Footer = () => {
               
               {!isSubscribed ? (
                 <div className="space-y-2">
+                  <Honeypot ref={honeypotRef} />
                   <div className="flex">
                     <input
                       type="email"

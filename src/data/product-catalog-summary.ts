@@ -1,0 +1,131 @@
+export const catalogMetrics = [
+  ['27,783', 'SKUs in stock', 'Updated April 2026 inventory'],
+  ['2,646', 'phone models', 'Compatible model and series coverage'],
+  ['49', 'part categories', 'Screens, batteries, housings, boards, IC and tools'],
+  ['10/50/200', 'price tiers', 'Tiered wholesale quote logic'],
+] as const;
+
+export const categoryLanes = [
+  {
+    name: 'LCD & OLED Screens',
+    href: '/products/screens',
+    image: '/images/home-redesign/category-screens.png',
+    rows: '5,263 screen SKUs',
+    range: '4,493 assemblies + 770 with-frame options',
+    text: 'iPhone, Samsung, Huawei, Xiaomi, OPPO, Vivo, Google and smartwatch display coverage.',
+    bullets: ['OLED, TFT, Incell and with-frame options', 'High-value Galaxy S / iPhone Pro Max SKUs', 'Model-list quote recommended'],
+  },
+  {
+    name: 'Phone Batteries',
+    href: '/products/batteries',
+    image: '/images/home-redesign/category-batteries.png',
+    rows: '1,500 battery SKUs',
+    range: '432 battery models covered',
+    text: 'Dedicated phone, tablet, smartwatch and long-tail brand battery supply with export packing logic.',
+    bullets: ['Apple, Samsung, Huawei, Xiaomi and Google lines', 'UN38.3 / DG route discussion', '20 pcs mixed-model starting point'],
+  },
+  {
+    name: 'Small Parts',
+    href: '/products/small-parts',
+    image: '/images/home-redesign/category-small-parts.png',
+    rows: '14,000+ small-part SKUs',
+    range: 'Flex, charging, camera, SIM tray, housing and speaker depth',
+    text: 'The largest operational category: repair shops can combine high-frequency small parts with screen orders.',
+    bullets: ['2,861 flex cable SKUs', '2,797 back-cover / housing SKUs', '2,098 SIM tray SKUs'],
+  },
+  {
+    name: 'IC Chips & Repair Tools',
+    href: '/products/repair-tools',
+    image: '/images/home-redesign/category-repair-tools.png',
+    rows: '2,080 tool & IC SKUs',
+    range: 'Screwdrivers, power cables, tool kits, programmers and IC chips',
+    text: 'Bench equipment and micro-repair inventory for shops that also handle board-level repairs.',
+    bullets: ['652 screwdriver SKUs', '399 power test cable SKUs', '185 IC chip SKUs'],
+  },
+  {
+    name: 'Tablet & Watch Parts',
+    href: '/products/tablet-watch',
+    image: '/hero/products-tablet-watch.jpg',
+    rows: '1,800+ tablet & watch SKUs',
+    range: 'iPad + smartwatch catalog modules',
+    text: 'Useful for buyers that stock iPad screens, tablet flex cables and watch display/battery repair lines.',
+    bullets: ['1,000 iPad SKUs', '800 smartwatch SKUs', 'Apple, Huawei, Garmin, Fitbit and Pixel Watch'],
+  },
+] as const;
+
+export const brandCatalogs = [
+  { name: 'Apple', rows: '1,670', models: '27 model families', lead: 'iPhone 17/Air/16/15/14/13/12 and older lines', top: ['Flex Cable', 'Screen Assembly', 'Back Cover', 'Repair Part'] },
+  { name: 'Samsung', rows: '6,717', models: '24 series groups', lead: 'Galaxy A, S, Tab, Note, Z, M, J and Watch', top: ['Screen Assembly', 'Charging Port', 'Back Cover', 'Flex Cable'] },
+  { name: 'Xiaomi / Redmi / POCO', rows: '2,857', models: '167 models covered', lead: 'Xiaomi 10-17, Redmi Note, Redmi K, POCO and Black Shark', top: ['Back Cover', 'Flex Cable', 'Screen Assembly', 'Frame'] },
+  { name: 'Huawei', rows: '2,566', models: '319 models covered', lead: 'Mate, P, Nova, Y, Enjoy, MatePad and MediaPad', top: ['Flex Cable', 'Screen Assembly', 'Repair Part', 'SIM Tray'] },
+  { name: 'Vivo / OPPO', rows: '2,415', models: '548 models covered', lead: 'Vivo X/Y/S/V, iQOO, OPPO Reno/A/Find/K/F/R', top: ['Screen Assembly', 'Back Cover', 'Flex Cable', 'Power Flex'] },
+  { name: 'OnePlus / Realme / Infinix / Tecno / itel', rows: '2,408', models: '362 models covered', lead: 'Five-brand long-tail Android coverage', top: ['Screen Assembly', 'SIM Tray', 'Back Cover', 'Flex Cable'] },
+] as const;
+
+export const modelDepthRows = [
+  ['Galaxy A Series', '2,000 SKUs', 'Samsung volume repair demand', 'Screens, ports, housings, flex cables'],
+  ['Galaxy S Series', '1,183 SKUs', 'Premium Samsung repairs', 'OLED assemblies, cameras, boards'],
+  ['Galaxy Tab Series', '900 SKUs', 'Tablet repair stock', 'Displays, flex, batteries, housings'],
+  ['OnePlus', '925 SKUs', 'Android long-tail resale', 'Screens, covers, ports, SIM trays'],
+  ['Motorola', '979 SKUs', 'US/LatAm repair demand', 'Screens, batteries, small parts'],
+  ['OPPO A / Reno', '781 SKUs', 'High model spread', 'Charging boards, screens, housings'],
+  ['Vivo X / Y', '761 SKUs', 'Regional repair demand', 'Displays, cameras, power flex'],
+  ['iPad Pro / Standard', '600 SKUs', 'Tablet stock expansion', 'Flex cable, camera, screen, housing'],
+] as const;
+
+export const sampleWholesaleLines = [
+  {
+    model: 'Apple iPhone 16 Pro Max',
+    category: 'Screen Assembly',
+    name: 'Original LTPO Super Retina XDR OLED LCD Assembly',
+    source: 'iPhone catalog / iPhone 16 Pro Max',
+    image: 'https://pub-3d088e9c8cac4da89ab00382fa664592.r2.dev/products/IP6P0048.jpg',
+    tiers: ['$242.31', '$238.62', '$238.62'],
+    note: 'Hot iPhone flagship screen SKU',
+  },
+  {
+    model: 'Samsung Galaxy S24 Ultra',
+    category: 'Screen Assembly',
+    name: 'Original LCD Touch Assembly',
+    source: 'Samsung catalog / Galaxy S24 Ultra',
+    image: '/images/home-redesign/category-screens.png',
+    tiers: ['$182.23', '$179.45', '$179.45'],
+    note: 'Samsung flagship screen SKU from the Galaxy S24 Ultra line',
+  },
+  {
+    model: 'iPhone 15 Pro Max',
+    category: 'Battery',
+    name: '4422mAh Replacement Battery',
+    source: 'Phone battery catalog / Other Brands Battery',
+    image: 'https://pub-3d088e9c8cac4da89ab00382fa664592.r2.dev/products/EDA006362401.jpg',
+    tiers: ['$9.48', '$9.28', '$9.09'],
+    note: 'Hot iPhone battery line with 10+ / 50+ / 200+ tiers',
+  },
+  {
+    model: 'OPPO Reno13 Pro',
+    category: 'Charging Port Board',
+    name: 'Original Charging Port Sub Board Card',
+    source: 'Vivo-OPPO catalog / OPPO Reno Series',
+    image: 'https://pub-3d088e9c8cac4da89ab00382fa664592.r2.dev/products/EDA008436002.jpg',
+    tiers: ['$7.45', '$7.30', '$7.14'],
+    note: 'OPPO Reno hot small-part line',
+  },
+  {
+    model: 'Google Pixel 9 Pro',
+    category: 'Rear Camera',
+    name: 'Original Camera Set + Rear Main Camera',
+    source: 'Google catalog / Pixel 9 Series',
+    image: 'https://pub-3d088e9c8cac4da89ab00382fa664592.r2.dev/products/SPA4742.jpg',
+    tiers: ['$33.85', '$33.16', '$32.81'],
+    note: 'Pixel camera SKU for Google flagship repair demand',
+  },
+  {
+    model: 'iPhone IC',
+    category: 'IC Chip',
+    name: '339S00647 WiFi IC for iPhone 11 Series',
+    source: 'IC & Tools catalog / iPhone IC Chips',
+    image: 'https://pub-3d088e9c8cac4da89ab00382fa664592.r2.dev/products/ICCP5686.jpg',
+    tiers: ['$3.15', '$3.08', '$3.02'],
+    note: 'High-frequency board-level repair SKU',
+  },
+] as const;

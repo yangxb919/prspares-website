@@ -44,6 +44,23 @@ next-env.d.ts
 .cursor/
 mcp-servers/
 
+# Claude Code / AI agent local state (per-user, do not commit)
+.claude/settings.local.json
+.claude/skills/
+.agents/
+.gemini-clipboard/
+.minimax/
+.playwright-cli/
+.playwright-mcp/
+clarity/
+
+# Build / runtime junk that occasionally lands here
+public/.next/
+supabase/.temp/
+output/
+responses/
+web-articles/
+
 # 注意：优化后的图片已提交到Git，以加快VPS部署速度
 # 原始图片备份保留在本地，不提交到Git
 /public/images/backup/

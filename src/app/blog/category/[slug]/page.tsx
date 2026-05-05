@@ -4,12 +4,23 @@ import { notFound } from 'next/navigation';
 import { createPublicClient } from '@/utils/supabase-public';
 import Breadcrumb from '@/components/shared/Breadcrumb';
 import SafeImage from '@/components/SafeImage';
+import JsonLd from '@/components/JsonLd';
 import {
   BLOG_CATEGORIES,
   getCategoryBySlug,
 } from '@/lib/blog-categories';
 import { pickPostDescription } from '@/lib/post-description';
 import type { ArticleCard } from '@/types/blog';
+
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  'https://www.phonerepairspares.com'
+).replace(/\/$/, '');
+
+function absoluteUrl(path: string) {
+  return `${SITE_URL}${path}`;
+}
 
 export const revalidate = 3600;
 
@@ -156,9 +167,59 @@ export default async function BlogCategoryPage({
   ];
 
   const otherCategories = BLOG_CATEGORIES.filter((c) => c.slug !== cat.slug);
+  const categoryJsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: cat.h1,
+      url: absoluteUrl(`/blog/category/${cat.slug}`),
+      description: cat.description,
+      isPartOf: {
+        '@type': 'Blog',
+        name: 'PRSPARES Blog',
+        url: absoluteUrl('/blog'),
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: SITE_URL,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Blog',
+          item: absoluteUrl('/blog'),
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: cat.label,
+          item: absoluteUrl(`/blog/category/${cat.slug}`),
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: `${cat.label} articles`,
+      itemListElement: articles.slice(0, 24).map((article, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: article.title,
+        url: absoluteUrl(`/blog/${article.slug}`),
+      })),
+    },
+  ];
 
   return (
     <main className="min-h-screen bg-gray-50">
+      <JsonLd data={categoryJsonLd} />
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] text-white py-16 md:py-20">
         <div className="max-w-[1200px] mx-auto px-4">
@@ -293,7 +354,7 @@ export default async function BlogCategoryPage({
                 href="/products"
                 className="inline-flex items-center justify-center gap-2 border-2 border-white/30 hover:bg-white/10 text-white font-semibold py-3.5 px-8 rounded-lg transition-colors text-lg"
               >
-                Browse Products
+                Browse Catalog
               </Link>
             </div>
           </div>

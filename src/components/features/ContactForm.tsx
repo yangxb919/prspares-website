@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Send } from 'lucide-react';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
+import { useTurnstile } from '@/components/common/Turnstile';
+import Honeypot from '@/components/common/Honeypot';
 
 interface FormData {
   name: string;
@@ -23,6 +25,15 @@ const ContactForm = () => {
   const [validationErrors, setValidationErrors] = useState<Partial<FormData>>({});
   const [userIP, setUserIP] = useState<string>('');
   const [submitError, setSubmitError] = useState<string>('');
+
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+  const {
+    token: turnstileToken,
+    isVerified: isTurnstileVerified,
+    hasError: turnstileError,
+    TurnstileWidget,
+  } = useTurnstile(turnstileSiteKey);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   // Get user IP address (best effort)
   const getUserIP = async (): Promise<string> => {
@@ -103,6 +114,12 @@ const ContactForm = () => {
       return;
     }
 
+    const turnstileRequired = turnstileSiteKey && !turnstileError;
+    if (turnstileRequired && !isTurnstileVerified) {
+      setSubmitError('Please complete the verification challenge.');
+      return;
+    }
+
     setSubmitError('');
     setIsSubmitting(true);
 
@@ -130,6 +147,8 @@ const ContactForm = () => {
         pageUrl,
         ip: currentIP,
         submittedAt,
+        turnstileToken: turnstileToken || undefined,
+        honeypot: honeypotRef.current?.value,
       });
 
       router.push('/thank-you');
@@ -147,6 +166,7 @@ const ContactForm = () => {
       <h2 className="text-2xl font-bold text-[#333333] mb-6">Send Message</h2>
 
       <form onSubmit={handleSubmit}>
+          <Honeypot ref={honeypotRef} />
           <div className="mb-4">
             <label htmlFor="name" className="block text-gray-700 mb-2">Name <span className="text-red-500">*</span></label>
             <input
@@ -201,13 +221,19 @@ const ContactForm = () => {
             )}
           </div>
 
+          {turnstileSiteKey && (
+            <div className="mb-4 flex justify-center">
+              <TurnstileWidget />
+            </div>
+          )}
+
           {submitError && (
             <p className="mb-4 text-sm text-red-600">{submitError}</p>
           )}
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || (!!turnstileSiteKey && !turnstileError && !isTurnstileVerified)}
             className={`w-full bg-[#00B140] hover:bg-[#008631] text-white font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center ${
               isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
             }`}

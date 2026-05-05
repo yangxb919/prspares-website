@@ -1,17 +1,32 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
-  CheckCircle, Factory, Shield, Clock, Award, ChevronDown, ChevronUp,
-  Phone, Mail, MessageSquare, Send, Zap, Users, Plus, Minus,
+  ArrowRight,
+  BadgeCheck,
+  CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  ClipboardCheck,
+  ExternalLink,
+  Mail,
+  MessageSquare,
+  Minus,
+  PackageCheck,
+  Phone,
+  Plus,
+  Send,
+  ShieldCheck,
+  Truck,
 } from 'lucide-react';
-import { submitRfqAndNotify } from '@/lib/rfq-client';
 import { useTurnstile } from '@/components/common/Turnstile';
-import { markAsHumanVerified } from '@/lib/analytics';
+import Honeypot from '@/components/common/Honeypot';
+import { markAsHumanVerified, trackEvent } from '@/lib/analytics';
+import { submitRfqAndNotify } from '@/lib/rfq-client';
 
-// ─── Types ───────────────────────────────────────────────────────
 interface FormData {
   company: string;
   name: string;
@@ -27,185 +42,228 @@ interface FormData {
 
 type FormErrors = Partial<Record<keyof FormData, string>>;
 
-// ─── Metadata (handled via generateMetadata in layout or head) ──
-// Since this is a client component, metadata is set via <head> tags below.
+type SelectedProductLine = {
+  name: string;
+  url: string;
+};
 
-// ─── FAQ Data ────────────────────────────────────────────────────
-const FAQ_ITEMS = [
-  {
-    q: "What's your minimum order quantity (MOQ)?",
-    a: "Our MOQ is flexible — starting from just 10 units for screens and 20 units for batteries/small parts. We serve businesses of all sizes — from small repair shops to large distributors.",
-  },
-  {
-    q: "Do you offer sample orders?",
-    a: "Yes, we offer sample orders for quality testing before bulk purchases. Contact us for sample pricing and shipping details.",
-  },
-  {
-    q: "What's your typical lead time?",
-    a: "Most items ship same-day or next business day. For bulk orders (1000+ units), lead time is typically 3-5 business days.",
-  },
-  {
-    q: "Do you provide OEM/ODM services?",
-    a: "Yes, we offer OEM/ODM services including custom branding, packaging, and product customization for bulk orders.",
-  },
-  {
-    q: "What payment methods do you accept?",
-    a: "We accept T/T (bank transfer), PayPal, Western Union, and Alibaba Trade Assurance for your security.",
-  },
-  {
-    q: "Do you ship internationally?",
-    a: "Yes, we ship worldwide via DHL, FedEx, UPS, and sea freight. We have experience shipping to USA, Canada, Europe, Australia, and 50+ countries.",
-  },
-  {
-    q: "What's your return/warranty policy?",
-    a: "We offer a 12-month warranty on all products. Our RMA rate is below 1%. Defective items are replaced free of charge.",
-  },
-  {
-    q: "Can I visit your factory?",
-    a: "Absolutely! We welcome factory visits. Our facility is located in Shenzhen Huaqiangbei. Contact us to schedule a tour.",
-  },
-];
-
-// ─── Product Categories ──────────────────────────────────────────
-const PRODUCT_CATEGORIES = [
+const productCategories = [
   {
     name: 'LCD/OLED Screens',
-    image: '/images/screens-hero.jpg',
-    items: ['iPhone LCD/OLED', 'Samsung AMOLED', 'Android Screens'],
+    image: '/images/home-redesign/category-screens.png',
+    metric: '4,400+ assemblies',
+    items: ['OEM / Soft OLED / Hard OLED', 'iPhone and Samsung focus', 'True Tone support'],
     href: '/products/screens',
   },
   {
     name: 'Batteries',
-    image: '/images/batteries-hero.jpg',
-    items: ['High-Capacity', 'Original Quality', 'All Major Brands'],
+    image: '/images/home-redesign/category-batteries.png',
+    metric: '1,500+ battery lines',
+    items: ['Standard and high-capacity', 'DG packing support', 'UN38.3 support'],
     href: '/products/batteries',
   },
   {
     name: 'Small Parts',
-    image: '/images/small-parts-hero.jpg',
-    items: ['Flex Cables', 'Charging Ports', 'Speakers & Buttons'],
+    image: '/images/home-redesign/category-small-parts.png',
+    metric: '15,000+ part lines',
+    items: ['Cameras and charging ports', 'Flex cables and speakers', 'Back covers and SIM trays'],
     href: '/products/small-parts',
   },
   {
-    name: 'Repair Tools',
-    image: '/images/repair-tools-hero.jpg',
-    items: ['Tool Kits', 'Programmers', 'Testing Equipment'],
+    name: 'IC Chips & Repair Tools',
+    image: '/images/home-redesign/category-repair-tools.png',
+    metric: '2,000+ tool / IC lines',
+    items: ['Screen testers', 'Programmers', 'Soldering tools'],
     href: '/products/repair-tools',
   },
 ];
 
-// ─── Trust Stats ─────────────────────────────────────────────────
-const TRUST_STATS = [
-  { value: '10+', label: 'Years in Business', icon: Award },
-  { value: '1000+', label: 'B2B Clients Served', icon: Users },
-  { value: '<1%', label: 'Low RMA Rate', icon: Shield },
-  { value: '24h', label: 'Response Time', icon: Clock },
+const quoteSteps = [
+  ['1', 'Pick category', 'Screens, batteries, small parts, tools or mixed order.'],
+  ['2', 'List models', 'Paste model names, brands, SKUs or a short procurement note.'],
+  ['3', 'Confirm quote', 'Sales returns stock, grade choices, price tiers and shipping route.'],
 ];
 
-// ─── GA4 helper ─────────────────────────────────────────────────
-import { trackEvent } from '@/lib/analytics';
+const trustStats = [
+  ['24h', 'quote response', 'Price, MOQ and lead time'],
+  ['10pcs', 'screen MOQ', 'Mixed models accepted'],
+  ['3-7d', 'express shipping', 'DHL, FedEx, UPS'],
+  ['12mo', 'warranty', 'Defect replacement support'],
+];
 
-// ─── FAQ Accordion Item ──────────────────────────────────────────
-function FaqItem({ item, defaultOpen }: { item: typeof FAQ_ITEMS[0]; defaultOpen?: boolean }) {
+const faqItems = [
+  {
+    q: "What's your minimum order quantity?",
+    a: 'MOQ starts from 10 units for screens and around 20 units for batteries or small parts. Mixed models and categories are supported.',
+  },
+  {
+    q: 'Can I send a mixed model list?',
+    a: 'Yes. This page is designed for model-list buying. Paste the models into the form and the sales team will confirm stock, grades and price tiers.',
+  },
+  {
+    q: 'Do you provide sample orders?',
+    a: 'Yes. Sample orders are available for quality checking before larger wholesale orders.',
+  },
+  {
+    q: 'How fast can PRSPARES ship?',
+    a: 'Popular in-stock items can move to packing quickly. Express routes usually take 3-7 days depending on destination and cargo type.',
+  },
+];
+
+function FaqItem({ item, defaultOpen }: { item: (typeof faqItems)[0]; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen ?? false);
+
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="overflow-hidden rounded-lg border border-[#ded6c8] bg-white">
       <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors"
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-black text-[#18212c] transition hover:bg-[#fffaf0]"
         aria-expanded={open}
       >
-        <span className="font-semibold text-gray-900 pr-4">{item.q}</span>
-        {open ? <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />}
+        {item.q}
+        {open ? <ChevronUp className="h-5 w-5 shrink-0 text-[#0b6b45]" /> : <ChevronDown className="h-5 w-5 shrink-0 text-[#0b6b45]" />}
       </button>
-      {open && (
-        <div className="px-6 pb-4 text-gray-600 leading-relaxed">
-          {item.a}
-        </div>
-      )}
+      {open && <div className="px-5 pb-5 text-sm leading-6 text-[#52606d]">{item.a}</div>}
     </div>
   );
 }
 
-// ─── Main Page Component ─────────────────────────────────────────
+function MetricStrip() {
+  return (
+    <section className="border-b border-[#d9d2c4] bg-[#fffaf0]">
+      <div className="mx-auto grid max-w-7xl gap-3 px-4 py-5 sm:px-6 md:grid-cols-4 lg:px-8">
+        {trustStats.map(([value, label, detail]) => (
+          <div key={label} className="border border-[#e4d8c2] bg-white px-4 py-4">
+            <div className="font-mono text-2xl font-black text-[#ff8a2a]">{value}</div>
+            <div className="mt-1 text-sm font-black text-[#18212c]">{label}</div>
+            <div className="mt-1 text-xs leading-5 text-[#52606d]">{detail}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: string; text?: string }) {
+  return (
+    <div className="mb-8 grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+      <div>
+        <p className="text-sm font-bold text-[#0b6b45]">{eyebrow}</p>
+        <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-5xl">{title}</h2>
+      </div>
+      {text && <p className="text-base leading-7 text-[#52606d] md:text-lg">{text}</p>}
+    </div>
+  );
+}
+
+function normalizeProductUrl(value: string | null) {
+  if (!value || typeof window === 'undefined') return '';
+
+  try {
+    const url = new URL(value, window.location.origin);
+    if (url.origin !== window.location.origin) return '';
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return '';
+  }
+}
+
+function absoluteProductUrl(value: string) {
+  if (!value || typeof window === 'undefined') return '';
+  return new URL(value, window.location.origin).toString();
+}
+
 export default function WholesaleInquiryPage() {
   const router = useRouter();
   const formRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<FormData>({
-    company: '', name: '', email: '', phone: '', country: '',
-    products: '', models: '', quantity: '', quality: '', message: '',
+    company: '',
+    name: '',
+    email: '',
+    phone: '',
+    country: '',
+    products: '',
+    models: '',
+    quantity: '',
+    quality: '',
+    message: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [userIP, setUserIP] = useState('');
   const [formStarted, setFormStarted] = useState(false);
-  const [showOptional, setShowOptional] = useState(false);
+  const [showOptional, setShowOptional] = useState(true);
+  const [selectedProductLine, setSelectedProductLine] = useState<SelectedProductLine | null>(null);
 
-  // Pre-fill product from URL params (e.g. ?product=Screens)
   useEffect(() => {
     const url = new URL(window.location.href);
     const productParam = url.searchParams.get('product');
-    if (productParam) {
-      const mapping: Record<string, string> = {
-        'Screens': 'LCD/OLED Screens',
-        'LCD/OLED Screens': 'LCD/OLED Screens',
-        'Batteries': 'Batteries',
-        'Small Parts': 'Small Parts',
-        'Small+Parts': 'Small Parts',
-        'Repair Tools': 'Repair Tools',
-        'Repair+Tools': 'Repair Tools',
-        'Multiple': 'Multiple Categories',
-      };
-      const matched = mapping[productParam] || mapping[productParam.replace(/\+/g, ' ')] || '';
-      if (matched) {
-        setFormData(prev => ({ ...prev, products: matched }));
-      }
+    const categoryParam = url.searchParams.get('category');
+    const productUrl = normalizeProductUrl(url.searchParams.get('productUrl'));
+
+    const cleaned = productParam?.replace(/\+/g, ' ').trim() || '';
+    const cleanedCategory = categoryParam?.replace(/\+/g, ' ').trim() || '';
+    const mapping: Record<string, string> = {
+      Screens: 'LCD/OLED Screens',
+      'LCD/OLED Screens': 'LCD/OLED Screens',
+      'LCD and OLED Screens': 'LCD/OLED Screens',
+      'Screen Assembly': 'LCD/OLED Screens',
+      'Screen Assembly with Frame': 'LCD/OLED Screens',
+      Batteries: 'Batteries',
+      Battery: 'Batteries',
+      'Phone Batteries': 'Batteries',
+      'Small Parts': 'Small Parts',
+      'Repair Tools': 'IC Chips & Repair Tools',
+      'Repair Tools and IC Chips': 'IC Chips & Repair Tools',
+      Multiple: 'Multiple Categories',
+      'Multiple Categories': 'Multiple Categories',
+      'IC Chips & Repair Tools': 'IC Chips & Repair Tools',
+    };
+
+    const hasSpecificProductLine = Boolean(cleaned && productUrl);
+
+    if (hasSpecificProductLine) {
+      setSelectedProductLine({ name: cleaned, url: productUrl });
+    }
+
+    const matched = mapping[cleanedCategory] || mapping[cleaned] || '';
+    if (matched || hasSpecificProductLine) {
+      setFormData((prev) => ({
+        ...prev,
+        products: matched || prev.products,
+        models: hasSpecificProductLine && !prev.models ? cleaned : prev.models,
+        message:
+          hasSpecificProductLine && !prev.message
+            ? `Please quote a better wholesale price for this product line: ${cleaned}`
+            : prev.message,
+      }));
     }
   }, []);
 
-  // Turnstile human verification
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
-  const { token: turnstileToken, isVerified: isTurnstileVerified, hasError: turnstileError, TurnstileWidget } = useTurnstile(turnstileSiteKey);
+  const {
+    token: turnstileToken,
+    isVerified: isTurnstileVerified,
+    hasError: turnstileError,
+    TurnstileWidget,
+  } = useTurnstile(turnstileSiteKey);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
-  // When Turnstile verifies, also mark analytics as human
   useEffect(() => {
-    if (isTurnstileVerified) {
-      markAsHumanVerified();
-    }
+    if (isTurnstileVerified) markAsHumanVerified();
   }, [isTurnstileVerified]);
-
-  // Get user IP
-  useEffect(() => {
-    (async () => {
-      const apis = [
-        'https://api.ipify.org?format=json',
-        'https://ipapi.co/json/',
-      ];
-      for (const url of apis) {
-        try {
-          const res = await fetch(url);
-          const data = await res.json();
-          const ip = data.ip || data.IPv4 || '';
-          if (ip) { setUserIP(ip); return; }
-        } catch { continue; }
-      }
-    })();
-  }, []);
 
   const scrollToForm = () => {
     formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    trackEvent('quote_cta_click', { event_label: 'Request Quote Button' });
+    trackEvent('quote_cta_click', { event_label: 'Wholesale Inquiry Hero CTA' });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name as keyof FormData]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name as keyof FormData]) setErrors((prev) => ({ ...prev, [name]: undefined }));
     if (submitError) setSubmitError('');
-    // Track form start
     if (!formStarted) {
       setFormStarted(true);
       trackEvent('begin_form', { form_name: 'wholesale_inquiry' });
@@ -227,14 +285,12 @@ export default function WholesaleInquiryPage() {
     e.preventDefault();
     if (!validate()) return;
 
-    // Turnstile verification (skip if no site key, or if Turnstile failed to load)
     const turnstileAvailable = turnstileSiteKey && !turnstileError && typeof window !== 'undefined' && !!window.turnstile;
     if (turnstileAvailable && !isTurnstileVerified) {
       setSubmitError('Please complete the verification challenge.');
       return;
     }
 
-    // Server-side Turnstile token validation
     if (turnstileAvailable && turnstileToken) {
       try {
         const verifyRes = await fetch('/api/turnstile/verify', {
@@ -258,33 +314,44 @@ export default function WholesaleInquiryPage() {
 
     try {
       const productLabel = formData.products;
+      const selectedProductLabel = selectedProductLine?.name
+        ? `\nSelected product line: ${selectedProductLine.name}`
+        : '';
+      const selectedProductUrl = selectedProductLine?.url
+        ? `\nProduct source link: ${absoluteProductUrl(selectedProductLine.url)}`
+        : '';
       const qtyLabel = formData.quantity ? ` | Qty: ${formData.quantity}` : '';
       const qualityLabel = formData.quality ? ` | Quality: ${formData.quality}` : '';
       const modelsLabel = formData.models ? `\nModels/Brands: ${formData.models}` : '';
       const countryLabel = formData.country ? `\nCountry: ${formData.country}` : '';
       const msgParts = [
-        `[Wholesale Inquiry]`,
+        '[Wholesale Inquiry]',
         `Products: ${productLabel}${qtyLabel}${qualityLabel}`,
+        selectedProductLabel,
+        selectedProductUrl,
         modelsLabel,
         countryLabel,
         formData.message ? `\nDetails: ${formData.message}` : '',
-      ].filter(Boolean).join('\n');
+      ]
+        .filter(Boolean)
+        .join('\n');
 
       await submitRfqAndNotify({
         name: formData.name.trim(),
         email: formData.email.trim(),
         company: formData.company.trim(),
         phone: formData.phone.trim(),
-        productInterest: formData.products,
+        productInterest: selectedProductLine?.name
+          ? `${formData.products} | ${selectedProductLine.name}`
+          : formData.products,
         message: msgParts,
         pageUrl: window.location.href,
-        ip: userIP,
         submittedAt: new Date().toISOString(),
+        turnstileToken: turnstileToken || undefined,
+        honeypot: honeypotRef.current?.value,
       });
 
-      // GA4 conversion
       trackEvent('generate_lead', { currency: 'USD', value: 100 });
-
       router.push('/thank-you');
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
@@ -295,439 +362,381 @@ export default function WholesaleInquiryPage() {
   };
 
   return (
-    <>
-      <div className="min-h-screen bg-white">
-        {/* ═══ HERO SECTION ═══ */}
-        <section className="relative bg-gradient-to-br from-[#1e3a5f] via-[#1a365d] to-[#0f2440] text-white overflow-hidden">
-          {/* Subtle pattern overlay */}
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(255,255,255,0.15) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Left: Copy */}
-              <div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">
-                  Wholesale Phone Parts{' '}
-                  <span className="text-orange-400">Direct from Shenzhen Factory</span>
-                </h1>
-                <p className="text-lg sm:text-xl text-blue-100 mb-6 leading-relaxed">
-                  OEM Quality — <strong className="text-white">Save 30–40% Compared to Regional Distributors</strong>. 10-Year Manufacturer Serving 1000+ B2B Clients Worldwide
-                </p>
-
-                {/* Trust badges */}
-                <div className="flex flex-wrap gap-3 mb-8">
-                  {['<1% RMA Rate', 'Same-Day Dispatch', 'MOQ from 10 Units', '12-Month Warranty'].map(badge => (
-                    <span key={badge} className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1.5 text-sm">
-                      <CheckCircle className="w-4 h-4 text-green-400" />
-                      {badge}
-                    </span>
-                  ))}
-                </div>
-
-                {/* CTA */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <button
-                    onClick={scrollToForm}
-                    className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg shadow-orange-500/30 transition-all hover:shadow-xl hover:shadow-orange-500/40 hover:-translate-y-0.5"
-                  >
-                    <MessageSquare className="w-5 h-5" />
-                    Request Wholesale Quote
-                  </button>
-                  <a
-                    href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
-                  >
-                    WhatsApp Sales
-                  </a>
-                </div>
-                <p className="mt-3 text-sm text-blue-200">Free quote within 24 hours — No commitment required</p>
-              </div>
-
-              {/* Right: Hero image */}
-              <div className="hidden lg:block relative">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <Image
-                    src="/images/oem-quality-iphone-screen-wholesale-collection.jpg"
-                    alt="OEM quality phone repair parts wholesale collection"
-                    width={600}
-                    height={400}
-                    className="w-full h-auto object-cover"
-                    priority
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-                    <p className="text-white font-semibold">Shenzhen Huaqiangbei — World&apos;s Largest Electronics Market</p>
-                  </div>
-                </div>
-              </div>
+    <main className="min-h-screen bg-[#f5f3ee]">
+      <section className="relative overflow-hidden bg-[#111922] text-white">
+        <Image src="/hero/wholesale-inquiry.jpg" alt="" fill priority className="object-cover" sizes="100vw" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,16,24,0.94),rgba(10,16,24,0.72)_45%,rgba(10,16,24,0.26))]" />
+        <div className="relative mx-auto grid min-h-[520px] max-w-7xl items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+          <div>
+            <div className="mb-5 inline-flex items-center gap-2 border border-white/25 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur">
+              <BadgeCheck className="h-4 w-4 text-[#51d88a]" />
+              Wholesale inquiry / quote workflow
             </div>
-          </div>
-        </section>
-
-        {/* ═══ WHY CHOOSE US ═══ */}
-        <section className="py-16 md:py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
-              Why 1000+ Businesses Choose PRSPARES
-            </h2>
-            <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-              We&apos;re not just a supplier — we&apos;re your manufacturing partner in Shenzhen&apos;s electronics hub.
+            <h1 className="max-w-4xl text-4xl font-black leading-[1.05] sm:text-5xl lg:text-6xl">A Faster Quote Page for Mixed Parts Lists</h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100">
+              Send category, model list and quantity tier. PRSPARES returns stock status, grade options, price tiers and shipping route without forcing buyers through a retail cart.
             </p>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Benefit 1 */}
-              <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-5">
-                  <Factory className="w-7 h-7 text-orange-600" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Factory Direct Pricing</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Buy directly from our Shenzhen Huaqiangbei factory. No middlemen markup — save 30–40% compared to regional distributors.
-                </p>
-              </div>
-
-              {/* Benefit 2 */}
-              <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-5">
-                  <Shield className="w-7 h-7 text-green-600" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Premium OEM Quality</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  TQC quality control with &lt;1% RMA rate. True Tone support for iPhone screens. CE/RoHS certified components.
-                </p>
-              </div>
-
-              {/* Benefit 3 */}
-              <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-5">
-                  <Zap className="w-7 h-7 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Fast &amp; Flexible Service</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Same-day dispatch for in-stock items. Flexible MOQ — from 10 units for screens, 20 units for batteries and small parts.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ PRODUCT RANGE ═══ */}
-        <section className="py-16 md:py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
-              Our Product Range
-            </h2>
-            <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-              Comprehensive phone repair parts covering all major brands and models.
-            </p>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {PRODUCT_CATEGORIES.map(cat => (
-                <a key={cat.name} href={cat.href} className="group relative rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-gray-100">
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={cat.image}
-                      alt={cat.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <h3 className="absolute bottom-4 left-4 text-white font-bold text-lg">{cat.name}</h3>
-                  </div>
-                  <div className="p-4 bg-white">
-                    <ul className="space-y-1.5">
-                      {cat.items.map(item => (
-                        <li key={item} className="flex items-center gap-2 text-sm text-gray-600">
-                          <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ MOQ / PAYMENT / SHIPPING / WARRANTY ═══ */}
-        <section className="py-16 md:py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
-              How We Work With You
-            </h2>
-            <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-              Transparent terms designed for B2B partners — no hidden fees, no surprises.
-            </p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { title: 'Flexible MOQ', items: ['From 10 units (screens)', 'From 20 units (batteries/parts)', 'Mix across categories', 'Sample orders welcome'] },
-                { title: 'Payment Methods', items: ['T/T (bank transfer)', 'PayPal', 'Western Union', 'Alibaba Trade Assurance'] },
-                { title: 'Fast Shipping', items: ['Same-day dispatch', 'DHL / FedEx / UPS', '3-7 days worldwide', 'Sea freight for bulk'] },
-                { title: '12-Month Warranty', items: ['All products covered', '<1% RMA rate', 'Free defect replacement', '24h response guarantee'] },
-              ].map(block => (
-                <div key={block.title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="text-lg font-bold text-[#1e3a5f] mb-4">{block.title}</h3>
-                  <ul className="space-y-2.5">
-                    {block.items.map(item => (
-                      <li key={item} className="flex items-center gap-2 text-sm text-gray-600">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ INQUIRY FORM + TRUST SIGNALS ═══ */}
-        <section ref={formRef} className="py-16 md:py-20" id="quote-form">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-5 gap-10">
-              {/* Left: Form (3 cols) */}
-              <div className="lg:col-span-3">
-                <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-gray-100">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Get Your Wholesale Quote in 24 Hours</h2>
-                  <p className="text-gray-600 mb-4">Fill out the form and our sales team will send you a customized quote.</p>
-                  <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-500 mb-8">
-                    <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> Free quote within 24 hours</span>
-                    <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> Sample orders available</span>
-                    <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> Mixed models &amp; categories supported</span>
-                    <span className="flex items-center gap-1.5"><CheckCircle className="w-3.5 h-3.5 text-green-500" /> 12-month warranty</span>
-                  </div>
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* ── Required fields ── */}
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">Contact Person <span className="text-red-500">*</span></label>
-                        <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.name ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="John Smith" />
-                        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email Address <span className="text-red-500">*</span></label>
-                        <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-300'}`} placeholder="john@company.com" />
-                        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-                      </div>
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="products" className="block text-sm font-medium text-gray-700 mb-1.5">Products Interested <span className="text-red-500">*</span></label>
-                        <select id="products" name="products" value={formData.products} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.products ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}>
-                          <option value="">Select category</option>
-                          <option value="LCD/OLED Screens">LCD/OLED Screens</option>
-                          <option value="Batteries">Batteries</option>
-                          <option value="Small Parts">Small Parts</option>
-                          <option value="Repair Tools">Repair Tools</option>
-                          <option value="Multiple Categories">Multiple Categories</option>
-                        </select>
-                        {errors.products && <p className="mt-1 text-sm text-red-500">{errors.products}</p>}
-                      </div>
-                      <div>
-                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1.5">Estimated Quantity <span className="text-red-500">*</span></label>
-                        <select id="quantity" name="quantity" value={formData.quantity} onChange={handleChange} className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.quantity ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}>
-                          <option value="">Select quantity range</option>
-                          <option value="10-50 units">10-50 units</option>
-                          <option value="50-100 units">50-100 units</option>
-                          <option value="100-500 units">100-500 units</option>
-                          <option value="500-1000 units">500-1,000 units</option>
-                          <option value="1000+ units">1,000+ units</option>
-                        </select>
-                        {errors.quantity && <p className="mt-1 text-sm text-red-500">{errors.quantity}</p>}
-                      </div>
-                    </div>
-
-                    {/* ── Collapsible optional fields ── */}
-                    <div className="border border-gray-200 rounded-lg overflow-hidden">
-                      <button
-                        type="button"
-                        onClick={() => setShowOptional(!showOptional)}
-                        className="w-full flex items-center justify-between px-4 py-3 text-left bg-gray-50 hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700"
-                      >
-                        <span>More Details (Optional) — helps us prepare a better quote</span>
-                        {showOptional ? <Minus className="w-4 h-4 text-gray-500" /> : <Plus className="w-4 h-4 text-gray-500" />}
-                      </button>
-                      {showOptional && (
-                        <div className="p-4 space-y-4 bg-white border-t border-gray-200">
-                          <div className="grid sm:grid-cols-2 gap-4">
-                            <div>
-                              <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1.5">Company Name</label>
-                              <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Your Company Ltd." />
-                            </div>
-                            <div>
-                              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1.5">Country / Region</label>
-                              <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="United States" />
-                            </div>
-                          </div>
-                          <div className="grid sm:grid-cols-2 gap-4">
-                            <div>
-                              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">Phone / WhatsApp</label>
-                              <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+1 (555) 123-4567" />
-                            </div>
-                            <div>
-                              <label htmlFor="models" className="block text-sm font-medium text-gray-700 mb-1.5">Model / Brand</label>
-                              <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="iPhone 15 Pro, Samsung S24..." />
-                            </div>
-                          </div>
-                          <div className="grid sm:grid-cols-2 gap-4">
-                            <div>
-                              <label htmlFor="quality" className="block text-sm font-medium text-gray-700 mb-1.5">Quality Requirement</label>
-                              <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option value="">Select quality grade</option>
-                                <option value="OEM Original">OEM Original</option>
-                                <option value="Premium Aftermarket">Premium Aftermarket</option>
-                                <option value="Standard Aftermarket">Standard Aftermarket</option>
-                                <option value="Mixed Grades">Mixed Grades</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div>
-                            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">Additional Requirements</label>
-                            <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="Specify models, quality requirements, shipping preferences..." />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Turnstile human verification */}
-                    {turnstileSiteKey && (
-                      <div className="flex justify-center">
-                        <TurnstileWidget />
-                      </div>
-                    )}
-                    {submitError && <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{submitError}</p>}
-                    <button type="submit" disabled={isSubmitting} className={`w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-2 text-lg shadow-md shadow-orange-500/20 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-orange-500/30'}`}>
-                      {isSubmitting ? (
-                        <><svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg> Submitting...</>
-                      ) : (
-                        <><Send className="w-5 h-5" /> Request Wholesale Quote</>
-                      )}
-                    </button>
-                    <p className="text-xs text-gray-500 text-center">We&apos;ll respond within 24 hours. Your information is kept confidential.</p>
-
-                    {/* WhatsApp alternative */}
-                    <div className="relative flex items-center justify-center py-2">
-                      <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
-                      <span className="relative bg-white px-4 text-sm text-gray-400">or</span>
-                    </div>
-                    <a
-                      href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => trackEvent('whatsapp_click', { event_label: 'form_whatsapp_alt' })}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-3.5 px-6 rounded-lg transition-all text-base"
-                    >
-                      <MessageSquare className="w-5 h-5" />
-                      Chat on WhatsApp — Get Instant Reply
-                    </a>
-                  </form>
-                </div>
-              </div>
-              {/* Right: Trust Signals (2 cols) */}
-              <div className="lg:col-span-2 space-y-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><Shield className="w-5 h-5 text-green-600" /> Quality Guarantee</h3>
-                  <ul className="space-y-3">
-                    {['TQC Quality Control System', 'CE & RoHS Certified', 'True Tone Support (iPhone)', '12-Month Warranty on All Products'].map(item => (
-                      <li key={item} className="flex items-center gap-2.5 text-sm text-gray-700"><CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] rounded-xl p-6 text-white">
-                  <h3 className="font-bold mb-4">By the Numbers</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {TRUST_STATS.map(stat => (
-                      <div key={stat.label} className="text-center">
-                        <div className="text-2xl font-bold text-orange-400">{stat.value}</div>
-                        <div className="text-xs text-blue-200 mt-1">{stat.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                  <h3 className="font-bold text-gray-900 mb-4">Prefer to Talk Directly?</h3>
-                  <div className="space-y-3">
-                    <a href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm text-gray-700 hover:text-green-600 transition-colors" onClick={() => trackEvent('whatsapp_click')}><MessageSquare className="w-4 h-4" /> WhatsApp: +853 6390 2425</a>
-                    <a href="mailto:parts.info@phonerepairspares.com" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('contact_click', { method: 'email' })}><Mail className="w-4 h-4" /> parts.info@phonerepairspares.com</a>
-                    <a href="tel:+8618312589439" className="flex items-center gap-3 text-sm text-gray-700 hover:text-blue-600 transition-colors" onClick={() => trackEvent('contact_click', { method: 'phone' })}><Phone className="w-4 h-4" /> +86 183 1258 9439</a>
-                  </div>
-                </div>
-                <div className="relative rounded-xl overflow-hidden h-48">
-                  <Image src="/images/oled_factory_hero.jpg" alt="PRSPARES factory in Shenzhen" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 40vw" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-4">
-                    <p className="text-white text-sm font-medium">Our Shenzhen Manufacturing Facility</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ TRUST BAR ═══ */}
-        <section className="py-12 bg-white border-y border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {TRUST_STATS.map(stat => {
-                const Icon = stat.icon;
-                return (
-                  <div key={stat.label} className="text-center">
-                    <Icon className="w-8 h-8 text-[#1e3a5f] mx-auto mb-2" />
-                    <div className="text-3xl font-bold text-[#1e3a5f]">{stat.value}</div>
-                    <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ FAQ SECTION ═══ */}
-        <section className="py-16 md:py-20 bg-gray-50">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-center text-gray-600 mb-10">
-              Everything you need to know about working with PRSPARES.
-            </p>
-            <div className="space-y-3">
-              {FAQ_ITEMS.map((item, i) => (
-                <FaqItem key={i} item={item} defaultOpen={i < 3} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ═══ FINAL CTA ═══ */}
-        <section className="py-16 bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] text-white text-center">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-blue-200 mb-8 text-lg">
-              Join 1000+ businesses that trust PRSPARES for quality phone repair parts at factory-direct prices.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <button
+                type="button"
                 onClick={scrollToForm}
-                className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg shadow-orange-500/30 transition-all hover:shadow-xl hover:shadow-orange-500/40 hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-[#ff8a2a] px-6 py-4 text-base font-bold text-white shadow-lg shadow-black/25 transition hover:bg-[#e97313]"
               >
-                <MessageSquare className="w-5 h-5" />
-                Request Wholesale Quote
+                Get Wholesale Quote
+                <ArrowRight className="h-5 w-5" />
               </button>
               <a
-                href="https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20parts"
+                href="https://wa.me/85363902425?text=Hi,%20I%27m%20interested%20in%20wholesale%20phone%20parts"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg text-lg border border-white/20 transition-all"
+                onClick={() => trackEvent('whatsapp_click', { event_label: 'Wholesale Hero WhatsApp' })}
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 bg-white/10 px-6 py-4 text-base font-bold text-white backdrop-blur transition hover:bg-white/20"
               >
                 WhatsApp Sales
               </a>
             </div>
           </div>
-        </section>
-      </div>
-    </>
+
+          <div className="rounded-lg border border-white/20 bg-white p-5 text-[#18212c] shadow-xl lg:ml-auto lg:w-[430px]">
+            <div className="flex items-center gap-3 border-b border-[#ece5da] pb-4">
+              <MessageSquare className="h-8 w-8 text-[#0b6b45]" />
+              <div>
+                <h2 className="text-xl font-black">Quick Quote Form</h2>
+                <p className="text-sm text-[#52606d]">Designed for B2B model lists</p>
+              </div>
+            </div>
+            <div className="mt-4 grid gap-3">
+              {['Product category', 'Models needed', 'Quantity range', 'Quality grade', 'Destination country'].map((field) => (
+                <div key={field} className="rounded-md border border-[#ded6c8] bg-[#fffaf0] px-4 py-3 text-sm font-bold text-[#52606d]">
+                  {field}
+                </div>
+              ))}
+              <button type="button" onClick={scrollToForm} className="mt-1 rounded-md bg-[#ff8a2a] px-4 py-3 text-sm font-black text-white">
+                Start Quote Request
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <MetricStrip />
+
+      <section className="bg-white py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            eyebrow="Form logic"
+            title="Ask only what sales needs to quote."
+            text="The page uses procurement-oriented fields and trust proof near the form, reducing hesitation before submission."
+          />
+          <div className="grid gap-4 lg:grid-cols-3">
+            {quoteSteps.map(([num, title, text]) => (
+              <div key={title} className="rounded-lg border border-[#ded6c8] bg-[#fffaf0] p-6">
+                <div className="font-mono text-sm font-black text-[#ff8a2a]">0{num}</div>
+                <h3 className="mt-4 text-xl font-black text-[#18212c]">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#52606d]">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#fffaf0] py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            eyebrow="Product range"
+            title="Quote by category, not shopping cart."
+            text="Buyers can start from a category, then send model and quantity details for exact stock and price confirmation."
+          />
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {productCategories.map((category) => (
+              <Link key={category.name} href={category.href} className="group rounded-lg border border-[#e4e0d8] bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
+                  <Image src={category.image} alt={category.name} fill className="object-cover transition duration-300 group-hover:scale-[1.03]" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/10 to-transparent" />
+                  <h3 className="absolute bottom-3 left-3 right-3 text-lg font-black leading-6 text-white">{category.name}</h3>
+                </div>
+                <div className="p-5">
+                  <div className="font-mono text-xs font-bold text-[#0b6b45]">{category.metric}</div>
+                  <ul className="mt-4 space-y-2">
+                    {category.items.map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-sm font-semibold text-[#27313c]">
+                        <CheckCircle className="h-4 w-4 text-[#0b6b45]" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section ref={formRef} id="quote-form" className="bg-white py-14 md:py-20">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+          <div className="rounded-lg border border-[#ded6c8] bg-white p-6 shadow-sm sm:p-8">
+            <div className="mb-8 border-b border-[#ece5da] pb-6">
+              <p className="text-sm font-bold text-[#0b6b45]">Quote request</p>
+              <h2 className="mt-2 text-3xl font-black text-[#18212c]">Get your wholesale quote in 24 hours.</h2>
+              <p className="mt-3 text-sm leading-6 text-[#52606d]">
+                Required fields are intentionally short. Add model details if you already have a procurement list.
+              </p>
+            </div>
+
+            {selectedProductLine && (
+              <div className="mb-6 rounded-lg border border-[#ffd8b6] bg-[#fffaf0] p-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.12em] text-[#0b6b45]">Selected product line</p>
+                    <h3 className="mt-2 text-base font-black leading-6 text-[#18212c]">{selectedProductLine.name}</h3>
+                    <p className="mt-2 text-sm leading-6 text-[#52606d]">
+                      This line has been added to the form so sales can quote a better wholesale price.
+                    </p>
+                  </div>
+                  {selectedProductLine.url && (
+                    <Link
+                      href={selectedProductLine.url}
+                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md border border-[#ded6c8] bg-white px-3 py-2 text-xs font-black text-[#18212c] transition hover:border-[#ff8a2a] hover:text-[#ff8a2a]"
+                    >
+                      View product source
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Link>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <Honeypot ref={honeypotRef} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="name" className="mb-1.5 block text-sm font-black text-[#18212c]">
+                    Contact Person <span className="text-[#ff8a2a]">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.name ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                    placeholder="John Smith"
+                  />
+                  {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+                </div>
+                <div>
+                  <label htmlFor="email" className="mb-1.5 block text-sm font-black text-[#18212c]">
+                    Email Address <span className="text-[#ff8a2a]">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.email ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                    placeholder="john@company.com"
+                  />
+                  {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="products" className="mb-1.5 block text-sm font-black text-[#18212c]">
+                    Products Interested <span className="text-[#ff8a2a]">*</span>
+                  </label>
+                  <select
+                    id="products"
+                    name="products"
+                    value={formData.products}
+                    onChange={handleChange}
+                    className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.products ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                  >
+                    <option value="">Select category</option>
+                    <option value="LCD/OLED Screens">LCD/OLED Screens</option>
+                    <option value="Batteries">Batteries</option>
+                    <option value="Small Parts">Small Parts</option>
+                    <option value="IC Chips & Repair Tools">IC Chips & Repair Tools</option>
+                    <option value="Multiple Categories">Multiple Categories</option>
+                  </select>
+                  {errors.products && <p className="mt-1 text-sm text-red-500">{errors.products}</p>}
+                </div>
+                <div>
+                  <label htmlFor="quantity" className="mb-1.5 block text-sm font-black text-[#18212c]">
+                    Estimated Quantity <span className="text-[#ff8a2a]">*</span>
+                  </label>
+                  <select
+                    id="quantity"
+                    name="quantity"
+                    value={formData.quantity}
+                    onChange={handleChange}
+                    className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.quantity ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                  >
+                    <option value="">Select quantity range</option>
+                    <option value="10-50 units">10-50 units</option>
+                    <option value="50-100 units">50-100 units</option>
+                    <option value="100-500 units">100-500 units</option>
+                    <option value="500-1000 units">500-1,000 units</option>
+                    <option value="1000+ units">1,000+ units</option>
+                  </select>
+                  {errors.quantity && <p className="mt-1 text-sm text-red-500">{errors.quantity}</p>}
+                </div>
+              </div>
+
+              <div className="overflow-hidden rounded-lg border border-[#ded6c8]">
+                <button
+                  type="button"
+                  onClick={() => setShowOptional((current) => !current)}
+                  className="flex w-full items-center justify-between gap-4 bg-[#fffaf0] px-4 py-3 text-left text-sm font-black text-[#18212c] transition hover:bg-[#fff3df]"
+                >
+                  <span>More details for a better quote</span>
+                  {showOptional ? <Minus className="h-4 w-4 text-[#0b6b45]" /> : <Plus className="h-4 w-4 text-[#0b6b45]" />}
+                </button>
+                {showOptional && (
+                  <div className="space-y-4 border-t border-[#ded6c8] bg-white p-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label htmlFor="company" className="mb-1.5 block text-sm font-black text-[#18212c]">Company Name</label>
+                        <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="Your Company Ltd." />
+                      </div>
+                      <div>
+                        <label htmlFor="country" className="mb-1.5 block text-sm font-black text-[#18212c]">Country / Region</label>
+                        <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="United States" />
+                      </div>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label htmlFor="phone" className="mb-1.5 block text-sm font-black text-[#18212c]">Phone / WhatsApp</label>
+                        <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="+1 (555) 123-4567" />
+                      </div>
+                      <div>
+                        <label htmlFor="models" className="mb-1.5 block text-sm font-black text-[#18212c]">Model / Brand List</label>
+                        <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="iPhone 15 Pro, Samsung S24..." />
+                      </div>
+                    </div>
+                    <div>
+                      <label htmlFor="quality" className="mb-1.5 block text-sm font-black text-[#18212c]">Quality Requirement</label>
+                      <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
+                        <option value="">Select quality grade</option>
+                        <option value="OEM Original">OEM Original</option>
+                        <option value="Premium Aftermarket">Premium Aftermarket</option>
+                        <option value="Standard Aftermarket">Standard Aftermarket</option>
+                        <option value="Mixed Grades">Mixed Grades</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="message" className="mb-1.5 block text-sm font-black text-[#18212c]">Additional Requirements</label>
+                      <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={4} className="w-full resize-none rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="Paste model list, preferred shipping route, packing needs or target quantity..." />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {turnstileSiteKey && (
+                <div className="flex justify-center">
+                  <TurnstileWidget />
+                </div>
+              )}
+
+              {submitError && <p className="rounded-md bg-red-50 p-3 text-sm text-red-600">{submitError}</p>}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`flex w-full items-center justify-center gap-2 rounded-md bg-[#ff8a2a] px-6 py-4 text-base font-black text-white shadow-md shadow-[#ff8a2a]/20 transition hover:bg-[#e97313] ${isSubmitting ? 'cursor-not-allowed opacity-70' : 'hover:shadow-lg'}`}
+              >
+                {isSubmitting ? (
+                  <>
+                    <svg className="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-5 w-5" />
+                    Get Wholesale Quote
+                  </>
+                )}
+              </button>
+              <p className="text-center text-xs text-[#52606d]">We will respond within 24 hours. Your quote request is handled by PRSPARES sales support.</p>
+            </form>
+          </div>
+
+          <aside className="space-y-4">
+            <div className="rounded-lg border border-[#ded6c8] bg-[#fffaf0] p-6">
+              <ShieldCheck className="h-8 w-8 text-[#0b6b45]" />
+              <h3 className="mt-5 text-xl font-black text-[#18212c]">What you receive</h3>
+              <ul className="mt-4 space-y-3 text-sm font-semibold text-[#27313c]">
+                {['Stock status by model', '10 / 50 / 200 pcs price tiers', 'Grade options and MOQ', 'Shipping route recommendation'].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-[#0b6b45]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-lg border border-[#ded6c8] bg-white p-6">
+              <ClipboardCheck className="h-8 w-8 text-[#0b6b45]" />
+              <h3 className="mt-5 text-xl font-black text-[#18212c]">Prefer direct contact?</h3>
+              <div className="mt-4 space-y-3">
+                <a href="https://wa.me/85363902425?text=Hi,%20I%27m%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_click', { event_label: 'Inquiry Side WhatsApp' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
+                  <MessageSquare className="h-4 w-4" />
+                  WhatsApp: +853 6390 2425
+                </a>
+                <a href="mailto:parts.info@phonerepairspares.com" onClick={() => trackEvent('contact_click', { method: 'email' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
+                  <Mail className="h-4 w-4" />
+                  parts.info@phonerepairspares.com
+                </a>
+                <a href="tel:+8618312589439" onClick={() => trackEvent('contact_click', { method: 'phone' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
+                  <Phone className="h-4 w-4" />
+                  +86 183 1258 9439
+                </a>
+              </div>
+            </div>
+            <div className="relative aspect-[16/11] overflow-hidden rounded-lg">
+              <Image src="/images/home-redesign/proof-sku-coverage.png" alt="PRSPARES quote support desk" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 40vw" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
+              <div className="absolute bottom-4 left-4 rounded-md bg-white px-3 py-2 text-sm font-black text-[#18212c]">SKU coverage check</div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section className="bg-[#18212c] py-14 text-white md:py-20">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+          <div>
+            <p className="text-sm font-bold text-[#ffb36b]">Support expectations</p>
+            <h2 className="mt-3 text-3xl font-black md:text-5xl">What happens after submission?</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              { icon: PackageCheck, title: 'Stock check', text: 'Sales checks availability and compatible models.' },
+              { icon: Truck, title: 'Route option', text: 'Team suggests express, battery-compliant or bulk route.' },
+              { icon: MessageSquare, title: 'Quote reply', text: 'Buyer receives price tiers and next-step confirmation.' },
+            ].map((item) => (
+              <div key={item.title} className="rounded-lg border border-white/15 bg-white/[0.06] p-5">
+                <item.icon className="h-7 w-7 text-[#51d88a]" />
+                <h3 className="mt-4 text-lg font-black text-white">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-14 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle eyebrow="FAQ" title="Wholesale quote questions." />
+          <div className="space-y-3">
+            {faqItems.map((item, index) => (
+              <FaqItem key={item.q} item={item} defaultOpen={index < 2} />
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

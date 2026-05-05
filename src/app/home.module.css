@@ -1,0 +1,248 @@
+.heroImage {
+  animation: heroImageDrift 24s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.heroAura {
+  animation: auraShift 12s ease-in-out infinite alternate;
+}
+
+.heroCopy {
+  animation: fadeUp 720ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+.heroBadge {
+  animation: fadeUp 640ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+.heroTitle {
+  animation: fadeUp 760ms cubic-bezier(0.2, 0.72, 0.2, 1) 80ms both;
+}
+
+.heroText {
+  animation: fadeUp 760ms cubic-bezier(0.2, 0.72, 0.2, 1) 170ms both;
+}
+
+.heroActions {
+  animation: fadeUp 760ms cubic-bezier(0.2, 0.72, 0.2, 1) 260ms both;
+}
+
+.ctaSheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaSheen::after {
+  background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.34) 45%, transparent 72%);
+  content: "";
+  height: 160%;
+  left: -120%;
+  position: absolute;
+  top: -30%;
+  transform: rotate(12deg);
+  width: 70%;
+}
+
+.ctaSheen:hover::after {
+  animation: sheen 720ms ease;
+}
+
+.statRail > * {
+  animation: statIn 620ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+.statRail > *:nth-child(1) {
+  animation-delay: 320ms;
+}
+
+.statRail > *:nth-child(2) {
+  animation-delay: 410ms;
+}
+
+.statRail > *:nth-child(3) {
+  animation-delay: 500ms;
+}
+
+.statRail > *:nth-child(4) {
+  animation-delay: 590ms;
+}
+
+.motionCard {
+  transform: translateZ(0);
+  transition:
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    transform 260ms ease;
+}
+
+.motionCard:hover {
+  box-shadow: 0 22px 46px rgba(24, 33, 44, 0.13);
+  transform: translateY(-6px);
+}
+
+.iconPulse {
+  transition: transform 260ms ease, color 260ms ease;
+}
+
+.motionCard:hover .iconPulse {
+  color: #ff8a2a;
+  transform: translateY(-2px) scale(1.06);
+}
+
+.mediaFrame {
+  transform: translateZ(0);
+  transition:
+    box-shadow 320ms ease,
+    transform 320ms ease;
+}
+
+.mediaFrame:hover {
+  box-shadow: 0 26px 56px rgba(24, 33, 44, 0.18);
+  transform: translateY(-4px);
+}
+
+.mediaImage {
+  transition: transform 900ms cubic-bezier(0.2, 0.72, 0.2, 1), filter 320ms ease;
+}
+
+.mediaFrame:hover .mediaImage {
+  filter: saturate(1.08) contrast(1.04);
+  transform: scale(1.045);
+}
+
+.proofMain {
+  transform: translateZ(0);
+}
+
+.proofSide {
+  transform: translateZ(0);
+}
+
+.proofSide > *:nth-child(2) {
+  transition-delay: 120ms;
+}
+
+.metricCard {
+  transition: background-color 220ms ease, border-color 220ms ease, transform 220ms ease;
+}
+
+.metricCard:hover {
+  background-color: #fff3df;
+  border-color: #ffbf8a;
+  transform: translateY(-3px);
+}
+
+@keyframes heroImageDrift {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.08) translate3d(-1.4%, -1%, 0);
+  }
+}
+
+@keyframes auraShift {
+  from {
+    opacity: 0.84;
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(1.5%, -1%, 0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes statIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealFromBottom {
+  from {
+    opacity: 0.001;
+    transform: translateY(34px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealFromLeft {
+  from {
+    opacity: 0.001;
+    transform: translateX(-26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes revealFromRight {
+  from {
+    opacity: 0.001;
+    transform: translateX(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes sheen {
+  from {
+    left: -120%;
+  }
+  to {
+    left: 140%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroImage,
+  .heroAura,
+  .heroCopy,
+  .heroBadge,
+  .heroTitle,
+  .heroText,
+  .heroActions,
+  .statRail > *,
+  .proofMain,
+  .proofSide {
+    animation: none;
+  }
+
+  .motionCard,
+  .mediaFrame,
+  .mediaImage,
+  .metricCard,
+  .iconPulse {
+    transition: none;
+  }
+
+  .motionCard:hover,
+  .mediaFrame:hover,
+  .metricCard:hover,
+  .mediaFrame:hover .mediaImage,
+  .motionCard:hover .iconPulse {
+    transform: none;
+  }
+}

@@ -20,7 +20,7 @@ let _humanVerified = false;
 let _scrollDepth = 0;
 let _timeOnPage = 0;
 let _engagementListenersAttached = false;
-let _pageLoadTime = 0;
+let _pageLoadTime = typeof window !== 'undefined' ? Date.now() : 0;
 
 /** Signals that count as "human-like" behaviour */
 function markHuman() {
@@ -48,7 +48,7 @@ let _scrollSamples = 0;
 function attachEngagementListeners() {
   if (_engagementListenersAttached || typeof window === 'undefined') return;
   _engagementListenersAttached = true;
-  _pageLoadTime = Date.now();
+  if (_pageLoadTime === 0) _pageLoadTime = Date.now();
 
   // ── Mouse movement: human detection + trajectory collection ──
   let mouseMoves = 0;
@@ -78,8 +78,9 @@ function attachEngagementListeners() {
 
   // ── Click ──
   window.addEventListener('click', () => {
+    markHuman();
     recordInteraction();
-  }, { passive: true });
+  }, { capture: true, passive: true });
 
   // ── Scroll tracking: depth + naturalness signals ──
   _lastScrollY = window.scrollY;
@@ -320,6 +321,7 @@ const EVENT_GATES: Record<string, EngagementGate> = {
   quote_cta_click: { requireHuman: true, minTimeOnPage: 3 },
   contact_click:   { requireHuman: true, minTimeOnPage: 2 },
   whatsapp_click:  { requireHuman: true, minTimeOnPage: 2 },
+  line_click:      { requireHuman: true, minTimeOnPage: 2 },
   chat_start:      { requireHuman: true, minTimeOnPage: 3 },
   browse_products: { requireHuman: true, minScrollDepth: 15 },
   begin_form:      { requireHuman: true },
@@ -510,5 +512,6 @@ function fireDelayedPageView() {
 }
 
 if (typeof window !== 'undefined') {
+  attachEngagementListeners();
   setTimeout(fireDelayedPageView, 3000);
 }

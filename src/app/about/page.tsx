@@ -1,215 +1,280 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CheckCircle, ArrowRight, MapPin, Users, ShieldCheck, Package, Globe, Headphones } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import {
+  ArrowRight,
+  BadgeCheck,
+  Factory,
+  ShieldCheck,
+  Truck,
+  Users,
+} from 'lucide-react';
+import JsonLd from '@/components/JsonLd';
+
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  'https://www.phonerepairspares.com'
+).replace(/\/$/, '');
+
+function absoluteUrl(path: string) {
+  return `${SITE_URL}${path}`;
+}
 
 export const metadata: Metadata = {
-  title: 'About PRSPARES — Shenzhen Wholesale Phone Parts Supplier | Huaqiangbei',
-  description: 'PRSPARES is a B2B wholesale phone repair parts supplier based in Shenzhen Huaqiangbei. 10+ years experience, 3-tier QC, OEM/aftermarket screens, batteries & small parts for global repair businesses.',
+  title: 'About PRSPARES | Shenzhen Phone Parts Supplier',
+  description:
+    'PRSPARES is a B2B wholesale phone repair parts supplier based in Shenzhen Huaqiangbei. Stock, QC, packing and global logistics support for repair businesses.',
   alternates: {
     canonical: '/about',
   },
   openGraph: {
     title: 'About PRSPARES — Shenzhen Wholesale Phone Parts Supplier',
-    description: 'B2B wholesale phone repair parts from Shenzhen Huaqiangbei. 10+ years, 3-tier QC, global shipping.',
+    description:
+      'A Shenzhen phone repair parts sourcing partner built around stock, QC, packing and fast B2B support.',
     type: 'website',
     url: '/about',
-    images: ['/PRSPARES1.png'],
+    images: ['/hero/about.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'About PRSPARES — Shenzhen Wholesale Phone Parts Supplier',
-    description: 'B2B wholesale phone repair parts from Shenzhen Huaqiangbei. 10+ years, 3-tier QC, global shipping.',
+    description:
+      'A Shenzhen phone repair parts sourcing partner built around stock, QC, packing and fast B2B support.',
+    images: ['/hero/about.jpg'],
   },
 };
 
-const STATS = [
-  { value: '10+', label: 'Years in Business', sub: 'Since 2015 in Huaqiangbei' },
-  { value: '50+', label: 'Countries Served', sub: 'Worldwide B2B shipping' },
-  { value: '5,000+', label: 'SKUs Available', sub: 'Screens, batteries, parts, tools' },
-  { value: '98%', label: 'Order Accuracy', sub: '3-tier quality control' },
-];
+type InfoCard = {
+  icon: LucideIcon;
+  title: string;
+  text: string;
+};
 
-const CAPABILITIES = [
+const capabilityCards: InfoCard[] = [
   {
-    icon: MapPin,
-    title: 'Shenzhen Huaqiangbei Base',
-    desc: 'Located in the world\'s largest electronics marketplace. Direct access to 200+ verified component factories and first-tier suppliers.',
+    icon: Factory,
+    title: 'Huaqiangbei access',
+    text: 'Close to first-tier electronics vendors and fast restocking channels for phone repair parts.',
   },
   {
     icon: ShieldCheck,
-    title: '3-Tier Quality Control',
-    desc: 'Every batch goes through incoming inspection, functional testing, and pre-shipment QC. Defect rate consistently below 1%.',
-  },
-  {
-    icon: Package,
-    title: 'Full Product Range',
-    desc: 'OEM Original, Premium Aftermarket, and Standard Aftermarket grades. Screens, batteries, small parts, and repair tools — all from one supplier.',
-  },
-  {
-    icon: Globe,
-    title: 'Global B2B Logistics',
-    desc: 'DHL, FedEx, UPS, and sea freight. DG-compliant battery shipping. Typical delivery 3-7 business days worldwide.',
+    title: 'Pre-shipment QC',
+    text: 'Screens, batteries and small parts are checked by batch before packing and dispatch.',
   },
   {
     icon: Users,
-    title: 'Dedicated Account Team',
-    desc: 'Each wholesale client gets a dedicated account manager. WeChat, WhatsApp, and email support in English, Chinese, and Spanish.',
-  },
-  {
-    icon: Headphones,
-    title: '12-Month Warranty',
-    desc: 'Industry-leading warranty on all products. Fast replacement for any quality issues — no complicated claims process.',
+    title: 'B2B account support',
+    text: 'Repeat buyers get practical help on model mixes, quality grades, packing and shipping routes.',
   },
 ];
 
-const BUYERS = [
-  'Independent repair shops',
-  'Multi-location repair chains',
-  'Refurbishment & resale companies',
-  'Telecom operators & carriers',
-  'IT asset management firms',
-  'Repair training academies',
+const aboutJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'About PRSPARES',
+    url: absoluteUrl('/about'),
+    description: metadata.description,
+    primaryImageOfPage: absoluteUrl('/hero/about.jpg'),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: SITE_URL,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'About',
+        item: absoluteUrl('/about'),
+      },
+    ],
+  },
 ];
+
+function PageHero({
+  eyebrow,
+  title,
+  text,
+  image,
+}: {
+  eyebrow: string;
+  title: string;
+  text: string;
+  image: string;
+}) {
+  return (
+    <section className="relative overflow-hidden bg-[#111922] text-white">
+      <Image src={image} alt="" fill priority className="object-cover" sizes="100vw" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,16,24,0.94),rgba(10,16,24,0.72)_45%,rgba(10,16,24,0.26))]" />
+      <div className="relative mx-auto grid min-h-[460px] max-w-7xl items-center gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
+        <div>
+          <div className="mb-5 inline-flex items-center gap-2 border border-white/25 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur">
+            <BadgeCheck className="h-4 w-4 text-[#51d88a]" />
+            {eyebrow}
+          </div>
+          <h1 className="max-w-4xl text-4xl font-black leading-[1.05] sm:text-5xl lg:text-6xl">{title}</h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100">{text}</p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/wholesale-inquiry" className="inline-flex items-center justify-center gap-2 rounded-md bg-[#ff8a2a] px-6 py-4 text-base font-bold text-white shadow-lg shadow-black/25 transition hover:bg-[#e97313]">
+              Get Wholesale Quote
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+            <Link href="/products" className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 bg-white/10 px-6 py-4 text-base font-bold text-white backdrop-blur transition hover:bg-white/20">
+              Browse Catalog
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MetricStrip() {
+  const items: Array<[string, string, string]> = [
+    ['10+', 'years', 'Huaqiangbei sourcing experience'],
+    ['50+', 'countries', 'B2B shipping reach'],
+    ['27k+', 'catalog lines', 'Major repair categories covered'],
+    ['24h', 'quote response', 'Stock, price and route feedback'],
+  ];
+
+  return (
+    <section className="border-b border-[#d9d2c4] bg-[#fffaf0]">
+      <div className="mx-auto grid max-w-7xl gap-3 px-4 py-5 sm:px-6 md:grid-cols-4 lg:px-8">
+        {items.map(([value, label, detail]) => (
+          <div key={label} className="border border-[#e4d8c2] bg-white px-4 py-4">
+            <div className="font-mono text-2xl font-black text-[#ff8a2a]">{value}</div>
+            <div className="mt-1 text-sm font-black text-[#18212c]">{label}</div>
+            <div className="mt-1 text-xs leading-5 text-[#52606d]">{detail}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: string; text?: string }) {
+  return (
+    <div className="mb-8 grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+      <div>
+        <p className="text-sm font-bold text-[#0b6b45]">{eyebrow}</p>
+        <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-5xl">{title}</h2>
+      </div>
+      {text && <p className="text-base leading-7 text-[#52606d] md:text-lg">{text}</p>}
+    </div>
+  );
+}
+
+function CardGrid({ cards }: { cards: InfoCard[] }) {
+  return (
+    <div className="grid gap-4 md:grid-cols-3">
+      {cards.map((item) => (
+        <div key={item.title} className="rounded-lg border border-[#ded6c8] bg-white p-6 shadow-sm">
+          <item.icon className="h-8 w-8 text-[#0b6b45]" />
+          <h3 className="mt-5 text-xl font-black text-[#18212c]">{item.title}</h3>
+          <p className="mt-3 text-sm leading-6 text-[#52606d]">{item.text}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FinalCta() {
+  return (
+    <section className="bg-[#0b6b45] py-14 text-white md:py-16">
+      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:px-6 md:flex-row md:items-center lg:px-8">
+        <div>
+          <p className="text-sm font-bold text-[#bff2d0]">Ready for next step</p>
+          <h2 className="mt-2 text-3xl font-black md:text-5xl">Send your model list for a quote.</h2>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-[#e4fff0]">
+            PRSPARES can return stock status, price tiers, grade options and shipping route within 24 hours.
+          </p>
+        </div>
+        <Link href="/wholesale-inquiry" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-white px-6 py-4 text-base font-black text-[#0b6b45] transition hover:bg-[#fff0dd]">
+          Get Wholesale Quote
+          <ArrowRight className="h-5 w-5" />
+        </Link>
+      </div>
+    </section>
+  );
+}
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="relative w-full h-[400px] md:h-[480px]">
-        <Image
-          src="/prspares-about-us-banner-mobile-repair-parts-supplier-professional.jpg"
-          alt="PRSPARES warehouse and quality control team in Shenzhen Huaqiangbei"
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-          quality={85}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a5f]/90 to-[#0f2440]/70 flex items-center">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl">
-              <p className="text-orange-400 font-semibold mb-3 text-sm tracking-wider uppercase">
-                Shenzhen · Huaqiangbei · Since 2015
-              </p>
-              <h1 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
-                Your Wholesale Partner for Phone Repair Parts
-              </h1>
-              <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                PRSPARES supplies OEM and aftermarket phone repair parts to repair businesses in 50+ countries — direct from the heart of Shenzhen&apos;s electronics supply chain.
-              </p>
-              <Link
-                href="/wholesale-inquiry"
-                className="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 hover:shadow-lg"
-              >
-                Get Wholesale Quote
-                <ArrowRight className="ml-2" size={18} />
-              </Link>
-            </div>
+    <main className="min-h-screen bg-[#f5f3ee]">
+      <JsonLd data={aboutJsonLd} />
+      <PageHero
+        eyebrow="About PRSPARES / Huaqiangbei sourcing base"
+        title="A Shenzhen Parts Partner Built Around Stock, QC and Speed"
+        text="PRSPARES supports repair shops, wholesalers and sourcing teams with phone repair parts from Shenzhen's electronics supply chain: screens, batteries, small parts, tools and fast quote support."
+        image="/hero/about.jpg"
+      />
+
+      <MetricStrip />
+
+      <section className="bg-white py-14 md:py-20">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+          <div>
+            <p className="text-sm font-bold text-[#0b6b45]">Company narrative</p>
+            <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-5xl">From local sourcing to global repair supply.</h2>
+            <p className="mt-5 text-base leading-7 text-[#52606d]">
+              The company page now focuses on operational proof: inventory access, QC workflow, packing discipline, logistics support and practical account service for repeat buyers.
+            </p>
           </div>
+          <CardGrid cards={capabilityCards} />
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-12 bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {STATS.map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="text-3xl md:text-4xl font-black text-[#1e3a5f] mb-1">{s.value}</div>
-                <div className="font-semibold text-gray-900 mb-1">{s.label}</div>
-                <div className="text-sm text-gray-500">{s.sub}</div>
+      <section className="bg-[#fffaf0] py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle eyebrow="Operational proof" title="Real supply-chain moments, not vague claims." />
+          <div className="grid gap-4 lg:grid-cols-3">
+            {[
+              ['/images/home-redesign/proof-stock-shelves.png', 'Inventory shelves'],
+              ['/images/home-redesign/proof-packing-station.png', 'Packing station'],
+              ['/images/home-redesign/proof-sku-coverage.png', 'SKU coverage'],
+            ].map(([src, label]) => (
+              <div key={label} className="relative aspect-[16/10] overflow-hidden rounded-lg">
+                <Image src={src} alt={label} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 33vw" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
+                <div className="absolute bottom-4 left-4 rounded-md bg-white px-3 py-2 text-sm font-black text-[#18212c]">{label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Who We Are */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Built in Huaqiangbei, Serving the World
-              </h2>
-              <p className="text-lg text-gray-600 mb-4 leading-relaxed">
-                PRSPARES was founded in 2015 in Shenzhen&apos;s Huaqiangbei district — the world&apos;s largest electronics marketplace. What started as a local parts supplier has grown into a trusted B2B wholesale partner for repair businesses across 50+ countries.
-              </p>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Our location gives us unmatched access to first-tier component factories, enabling us to offer competitive pricing, fast sourcing, and consistent quality across our full product range: screens, batteries, small parts, and professional repair tools.
-              </p>
-              <div className="space-y-3">
-                {BUYERS.map((b) => (
-                  <div key={b} className="flex items-center gap-3">
-                    <CheckCircle className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                    <span className="text-gray-700">{b}</span>
-                  </div>
-                ))}
+      <section className="bg-white py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            eyebrow="How PRSPARES helps"
+            title="Built for repeated B2B buying."
+            text="Instead of asking buyers to checkout one SKU at a time, the site guides them toward the faster workflow: send model list, confirm availability, receive quote tiers, ship."
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              { icon: ShieldCheck, title: 'Check', text: 'Confirm compatible models, quality grades and stock availability before quoting.' },
+              { icon: Truck, title: 'Pack', text: 'Prepare mixed orders, export packing and battery shipment requirements where needed.' },
+              { icon: Users, title: 'Support', text: 'Follow up on reorder lists, warranty questions and urgent repair-shop demand.' },
+            ].map((item) => (
+              <div key={item.title} className="rounded-lg border border-[#ded6c8] bg-[#fffaf0] p-6">
+                <item.icon className="h-8 w-8 text-[#0b6b45]" />
+                <h3 className="mt-5 text-xl font-black text-[#18212c]">{item.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#52606d]">{item.text}</p>
               </div>
-            </div>
-            <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3]">
-              <Image
-                src="/prspares-company-team-workspace-mobile-parts-quality-control-professional.jpg"
-                alt="PRSPARES team performing quality control on phone repair parts"
-                fill
-                className="object-cover"
-              />
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Capabilities */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Repair Businesses Choose PRSPARES</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              From sourcing to shipping, we handle every step of the wholesale supply chain so you can focus on your repair business.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {CAPABILITIES.map((c) => {
-              const Icon = c.icon;
-              return (
-                <div key={c.title} className="bg-gray-50 rounded-2xl p-8 hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 bg-[#1e3a5f] rounded-xl flex items-center justify-center mb-5">
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{c.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{c.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-16 bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Partner With Us?</h2>
-          <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-            Tell us what you need — our team will respond within 24 hours with pricing, MOQ, and shipping options.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/wholesale-inquiry"
-              className="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 hover:shadow-lg"
-            >
-              Get Wholesale Quote
-              <ArrowRight className="ml-2" size={18} />
-            </Link>
-            <Link
-              href="/products"
-              className="inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-xl border border-white/20 transition-all duration-300"
-            >
-              Browse Products
-            </Link>
-          </div>
-        </div>
-      </section>
+      <FinalCta />
     </main>
   );
 }

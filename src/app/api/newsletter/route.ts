@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminClient } from '@/lib/supabase/admin';
+import { checkSubmission } from '@/lib/security/spam-checks';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 type NewsletterSource = 'footer' | 'blog' | 'unknown';
 
 interface NewsletterSubscriptionPayload {
   email?: string;
   source?: string;
+  honeypot?: string;
 }
 
 const NEWSLETTER_SOURCES: NewsletterSource[] = ['footer', 'blog', 'unknown'];
@@ -43,6 +46,23 @@ export async function POST(request: NextRequest) {
     const body: NewsletterSubscriptionPayload = await request.json();
     const email = String(body.email || '').trim().toLowerCase();
     const source = normalizeSource(body.source);
+    const clientIP = resolveClientIP(request);
+
+    // Newsletter is lower-value to spam (no email is sent to admins on subscribe),
+    // but still gate it to keep the table clean and stop drive-by bots.
+    const rl = checkRateLimit(`newsletter:${clientIP}`, 5, 60_000);
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Too many subscriptions, please try again in a minute.' },
+        { status: 429 }
+      );
+    }
+
+    const spam = checkSubmission({ honeypot: body.honeypot, email });
+    if (!spam.ok) {
+      console.warn('[Newsletter] spam check rejected:', spam.reason, 'ip:', clientIP);
+      return NextResponse.json({ error: 'Invalid submission' }, { status: 400 });
+    }
 
     // Validate email
     if (!email) {
@@ -61,7 +81,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const clientIP = resolveClientIP(request);
     const userAgent = request.headers.get('user-agent') || 'unknown';
     const supabase = getNewsletterClient();
 

@@ -1,6 +1,8 @@
 'use client';
 
+import { useRef } from 'react';
 import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
+import Honeypot from '@/components/common/Honeypot';
 
 export default function BlogNewsletterSubscribe() {
   const {
@@ -13,8 +15,12 @@ export default function BlogNewsletterSubscribe() {
     submit,
   } = useNewsletterSubscription({ source: 'blog' });
 
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const submitWithHoneypot = () => submit({ honeypot: honeypotRef.current?.value });
+
   return (
     <div className="max-w-md mx-auto">
+      <Honeypot ref={honeypotRef} />
       <div className="flex flex-col sm:flex-row gap-3">
         <input
           type="email"
@@ -25,13 +31,13 @@ export default function BlogNewsletterSubscribe() {
           disabled={isSubmitting}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              void submit();
+              void submitWithHoneypot();
             }
           }}
         />
         <button
           onClick={() => {
-            void submit();
+            void submitWithHoneypot();
           }}
           disabled={isSubmitting || isSubscribed}
           className="px-7 py-3.5 bg-[#00B140] text-white rounded-lg font-semibold hover:bg-[#008631] transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"

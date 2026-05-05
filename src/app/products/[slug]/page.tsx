@@ -9,6 +9,37 @@ import { CheckCircle, ShieldCheck, Truck, Zap } from 'lucide-react';
 import ProductDetailClient, { ClientProduct } from '@/components/features/ProductDetailClient';
 import ProductInfoTabs, { InfoTabsProduct } from '@/components/features/ProductInfoTabs';
 import { convertToProduct } from '@/utils/type-converters';
+import JsonLd from '@/components/JsonLd';
+
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  'https://www.phonerepairspares.com'
+).replace(/\/$/, '');
+
+function absoluteUrl(path: string) {
+  return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
+function getProductSeoDescription(product: Pick<Product, 'name' | 'short_desc'>) {
+  const shortDescription = product.short_desc?.trim();
+  if (shortDescription && shortDescription.length >= 120 && shortDescription.length <= 155) {
+    return shortDescription;
+  }
+
+  return `Wholesale ${product.name} from PRSPARES. B2B phone repair parts with model compatibility, batch QC, MOQ support and fast quote from Shenzhen.`;
+}
+
+function getProductImageUrls(product: Product) {
+  const images = Array.isArray(product.images) ? (product.images as any[]) : [];
+  return images
+    .map((image) => (typeof image === 'string' ? image : image?.url))
+    .filter(Boolean)
+    .map((src: string) => {
+      if (/^https?:\/\//i.test(src)) return src;
+      return absoluteUrl(src);
+    });
+}
 
 // 使用项目中已定义的Product类型，无需重复定义
 
@@ -109,16 +140,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   // 使用统一的类型转换器
   const product = convertToProduct(productData);
+  const description = getProductSeoDescription(product);
 
   return {
     title: `${product.name} - PRSPARES Mobile Parts`,
-    description: product.short_desc || `Details for ${product.name} - high-quality mobile repair parts.`,
+    description,
     alternates: {
       canonical: `/products/${params.slug}`,
     },
     openGraph: {
       title: `${product.name} - PRSPARES Mobile Parts`,
-      description: product.short_desc || `Details for ${product.name} - high-quality mobile repair parts.`,
+      description,
       type: 'website',
       url: `/products/${params.slug}`,
     },
@@ -149,9 +181,70 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
     ];
 
     const relatedProducts = await getRelatedProducts(product.id, 3);
+    const productDescription = getProductSeoDescription(product);
+    const productSchema: Record<string, unknown> = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      description: productDescription,
+      sku: product.sku,
+      image: getProductImageUrls(product),
+      brand: {
+        '@type': 'Brand',
+        name: 'PRSPARES',
+      },
+      category: product.type || 'Mobile Phone Repair Parts',
+      url: absoluteUrl(`/products/${product.slug}`),
+    };
+
+    const productPrice = product.sale_price || product.regular_price;
+    if (productPrice) {
+      productSchema.offers = {
+        '@type': 'Offer',
+        priceCurrency: 'USD',
+        price: productPrice,
+        availability:
+          product.stock_status === 'outofstock'
+            ? 'https://schema.org/OutOfStock'
+            : 'https://schema.org/InStock',
+        seller: {
+          '@type': 'Organization',
+          name: 'PRSPARES',
+        },
+      };
+    }
+
+    const productJsonLd = [
+      productSchema,
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Products',
+            item: absoluteUrl('/products'),
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: product.name,
+            item: absoluteUrl(`/products/${product.slug}`),
+          },
+        ],
+      },
+    ];
 
     return (
       <main className="min-h-screen bg-gray-100">
+        <JsonLd data={productJsonLd} />
         <div className="bg-white border-b border-gray-200 py-4 shadow-sm">
             <div className="max-w-[1200px] mx-auto px-4">
                 <Breadcrumb items={breadcrumbItems} />

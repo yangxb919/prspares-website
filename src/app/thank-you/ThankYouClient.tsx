@@ -2,17 +2,25 @@
 import Link from 'next/link';
 import { CheckCircle, ArrowLeft, Mail, Clock, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function ThankYouClient() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const searchParams = useSearchParams();
+  // Permit 'en' | 'id' | 'th' from ?lang= query — set by SEA wholesale pages on submit.
+  const rawLang = searchParams?.get('lang') ?? '';
+  const lang = ['id', 'th', 'en'].includes(rawLang) ? rawLang : 'en';
+  const pageType = lang === 'id' || lang === 'th' ? 'sea_wholesale' : 'default';
 
   useEffect(() => {
     setIsLoaded(true);
-    // Track thank-you page view via GTM dataLayer
+    // Track thank-you page view via GTM dataLayer (with lang for SEA conversion split)
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: 'thank_you_page_view',
       page_path: '/thank-you',
+      lang,
+      page_type: pageType,
     });
 
     // Google Ads conversion tracking — via GTM dataLayer
@@ -21,8 +29,10 @@ export default function ThankYouClient() {
       send_to: 'AW-18045108063/Ev3VCLzXwZAcEN_-yZxD',
       value: 725.0,
       currency: 'CNY',
+      lang,
+      page_type: pageType,
     });
-  }, []);
+  }, [lang, pageType]);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center px-4 relative overflow-hidden">
@@ -127,7 +137,7 @@ export default function ThankYouClient() {
               href="/products"
               className="group inline-flex items-center justify-center px-10 py-5 bg-white text-gray-700 font-bold rounded-2xl border-2 border-gray-200 hover:border-[#00B140] hover:bg-gray-50 hover:text-[#00B140] transition-all duration-500 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
             >
-              Browse Products
+              Browse Catalog
               <ArrowLeft className="w-6 h-6 ml-3 rotate-180 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </div>

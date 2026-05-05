@@ -1,11 +1,14 @@
 'use client';
 
+import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { contactFormSchema, type ContactFormData } from '@/lib/form-schemas';
 import { FormWrapper } from '@/components/common/FormWrapper';
 import { FormInput, FormTextarea, FormSelect } from '@/components/common/FormComponents';
 import { Mail, Phone, MessageSquare, User, Building } from 'lucide-react';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
+import { useTurnstile } from '@/components/common/Turnstile';
+import Honeypot from '@/components/common/Honeypot';
 
 interface ContactFormProps {
   className?: string;
@@ -32,7 +35,21 @@ const requestTypeOptions = [
 export default function ContactFormEnhanced({ className, showTitle = true, onSuccess }: ContactFormProps) {
   const router = useRouter();
 
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+  const {
+    token: turnstileToken,
+    isVerified: isTurnstileVerified,
+    hasError: turnstileError,
+    TurnstileWidget,
+  } = useTurnstile(turnstileSiteKey);
+  const honeypotRef = useRef<HTMLInputElement>(null);
+
   const handleSubmit = async (data: ContactFormData) => {
+    const turnstileRequired = turnstileSiteKey && !turnstileError;
+    if (turnstileRequired && !isTurnstileVerified) {
+      throw new Error('Please complete the verification challenge.');
+    }
+
     try {
       const submittedAt = new Date().toISOString();
       const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
@@ -47,6 +64,8 @@ export default function ContactFormEnhanced({ className, showTitle = true, onSuc
         message: data.message,
         pageUrl,
         submittedAt,
+        turnstileToken: turnstileToken || undefined,
+        honeypot: honeypotRef.current?.value,
       });
 
       router.push('/thank-you');
@@ -77,6 +96,7 @@ export default function ContactFormEnhanced({ className, showTitle = true, onSuc
 
         return (
           <div className="space-y-6">
+            <Honeypot ref={honeypotRef} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Name */}
               <FormInput
@@ -178,6 +198,12 @@ export default function ContactFormEnhanced({ className, showTitle = true, onSuc
               description="Please provide as much detail as possible to help us serve you better"
               icon={<MessageSquare className="h-4 w-4 text-gray-400" />}
             />
+
+            {turnstileSiteKey && (
+              <div className="flex justify-center pt-2">
+                <TurnstileWidget />
+              </div>
+            )}
           </div>
         );
       }}

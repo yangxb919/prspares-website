@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { X, Send, User, Mail, MessageCircle } from 'lucide-react';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
+import { useTurnstile } from '@/components/common/Turnstile';
+import Honeypot from '@/components/common/Honeypot';
 
 interface InquiryModalProps {
   isOpen: boolean;
@@ -36,6 +38,15 @@ const InquiryModal = ({
   const [validationErrors, setValidationErrors] = useState<Partial<FormData>>({});
   const [userIP, setUserIP] = useState<string>('');
   const [submitError, setSubmitError] = useState<string>('');
+
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+  const {
+    token: turnstileToken,
+    isVerified: isTurnstileVerified,
+    hasError: turnstileError,
+    TurnstileWidget,
+  } = useTurnstile(turnstileSiteKey);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   // Get user IP address
   const getUserIP = async (): Promise<string> => {
@@ -129,8 +140,14 @@ const InquiryModal = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
+      return;
+    }
+
+    const turnstileRequired = turnstileSiteKey && !turnstileError;
+    if (turnstileRequired && !isTurnstileVerified) {
+      setSubmitError('Please complete the verification challenge.');
       return;
     }
 
@@ -157,6 +174,8 @@ const InquiryModal = ({
         pageUrl,
         ip: currentIP,
         submittedAt,
+        turnstileToken: turnstileToken || undefined,
+        honeypot: honeypotRef.current?.value,
       });
 
       router.push('/thank-you');
@@ -205,6 +224,7 @@ const InquiryModal = ({
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            <Honeypot ref={honeypotRef} />
             {/* Name input */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -280,6 +300,13 @@ const InquiryModal = ({
               )}
             </div>
 
+            {/* Turnstile verification */}
+            {turnstileSiteKey && (
+              <div className="flex justify-center">
+                <TurnstileWidget />
+              </div>
+            )}
+
             {/* Submit button */}
             {submitError && (
               <p className="text-sm text-red-600">{submitError}</p>
@@ -287,7 +314,7 @@ const InquiryModal = ({
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || (!!turnstileSiteKey && !turnstileError && !isTurnstileVerified)}
               className="w-full bg-gradient-to-r from-[#00B140] to-[#00D155] hover:from-[#008631] hover:to-[#00B140] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               {isSubmitting ? (

@@ -1,26 +1,27 @@
 import type { Metadata } from 'next';
 
+const metaTitle = 'iPad Battery Wholesale — OEM Replacement from $8 | PRSPARES';
+const metaDescription =
+  'Wholesale iPad batteries from Shenzhen with OEM replacement options from $8. MOQ support, UN38.3 packing, batch QC and fast quote for shops worldwide.';
+
 export const metadata: Metadata = {
-  title: 'iPad Battery Replacement | Wholesale OEM iPad Batteries — From $8/Unit | PRSPARES',
-  description:
-    'Wholesale iPad battery replacement: OEM quality batteries for iPad Pro, iPad Air, iPad mini & standard iPad. All models from 3rd gen to latest. MOQ 10 pcs, 12-month warranty. Factory-direct from Shenzhen.',
+  title: metaTitle,
+  description: metaDescription,
   keywords: 'ipad battery replacement, apple ipad battery replacement, ipad pro battery replacement, ipad air battery replacement, ipad battery replacement cost, ipad mini battery, wholesale ipad battery, ipad battery supplier',
   alternates: {
     canonical: '/products/ipad-battery-replacement-factory',
   },
   openGraph: {
-    title: 'iPad Battery Replacement Wholesale — OEM Batteries for All iPad Models | PRSPARES',
-    description:
-      'Wholesale iPad battery replacement: OEM quality for iPad Pro, Air, mini & standard models. Factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     type: 'website',
     url: '/products/ipad-battery-replacement-factory',
     images: ['/PRSPARES1.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'iPad Battery Replacement Wholesale — OEM Batteries for All iPad Models | PRSPARES',
-    description:
-      'Wholesale iPad battery replacement: OEM quality for iPad Pro, Air, mini & standard. Factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     images: ['/PRSPARES1.png'],
   },
 };
@@ -80,12 +81,22 @@ export default function iPadBatteryLayout({
     ],
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.phonerepairspares.com" },
+      { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.phonerepairspares.com/products" },
+      { "@type": "ListItem", "position": 3, "name": "iPad Batteries", "item": "https://www.phonerepairspares.com/products/ipad-battery-replacement-factory" }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([productSchema, faqSchema]),
+          __html: JSON.stringify([productSchema, faqSchema, breadcrumbSchema]),
         }}
       />
       {children}

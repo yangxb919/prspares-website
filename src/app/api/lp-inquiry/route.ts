@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminClient } from '@/lib/supabase/admin';
 import { sendRfqEmail } from '@/lib/email/sendRfqEmail';
+import { verifyTurnstileToken } from '@/lib/security/verifyTurnstile';
+import { checkSubmission } from '@/lib/security/spam-checks';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 
@@ -13,6 +16,8 @@ interface LpInquiryPayload {
   message?: string;
   pageUrl?: string;
   source?: string;
+  turnstileToken?: string;
+  honeypot?: string;
 }
 
 function isValidEmail(email: string): boolean {
@@ -32,6 +37,34 @@ function getClientIP(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as Partial<LpInquiryPayload>;
+    const ip = getClientIP(request);
+
+    // Rate limit, honeypot/content, then captcha — fail fast before DB/email work.
+    const rl = checkRateLimit(`lp:${ip}`, 5, 60_000);
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Too many submissions, please try again in a minute.' },
+        { status: 429 }
+      );
+    }
+
+    const spam = checkSubmission({
+      honeypot: body.honeypot,
+      email: body.email,
+      message: body.message,
+    });
+    if (!spam.ok) {
+      console.warn('[LP Inquiry] spam check rejected:', spam.reason, 'ip:', ip);
+      return NextResponse.json({ error: 'Invalid submission' }, { status: 400 });
+    }
+
+    const turnstile = await verifyTurnstileToken(body.turnstileToken, ip);
+    if (!turnstile.ok) {
+      return NextResponse.json(
+        { error: turnstile.reason || 'Captcha verification failed' },
+        { status: 403 }
+      );
+    }
 
     const name = body.name?.trim();
     const email = body.email?.trim();
@@ -43,7 +76,6 @@ export async function POST(request: NextRequest) {
     }
 
     const now = new Date().toISOString();
-    const ip = getClientIP(request);
     const userAgent = request.headers.get('user-agent') || '';
     const message = body.message?.trim() || '';
     const source = body.source?.trim() || '';

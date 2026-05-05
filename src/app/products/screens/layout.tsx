@@ -1,12 +1,16 @@
 import type { Metadata } from 'next';
 
+const metaTitle = 'Wholesale iPhone Samsung Screens LCD/OLED | PRSPARES';
+const metaDescription =
+  'Wholesale iPhone and Samsung LCD/OLED screens from Shenzhen. MOQ 10 pcs, grade options, batch QC, warranty support and fast quote for shops worldwide.';
+
 export const metadata: Metadata = {
-  title: 'Wholesale Phone Screens | iPhone & Samsung LCD/OLED Bulk Supplier - PRSPARES',
-  description: 'B2B wholesale phone screens from $19/unit. iPhone 12-16 & Samsung S-series LCD/OLED displays in 5 quality grades. Factory-direct Shenzhen, MOQ 10pcs, 12-month warranty. Request bulk pricing.',
+  title: metaTitle,
+  description: metaDescription,
   keywords: 'wholesale phone screens, iPhone screen wholesale, bulk iPhone screens, cell phone screen wholesale, wholesale iPhone LCD, phone LCD wholesale, iPhone replacement screen wholesale, cell phone parts wholesale',
   openGraph: {
-    title: 'Wholesale Phone Screens | iPhone & Samsung LCD/OLED Bulk Supplier - PRSPARES',
-    description: 'B2B wholesale phone screens from $19/unit. iPhone & Samsung LCD/OLED in 5 quality grades. Factory-direct, MOQ 10pcs, 12-month warranty.',
+    title: metaTitle,
+    description: metaDescription,
     type: 'website',
     url: '/products/screens',
     images: [
@@ -20,8 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wholesale Phone Screens | iPhone & Samsung LCD/OLED Bulk Supplier - PRSPARES',
-    description: 'B2B wholesale phone screens from $19/unit. iPhone & Samsung LCD/OLED in 5 quality grades. Factory-direct, MOQ 10pcs, 12-month warranty.',
+    title: metaTitle,
+    description: metaDescription,
     images: ['/PRSPARES1.png'],
   },
   alternates: {
@@ -118,12 +122,22 @@ export default function ScreensLayout({
     ]
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.phonerepairspares.com" },
+      { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.phonerepairspares.com/products" },
+      { "@type": "ListItem", "position": 3, "name": "Phone Screens", "item": "https://www.phonerepairspares.com/products/screens" }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productSchemas)
+          __html: JSON.stringify([...productSchemas, breadcrumbSchema])
         }}
       />
       <script

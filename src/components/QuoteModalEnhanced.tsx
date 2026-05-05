@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,6 +10,7 @@ import { FormInput, FormTextarea, FormErrorSummary, FormStatus } from '@/compone
 import { useFormAutoSave, useFormRecovery, useFormChanges, useFormSubmission, usePreventDataLoss } from '@/lib/form-utils';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
 import { useTurnstile } from '@/components/common/Turnstile';
+import Honeypot from '@/components/common/Honeypot';
 import { markAsHumanVerified } from '@/lib/analytics';
 
 interface QuoteModalProps {
@@ -35,6 +36,7 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
   // Turnstile human verification
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
   const { token: turnstileToken, isVerified: isTurnstileVerified, TurnstileWidget } = useTurnstile(turnstileSiteKey);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   // 获取保存的表单数据
   const { savedData, hasSavedData, clearSavedData } = useFormRecovery<QuoteFormData>(
@@ -121,6 +123,8 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
         message: data.message,
         pageUrl,
         submittedAt,
+        turnstileToken: turnstileToken || undefined,
+        honeypot: honeypotRef.current?.value,
       });
 
       setSuccess('Quote request submitted successfully! We will send you a detailed quote within 24 hours.');
@@ -203,6 +207,7 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit as any)} className="p-6 space-y-6" noValidate>
+          <Honeypot ref={honeypotRef} />
           {/* 恢复数据提示 */}
           {hasSavedData && (
             <div className="bg-blue-50 border border-blue-200 rounded-md p-4">

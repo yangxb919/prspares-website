@@ -1,26 +1,27 @@
 import type { Metadata } from 'next';
 
+const metaTitle = 'Phone Repair Tools & IC Chips Wholesale | PRSPARES';
+const metaDescription =
+  'Wholesale phone repair tools, IC chips and programmers for repair shops. MOQ support, bench stock planning, Shenzhen sourcing and fast B2B quote.';
+
 export const metadata: Metadata = {
-  title: 'Phone Repair Tools Wholesale | iPhone Screen Tester, Programmers, Spot Welder — From $3 | PRSPARES',
-  description:
-    'Wholesale phone repair tools: iPhone screen testers, True Tone programmers, battery spot welders, soldering stations, LCD separators. 200+ SKUs, 12-month warranty. Factory-direct from Shenzhen.',
+  title: metaTitle,
+  description: metaDescription,
   keywords: 'phone repair tools, iphone screen tester, battery spot welder, lcd screen tester, phone repair tool kit, true tone programmer, tools for mobile phone repair, wholesale repair tools, repair equipment supplier',
   alternates: {
     canonical: '/products/repair-tools',
   },
   openGraph: {
-    title: 'Phone Repair Tools Wholesale — Testers, Programmers, Soldering Equipment | PRSPARES',
-    description:
-      'Wholesale phone repair tools: screen testers, True Tone programmers, battery spot welders, soldering stations. 200+ SKUs from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     type: 'website',
     url: '/products/repair-tools',
     images: ['/PRSPARES1.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Phone Repair Tools Wholesale — Testers, Programmers, Soldering Equipment | PRSPARES',
-    description:
-      'Wholesale phone repair tools: screen testers, programmers, spot welders, soldering stations. Factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     images: ['/PRSPARES1.png'],
   },
 };
@@ -80,12 +81,22 @@ export default function RepairToolsLayout({
     ],
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.phonerepairspares.com" },
+      { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.phonerepairspares.com/products" },
+      { "@type": "ListItem", "position": 3, "name": "Repair Tools", "item": "https://www.phonerepairspares.com/products/repair-tools" }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([productSchema, faqSchema]),
+          __html: JSON.stringify([productSchema, faqSchema, breadcrumbSchema]),
         }}
       />
       {children}

@@ -1,26 +1,27 @@
 import type { Metadata } from 'next';
 
+const metaTitle = 'Wholesale Phone Batteries iPhone Samsung | PRSPARES';
+const metaDescription =
+  'Wholesale iPhone and Samsung batteries from Shenzhen. MOQ 20 pcs, UN38.3 packing, QC, warranty support and fast quote for repair shops worldwide.';
+
 export const metadata: Metadata = {
-  title: 'Wholesale Phone Batteries | iPhone & Samsung Battery Replacement Supplier — From $5/Unit | PRSPARES',
-  description:
-    'B2B wholesale phone batteries for iPhone 13–16 & Samsung Galaxy. OEM original, high-capacity & standard replacement grades. TI/ATL cells, UN38.3 certified, DG shipping ready. MOQ 20 pcs, 12-month warranty.',
+  title: metaTitle,
+  description: metaDescription,
   keywords: 'iphone battery replacement, wholesale phone batteries, samsung battery wholesale, OEM iphone battery, high capacity iphone battery, bulk phone batteries, phone battery supplier, iphone 13 battery replacement, iphone battery health replacement',
   alternates: {
     canonical: '/products/batteries',
   },
   openGraph: {
-    title: 'Wholesale Phone Batteries — iPhone & Samsung | From $5/Unit | PRSPARES',
-    description:
-      'B2B wholesale replacement batteries for iPhone & Samsung. OEM, high-capacity & standard grades. TI/ATL cells, UN38.3 certified. Factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     type: 'website',
     url: '/products/batteries',
     images: ['/PRSPARES1.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wholesale Phone Batteries — iPhone & Samsung | From $5/Unit | PRSPARES',
-    description:
-      'B2B wholesale replacement batteries for iPhone & Samsung. OEM, high-capacity & standard grades. Factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     images: ['/PRSPARES1.png'],
   },
 };
@@ -98,12 +99,22 @@ export default function BatteriesLayout({
     ],
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.phonerepairspares.com" },
+      { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.phonerepairspares.com/products" },
+      { "@type": "ListItem", "position": 3, "name": "Phone Batteries", "item": "https://www.phonerepairspares.com/products/batteries" }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([iphoneBatterySchema, samsungBatterySchema, faqSchema]),
+          __html: JSON.stringify([iphoneBatterySchema, samsungBatterySchema, faqSchema, breadcrumbSchema]),
         }}
       />
       {children}

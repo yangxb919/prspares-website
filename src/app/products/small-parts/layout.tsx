@@ -1,26 +1,27 @@
 import type { Metadata } from 'next';
 
+const metaTitle = 'Wholesale Phone Small Parts Camera Ports | PRSPARES';
+const metaDescription =
+  'Wholesale phone small parts for repair shops: cameras, charging ports, flex cables and speakers. MOQ support, broad model coverage and fast B2B quote.';
+
 export const metadata: Metadata = {
-  title: 'Wholesale Cell Phone Parts | iPhone Back Glass, Charging Port, Camera — From $2 | PRSPARES',
-  description:
-    'Wholesale cell phone replacement parts: cameras, charging ports, back glass, speakers, flex cables for iPhone 13–16 & Samsung Galaxy. 100% tested, MOQ 20 pcs, 12-month warranty. Factory-direct from Shenzhen.',
+  title: metaTitle,
+  description: metaDescription,
   keywords: 'wholesale cell phone parts, cell phone replacement parts wholesale, iphone back glass replacement, iphone charging port replacement, iphone camera replacement, iphone 15 charging port, wholesale phone parts, phone repair parts wholesale, phone parts supplier',
   alternates: {
     canonical: '/products/small-parts',
   },
   openGraph: {
-    title: 'Wholesale Cell Phone Parts — Cameras, Charging Ports, Back Glass | PRSPARES',
-    description:
-      'Wholesale cell phone replacement parts: cameras, charging ports, back glass, speakers, flex cables. iPhone & Samsung. Factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     type: 'website',
     url: '/products/small-parts',
     images: ['/PRSPARES1.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wholesale Cell Phone Parts — Cameras, Charging Ports, Back Glass | PRSPARES',
-    description:
-      'Wholesale cell phone replacement parts: cameras, charging ports, back glass, speakers. Factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     images: ['/PRSPARES1.png'],
   },
 };
@@ -80,12 +81,22 @@ export default function SmallPartsLayout({
     ],
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.phonerepairspares.com" },
+      { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.phonerepairspares.com/products" },
+      { "@type": "ListItem", "position": 3, "name": "Small Parts", "item": "https://www.phonerepairspares.com/products/small-parts" }
+    ]
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([productSchema, faqSchema]),
+          __html: JSON.stringify([productSchema, faqSchema, breadcrumbSchema]),
         }}
       />
       {children}

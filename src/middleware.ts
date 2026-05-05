@@ -66,8 +66,15 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // Propagate the pathname as a response header so server layouts can read it
+  // via next/headers — used to pick html lang + hide Header/Footer on SEA landing pages.
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-pathname', request.nextUrl.pathname)
+
   // Create a simple response object
-  let response = NextResponse.next()
+  let response = NextResponse.next({
+    request: { headers: requestHeaders },
+  })
 
   try {
     console.log('Middleware running for:', request.nextUrl.pathname)

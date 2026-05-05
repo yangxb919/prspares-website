@@ -45,6 +45,7 @@ const siteUrl =
 module.exports = {
   siteUrl: siteUrl,
   generateRobotsTxt: false,
+  autoLastmod: false,
   sitemapSize: 7000,
   changefreq: 'daily',
   priority: 0.7,
@@ -82,6 +83,15 @@ module.exports = {
   ],
   additionalPaths: async (config) => {
     const staticPaths = [
+      '/',
+      '/about',
+      '/contact',
+      '/products',
+      '/products/screens',
+      '/products/batteries',
+      '/products/small-parts',
+      '/products/repair-tools',
+      '/products/tablet-watch',
       '/products/iphone-rear-camera-wholesale',
       '/products/ipad-battery-replacement-factory',
       '/wholesale-inquiry',
@@ -121,7 +131,6 @@ module.exports = {
         loc: path,
         changefreq: 'weekly',
         priority: 0.9,
-        lastmod: new Date().toISOString(),
       }
     }
 
@@ -130,7 +139,6 @@ module.exports = {
       loc: path,
       changefreq: config.changefreq,
       priority: config.priority,
-      lastmod: new Date().toISOString(),
     }
   },
 }

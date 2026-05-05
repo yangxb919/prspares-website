@@ -12,6 +12,10 @@ export interface RfqInput {
   pageUrl?: string;
   ip?: string;
   submittedAt?: string;
+  /** Cloudflare Turnstile token from the widget. Required in production. */
+  turnstileToken?: string;
+  /** Honeypot field — must be empty. Bots tend to fill every input. */
+  honeypot?: string;
 }
 
 export interface RfqPayload {
@@ -24,6 +28,8 @@ export interface RfqPayload {
   pageUrl: string;
   ip: string;
   submittedAt: string;
+  turnstileToken?: string;
+  honeypot?: string;
 }
 
 function normalizeIp(ip?: string): string {
@@ -83,6 +89,8 @@ export async function submitRfqAndNotify(input: RfqInput): Promise<RfqPayload> {
     pageUrl: input.pageUrl || (typeof window !== 'undefined' ? window.location.href : ''),
     ip: normalizeIp(input.ip),
     submittedAt: input.submittedAt || new Date().toISOString(),
+    turnstileToken: input.turnstileToken,
+    honeypot: input.honeypot,
   };
 
   validate(payload);

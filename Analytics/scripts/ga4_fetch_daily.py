@@ -8,6 +8,7 @@ import os, sys, warnings
 warnings.filterwarnings("ignore")
 
 from pathlib import Path
+from google.api_core.exceptions import InvalidArgument
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
     RunReportRequest, DateRange, Dimension, Metric, OrderBy
@@ -91,8 +92,11 @@ def fetch_day(date):
             conversion_events[ename] = int(float(mets[0]))
 
     # Traffic quality breakdown (custom dimension from analytics.ts scoring)
-    tq_raw = run(date, ["customEvent:traffic_quality_label"],
-                 ["activeUsers", "sessions", "eventCount"], limit=5)
+    try:
+        tq_raw = run(date, ["customEvent:traffic_quality_label"],
+                     ["activeUsers", "sessions", "eventCount"], limit=5)
+    except InvalidArgument:
+        tq_raw = []
     traffic_quality = {}
     for (dims, mets) in tq_raw:
         label = dims[0] if dims[0] else "(not set)"
@@ -187,6 +191,14 @@ def write_daily(d):
     )
     if not tq_md:
         tq_md = "| (维度数据未就绪) | - | - | - |"
+    tq_yaml_block = tq_yaml.rstrip()
+    if not tq_yaml_block:
+        tq_yaml_block = (
+            '  - label: "(not set)"\n'
+            "    active_users: 0\n"
+            "    sessions: 0\n"
+            "    event_count: 0"
+        )
 
     content = f"""---
 date: "{date}"
@@ -209,7 +221,7 @@ sessions_by_source:
 cities:
 {cities_yaml.rstrip()}
 traffic_quality:
-{tq_yaml.rstrip() if tq_yaml.strip() else "  - label: \"(not set)\"\n    active_users: 0\n    sessions: 0\n    event_count: 0"}
+{tq_yaml_block}
 notes: "通过 GA4 Data API (服务账号 ga4-reader) 拉取，数据为 GA4 最终值（非 Today 实时）"
 ---
 

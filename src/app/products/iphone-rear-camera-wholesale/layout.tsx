@@ -1,26 +1,27 @@
 import type { Metadata } from 'next';
 
+const metaTitle = 'iPhone Rear Camera Wholesale Module Supply | PRSPARES';
+const metaDescription =
+  'Wholesale iPhone rear camera modules and lens parts for repair shops. MOQ support, batch QC, mixed-model sourcing and fast B2B quote from Shenzhen.';
+
 export const metadata: Metadata = {
-  title: 'iPhone Camera Lens Replacement | Rear Camera Module Wholesale — From $29 | PRSPARES',
-  description:
-    'Wholesale iPhone camera lens replacement: OEM rear camera modules for iPhone 11–16 series. Autofocus tested, optical image stabilization verified. MOQ 20 pcs, 12-month warranty. Factory-direct from Shenzhen.',
-  keywords: 'iphone camera lens replacement, iphone camera replacement, iphone rear camera wholesale, iphone 15 camera replacement, iphone 14 camera replacement, iphone 13 camera lens replacement, camera module wholesale, iphone camera lens replacement kit',
+  title: metaTitle,
+  description: metaDescription,
+  keywords: 'wholesale iphone camera modules, iphone rear camera wholesale, iphone front camera parts, iphone camera lens replacement, iphone camera ring frame, iphone small parts supplier, phone camera module wholesale',
   alternates: {
     canonical: '/products/iphone-rear-camera-wholesale',
   },
   openGraph: {
-    title: 'iPhone Camera Lens Replacement Wholesale — Rear Camera Modules | PRSPARES',
-    description:
-      'Wholesale iPhone rear camera modules: OEM quality for iPhone 11–16 series. Autofocus & OIS tested. Factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     type: 'website',
     url: '/products/iphone-rear-camera-wholesale',
     images: ['/PRSPARES1.png'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'iPhone Camera Lens Replacement Wholesale — Rear Camera Modules | PRSPARES',
-    description:
-      'Wholesale iPhone rear camera modules for iPhone 11–16 series. OEM quality, factory-direct from Shenzhen.',
+    title: metaTitle,
+    description: metaDescription,
     images: ['/PRSPARES1.png'],
   },
 };
@@ -30,54 +31,52 @@ export default function iPhoneCameraLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Wholesale iPhone Camera Modules and Lens Parts",
+    "description": "PRSPARES category page for wholesale iPhone rear camera modules, front cameras, camera lens covers and camera ring-frame parts.",
+    "url": "https://www.phonerepairspares.com/products/iphone-rear-camera-wholesale",
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": 6,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Apple iPhone 16 Pro Max Rear Camera" },
+        { "@type": "ListItem", "position": 2, "name": "Apple iPhone 16 Pro / 16 Pro Max Rear Camera Lens" },
+        { "@type": "ListItem", "position": 3, "name": "Apple iPhone 16 Pro Max Front Camera" },
+        { "@type": "ListItem", "position": 4, "name": "Apple iPhone 14 Pro Max Original Rear Camera" },
+        { "@type": "ListItem", "position": 5, "name": "Apple iPhone 13 Pro Max Rear Camera" },
+        { "@type": "ListItem", "position": 6, "name": "Apple iPhone 16 Pro Max Camera Ring Frame with Lens" }
+      ]
+    }
+  };
+
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": "Wholesale iPhone Rear Camera Modules — Camera Lens Replacement for iPhone 11–16",
-    "description": "OEM quality iPhone rear camera modules for iPhone 11, 12, 13, 14, 15, and 16 series. Autofocus tested, optical image stabilization verified. Factory-direct wholesale.",
+    "name": "Wholesale iPhone Camera Modules and Lens Parts",
+    "description": "Wholesale iPhone camera replacement parts including rear camera modules, front cameras, camera lens covers and ring-frame parts for iPhone 11-16 model families.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
-    "category": "iPhone Camera Modules",
+    "category": "Phone Camera Replacement Parts",
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "USD",
-      "lowPrice": "29",
-      "highPrice": "65",
-      "offerCount": "24",
+      "lowPrice": "0.65",
+      "highPrice": "57.13",
+      "offerCount": "6",
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
     },
   };
 
-  const faqSchema = {
+  const breadcrumbSchema = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How much does iPhone camera replacement cost?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Apple charges $169-$249. Third-party shops charge $80-$150 (OEM) or $40-$80 (aftermarket). Wholesale: iPhone 16 Pro Max $65, 15 Pro Max $55, 14 Pro Max $48, 13 Pro Max $42, 11 $29. Bulk discounts from 50+ units." },
-      },
-      {
-        "@type": "Question",
-        "name": "What is the difference between camera glass and camera module?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Camera glass is the protective cover — replacing it costs $15-$30. The camera module is the actual sensor, lens, autofocus motor, and OIS system — costs $29-$65 wholesale. If only the glass is cracked but camera still works, you may only need the glass." },
-      },
-      {
-        "@type": "Question",
-        "name": "Why is my iPhone camera shaking or vibrating after replacement?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Usually caused by: OIS motor not seated properly, aftermarket module with weaker OIS magnets, debris between module and housing, or wrong model installed. Always test OIS before returning device to customer." },
-      },
-      {
-        "@type": "Question",
-        "name": "Does replacing the iPhone camera affect photo quality?",
-        "acceptedAnswer": { "@type": "Answer", "text": "With OEM modules: no difference. With quality aftermarket: very close to OEM, slight differences possible in color temperature on Pro models. The key factor is autofocus calibration — a properly tested module produces identical results." },
-      },
-      {
-        "@type": "Question",
-        "name": "Are iPhone camera modules compatible across different models?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No — strictly model-specific. Even within the same generation: iPhone 15 Pro and 15 Pro Max use different modules. iPhone 14 and 14 Plus share a module, but 14 Pro and 14 Pro Max do not. Always verify the exact model number." },
-      },
-    ],
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.phonerepairspares.com" },
+      { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.phonerepairspares.com/products" },
+      { "@type": "ListItem", "position": 3, "name": "iPhone Camera Modules", "item": "https://www.phonerepairspares.com/products/iphone-rear-camera-wholesale" }
+    ]
   };
 
   return (
@@ -85,7 +84,7 @@ export default function iPhoneCameraLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([productSchema, faqSchema]),
+          __html: JSON.stringify([collectionSchema, productSchema, breadcrumbSchema]),
         }}
       />
       {children}
