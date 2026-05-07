@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, FileText, Phone, Mail, User } from 'lucide-react';
-import InquiryModal from '@/components/InquiryModal';
+import InquiryModal from '@/components/InquiryModalLazy';
 
 // 前端组件专用的Product接口
 export interface ClientProduct {

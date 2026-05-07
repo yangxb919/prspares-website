@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowRight, BatteryFull } from 'lucide-react';
-import QuoteModal from '@/components/QuoteModal';
+import QuoteModal from '@/components/QuoteModalLazy';
 import { trackEvent } from '@/lib/analytics';
 
 interface iPadBatteryCardProps {

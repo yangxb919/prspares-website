@@ -8,6 +8,46 @@ try {
 }
 
 const nextConfig = {
+  // Tree-shake lucide-react: instead of bundling the whole index, import each
+  // icon from its own file. Cuts ~22 KB of "legacy JavaScript" on PSI mobile.
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+      preventFullImport: true,
+    },
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
+  async headers() {
+    return [
+      // Long-cache pre-optimized images and hero originals (1 year, immutable).
+      {
+        source: '/images/optimized/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/hero/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      // Site-wide security headers (closes PSI Best Practices warnings on
+      // HSTS / COOP / XFO / X-Content-Type-Options).
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowRight, Zap, Shield, Clock } from 'lucide-react';
-import QuoteModalEnhanced from './QuoteModalEnhanced';
+import QuoteModalEnhanced from './QuoteModalEnhancedLazy';
 
 interface QuoteButtonProps {
   text?: string;
