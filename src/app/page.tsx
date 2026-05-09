@@ -279,6 +279,7 @@ export default function Home() {
           alt="PRSPARES warehouse stock shelves"
           fill
           priority
+          unoptimized
           className={`object-cover ${styles.heroImage}`}
           sizes="100vw"
         />
