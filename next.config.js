@@ -8,14 +8,15 @@ try {
 }
 
 const nextConfig = {
-  // Tree-shake lucide-react: instead of bundling the whole index, import each
-  // icon from its own file. Cuts ~22 KB of "legacy JavaScript" on PSI mobile.
-  modularizeImports: {
-    'lucide-react': {
-      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
-      preventFullImport: true,
-    },
+  // Use Next 14's native package import optimisation. modularizeImports
+  // (the previous approach) over-fragmented lucide-react into per-icon
+  // chunks and tripled Desktop TBT (300ms → 930ms in Lighthouse).
+  // optimizePackageImports does the same tree-shake at compile time
+  // without breaking the runtime module graph.
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
   },
+  poweredByHeader: false,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
@@ -49,6 +50,8 @@ const nextConfig = {
     ];
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: 'https',

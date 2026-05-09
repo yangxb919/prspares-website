@@ -275,10 +275,11 @@ export default function Home() {
       <JsonLd data={homeJsonLd} />
       <section className="relative min-h-[calc(100svh-150px)] overflow-hidden bg-[#101820] text-white">
         <Image
-          src="/hero/home.jpg"
+          src="/hero/home.webp"
           alt="PRSPARES warehouse stock shelves"
           fill
           priority
+          unoptimized
           className={`object-cover ${styles.heroImage}`}
           sizes="100vw"
         />
