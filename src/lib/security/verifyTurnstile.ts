@@ -2,7 +2,14 @@
  * Server-side Cloudflare Turnstile token verification.
  *
  * Behavior:
- *  - In production, a token is REQUIRED whenever TURNSTILE_SECRET_KEY is configured.
+ *  - If a token IS provided, it must verify successfully against Cloudflare.
+ *  - If no token is provided (widget failed to load — common in CN/SEA networks
+ *    that can't reach challenges.cloudflare.com, or in browsers blocking the
+ *    script), soft-pass: rely on upstream honeypot + IP rate-limit + content
+ *    checks. Hard-blocking on missing token caused 7 days of silent inquiry
+ *    loss (2026-05-05 → 2026-05-12); the front-end already skips Turnstile
+ *    when window.turnstile is absent, so backend must match to keep the
+ *    pipeline open.
  *  - In development, missing token / missing secret returns ok so local dev
  *    doesn't require the widget to load.
  *
@@ -31,7 +38,8 @@ export async function verifyTurnstileToken(
 
   if (!token) {
     if (isDev) return { ok: true };
-    return { ok: false, reason: 'Missing captcha token' };
+    console.warn('[turnstile] no token from client (widget failed to load); trusting honeypot + rate-limit, ip:', ip);
+    return { ok: true };
   }
 
   try {
