@@ -1,7 +1,5 @@
 'use client';
 
-import { getBrowserClient } from '@/lib/supabase/client';
-
 export interface RfqInput {
   name: string;
   email: string;
@@ -95,31 +93,10 @@ export async function submitRfqAndNotify(input: RfqInput): Promise<RfqPayload> {
 
   validate(payload);
 
-  // Save to Supabase if configured, but don't block on failure
-  try {
-    const supabase = getBrowserClient();
-    const { error } = await supabase
-      .from('rfqs')
-      .insert({
-        name: payload.name,
-        email: payload.email,
-        company: payload.company || null,
-        phone: payload.phone || null,
-        product_interest: payload.productInterest || null,
-        message: payload.message,
-        page_url: payload.pageUrl || null,
-        ip: payload.ip || null,
-        submitted_at: payload.submittedAt,
-      });
-
-    if (error) {
-      console.warn('[RFQ] Supabase save failed (non-blocking):', error.message);
-    }
-  } catch (err) {
-    console.warn('[RFQ] Supabase unavailable (non-blocking):', err instanceof Error ? err.message : err);
-  }
-
-  // Send email notification — await so callers see failures
+  // Persistence + email both happen server-side in /api/send-rfq-email
+  // (writes contact_submissions via service-role, then sends SMTP). Earlier
+  // client-side .from('rfqs') insert pointed at a non-existent table and
+  // silently swallowed errors — removed.
   await notifyRfqByEmail(payload);
   return payload;
 }
