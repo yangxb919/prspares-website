@@ -517,6 +517,7 @@ export default function WholesaleInquiryPage() {
                     type="text"
                     id="name"
                     name="name"
+                    required
                     value={formData.name}
                     onChange={handleChange}
                     className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.name ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
@@ -532,6 +533,7 @@ export default function WholesaleInquiryPage() {
                     type="email"
                     id="email"
                     name="email"
+                    required
                     value={formData.email}
                     onChange={handleChange}
                     className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.email ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
@@ -549,6 +551,7 @@ export default function WholesaleInquiryPage() {
                   <select
                     id="products"
                     name="products"
+                    required
                     value={formData.products}
                     onChange={handleChange}
                     className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.products ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
@@ -569,6 +572,7 @@ export default function WholesaleInquiryPage() {
                   <select
                     id="quantity"
                     name="quantity"
+                    required
                     value={formData.quantity}
                     onChange={handleChange}
                     className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.quantity ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
