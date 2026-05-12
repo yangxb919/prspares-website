@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import { headers } from "next/headers";
+import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -39,11 +40,11 @@ export const metadata: Metadata = {
   description: "Factory-direct wholesale phone repair parts from Shenzhen. OEM iPhone & Samsung screens, batteries, and tools for repair shops and distributors.",
   icons: {
     icon: [
-      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon.png', sizes: '16x16', type: 'image/png' }
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' }
     ],
     shortcut: '/favicon.png',
-    apple: '/favicon.png',
+    apple: '/apple-touch-icon.png',
   },
   openGraph: {
     title: "Wholesale Phone Repair Parts Supplier | Factory Direct — PRSPARES",
@@ -104,46 +105,20 @@ export default function RootLayout({
   return (
     <html lang={lang}>
       <head>
-        {/* Google Tag Manager */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TTBMN854');`
-          }}
-        />
-        {/* End Google Tag Manager */}
-
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationSchema)
           }}
         />
-
-
       </head>
+      <GoogleTagManager gtmId="GTM-TTBMN854" />
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
-        {/* Google Tag Manager (noscript) */}
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-TTBMN854"
-            height="0"
-            width="0"
-            style={{display:'none',visibility:'hidden'}}
-          />
-        </noscript>
-        {/* End Google Tag Manager (noscript) */}
-
         {chrome && <Header />}
         {children}
         {chrome && <Footer />}
-
-
       </body>
     </html>
   );
