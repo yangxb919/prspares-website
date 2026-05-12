@@ -3,6 +3,9 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { checkRateLimit } from '@/lib/rate-limit'
 
 // --- Bot Detection ---
+// Generic patterns to catch unauthorized scrapers. AI crawlers (gptbot/claudebot/
+// ccbot/perplexitybot etc.) are removed here and explicitly allow-listed below —
+// AI answer engines now drive a meaningful share of B2B referrals.
 const BOT_UA_PATTERNS = [
   /bot/i, /crawl/i, /spider/i, /slurp/i,
   /headlesschrome/i, /phantomjs/i, /puppet/i, /selenium/i,
@@ -10,7 +13,7 @@ const BOT_UA_PATTERNS = [
   /python-requests/i, /go-http-client/i, /java\//i,
   /ahrefsbot/i, /semrushbot/i, /dotbot/i, /mj12bot/i,
   /bytespider/i, /petalbot/i,
-  /dataforseo/i, /gptbot/i, /claudebot/i, /ccbot/i,
+  /dataforseo/i,
 ]
 
 // Known datacenter / bot IP ranges — we match the start of the IP string
@@ -43,11 +46,18 @@ function isBot(request: NextRequest): boolean {
   return false
 }
 
+// --- Crawler allow-list ---
+// AI answer engines (ChatGPT, Perplexity, Claude, Gemini, etc.) increasingly
+// surface B2B suppliers; blocking them caps GEO/AI referral ceiling at ~0.
+// Trade-off: more bandwidth. Rate-limit below still applies as abuse guard.
+const AI_CRAWLERS = /gptbot|chatgpt-user|oai-searchbot|perplexitybot|perplexity-user|claudebot|anthropic-ai|claude-web|google-extended|applebot-extended|youbot|meta-externalagent|duckassistbot|amazonbot|mistralai-user|cohere-ai|ccbot/i
+const SEARCH_CRAWLERS = /googlebot|adsbot-google|mediapartners-google|google-adsbot|bingbot|yandex|baiduspider|duckduckbot/i
+const SOCIAL_CRAWLERS = /facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp/i
+
 export async function middleware(request: NextRequest) {
   // --- Bot blocking (before any other logic) ---
-  // Allow search engine crawlers that are good for SEO (Googlebot, Bingbot, etc.)
   const ua = request.headers.get('user-agent') || ''
-  const isGoodCrawler = /googlebot|adsbot-google|mediapartners-google|google-adsbot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp/i.test(ua)
+  const isGoodCrawler = AI_CRAWLERS.test(ua) || SEARCH_CRAWLERS.test(ua) || SOCIAL_CRAWLERS.test(ua)
 
   if (!isGoodCrawler && isBot(request)) {
     return new NextResponse('Forbidden', { status: 403 })
