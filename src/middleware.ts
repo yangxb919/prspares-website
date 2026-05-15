@@ -16,16 +16,31 @@ const BOT_UA_PATTERNS = [
   /dataforseo/i,
 ]
 
-// Known datacenter / bot IP ranges — we match the start of the IP string
+// Known datacenter / bot IP ranges — we match the start of the IP string.
+// Extended 2026-05-15 after GA4 data showed 84/223 (37.7%) "users" came from
+// Singapore with 0% engagement_rate, 0s engagement_time, 0 key_events —
+// textbook SG datacenter bot traffic that bypassed the previous list.
 const BLOCKED_IP_PREFIXES: string[] = [
   // AWS ap-southeast-1 (Singapore)
   '13.212.', '13.213.', '13.214.', '13.215.',
+  '13.228.', '13.229.', '13.250.', '13.251.',
   '18.136.', '18.138.', '18.139.', '18.140.', '18.141.', '18.142.', '18.143.',
   '54.151.', '54.179.', '54.251.', '54.252.', '54.254.', '54.255.',
   '52.74.', '52.76.', '52.77.',
+  '108.137.', '108.138.',
+  '122.248.',
+  '175.41.',
   '3.0.', '3.1.',
-  // DigitalOcean SGP1
-  '128.199.', '159.65.', '167.71.', '188.166.', '206.189.',
+  // GCP asia-southeast1 (Singapore)
+  '34.87.', '34.124.', '34.126.', '34.142.', '34.143.',
+  // Linode SG (entire /16 is Singapore datacenter)
+  '139.162.', '172.105.',
+  // Vultr (heavy SG presence — large fraction of these /16 route to SGP)
+  '45.32.', '45.77.', '108.61.',
+  // OVH SGP
+  '51.79.',
+  // DigitalOcean SGP1 (additional /16 beyond the original set)
+  '165.22.', '178.128.',
 ]
 
 function isBot(request: NextRequest): boolean {

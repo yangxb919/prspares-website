@@ -507,10 +507,11 @@ export default function WholesaleInquiryPage() {
                     type="text"
                     id="name"
                     name="name"
+                    autoComplete="name"
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.name ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                    className={`w-full rounded-md border bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.name ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
                     placeholder="John Smith"
                   />
                   {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
@@ -523,10 +524,12 @@ export default function WholesaleInquiryPage() {
                     type="email"
                     id="email"
                     name="email"
+                    autoComplete="email"
+                    inputMode="email"
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.email ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                    className={`w-full rounded-md border bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.email ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
                     placeholder="john@company.com"
                   />
                   {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
@@ -544,7 +547,7 @@ export default function WholesaleInquiryPage() {
                     required
                     value={formData.products}
                     onChange={handleChange}
-                    className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.products ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                    className={`w-full rounded-md border bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.products ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
                   >
                     <option value="">Select category</option>
                     <option value="LCD/OLED Screens">LCD/OLED Screens</option>
@@ -565,7 +568,7 @@ export default function WholesaleInquiryPage() {
                     required
                     value={formData.quantity}
                     onChange={handleChange}
-                    className={`w-full rounded-md border bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.quantity ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                    className={`w-full rounded-md border bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.quantity ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
                   >
                     <option value="">Select quantity range</option>
                     <option value="10-50 units">10-50 units</option>
@@ -592,26 +595,26 @@ export default function WholesaleInquiryPage() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label htmlFor="company" className="mb-1.5 block text-sm font-black text-[#18212c]">Company Name</label>
-                        <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="Your Company Ltd." />
+                        <input type="text" id="company" name="company" autoComplete="organization" value={formData.company} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="Your Company Ltd." />
                       </div>
                       <div>
                         <label htmlFor="country" className="mb-1.5 block text-sm font-black text-[#18212c]">Country / Region</label>
-                        <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="United States" />
+                        <input type="text" id="country" name="country" autoComplete="country-name" value={formData.country} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="United States" />
                       </div>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label htmlFor="phone" className="mb-1.5 block text-sm font-black text-[#18212c]">Phone / WhatsApp</label>
-                        <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="+1 (555) 123-4567" />
+                        <input type="tel" id="phone" name="phone" autoComplete="tel" inputMode="tel" value={formData.phone} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="+1 (555) 123-4567" />
                       </div>
                       <div>
                         <label htmlFor="models" className="mb-1.5 block text-sm font-black text-[#18212c]">Model / Brand List</label>
-                        <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="iPhone 15 Pro, Samsung S24..." />
+                        <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="iPhone 15 Pro, Samsung S24..." />
                       </div>
                     </div>
                     <div>
                       <label htmlFor="quality" className="mb-1.5 block text-sm font-black text-[#18212c]">Quality Requirement</label>
-                      <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
+                      <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
                         <option value="">Select quality grade</option>
                         <option value="OEM Original">OEM Original</option>
                         <option value="Premium Aftermarket">Premium Aftermarket</option>
@@ -621,7 +624,7 @@ export default function WholesaleInquiryPage() {
                     </div>
                     <div>
                       <label htmlFor="message" className="mb-1.5 block text-sm font-black text-[#18212c]">Additional Requirements</label>
-                      <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={4} className="w-full resize-none rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-sm text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="Paste model list, preferred shipping route, packing needs or target quantity..." />
+                      <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={4} className="w-full resize-none rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="Paste model list, preferred shipping route, packing needs or target quantity..." />
                     </div>
                   </div>
                 )}
