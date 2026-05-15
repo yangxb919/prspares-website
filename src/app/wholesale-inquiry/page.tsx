@@ -291,23 +291,13 @@ export default function WholesaleInquiryPage() {
       return;
     }
 
-    if (turnstileAvailable && turnstileToken) {
-      try {
-        const verifyRes = await fetch('/api/turnstile/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: turnstileToken }),
-        });
-        const verifyData = await verifyRes.json();
-        if (!verifyData.success) {
-          setSubmitError('Verification failed. Please refresh and try again.');
-          return;
-        }
-      } catch {
-        setSubmitError('Verification check failed. Please try again.');
-        return;
-      }
-    }
+    // NOTE: Do NOT pre-verify the Turnstile token here. Cloudflare tokens are
+    // single-use — calling /api/turnstile/verify consumes it, and the
+    // subsequent verifyTurnstileToken() inside /api/send-rfq-email then gets
+    // back `timeout-or-duplicate` and 403s the submission. That double-verify
+    // is exactly why begin_form → generate_lead was leaking 75% in GA4
+    // (2026-05-08..14). The token is passed through to send-rfq-email below
+    // and verified server-side once.
 
     setIsSubmitting(true);
     setSubmitError('');
