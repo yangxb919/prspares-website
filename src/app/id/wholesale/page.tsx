@@ -173,7 +173,13 @@ export default function IdWholesalePage() {
 
   // Turnstile
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
-  const { token: turnstileToken, isVerified: isTurnstileVerified, hasError: turnstileError, TurnstileWidget } = useTurnstile(turnstileSiteKey);
+  const {
+    token: turnstileToken,
+    isVerified: isTurnstileVerified,
+    hasError: turnstileError,
+    isEnabled: isTurnstileEnabled,
+    TurnstileWidget,
+  } = useTurnstile(turnstileSiteKey);
   const honeypotRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -217,33 +223,24 @@ export default function IdWholesalePage() {
     e.preventDefault();
     if (!validate()) return;
 
-    // Fail-closed: if a site key is configured, verification MUST pass.
-    // Never silently skip — broken script / blocked CDN must reject submit.
-    const hasTurnstileConfig = Boolean(turnstileSiteKey);
-    if (hasTurnstileConfig) {
-      if (turnstileError || typeof window === 'undefined' || !window.turnstile) {
-        setSubmitError('Verifikasi keamanan tidak tersedia. Silakan refresh halaman dan coba lagi.');
-        return;
-      }
-      if (!isTurnstileVerified || !turnstileToken) {
-        setSubmitError('Silakan selesaikan verifikasi keamanan.');
-        return;
-      }
-      try {
-        const verifyRes = await fetch('/api/turnstile/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: turnstileToken }),
-        });
-        const verifyData = await verifyRes.json();
-        if (!verifyData.success) {
-          setSubmitError('Verifikasi gagal. Silakan refresh dan coba lagi.');
-          return;
-        }
-      } catch {
-        setSubmitError('Cek verifikasi gagal. Silakan coba lagi.');
-        return;
-      }
+    // Fail-open Turnstile policy (aligned with /wholesale-inquiry after
+    // commit cbe3644). If the widget rendered and the user can see it,
+    // require it to be solved — that's a fair UX expectation. But if the
+    // Turnstile script itself failed to load (CN/SEA networks frequently
+    // block challenges.cloudflare.com, ad/privacy extensions can too),
+    // do NOT kill the submit; let the server verifyTurnstileToken()
+    // soft-pass via honeypot + rate-limit + content checks. The previous
+    // fail-closed branch silently lost leads from exactly the markets
+    // this page targets.
+    //
+    // We also do NOT pre-verify the token here — Cloudflare tokens are
+    // single-use, and a client-side pre-verify call consumed the token
+    // before the server got it, causing every submit to 403. Server
+    // verifies once via /api/send-rfq-email → verifyTurnstileToken.
+    const turnstileAvailable = isTurnstileEnabled && !turnstileError && typeof window !== 'undefined' && !!window.turnstile;
+    if (turnstileAvailable && !isTurnstileVerified) {
+      setSubmitError('Silakan selesaikan verifikasi keamanan.');
+      return;
     }
 
     setIsSubmitting(true);
@@ -591,7 +588,7 @@ export default function IdWholesalePage() {
                     )}
                   </div>
 
-                  {turnstileSiteKey && (
+                  {isTurnstileEnabled && (
                     <div className="flex justify-center">
                       <TurnstileWidget />
                     </div>

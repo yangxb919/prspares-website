@@ -35,7 +35,12 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
 
   // Turnstile human verification
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
-  const { token: turnstileToken, isVerified: isTurnstileVerified, TurnstileWidget } = useTurnstile(turnstileSiteKey);
+  const {
+    token: turnstileToken,
+    isVerified: isTurnstileVerified,
+    isEnabled: isTurnstileEnabled,
+    TurnstileWidget,
+  } = useTurnstile(turnstileSiteKey);
   const honeypotRef = useRef<HTMLInputElement>(null);
 
   // 获取保存的表单数据
@@ -85,11 +90,11 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
   // 处理表单提交
   const onSubmit = async (data: QuoteFormData) => {
     // Turnstile verification
-    if (turnstileSiteKey && !isTurnstileVerified) {
+    if (isTurnstileEnabled && !isTurnstileVerified) {
       setError('Please complete the verification challenge.');
       return;
     }
-    if (turnstileSiteKey && turnstileToken) {
+    if (isTurnstileEnabled && turnstileToken) {
       try {
         const verifyRes = await fetch('/api/turnstile/verify', {
           method: 'POST',
@@ -362,7 +367,7 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
               </button>
 
               {/* Turnstile verification */}
-              {turnstileSiteKey && (
+              {isTurnstileEnabled && (
                 <div className="flex justify-center">
                   <TurnstileWidget />
                 </div>
@@ -370,7 +375,7 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
 
               <button
                 type="submit"
-                disabled={state.isSubmitting || !isValid || (!!turnstileSiteKey && !isTurnstileVerified)}
+                disabled={state.isSubmitting || !isValid || (isTurnstileEnabled && !isTurnstileVerified)}
                 className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {state.isSubmitting ? (

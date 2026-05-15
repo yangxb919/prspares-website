@@ -41,6 +41,11 @@ let scriptLoaded = false;
 let scriptLoadPromise: Promise<void> | null = null;
 
 const SCRIPT_LOAD_TIMEOUT_MS = 10_000;
+const ENABLE_TURNSTILE_IN_LOCAL_DEV = process.env.NEXT_PUBLIC_ENABLE_TURNSTILE_LOCAL === 'true';
+
+function shouldUseTurnstile(siteKey: string) {
+  return Boolean(siteKey) && (process.env.NODE_ENV === 'production' || ENABLE_TURNSTILE_IN_LOCAL_DEV);
+}
 
 function loadTurnstileScript(): Promise<void> {
   if (scriptLoaded) return Promise.resolve();
@@ -91,6 +96,7 @@ export default function Turnstile({
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const isEnabled = shouldUseTurnstile(siteKey);
 
   const renderWidget = useCallback(() => {
     if (!containerRef.current || !window.turnstile) return;
@@ -122,6 +128,8 @@ export default function Turnstile({
   }, [siteKey, onVerify, onError, onExpire, appearance, theme, size]);
 
   useEffect(() => {
+    if (!isEnabled) return;
+
     loadTurnstileScript()
       .then(() => {
         setIsReady(true);
@@ -140,12 +148,12 @@ export default function Turnstile({
         }
       }
     };
-  }, [renderWidget, onError]);
+  }, [isEnabled, renderWidget, onError]);
 
   // Re-render if siteKey changes
   useEffect(() => {
-    if (isReady) renderWidget();
-  }, [isReady, renderWidget]);
+    if (isEnabled && isReady) renderWidget();
+  }, [isEnabled, isReady, renderWidget]);
 
   return <div ref={containerRef} className={className} />;
 }
@@ -158,6 +166,7 @@ export default function Turnstile({
 export function useTurnstile(siteKey: string) {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState(false);
+  const isEnabled = shouldUseTurnstile(siteKey);
 
   const handleVerify = useCallback((t: string) => {
     setToken(t);
@@ -174,22 +183,27 @@ export function useTurnstile(siteKey: string) {
   }, []);
 
   const TurnstileWidget = useCallback(
-    ({ className }: { className?: string } = {}) => (
-      <Turnstile
-        siteKey={siteKey}
-        onVerify={handleVerify}
-        onError={handleError}
-        onExpire={handleExpire}
-        className={className}
-      />
-    ),
-    [siteKey, handleVerify, handleError, handleExpire]
+    ({ className }: { className?: string } = {}) => {
+      if (!isEnabled) return null;
+
+      return (
+        <Turnstile
+          siteKey={siteKey}
+          onVerify={handleVerify}
+          onError={handleError}
+          onExpire={handleExpire}
+          className={className}
+        />
+      );
+    },
+    [isEnabled, siteKey, handleVerify, handleError, handleExpire]
   );
 
   return {
     token,
     isVerified: !!token,
-    hasError: error,
+    hasError: isEnabled ? error : true,
+    isEnabled,
     TurnstileWidget,
     resetToken: () => setToken(null),
   };

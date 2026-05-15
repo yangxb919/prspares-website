@@ -192,7 +192,13 @@ export default function ThWholesalePage() {
   }, []);
 
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
-  const { token: turnstileToken, isVerified: isTurnstileVerified, hasError: turnstileError, TurnstileWidget } = useTurnstile(turnstileSiteKey);
+  const {
+    token: turnstileToken,
+    isVerified: isTurnstileVerified,
+    hasError: turnstileError,
+    isEnabled: isTurnstileEnabled,
+    TurnstileWidget,
+  } = useTurnstile(turnstileSiteKey);
   const honeypotRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -234,32 +240,16 @@ export default function ThWholesalePage() {
     e.preventDefault();
     if (!validate()) return;
 
-    // Fail-closed: if a site key is configured, verification MUST pass.
-    const hasTurnstileConfig = Boolean(turnstileSiteKey);
-    if (hasTurnstileConfig) {
-      if (turnstileError || typeof window === 'undefined' || !window.turnstile) {
-        setSubmitError('ระบบยืนยันตัวตนไม่พร้อมใช้งาน กรุณารีเฟรชหน้าและลองใหม่');
-        return;
-      }
-      if (!isTurnstileVerified || !turnstileToken) {
-        setSubmitError('กรุณายืนยันตัวตนให้เสร็จก่อน');
-        return;
-      }
-      try {
-        const verifyRes = await fetch('/api/turnstile/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: turnstileToken }),
-        });
-        const verifyData = await verifyRes.json();
-        if (!verifyData.success) {
-          setSubmitError('การยืนยันล้มเหลว กรุณารีเฟรชและลองใหม่');
-          return;
-        }
-      } catch {
-        setSubmitError('ตรวจสอบการยืนยันล้มเหลว กรุณาลองอีกครั้ง');
-        return;
-      }
+    // Fail-open Turnstile policy (aligned with /wholesale-inquiry after
+    // commit cbe3644 and /id/wholesale). Require Turnstile only if the
+    // widget actually rendered. If the script failed to load (CN/SEA
+    // networks often block challenges.cloudflare.com), let the submit
+    // through — the server verifies via honeypot + rate-limit + content
+    // checks. Also no client pre-verify (single-use token).
+    const turnstileAvailable = isTurnstileEnabled && !turnstileError && typeof window !== 'undefined' && !!window.turnstile;
+    if (turnstileAvailable && !isTurnstileVerified) {
+      setSubmitError('กรุณายืนยันตัวตนให้เสร็จก่อน');
+      return;
     }
 
     setIsSubmitting(true);
@@ -638,7 +628,7 @@ export default function ThWholesalePage() {
                     )}
                   </div>
 
-                  {turnstileSiteKey && (
+                  {isTurnstileEnabled && (
                     <div className="flex justify-center">
                       <TurnstileWidget />
                     </div>
