@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Script from 'next/script';
 import { CheckCircle, ArrowLeft, Mail, Clock, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -24,6 +25,9 @@ export default function ThankYouClient() {
     });
 
     // Google Ads conversion tracking — via GTM dataLayer
+    // (Kept for forward-compatibility with future GTM container config; gtag
+    //  de-dupes same send_to within 30s, so the inline gtag fallback below is
+    //  the actual transport today.)
     window.dataLayer.push({
       event: 'ads_conversion',
       send_to: 'AW-18045108063/Ev3VCLzXwZAcEN_-yZxD',
@@ -35,7 +39,31 @@ export default function ThankYouClient() {
   }, [lang, pageType]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center px-4 relative overflow-hidden">
+    <>
+      {/* Inline gtag fallback for Google Ads WEBPAGE_CODELESS conversion
+          (id 7550823356 "提交潜在客户表单"). GTM container is loaded site-wide
+          via layout.tsx but currently has no tag bound to send Ads conversions,
+          so we fire gtag directly here. Auto-tagging is enabled at account
+          level, so GCLID is preserved through the URL. */}
+      <Script
+        id="aw-gtag-loader"
+        src="https://www.googletagmanager.com/gtag/js?id=AW-18045108063"
+        strategy="afterInteractive"
+      />
+      <Script id="aw-gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-18045108063');
+          gtag('event', 'conversion', {
+            'send_to': 'AW-18045108063/Ev3VCLzXwZAcEN_-yZxD',
+            'value': 725.0,
+            'currency': 'CNY'
+          });
+        `}
+      </Script>
+      <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center px-4 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-[#00B140]/10 to-[#00D155]/10 rounded-full blur-xl"></div>
@@ -167,5 +195,6 @@ export default function ThankYouClient() {
         </div>
       </div>
     </main>
+    </>
   );
 }
