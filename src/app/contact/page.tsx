@@ -84,7 +84,7 @@ const contactCards: ContactCard[] = [
     text: 'Best for order support, warranty questions and documents.',
     action: 'Send Email',
     href: 'mailto:parts.info@phonerepairspares.com',
-    event: 'contact_click',
+    event: 'email_click',
   },
   {
     icon: MapPin,

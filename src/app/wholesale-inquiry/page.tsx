@@ -683,11 +683,11 @@ export default function WholesaleInquiryPage() {
                   <MessageSquare className="h-4 w-4" />
                   WhatsApp: +853 6390 2425
                 </a>
-                <a href="mailto:parts.info@phonerepairspares.com" onClick={() => trackEvent('contact_click', { method: 'email' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
+                <a href="mailto:parts.info@phonerepairspares.com" onClick={() => trackEvent('email_click', { placement: 'wholesale_inquiry_sidebar' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
                   <Mail className="h-4 w-4" />
                   parts.info@phonerepairspares.com
                 </a>
-                <a href="tel:+8618312589439" onClick={() => trackEvent('contact_click', { method: 'phone' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
+                <a href="tel:+8618312589439" onClick={() => trackEvent('phone_click', { placement: 'wholesale_inquiry_sidebar' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
                   <Phone className="h-4 w-4" />
                   +86 183 1258 9439
                 </a>

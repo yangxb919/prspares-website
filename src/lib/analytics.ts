@@ -6,8 +6,10 @@
  *   generate_lead   — form submitted successfully (GA4 recommended event)
  *   quote_cta_click — click on "Get Wholesale Quote" CTA buttons
  *   whatsapp_click  — click on WhatsApp links/buttons
+ *   email_click     — click on mailto: links (split out from contact_click 2026-05-19)
+ *   phone_click     — click on tel: links (split out from contact_click 2026-05-19)
  *   begin_form      — first focus on any form field
- *   contact_click   — click on email/phone contact links
+ *   contact_click   — legacy umbrella event (kept for historical compat; not actively fired)
  *
  * Traffic quality scoring:
  *   Every event carries traffic_quality (0-100) and traffic_quality_label
@@ -320,6 +322,8 @@ const EVENT_GATES: Record<string, EngagementGate> = {
   request_quote:   { requireHuman: true, minTimeOnPage: 5 },
   quote_cta_click: { requireHuman: true, minTimeOnPage: 3 },
   contact_click:   { requireHuman: true, minTimeOnPage: 2 },
+  email_click:     { requireHuman: true, minTimeOnPage: 2 },
+  phone_click:     { requireHuman: true, minTimeOnPage: 2 },
   whatsapp_click:  { requireHuman: true, minTimeOnPage: 2 },
   line_click:      { requireHuman: true, minTimeOnPage: 2 },
   chat_start:      { requireHuman: true, minTimeOnPage: 3 },
