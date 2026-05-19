@@ -35,15 +35,15 @@ const Footer = () => {
   return (
     <footer className="bg-[#1A1A1A] text-white py-12">
       <div className="max-w-[1200px] mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5 items-start">
           {/* Company information */}
-          <div className="md:col-span-1 flex flex-col h-full">
+          <div className="md:col-span-2 lg:col-span-1 flex flex-col h-full">
             <h3 className="text-xl font-bold mb-4">PRSPARES</h3>
             <p className="text-sm mb-6 leading-relaxed flex-grow">
               Leading supplier of high-quality mobile repair parts and OEM components based in Shenzhen Huaqiangbei electronics hub.
             </p>
             <div className="flex space-x-4 mt-auto">
-              <a href="mailto:parts.info@phonerepairspares.com" className="hover:text-[#00B140] transition-colors" aria-label="Email">
+              <a href="mailto:service.team@phonerepairspares.com" className="hover:text-[#00B140] transition-colors" aria-label="Email">
                 <Mail size={20} />
               </a>
               <a href="tel:+8618312589439" className="hover:text-[#00B140] transition-colors" aria-label="Phone">
@@ -122,7 +122,7 @@ const Footer = () => {
             <ul className="space-y-3 mb-6 flex-grow">
               <li className="flex items-start space-x-2">
                 <Mail size={16} className="mt-0.5 flex-shrink-0" />
-                <span className="text-sm">parts.info@phonerepairspares.com</span>
+                <span className="min-w-0 break-all text-sm">service.team@phonerepairspares.com</span>
               </li>
               <li className="flex items-start space-x-2">
                 <Phone size={16} className="mt-0.5 flex-shrink-0" />
@@ -141,13 +141,13 @@ const Footer = () => {
               {!isSubscribed ? (
                 <div className="space-y-2">
                   <Honeypot ref={honeypotRef} />
-                  <div className="flex">
+                  <div className="flex min-w-0">
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Your email"
-                      className="flex-1 px-3 py-2 bg-transparent border border-gray-600 rounded-l-lg text-white placeholder-gray-500 focus:ring-1 focus:ring-[#00B140] focus:border-[#00B140] transition-all duration-200 outline-none text-sm"
+                      className="min-w-0 flex-1 px-3 py-2 bg-transparent border border-gray-600 rounded-l-lg text-white placeholder-gray-500 focus:ring-1 focus:ring-[#00B140] focus:border-[#00B140] transition-all duration-200 outline-none text-sm"
                       required
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {

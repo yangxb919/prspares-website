@@ -701,8 +701,8 @@ export default function ThWholesalePage() {
                   <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm font-semibold text-[#27313c] transition-colors hover:text-[#0b6b45]" onClick={() => trackEvent('whatsapp_click', { ...TRACK_BASE, channel: 'whatsapp', placement: 'contact_card' })}>
                     <MessageSquare className="w-4 h-4" /> WhatsApp: {WA_DISPLAY}
                   </a>
-                  <a href="mailto:parts.info@phonerepairspares.com" className="flex items-center gap-3 text-sm font-semibold text-[#27313c] transition-colors hover:text-[#0b6b45]" onClick={() => trackEvent('email_click', { ...TRACK_BASE, placement: 'th_wholesale_contact_card' })}>
-                    <Mail className="w-4 h-4" /> parts.info@phonerepairspares.com
+                  <a href="mailto:service.team@phonerepairspares.com" className="flex items-center gap-3 text-sm font-semibold text-[#27313c] transition-colors hover:text-[#0b6b45]" onClick={() => trackEvent('email_click', { ...TRACK_BASE, placement: 'th_wholesale_contact_card' })}>
+                    <Mail className="w-4 h-4" /> service.team@phonerepairspares.com
                   </a>
                   <a href="tel:+8618312589439" className="flex items-center gap-3 text-sm font-semibold text-[#27313c] transition-colors hover:text-[#0b6b45]" onClick={() => trackEvent('phone_click', { ...TRACK_BASE, placement: 'th_wholesale_contact_card' })}>
                     <Phone className="w-4 h-4" /> +86 183 1258 9439

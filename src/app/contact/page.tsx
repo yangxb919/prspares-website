@@ -83,7 +83,7 @@ const contactCards: ContactCard[] = [
     title: 'Email',
     text: 'Best for order support, warranty questions and documents.',
     action: 'Send Email',
-    href: 'mailto:parts.info@phonerepairspares.com',
+    href: 'mailto:service.team@phonerepairspares.com',
     event: 'email_click',
   },
   {
@@ -106,7 +106,7 @@ const contactJsonLd = [
     mainEntity: {
       '@type': 'Organization',
       name: 'PRSPARES',
-      email: 'parts.info@phonerepairspares.com',
+      email: 'service.team@phonerepairspares.com',
       telephone: '+8618312589439',
       address: {
         '@type': 'PostalAddress',
@@ -120,7 +120,7 @@ const contactJsonLd = [
           '@type': 'ContactPoint',
           contactType: 'sales',
           telephone: '+85363902425',
-          email: 'parts.info@phonerepairspares.com',
+          email: 'service.team@phonerepairspares.com',
           availableLanguage: ['English', 'Chinese'],
         },
       ],
@@ -316,8 +316,8 @@ export default function ContactPage() {
             <div className="grid gap-5 md:grid-cols-2">
               <div>
                 <div className="text-sm font-black text-[#18212c]">Email</div>
-                <a href="mailto:parts.info@phonerepairspares.com" className="mt-2 block break-words text-sm font-semibold text-[#0b6b45]">
-                  parts.info@phonerepairspares.com
+                <a href="mailto:service.team@phonerepairspares.com" className="mt-2 block break-words text-sm font-semibold text-[#0b6b45]">
+                  service.team@phonerepairspares.com
                 </a>
               </div>
               <div>
