@@ -4,6 +4,7 @@ import Script from 'next/script';
 import { CheckCircle, ArrowLeft, Mail, Clock, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { trackEvent } from '@/lib/analytics';
 
 export default function ThankYouClient() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,10 +16,14 @@ export default function ThankYouClient() {
 
   useEffect(() => {
     setIsLoaded(true);
-    // Track thank-you page view via GTM dataLayer (with lang for SEA conversion split)
+    // Track thank-you page view via trackEvent (NOT direct dataLayer push).
+    // Going through trackEvent ensures this event uses the same engagement
+    // gates as generate_lead, so funnel counts can be compared apples to
+    // apples. Previously bot traffic that bypassed the form (deep links to
+    // /thank-you, prefetches, etc.) inflated thank_you_page_view independent
+    // of generate_lead — hence the 54 vs 57 reverse delta that Codex flagged.
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'thank_you_page_view',
+    trackEvent('thank_you_page_view', {
       page_path: '/thank-you',
       lang,
       page_type: pageType,

@@ -329,6 +329,7 @@ const EVENT_GATES: Record<string, EngagementGate> = {
   chat_start:      { requireHuman: true, minTimeOnPage: 3 },
   browse_products: { requireHuman: true, minScrollDepth: 15 },
   begin_form:      { requireHuman: true },
+  thank_you_page_view: { requireHuman: true, minTimeOnPage: 3 },
   page_view:       { requireHuman: true, minTimeOnPage: 3 },
 };
 
