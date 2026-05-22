@@ -41,6 +41,30 @@ const BLOCKED_IP_PREFIXES: string[] = [
   '51.79.',
   // DigitalOcean SGP1 (additional /16 beyond the original set)
   '165.22.', '178.128.',
+
+  // ── 2026-05-22 nginx log audit findings ────────────────────────
+  // After GA4 kept reporting Singapore at 37%+ for a full week despite
+  // the SG prefix expansions above, pulled the actual VPS access log
+  // and discovered the real bot traffic is mostly from European
+  // datacenter ISPs and Indian residential bot clusters — not Singapore.
+  // GA4's city dimension was mis-labeling them. These prefixes catch
+  // ~1500 hits over the 7-day window.
+
+  // Techoff SRV Limited (datacenter, registered Andorra & Netherlands)
+  // — single biggest source: ~1150 hits across 8 IPs in /24
+  '195.178.110.',  // Andorra-registered /24, 700+ hits / 5 IPs
+  '45.148.10.',    // Netherlands-registered /24, 450+ hits / 3 IPs
+
+  // Indian residential bot clusters
+  // (same ISP family, registered to individual names — typical bot proxies)
+  '103.215.74.',   // "Rekha M. Jain", 290 hits
+  '103.168.66.',   // "Mahavir Milapchand Jain", 123 hits
+  '103.153.183.',  // "Harsh Jain", 170 hits
+
+  // Smaller-volume but consistently scraping
+  '37.114.41.',    // Smartnet Limited DE
+  '176.123.30.',   // Public Telecom Yemen
+  '195.64.239.',   // TELECOMTRADE Ukraine
 ]
 
 function isBot(request: NextRequest): boolean {
