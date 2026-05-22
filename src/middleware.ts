@@ -58,6 +58,8 @@ const BLOCKED_IP_PREFIXES: string[] = [
   // Indian residential bot clusters
   // (same ISP family, registered to individual names — typical bot proxies)
   '103.215.74.',   // "Rekha M. Jain", 290 hits
+  '103.215.75.',   // 2026-05-22: bot operator migrated +1 /24 same day prefix
+                   // shipped. 188 hits to product pages within hours of deploy.
   '103.168.66.',   // "Mahavir Milapchand Jain", 123 hits
   '103.153.183.',  // "Harsh Jain", 170 hits
 
