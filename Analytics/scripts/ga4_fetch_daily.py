@@ -16,13 +16,16 @@ warnings.filterwarnings("ignore")
 from google.api_core.exceptions import InvalidArgument
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
-    RunReportRequest, DateRange, Dimension, Metric, OrderBy
+    RunReportRequest, DateRange, Dimension, Metric, OrderBy,
+    FilterExpression, FilterExpressionList, Filter,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
 KEY = ROOT / ".secrets" / "ga4-key.json"
 PROPERTY_ID = "502760218"
 DAILY_DIR = ROOT / "Analytics" / "daily"
+CHATGPT_SOURCE_PREFIX = "chatgpt.com"
+CHATGPT_EVENT_NAMES = ("begin_form", "generate_lead")
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(KEY)
 client = BetaAnalyticsDataClient()
@@ -236,7 +239,7 @@ def fetch_supabase_leads(date_str):
     return result
 
 
-def run(date, dims, mets, order_metric=None, limit=20):
+def run(date, dims, mets, order_metric=None, limit=20, dimension_filter=None):
     req = RunReportRequest(
         property=f"properties/{PROPERTY_ID}",
         date_ranges=[DateRange(start_date=date, end_date=date)],
@@ -244,6 +247,7 @@ def run(date, dims, mets, order_metric=None, limit=20):
         metrics=[Metric(name=m) for m in mets],
         order_bys=[OrderBy(metric=OrderBy.MetricOrderBy(metric_name=order_metric or mets[0]),
                            desc=True)] if mets else [],
+        dimension_filter=dimension_filter,
         limit=limit,
     )
     resp = client.run_report(req)
@@ -258,6 +262,76 @@ def fmt_engagement(seconds):
     if s >= 60:
         return f"{s//60}m {s%60}s"
     return f"{s}s"
+
+
+def _sum_metric_values(rows, metric_index=0):
+    return sum(int(float(mets[metric_index])) for _, mets in rows if len(mets) > metric_index)
+
+
+def _event_counts_from_rows(rows, event_names):
+    counts = {name: 0 for name in event_names}
+    for dims, mets in rows:
+        if dims and dims[0] in counts and mets:
+            counts[dims[0]] = int(float(mets[0]))
+    return counts
+
+
+def _source_medium_contains(value):
+    return FilterExpression(
+        filter=Filter(
+            field_name="sessionSourceMedium",
+            string_filter=Filter.StringFilter(
+                match_type=Filter.StringFilter.MatchType.CONTAINS,
+                value=value,
+                case_sensitive=False,
+            ),
+        )
+    )
+
+
+def _event_name_in(event_names):
+    return FilterExpression(
+        filter=Filter(
+            field_name="eventName",
+            in_list_filter=Filter.InListFilter(
+                values=list(event_names),
+                case_sensitive=True,
+            ),
+        )
+    )
+
+
+def _and_filters(*expressions):
+    return FilterExpression(
+        and_group=FilterExpressionList(expressions=list(expressions))
+    )
+
+
+def fetch_chatgpt_metrics(date):
+    source_filter = _source_medium_contains(CHATGPT_SOURCE_PREFIX)
+    event_filter = _and_filters(source_filter, _event_name_in(CHATGPT_EVENT_NAMES))
+
+    session_rows = run(
+        date,
+        ["sessionSourceMedium"],
+        ["sessions"],
+        limit=20,
+        dimension_filter=source_filter,
+    )
+    event_rows = run(
+        date,
+        ["eventName"],
+        ["eventCount"],
+        limit=10,
+        dimension_filter=event_filter,
+    )
+    event_counts = _event_counts_from_rows(event_rows, CHATGPT_EVENT_NAMES)
+
+    return {
+        "chatgpt_sessions": _sum_metric_values(session_rows),
+        "chatgpt_begin_form": event_counts["begin_form"],
+        "chatgpt_generate_lead": event_counts["generate_lead"],
+    }
 
 
 def fetch_day(date):
@@ -319,6 +393,8 @@ def fetch_day(date):
             "event_count": int(float(mets[2])),
         }
 
+    chatgpt = fetch_chatgpt_metrics(date)
+
     # Supabase contact_submissions
     sb = fetch_supabase_leads(date)
 
@@ -327,7 +403,7 @@ def fetch_day(date):
         sess=int(sess), ke=int(ke), avg_eng=avg_eng, eng_rate=eng_rate,
         pages=pages, sources=sources, cities=cities, channels=channels,
         conversions=conversion_events, traffic_quality=traffic_quality,
-        supabase=sb,
+        chatgpt=chatgpt, supabase=sb,
     )
 
 
@@ -392,6 +468,10 @@ def write_daily(d):
     leads = conv.get("generate_lead", 0)
     thank_you = conv.get("thank_you_page_view", 0)
     ads_conv = conv.get("ads_conversion", 0)
+    chatgpt = d.get("chatgpt", {})
+    chatgpt_sessions = chatgpt.get("chatgpt_sessions", 0)
+    chatgpt_begin_form = chatgpt.get("chatgpt_begin_form", 0)
+    chatgpt_generate_lead = chatgpt.get("chatgpt_generate_lead", 0)
 
     # Traffic quality
     tq = d.get("traffic_quality", {})
@@ -508,6 +588,9 @@ cities:
 {cities_yaml.rstrip()}
 traffic_quality:
 {tq_yaml_block}
+chatgpt_sessions: {chatgpt_sessions}
+chatgpt_begin_form: {chatgpt_begin_form}
+chatgpt_generate_lead: {chatgpt_generate_lead}
 {sb_yaml}
 notes: "GA4 Data API + Supabase contact_submissions，数据为 GA4 最终值 + Supabase 真实询盘"
 ---
@@ -526,6 +609,15 @@ notes: "GA4 Data API + Supabase contact_submissions，数据为 GA4 最终值 + 
 - **Supabase Clean Leads：{sb_clean}**
 - **Thank You Page Views：{thank_you}**
 - **Ads Conversion：{ads_conv}**
+- **ChatGPT Sessions：{chatgpt_sessions}**
+- **ChatGPT Begin Form：{chatgpt_begin_form}**
+- **ChatGPT Leads (generate_lead)：{chatgpt_generate_lead}**
+
+## ChatGPT 有效流量
+- Sessions：{chatgpt_sessions}
+- Begin Form：{chatgpt_begin_form}
+- Generate Lead：{chatgpt_generate_lead}
+- 观察口径：第 1 周不要求 referrer 立即上涨；第 2 周开始看 trend，并配合手动 ChatGPT 搜索做 spot check。
 
 ## Supabase 真实询盘（Ground Truth）
 {sb_note}

@@ -84,6 +84,33 @@ const quoteSteps = [
   ['3', 'Confirm quote', 'Sales returns stock, grade choices, price tiers and shipping route.'],
 ];
 
+const procurementDecisionPoints = [
+  {
+    title: 'Supplier fit',
+    question: 'Can one supplier quote the model mix your repair business actually buys?',
+    answer:
+      'Shortlist suppliers that can confirm coverage by model, part category and quality grade instead of pushing a single generic price list.',
+  },
+  {
+    title: 'Quote inputs',
+    question: 'What details make a wholesale quote accurate before you commit?',
+    answer:
+      'Send category, exact models, quantity range, destination country, preferred grade and any packing or shipping constraints before comparing unit price.',
+  },
+  {
+    title: 'Quality choice',
+    question: 'How should you compare screen and battery grade options?',
+    answer:
+      'Ask for grade options to be separated clearly, then compare compatibility, defect handling, battery route limitations and replacement policy.',
+  },
+  {
+    title: 'First-order risk',
+    question: 'What should be checked before the first order?',
+    answer:
+      'Confirm model compatibility, stock status, testing process, replacement terms and whether the same SKU list can be quoted consistently next time.',
+  },
+];
+
 const trustStats = [
   ['24h', 'quote response', 'Price, MOQ and lead time'],
   ['10pcs', 'screen MOQ', 'Mixed models accepted'],
@@ -93,20 +120,24 @@ const trustStats = [
 
 const faqItems = [
   {
-    q: "What's your minimum order quantity?",
-    a: 'MOQ starts from 10 units for screens and around 20 units for batteries or small parts. Mixed models and categories are supported.',
+    q: 'How should a repair business choose a wholesale phone parts supplier in China?',
+    a: 'Before comparing only unit price, buyers should check model coverage, available quality grades, stock confirmation process, defect handling, shipping route options and how clearly the supplier can quote mixed-model lists.',
   },
   {
-    q: 'Can I send a mixed model list?',
-    a: 'Yes. This page is designed for model-list buying. Paste the models into the form and the sales team will confirm stock, grades and price tiers.',
+    q: 'What information should I prepare before requesting a wholesale phone parts quote?',
+    a: 'Prepare the phone models, part categories, estimated quantity range, target quality grade, destination country and any packing or shipping requirements. This lets the supplier confirm stock, alternatives and freight constraints faster.',
   },
   {
-    q: 'Do you provide sample orders?',
-    a: 'Yes. Sample orders are available for quality checking before larger wholesale orders.',
+    q: 'How do I compare screen or battery quality grades before a bulk order?',
+    a: 'Ask the supplier to separate original, premium aftermarket and standard aftermarket options instead of mixing them in one quote. Compare compatibility, warranty handling, visible defects, packaging and route limitations for batteries.',
   },
   {
-    q: 'How fast can PRSPARES ship?',
-    a: 'Popular in-stock items can move to packing quickly. Express routes usually take 3-7 days depending on destination and cargo type.',
+    q: 'What should I check before placing a first order with a phone parts wholesaler?',
+    a: 'Start by confirming exact model compatibility, replacement policy, test process, shipping route and whether the supplier can quote the same SKU list repeatedly. A sample or smaller first batch can reduce procurement risk.',
+  },
+  {
+    q: 'When is a mixed-model order better than a single-SKU wholesale order?',
+    a: 'Mixed-model orders fit repair shops and distributors that need coverage across common repairs. They help test supplier responsiveness and stock breadth before committing to deeper volume on one model or grade.',
   },
 ];
 
@@ -410,6 +441,25 @@ export default function WholesaleInquiryPage() {
       </section>
 
       <MetricStrip />
+
+      <section className="bg-white py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            eyebrow="Buyer decision guide"
+            title="Before choosing a phone parts supplier."
+            text="Use the quote request to compare fit, quality and order risk before the first bulk shipment."
+          />
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {procurementDecisionPoints.map((item) => (
+              <div key={item.title} className="rounded-lg border border-[#ded6c8] bg-[#fffaf0] p-5">
+                <p className="text-xs font-black uppercase tracking-[0.12em] text-[#0b6b45]">{item.title}</p>
+                <h3 className="mt-4 text-lg font-black leading-6 text-[#18212c]">{item.question}</h3>
+                <p className="mt-3 text-sm leading-6 text-[#52606d]">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="bg-white py-14 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
