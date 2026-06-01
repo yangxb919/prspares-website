@@ -588,10 +588,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 </div>
               </div>
               
-              {/* Sidebar - Table of Contents + Sticky CTA（腿1 桌面常驻 CTA） */}
+              {/* Sidebar - Sticky CTA（腿1 桌面常驻 CTA）置于目录上方 + Table of Contents */}
               <aside className="lg:w-[calc(33.333%-1.25rem)] xl:w-[calc(33.333%-1.5rem)]">
-                <TableOfContents content={typedPost.content || ''} />
-                <BlogSidebarCTA ctx={ctaCtx} />
+                <div className="lg:sticky lg:top-24 space-y-4">
+                  <BlogSidebarCTA ctx={ctaCtx} />
+                  <TableOfContents content={typedPost.content || ''} />
+                </div>
               </aside>
             </div>
           </div>

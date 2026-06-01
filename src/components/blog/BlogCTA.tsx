@@ -68,7 +68,7 @@ export function BlogStickyCTA({ ctx }: { ctx: BlogCtaContext }) {
 /** ③ 桌面 sticky 侧栏卡（放 TOC 下方，桌面读者全程可见） */
 export function BlogSidebarCTA({ ctx }: { ctx: BlogCtaContext }) {
   return (
-    <div className="hidden lg:block mt-6 rounded-xl bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] p-5 shadow-md">
+    <div className="hidden lg:block rounded-xl bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] p-5 shadow-md">
       <h3 className="text-white font-bold text-base mb-2 leading-snug">{ctx.headline}</h3>
       <p className="text-blue-200 text-sm mb-4 leading-relaxed">{ctx.sub}</p>
       <Link

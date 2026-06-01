@@ -63,63 +63,53 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
   }, [content]);
 
   useEffect(() => {
-    const observerOptions = {
-      rootMargin: '-20% 0% -35% 0%',
-      threshold: [0, 0.25, 0.5, 0.75, 1]
-    };
+    if (toc.length === 0) return;
 
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      // Find the heading that's most visible
-      let mostVisibleEntry: IntersectionObserverEntry | undefined;
-      let maxRatio = 0;
+    // 滚动时高亮"最后一个已滚过视口上方阈值的标题"，到底部时强制高亮最后一项。
+    // 比 IntersectionObserver band 更可靠：标题间距大/页面快速滚动都不会漏判。
+    const ACTIVATION_OFFSET = 120; // 标题越过视口顶部下方 120px 即视为当前
 
-      for (const entry of entries) {
-        if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-          maxRatio = entry.intersectionRatio;
-          mostVisibleEntry = entry;
-        }
+    let ticking = false;
+    const updateActive = () => {
+      ticking = false;
+      const elements = toc
+        .map(({ id }) => document.getElementById(id))
+        .filter((el): el is HTMLElement => el !== null);
+      if (elements.length === 0) return;
+
+      // 到达页面底部：高亮最后一个标题
+      const atBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      if (atBottom) {
+        setActiveId(elements[elements.length - 1].id);
+        return;
       }
 
-      // If no heading is intersecting, find the closest one above the viewport
-      if (!mostVisibleEntry) {
-        const headingElements = toc
-          .map(({ id }) => document.getElementById(id))
-          .filter((el): el is HTMLElement => el !== null);
-
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        let closestHeading: HTMLElement | undefined;
-        let minDistance = Infinity;
-
-        for (const element of headingElements) {
-          const elementTop = element.offsetTop;
-          const distance = Math.abs(scrollTop - elementTop);
-
-          if (elementTop <= scrollTop + 200 && distance < minDistance) {
-            minDistance = distance;
-            closestHeading = element;
-          }
+      let currentId = elements[0].id;
+      for (const el of elements) {
+        if (el.getBoundingClientRect().top <= ACTIVATION_OFFSET) {
+          currentId = el.id;
+        } else {
+          break;
         }
+      }
+      setActiveId(currentId);
+    };
 
-        if (closestHeading) {
-          setActiveId(closestHeading.id);
-        }
-      } else {
-        const target = mostVisibleEntry.target as HTMLElement;
-        setActiveId(target.id);
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(updateActive);
       }
     };
 
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
-
-    // Observe all heading elements
-    toc.forEach(({ id }) => {
-      const element = document.getElementById(id);
-      if (element) {
-        observer.observe(element);
-      }
-    });
-
-    return () => observer.disconnect();
+    updateActive(); // 初始化
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
   }, [toc]);
 
   // Auto-scroll TOC to keep active item visible
@@ -176,7 +166,7 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg sticky top-24 max-h-[calc(100vh-120px)] flex flex-col">
+    <div className="bg-white rounded-xl shadow-lg max-h-[calc(100vh-260px)] flex flex-col">
       <div className="flex items-center p-6 pb-4 border-b border-gray-100">
         <BookOpen className="w-6 h-6 text-[#00B140] mr-3" />
         <h3 className="text-xl font-bold text-gray-900">Table of Contents</h3>
