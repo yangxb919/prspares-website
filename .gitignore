@@ -4,6 +4,9 @@
 /node_modules
 /.pnp
 .pnp.*
+
+# analytics local caches (regenerable, contains no secrets but no value in VCS)
+Analytics/scripts/.dfs_volume_cache.json
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
