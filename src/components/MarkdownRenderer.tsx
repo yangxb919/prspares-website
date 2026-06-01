@@ -15,6 +15,8 @@ interface MarkdownRendererProps {
   articleTitle?: string;
   className?: string;
   demoteH1ToH2?: boolean;
+  /** 可选：在正文第 2 个 H2 之前注入的节点（用于 blog 中段内联 CTA，catch <40% 滚动区读者） */
+  inlineCta?: React.ReactNode;
 }
 
 export default function MarkdownRenderer({
@@ -22,6 +24,7 @@ export default function MarkdownRenderer({
   articleTitle,
   className = '',
   demoteH1ToH2 = false,
+  inlineCta,
 }: MarkdownRendererProps) {
   const [openImage, setOpenImage] = useState<{ src: string; alt: string } | null>(null);
 
@@ -56,6 +59,31 @@ export default function MarkdownRenderer({
         /\[([^\]]+)\]\(quote\)/g,
         '<QuoteButton text="$1" />'
       );
+  };
+
+  /**
+   * 在第 2 个 `##` 标题前确定性地插入中段 CTA 占位符。
+   * 必须在字符串层面做（而非渲染期计数器），否则 SSR / CSR 计数不一致会触发 hydration 错误。
+   */
+  const injectInlineCta = (markdown: string): string => {
+    if (!inlineCta) return markdown;
+    const lines = markdown.split('\n');
+    let headingCount = 0;
+    let inCodeFence = false;
+    for (let i = 0; i < lines.length; i++) {
+      // 跳过代码块内的 # 注释，避免误判
+      if (/^\s*```/.test(lines[i])) inCodeFence = !inCodeFence;
+      if (inCodeFence) continue;
+      // 识别一级或二级标题（# 或 ##），因 demoteH1ToH2 文章可能全用 #
+      if (/^#{1,2}\s+/.test(lines[i])) {
+        headingCount += 1;
+        if (headingCount === 2) {
+          lines.splice(i, 0, '', '<div data-blog-inline-cta></div>', '');
+          break;
+        }
+      }
+    }
+    return lines.join('\n');
   };
 
   const components = {
@@ -95,6 +123,14 @@ export default function MarkdownRenderer({
         .replace(/\s+/g, '-')
         .trim();
       return <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>;
+    },
+    // 中段 CTA 占位符：由 injectInlineCta 在第 2 个 ## 前插入 <div data-blog-inline-cta>，此处拦截替换为组件。
+    // 用标准 div + data 属性（而非自定义标签），避免 rehype-raw 把自定义标签名小写化导致匹配失败。
+    div: ({ children, ...props }: any) => {
+      if (props['data-blog-inline-cta'] !== undefined) {
+        return <>{inlineCta ?? null}</>;
+      }
+      return <div {...props}>{children}</div>;
     },
     h3: ({ children, ...props }: any) => {
       const text = typeof children === 'string' ? children : String(children);
@@ -294,7 +330,7 @@ export default function MarkdownRenderer({
         rehypePlugins={[rehypeRaw]}
         components={components}
       >
-        {processContent(content)}
+        {injectInlineCta(processContent(content))}
       </ReactMarkdown>
       <Lightbox
         open={openImage !== null}
