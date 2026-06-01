@@ -15,6 +15,8 @@ interface MarkdownRendererProps {
   articleTitle?: string;
   className?: string;
   demoteH1ToH2?: boolean;
+  /** 可选：在正文第 2 个 H2 之前注入的节点（用于 blog 中段内联 CTA，catch <40% 滚动区读者） */
+  inlineCta?: React.ReactNode;
 }
 
 export default function MarkdownRenderer({
@@ -22,8 +24,11 @@ export default function MarkdownRenderer({
   articleTitle,
   className = '',
   demoteH1ToH2 = false,
+  inlineCta,
 }: MarkdownRendererProps) {
   const [openImage, setOpenImage] = useState<{ src: string; alt: string } | null>(null);
+  // 统计渲染到第几个 H2，用于在第一节之后注入中段 CTA（每次渲染重置）
+  const h2Counter = { n: 0 };
 
   // 预处理内容，将特殊标记转换为组件
   const processContent = (markdown: string) => {
@@ -94,7 +99,15 @@ export default function MarkdownRenderer({
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
         .trim();
-      return <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>;
+      // 在第 2 个 H2 之前注入中段 CTA：第一节内容刚读完处（约 <40% 滚动区）
+      h2Counter.n += 1;
+      const injectCta = inlineCta && h2Counter.n === 2;
+      return (
+        <>
+          {injectCta && inlineCta}
+          <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>
+        </>
+      );
     },
     h3: ({ children, ...props }: any) => {
       const text = typeof children === 'string' ? children : String(children);

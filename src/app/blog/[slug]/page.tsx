@@ -9,6 +9,9 @@ import RelatedPosts from '@/components/features/RelatedPosts';
 import SafeImage from '@/components/SafeImage';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import ReadingProgress from '@/components/ReadingProgress';
+import { BlogInlineCTA, BlogStickyCTA, BlogSidebarCTA } from '@/components/blog/BlogCTA';
+import { getBlogCtaContext, wholesaleInquiryHref } from '@/lib/blog-cta-context';
+import { TrackedLink } from '@/components/TrackedLink';
 import { extractFAQs, buildFaqSchema } from '@/lib/extract-faqs';
 import { pickRelatedByTitle } from '@/lib/related-posts';
 import { pickPostDescription } from '@/lib/post-description';
@@ -434,6 +437,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     const faqs = extractFAQs(typedPost.content);
     const faqSchema = buildFaqSchema(faqs);
 
+    // Blog CTA 上下文（腿1 转化漏桶）：按 category/tags/title 推断品类，做上下文文案 + 预填深链
+    const ctaCtx = getBlogCtaContext(
+      typedPost.meta?.category as string | undefined,
+      (typedPost.meta?.tags as string[] | undefined) || null,
+      typedPost.title,
+    );
+
     return (
       <>
         {/* 阅读进度条 */}
@@ -555,6 +565,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                         content={typedPost.content || 'Content not available.'}
                         articleTitle={typedPost.title}
                         demoteH1ToH2
+                        inlineCta={<BlogInlineCTA ctx={ctaCtx} />}
                       />
                     </div>
                   </article>
@@ -577,9 +588,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 </div>
               </div>
               
-              {/* Sidebar - Table of Contents */}
+              {/* Sidebar - Table of Contents + Sticky CTA（腿1 桌面常驻 CTA） */}
               <aside className="lg:w-[calc(33.333%-1.25rem)] xl:w-[calc(33.333%-1.5rem)]">
                 <TableOfContents content={typedPost.content || ''} />
+                <BlogSidebarCTA ctx={ctaCtx} />
               </aside>
             </div>
           </div>
@@ -592,23 +604,31 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
         </div>
         
-        {/* Call to Action */}
+        {/* Call to Action（腿1：上下文文案 + 预填深链 + 埋点） */}
         <div className="bg-gradient-to-br from-[#1e3a5f] to-[#0f2440] py-16 md:py-20">
           <div className="max-w-[1200px] mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-5">Need Wholesale Phone Repair Parts?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-5">{ctaCtx.headline}</h2>
             <p className="text-blue-200 mb-8 max-w-xl mx-auto text-lg">
-              Factory-direct pricing from Shenzhen. OEM quality screens, batteries, and small parts with 12-month warranty.
+              {ctaCtx.sub} 12-month warranty.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <Link href="/wholesale-inquiry" className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-colors duration-200 shadow-lg text-lg">
+              <TrackedLink
+                href={wholesaleInquiryHref(ctaCtx.product)}
+                event="quote_cta_click"
+                params={{ event_label: 'Blog Bottom CTA', product: ctaCtx.product || '(generic)' }}
+                className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-8 rounded-lg transition-colors duration-200 shadow-lg text-lg"
+              >
                 Get Wholesale Quote
-              </Link>
+              </TrackedLink>
               <Link href="/products" className="border-2 border-white/30 hover:bg-white/10 text-white font-semibold py-3.5 px-8 rounded-lg transition-colors duration-200 text-lg">
                 Browse All Parts
               </Link>
             </div>
           </div>
         </div>
+
+        {/* 移动端 sticky 底部 CTA 条（腿1：覆盖 ~78% 移动流量） */}
+        <BlogStickyCTA ctx={ctaCtx} />
       </main>
       </>
     );
