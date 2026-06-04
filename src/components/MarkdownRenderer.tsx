@@ -19,6 +19,32 @@ interface MarkdownRendererProps {
   inlineCta?: React.ReactNode;
 }
 
+/**
+ * 递归提取 React children 的纯可见文本。
+ * 必须与 TableOfContents 的标题文本提取保持一致：含 inline 格式（**bold** / `code` / [link]）
+ * 的标题，react-markdown 传入的 children 是节点数组，旧逻辑 String(children) 会退化成
+ * "[object Object]" 生成错误 id → 点击对应 TOC 项 getElementById=null → 静默无反应
+ * （Clarity 记为 dead click）。
+ */
+function extractNodeText(node: React.ReactNode): string {
+  if (node == null || typeof node === 'boolean') return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(extractNodeText).join('');
+  if (typeof node === 'object' && 'props' in (node as { props?: { children?: React.ReactNode } })) {
+    return extractNodeText((node as { props?: { children?: React.ReactNode } }).props?.children);
+  }
+  return '';
+}
+
+/** 标题 slug 化 —— 与 TableOfContents 的 id 生成算法逐字符对齐 */
+function headingSlug(children: React.ReactNode): string {
+  return extractNodeText(children)
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .trim();
+}
+
 export default function MarkdownRenderer({
   content,
   articleTitle,
@@ -104,24 +130,14 @@ export default function MarkdownRenderer({
     // 标准Markdown元素的样式 - 修复类型问题
     // 为标题添加 id 属性，使 TableOfContents 能够定位
     h1: ({ children, ...props }: any) => {
-      const text = typeof children === 'string' ? children : String(children);
-      const id = text
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .trim();
+      const id = headingSlug(children);
       if (demoteH1ToH2) {
         return <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>;
       }
       return <h1 id={id} className="text-3xl font-bold text-gray-900 mb-6 mt-8 scroll-mt-24" {...props}>{children}</h1>;
     },
     h2: ({ children, ...props }: any) => {
-      const text = typeof children === 'string' ? children : String(children);
-      const id = text
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .trim();
+      const id = headingSlug(children);
       return <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>;
     },
     // 中段 CTA 占位符：由 injectInlineCta 在第 2 个 ## 前插入 <div data-blog-inline-cta>，此处拦截替换为组件。
@@ -133,21 +149,11 @@ export default function MarkdownRenderer({
       return <div {...props}>{children}</div>;
     },
     h3: ({ children, ...props }: any) => {
-      const text = typeof children === 'string' ? children : String(children);
-      const id = text
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .trim();
+      const id = headingSlug(children);
       return <h3 id={id} className="text-xl font-bold text-gray-900 mb-3 mt-5 scroll-mt-24" {...props}>{children}</h3>;
     },
     h4: ({ children, ...props }: any) => {
-      const text = typeof children === 'string' ? children : String(children);
-      const id = text
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .trim();
+      const id = headingSlug(children);
       return <h4 id={id} className="text-lg font-semibold text-gray-900 mb-2 mt-4 scroll-mt-24" {...props}>{children}</h4>;
     },
     p: ({ children, ...props }: any) => (
