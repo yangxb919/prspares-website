@@ -129,61 +129,61 @@ export default function MarkdownRenderer({
 
     // 标准Markdown元素的样式 - 修复类型问题
     // 为标题添加 id 属性，使 TableOfContents 能够定位
-    h1: ({ children, ...props }: any) => {
+    h1: ({ node: _node, children, ...props }: any) => {
       const id = headingSlug(children);
       if (demoteH1ToH2) {
         return <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>;
       }
       return <h1 id={id} className="text-3xl font-bold text-gray-900 mb-6 mt-8 scroll-mt-24" {...props}>{children}</h1>;
     },
-    h2: ({ children, ...props }: any) => {
+    h2: ({ node: _node, children, ...props }: any) => {
       const id = headingSlug(children);
       return <h2 id={id} className="text-2xl font-bold text-gray-900 mb-4 mt-6 scroll-mt-24" {...props}>{children}</h2>;
     },
     // 中段 CTA 占位符：由 injectInlineCta 在第 2 个 ## 前插入 <div data-blog-inline-cta>，此处拦截替换为组件。
     // 用标准 div + data 属性（而非自定义标签），避免 rehype-raw 把自定义标签名小写化导致匹配失败。
-    div: ({ children, ...props }: any) => {
+    div: ({ node: _node, children, ...props }: any) => {
       if (props['data-blog-inline-cta'] !== undefined) {
         return <>{inlineCta ?? null}</>;
       }
       return <div {...props}>{children}</div>;
     },
-    h3: ({ children, ...props }: any) => {
+    h3: ({ node: _node, children, ...props }: any) => {
       const id = headingSlug(children);
       return <h3 id={id} className="text-xl font-bold text-gray-900 mb-3 mt-5 scroll-mt-24" {...props}>{children}</h3>;
     },
-    h4: ({ children, ...props }: any) => {
+    h4: ({ node: _node, children, ...props }: any) => {
       const id = headingSlug(children);
       return <h4 id={id} className="text-lg font-semibold text-gray-900 mb-2 mt-4 scroll-mt-24" {...props}>{children}</h4>;
     },
-    p: ({ children, ...props }: any) => (
+    p: ({ node: _node, children, ...props }: any) => (
       <p className="text-gray-700 mb-4 leading-relaxed" {...props}>{children}</p>
     ),
-    ul: ({ children, ...props }: any) => (
+    ul: ({ node: _node, children, ...props }: any) => (
       <ul className="list-disc list-inside text-gray-700 mb-4 space-y-1" {...props}>{children}</ul>
     ),
-    ol: ({ children, ...props }: any) => (
+    ol: ({ node: _node, children, ...props }: any) => (
       <ol className="list-decimal list-inside text-gray-700 mb-4 space-y-1" {...props}>{children}</ol>
     ),
-    li: ({ children, ...props }: any) => (
+    li: ({ node: _node, children, ...props }: any) => (
       <li className="mb-1" {...props}>{children}</li>
     ),
-    blockquote: ({ children, ...props }: any) => (
+    blockquote: ({ node: _node, children, ...props }: any) => (
       <blockquote className="border-l-4 border-primary pl-4 py-2 my-4 bg-green-50 text-gray-700 italic" {...props}>
         {children}
       </blockquote>
     ),
-    code: ({ children, ...props }: any) => (
+    code: ({ node: _node, children, ...props }: any) => (
       <code className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm font-mono" {...props}>
         {children}
       </code>
     ),
-    pre: ({ children, ...props }: any) => (
+    pre: ({ node: _node, children, ...props }: any) => (
       <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto mb-4" {...props}>
         {children}
       </pre>
     ),
-    a: ({ href, children, ...props }: any) => (
+    a: ({ node: _node, href, children, ...props }: any) => (
       <a
         href={href}
         className="text-primary hover:text-primary-dark underline decoration-2 underline-offset-2 font-medium transition-colors duration-200 hover:bg-green-50 px-1 py-0.5 rounded"
@@ -194,7 +194,7 @@ export default function MarkdownRenderer({
         {children}
       </a>
     ),
-    img: ({ src, alt, ...props }: any) => {
+    img: ({ node: _node, src, alt, ...props }: any) => {
       const base = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
       let supabaseOrigin = '';
       let supabaseHost = '';
@@ -312,19 +312,19 @@ export default function MarkdownRenderer({
         />
       );
     },
-    table: ({ children, ...props }: any) => (
+    table: ({ node: _node, children, ...props }: any) => (
       <div className="overflow-x-auto my-4">
         <table className="min-w-full border-collapse border border-gray-300" {...props}>
           {children}
         </table>
       </div>
     ),
-    th: ({ children, ...props }: any) => (
+    th: ({ node: _node, children, ...props }: any) => (
       <th className="border border-gray-300 bg-gray-50 px-4 py-2 text-left font-semibold text-gray-900" {...props}>
         {children}
       </th>
     ),
-    td: ({ children, ...props }: any) => (
+    td: ({ node: _node, children, ...props }: any) => (
       <td className="border border-gray-300 px-4 py-2 text-gray-700" {...props}>{children}</td>
     ),
   };

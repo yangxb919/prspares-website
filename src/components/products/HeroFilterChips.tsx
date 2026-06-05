@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 import type { QuoteLine } from '@/data/product-category-pages';
 
 type HeroFilterRow = {
@@ -259,13 +261,20 @@ export default function HeroFilterChips({
 
       <div className="space-y-3">
         {activeRows.map((line) => (
-          <div key={`${activeLabel}-${line.model}-${line.category}`} className="grid grid-cols-[1fr_auto] gap-4 border border-white/12 bg-white/[0.07] p-3">
+          <Link
+            key={`${activeLabel}-${line.model}-${line.category}`}
+            href={`/wholesale-inquiry?product=${encodeURIComponent(`${line.model} — ${line.category}`)}`}
+            className="group grid grid-cols-[1fr_auto] items-center gap-4 border border-white/12 bg-white/[0.07] p-3 transition hover:border-[#ff8a2a] hover:bg-white/[0.12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#ff8a2a]"
+          >
             <div>
               <div className="text-sm font-black text-white">{line.model}</div>
               <div className="mt-1 text-xs text-slate-300">{line.category}</div>
             </div>
-            <div className="font-mono text-sm font-black text-[#ffb36b]">{line.value}</div>
-          </div>
+            <div className="flex items-center gap-1.5 font-mono text-sm font-black text-[#ffb36b]">
+              {line.value}
+              <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition group-hover:opacity-100" />
+            </div>
+          </Link>
         ))}
       </div>
     </div>
