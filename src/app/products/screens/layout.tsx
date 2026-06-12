@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
 const metaTitle = 'Wholesale iPhone Samsung Screens LCD/OLED | PRSPARES';
 const metaDescription =
@@ -46,6 +47,7 @@ export default function ScreensLayout({
       "description": "Wholesale iPhone LCD and OLED screen assemblies in multiple quality grades: OEM Original, Soft OLED, Hard OLED, and Incell. Compatible with iPhone 12 through iPhone 16 series.",
       "brand": { "@type": "Brand", "name": "PRSPARES" },
       "category": "Phone Replacement Screens",
+      "additionalProperty": wholesaleProductProperties(10),
       "offers": {
         "@type": "AggregateOffer",
         "lowPrice": "19.00",
@@ -53,7 +55,8 @@ export default function ScreensLayout({
         "priceCurrency": "USD",
         "offerCount": "50",
         "availability": "https://schema.org/InStock",
-        "seller": { "@type": "Organization", "name": "PRSPARES" }
+        "seller": { "@type": "Organization", "name": "PRSPARES" },
+        "eligibleQuantity": wholesaleMoq(10)
       }
     },
     {
@@ -63,6 +66,7 @@ export default function ScreensLayout({
       "description": "Wholesale Samsung Galaxy OLED and TFT screen assemblies. Galaxy S24, S23, S22 Ultra and standard models. OEM and aftermarket options available.",
       "brand": { "@type": "Brand", "name": "PRSPARES" },
       "category": "Phone Replacement Screens",
+      "additionalProperty": wholesaleProductProperties(10),
       "offers": {
         "@type": "AggregateOffer",
         "lowPrice": "35.00",
@@ -70,7 +74,8 @@ export default function ScreensLayout({
         "priceCurrency": "USD",
         "offerCount": "20",
         "availability": "https://schema.org/InStock",
-        "seller": { "@type": "Organization", "name": "PRSPARES" }
+        "seller": { "@type": "Organization", "name": "PRSPARES" },
+        "eligibleQuantity": wholesaleMoq(10)
       }
     }
   ];

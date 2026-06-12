@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
 const metaTitle = 'Wholesale Phone Batteries iPhone Samsung | PRSPARES';
 const metaDescription =
@@ -37,6 +38,7 @@ export default function BatteriesLayout({
     "name": "Wholesale iPhone Replacement Batteries",
     "description": "OEM original, high-capacity, and standard replacement batteries for iPhone 13–16 series. TI/ATL cells with UN38.3 safety certification.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
+    "additionalProperty": wholesaleProductProperties(20),
     "category": "iPhone Batteries",
     "offers": {
       "@type": "AggregateOffer",
@@ -46,6 +48,7 @@ export default function BatteriesLayout({
       "offerCount": "33",
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
+      "eligibleQuantity": wholesaleMoq(20)
     },
   };
 
@@ -55,6 +58,7 @@ export default function BatteriesLayout({
     "name": "Wholesale Samsung Replacement Batteries",
     "description": "OEM original, high-capacity, and standard replacement batteries for Samsung Galaxy S23–S24 series. High-quality lithium polymer cells.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
+    "additionalProperty": wholesaleProductProperties(20),
     "category": "Samsung Batteries",
     "offers": {
       "@type": "AggregateOffer",
@@ -64,6 +68,7 @@ export default function BatteriesLayout({
       "offerCount": "12",
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
+      "eligibleQuantity": wholesaleMoq(20)
     },
   };
 

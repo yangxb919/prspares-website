@@ -22,32 +22,32 @@ type HeroFilterConfig = {
 };
 
 const heroFilterConfigs: Record<string, HeroFilterConfig> = {
-  // TODO: replace placeholder hero chip rows with verified catalog segmentation when source data is available.
+  // screens lane uses verified April-2026 catalog models + real grade lanes; value shows the 10+/50+/200+ tier ladder (RFQ pricing, no public unit price). Lanes below still use placeholder segmentation pending source data.
   screens: {
     eyebrow: 'Grade lane',
     filters: [
       {
         label: 'Soft OLED',
         rows: [
-          { model: 'iPhone Pro Max series', category: 'Soft OLED screen', value: 'Grade quote' },
-          { model: 'Samsung S series', category: 'Soft OLED assembly', value: 'Grade quote' },
-          { model: 'Pixel Pro series', category: 'Soft OLED panel', value: 'Grade quote' },
+          { model: 'iPhone 15 Pro Max', category: 'Soft OLED assembly', value: '10+ · 50+ · 200+' },
+          { model: 'iPhone 14 Pro', category: 'Soft OLED assembly', value: '10+ · 50+ · 200+' },
+          { model: 'Samsung Galaxy S23', category: 'Service pack OLED', value: '10+ · 50+ · 200+' },
         ],
       },
       {
         label: 'Hard OLED',
         rows: [
-          { model: 'iPhone standard series', category: 'Hard OLED screen', value: 'Value quote' },
-          { model: 'Samsung A/S mix', category: 'Hard OLED assembly', value: 'Value quote' },
-          { model: 'Android hot models', category: 'Hard OLED panel', value: 'Value quote' },
+          { model: 'iPhone 14', category: 'Hard OLED assembly', value: '10+ · 50+ · 200+' },
+          { model: 'iPhone 13', category: 'Hard OLED assembly', value: '10+ · 50+ · 200+' },
+          { model: 'iPhone 12', category: 'Hard OLED assembly', value: '10+ · 50+ · 200+' },
         ],
       },
       {
         label: 'Incell',
         rows: [
-          { model: 'iPhone legacy models', category: 'Incell LCD screen', value: 'MOQ quote' },
-          { model: 'Galaxy A series', category: 'Incell LCD option', value: 'MOQ quote' },
-          { model: 'Redmi / OPPO lines', category: 'Incell LCD panel', value: 'MOQ quote' },
+          { model: 'iPhone 11', category: 'Incell LCD', value: '10+ · 50+ · 200+' },
+          { model: 'iPhone XR', category: 'Incell LCD', value: '10+ · 50+ · 200+' },
+          { model: 'iPhone SE (2020)', category: 'Incell LCD', value: '10+ · 50+ · 200+' },
         ],
       },
     ],

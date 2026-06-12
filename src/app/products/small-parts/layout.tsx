@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
 const metaTitle = 'Wholesale Phone Small Parts Camera Ports | PRSPARES';
 const metaDescription =
@@ -37,6 +38,7 @@ export default function SmallPartsLayout({
     "name": "Wholesale Cell Phone Replacement Parts — Cameras, Charging Ports, Back Glass",
     "description": "Wholesale cell phone replacement parts including cameras, charging ports, back glass panels, speakers, and flex cables for iPhone and Samsung devices.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
+    "additionalProperty": wholesaleProductProperties(10),
     "category": "Phone Small Parts",
     "offers": {
       "@type": "AggregateOffer",
@@ -46,6 +48,7 @@ export default function SmallPartsLayout({
       "offerCount": "65",
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
+      "eligibleQuantity": wholesaleMoq(10)
     },
   };
 

@@ -80,9 +80,24 @@ export default function RootLayout({
   const pathname = headers().get('x-pathname') || '/';
   const { lang, chrome } = localeForPath(pathname);
 
+  // Only load GTM (which loads GA4 + Ads + Clarity) on the real production
+  // host. This prevents local dev / preview traffic from polluting analytics —
+  // e.g. localhost:3100 sessions were leaking into the production Clarity
+  // project (2026-06-02). Gate on BOTH NODE_ENV (blocks `next dev`) and the
+  // request host (blocks a production build run locally, where NODE_ENV=production).
+  const host = (headers().get('host') || '').toLowerCase();
+  const isLocalHost =
+    host.startsWith('localhost') ||
+    host.startsWith('127.0.0.1') ||
+    host.startsWith('0.0.0.0') ||
+    host.startsWith('[::1]') ||
+    host.endsWith('.local');
+  const analyticsEnabled = process.env.NODE_ENV === 'production' && !isLocalHost;
+
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
     "name": "PRSPARES",
     "description": "Professional Mobile Phone Repair Parts Factory & OEM/ODM Manufacturer from Shenzhen Huaqiangbei",
     "url": SITE_URL,
@@ -99,7 +114,19 @@ export default function RootLayout({
       "contactType": "customer service",
       "availableLanguage": ["English", "Chinese"]
     },
+    // TODO(P1): populate with real PRSPARES social profile URLs (LinkedIn, YouTube, etc.)
     "sameAs": []
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    "name": "PRSPARES",
+    "url": SITE_URL,
+    "description": "Factory-direct wholesale phone repair parts from Shenzhen — OEM iPhone & Samsung screens, batteries, and tools for repair shops and distributors.",
+    "inLanguage": "en",
+    "publisher": { "@id": `${SITE_URL}/#organization` }
   };
 
   return (
@@ -108,11 +135,11 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema)
+            __html: JSON.stringify([organizationSchema, websiteSchema])
           }}
         />
       </head>
-      <GoogleTagManager gtmId="GTM-TTBMN854" />
+      {analyticsEnabled && <GoogleTagManager gtmId="GTM-TTBMN854" />}
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >

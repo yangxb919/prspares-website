@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
 const metaTitle = 'Phone Repair Tools & IC Chips Wholesale | PRSPARES';
 const metaDescription =
@@ -37,6 +38,7 @@ export default function RepairToolsLayout({
     "name": "Wholesale Phone Repair Tools — Screen Testers, Programmers, Soldering Equipment",
     "description": "Professional phone repair tools including iPhone screen testers, True Tone programmers, battery spot welders, soldering stations, and LCD separator machines for repair shops and refurbishment factories.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
+    "additionalProperty": wholesaleProductProperties(10),
     "category": "Phone Repair Tools",
     "offers": {
       "@type": "AggregateOffer",
@@ -46,6 +48,7 @@ export default function RepairToolsLayout({
       "offerCount": "45",
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
+      "eligibleQuantity": wholesaleMoq(10)
     },
   };
 

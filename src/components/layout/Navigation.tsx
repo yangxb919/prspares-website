@@ -207,39 +207,29 @@ const Navigation = ({ orientation = 'horizontal', onMenuItemClick }: NavigationP
         )}
 
         {/* Dropdown Menu */}
-        <div
-          className={`absolute right-0 top-full z-40 h-2 w-[720px] max-w-[calc(100vw-2rem)] ${
-            orientation === 'horizontal' ? '' : 'hidden'
-          } ${isProductsOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
-          aria-hidden={!isProductsOpen}
-        ></div>
-        <div
-          className={`absolute right-0 top-full z-50 mt-2 w-[720px] max-w-[calc(100vw-2rem)] rounded-lg border border-gray-100 bg-white p-4 shadow-2xl shadow-gray-900/10 transition-all duration-200 ${
-            orientation === 'horizontal' ? '' : 'hidden'
-          } ${
-            isProductsOpen
-              ? 'pointer-events-auto translate-y-0 opacity-100'
-              : 'pointer-events-none -translate-y-2 opacity-0'
-          }`}
-          aria-hidden={!isProductsOpen}
-        >
-          <div className="mb-3 flex items-center justify-between gap-3 border-b border-gray-100 pb-3">
-            <span className="text-xs font-black uppercase tracking-[0.14em] text-gray-400">Product categories</span>
-            <Link
-              href={productMenuAllCatalog.path}
-              className="text-xs font-black text-[#0b6b45] transition hover:text-[#ff8a2a]"
-              onClick={() => {
-                setIsProductsOpen(false);
-                handleMenuItemClick();
-              }}
-            >
-              All catalog · {productMenuAllCatalog.count}
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {productMenuCategories.map((item) => renderDesktopProductItem(item))}
-          </div>
-        </div>
+        {orientation === 'horizontal' && isProductsOpen && (
+          <>
+            <div className="absolute right-0 top-full z-40 h-2 w-[720px] max-w-[calc(100vw-2rem)]" aria-hidden="true"></div>
+            <div className="absolute right-0 top-full z-50 mt-2 w-[720px] max-w-[calc(100vw-2rem)] rounded-lg border border-gray-100 bg-white p-4 shadow-2xl shadow-gray-900/10">
+              <div className="mb-3 flex items-center justify-between gap-3 border-b border-gray-100 pb-3">
+                <span className="text-xs font-black uppercase tracking-[0.14em] text-gray-400">Product categories</span>
+                <Link
+                  href={productMenuAllCatalog.path}
+                  className="text-xs font-black text-[#0b6b45] transition hover:text-[#ff8a2a]"
+                  onClick={() => {
+                    setIsProductsOpen(false);
+                    handleMenuItemClick();
+                  }}
+                >
+                  All catalog · {productMenuAllCatalog.count}
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {productMenuCategories.map((item) => renderDesktopProductItem(item))}
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Vertical Menu for Mobile */}
         <div

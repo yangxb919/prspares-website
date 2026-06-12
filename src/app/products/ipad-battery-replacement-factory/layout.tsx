@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
 const metaTitle = 'iPad Battery Wholesale — OEM Replacement from $8 | PRSPARES';
 const metaDescription =
@@ -37,6 +38,7 @@ export default function iPadBatteryLayout({
     "name": "Wholesale iPad Battery Replacement — OEM Batteries for All iPad Models",
     "description": "OEM quality iPad replacement batteries for iPad Pro 12.9, iPad Pro 11, iPad Air, iPad mini, and standard iPad models. Factory-direct wholesale from Shenzhen.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
+    "additionalProperty": wholesaleProductProperties(10),
     "category": "iPad Batteries",
     "offers": {
       "@type": "AggregateOffer",
@@ -46,6 +48,7 @@ export default function iPadBatteryLayout({
       "offerCount": "20",
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
+      "eligibleQuantity": wholesaleMoq(10)
     },
   };
 
