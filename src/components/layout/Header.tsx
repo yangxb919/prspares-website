@@ -11,13 +11,14 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
+    <>
     <header className="bg-white/95 backdrop-blur-md border-b border-gray-100 h-[70px] w-full sticky top-0 z-50 shadow-sm">
       <div className="max-w-[1400px] mx-auto h-full px-4 md:px-6">
         {/* Mobile Layout */}
-        <div className="md:hidden h-full flex items-center justify-between">
+        <div className="lg:hidden h-full flex items-center justify-between">
           {/* Mobile menu button */}
           <button
-            className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0"
+            className="flex items-center justify-center w-11 h-11 rounded-lg hover:bg-gray-100 transition-colors flex-shrink-0"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Menu"
           >
@@ -42,7 +43,7 @@ const Header = () => {
           <div className="flex-shrink-0">
             <Link
               href="/wholesale-inquiry"
-              className="inline-flex items-center gap-1 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+              className="inline-flex items-center gap-1 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 min-h-[44px] rounded-lg transition-colors"
               onClick={() => trackEvent('quote_cta_click', { event_label: 'Header Mobile' })}
             >
               <MessageSquare size={12} />
@@ -52,7 +53,7 @@ const Header = () => {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden md:flex items-center justify-between h-full">
+        <div className="hidden lg:flex items-center justify-between h-full">
           {/* Desktop Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="hover:scale-105 transition-transform duration-200">
@@ -85,14 +86,14 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile navigation menu */}
-        {isMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-[70px] bg-white z-40 p-6 border-t border-gray-100 shadow-lg">
-            <Navigation orientation="vertical" onMenuItemClick={() => setIsMenuOpen(false)} />
-          </div>
-        )}
       </div>
     </header>
+    {isMenuOpen && (
+      <div className="lg:hidden fixed inset-x-0 bottom-0 top-[70px] z-40 overflow-y-auto border-t border-gray-100 bg-white p-6 pb-10 shadow-lg">
+        <Navigation orientation="vertical" onMenuItemClick={() => setIsMenuOpen(false)} />
+      </div>
+    )}
+    </>
   );
 };
 

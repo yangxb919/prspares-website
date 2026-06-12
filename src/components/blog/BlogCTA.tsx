@@ -50,7 +50,7 @@ export function BlogStickyCTA({ ctx }: { ctx: BlogCtaContext }) {
       <Link
         href={wholesaleInquiryHref(ctx.product)}
         onClick={() => track('Blog Sticky CTA', ctx.product)}
-        className="shrink-0 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm py-2.5 px-4 rounded-lg transition-colors"
+        className="shrink-0 inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm min-h-[44px] px-5 rounded-lg transition-colors"
       >
         Get Quote
       </Link>

@@ -105,10 +105,12 @@ export async function middleware(request: NextRequest) {
   }
 
   // --- Rate limiting (skip for good crawlers) ---
+  // 60 req/min per IP: real users with Next.js Link prefetch can burst well
+  // past 30/min on catalog pages; bots are already filtered by isBot() above.
   if (!isGoodCrawler) {
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
       || request.headers.get('x-real-ip') || 'unknown'
-    const { allowed } = checkRateLimit(ip, 30, 60000)
+    const { allowed } = checkRateLimit(ip, 60, 60000)
     if (!allowed) {
       return new NextResponse('Too Many Requests', {
         status: 429,
@@ -126,6 +128,17 @@ export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: { headers: requestHeaders },
   })
+
+  // Auth gating only matters on these routes. Everything else (blog, products,
+  // home — the entire anonymous surface) returns immediately: the Supabase
+  // getSession()/refreshSession() round-trip below costs a network hop to
+  // Supabase on EVERY page view and was a primary TTFB contributor.
+  const AUTH_ROUTES = ['/pricing', '/dashboard', '/profile', '/settings', '/user', '/admin', '/login']
+  const needsAuth = AUTH_ROUTES.some(route =>
+    request.nextUrl.pathname === route || request.nextUrl.pathname.startsWith(route + '/'))
+  if (!needsAuth) {
+    return response
+  }
 
   try {
     console.log('Middleware running for:', request.nextUrl.pathname)
@@ -260,6 +273,6 @@ export const config = {
      * - favicon.ico, favicon.png
      * - public assets (images, fonts, etc.)
      */
-    '/((?!_next/static|_next/image|favicon\\.ico|favicon\\.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot)).*)',
+    '/((?!_next/static|_next/image|favicon\\.ico|favicon\\.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot|txt|xml|json)).*)',
   ],
 }

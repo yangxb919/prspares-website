@@ -39,7 +39,7 @@ export const productCategoryPages = {
     eyebrow: 'Screen Catalog',
     title: 'Wholesale iPhone & Samsung Screens — LCD, OLED, Incell from $9',
     intro:
-      'Screen inventory should be presented by buyer workflow, not by retail product cards. This page uses the April 2026 catalog to show screen depth, quality lanes and representative quote options.',
+      'Browse 5,263 screen SKUs by quality lane — Original, OEM, OLED and Incell — with transparent 10/50/200 price tiers. Pick your models, compare grades, and get a factory-direct quote within 24 hours.',
     heroImage: '/hero/products-screens.jpg',
     quoteProduct: 'LCD and OLED Screens',
     metrics: [

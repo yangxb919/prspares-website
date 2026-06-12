@@ -479,7 +479,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               style={{objectFit: 'cover'}}
               priority
               sizes="100vw"
-              className="transform scale-105 group-hover:scale-110 transition-transform duration-500 ease-in-out"
+              className=""
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent"></div>
