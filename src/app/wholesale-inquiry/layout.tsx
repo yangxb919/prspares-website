@@ -111,7 +111,10 @@ const wholesaleInquiryJsonLd = [
         '@type': 'Offer',
         position: index + 1,
         itemOffered: {
-          '@type': 'Product',
+          // Category buckets of a B2B quotation Service — NOT priced retail products.
+          // Typed as Service (not Product) so Google's Product-snippet validator does
+          // not require offers/review/aggregateRating on each bare category node.
+          '@type': 'Service',
           name,
         },
       })),
