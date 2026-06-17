@@ -88,7 +88,14 @@ export default function Turnstile({
   onVerify,
   onError,
   onExpire,
-  appearance = 'always',
+  // 'interaction-only': Cloudflare issues a token silently for low-risk
+  // visitors (no visible widget, no click) and only shows a challenge when
+  // it actually flags the session. Switched from 'always' (2026-06-17) because
+  // the always-visible managed widget kept legit users at isVerified=false when
+  // they submitted fast/before it resolved → client gate blocked them even
+  // though the server accepts tokenless submissions. That asymmetry was the
+  // begin_form→generate_lead leak (06-15: 15→1).
+  appearance = 'interaction-only',
   theme = 'light',
   size = 'normal',
   className = '',

@@ -276,7 +276,6 @@ export default function WholesaleInquiryPage() {
   const {
     token: turnstileToken,
     isVerified: isTurnstileVerified,
-    hasError: turnstileError,
     TurnstileWidget,
   } = useTurnstile(turnstileSiteKey);
   const honeypotRef = useRef<HTMLInputElement>(null);
@@ -316,11 +315,14 @@ export default function WholesaleInquiryPage() {
     e.preventDefault();
     if (!validate()) return;
 
-    const turnstileAvailable = turnstileSiteKey && !turnstileError && typeof window !== 'undefined' && !!window.turnstile;
-    if (turnstileAvailable && !isTurnstileVerified) {
-      setSubmitError('Please complete the verification challenge.');
-      return;
-    }
+    // Do NOT hard-block on isTurnstileVerified here. With appearance
+    // 'interaction-only' the token is issued silently for legit users, but a
+    // fast submit can fire before it resolves. The server (verifyTurnstile)
+    // already verifies a real token when present and accepts a missing one by
+    // design (honeypot + rate limit + content checks are the real bot gate),
+    // so we pass whatever token exists through and let the server decide —
+    // matching the server's own "don't hard-block legit users" stance. The
+    // previous client gate here was the begin_form→generate_lead leak.
 
     // NOTE: Do NOT pre-verify the Turnstile token here. Cloudflare tokens are
     // single-use — calling /api/turnstile/verify consumes it, and the
