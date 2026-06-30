@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import JsonLd from '@/components/JsonLd';
 import { IPHONE_BATTERY_CATALOG, type BatterySku } from '@/data/iphone-battery-catalog';
 
 // Server-rendered native <table> of real iPhone battery SKUs with tiered
@@ -27,8 +28,28 @@ export default function WholesaleBatteryTable() {
   const low = Math.min(...rows.map((r) => r.p10));
   const high = Math.max(...rows.map((r) => r.p10));
 
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: `Wholesale iPhone Batteries (${rows.length} SKUs)`,
+    category: 'Phone Replacement Batteries',
+    brand: { '@type': 'Brand', name: 'PRSPARES' },
+    description:
+      'Factory-direct iPhone replacement battery cells for iPhone 8 through iPhone 16, original-capacity rated, UN38.3-compliant, with tiered 10/50/200 wholesale pricing.',
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'USD',
+      lowPrice: low.toFixed(2),
+      highPrice: high.toFixed(2),
+      offerCount: rows.length,
+      availability: 'https://schema.org/InStock',
+      seller: { '@type': 'Organization', name: 'PRSPARES' },
+    },
+  };
+
   return (
     <section id="price-list" className="bg-white py-14 md:py-20">
+      <JsonLd data={schema} />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-sm font-bold text-[#0b6b45]">Live wholesale price list</p>
         <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-4xl">

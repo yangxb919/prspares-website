@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import JsonLd from '@/components/JsonLd';
 import { IPHONE_SCREEN_CATALOG, type ScreenSku } from '@/data/iphone-screen-catalog';
 
 // Server-rendered native <table> of real iPhone screen SKUs with tiered wholesale
@@ -41,8 +42,28 @@ export default function WholesaleScreenTable() {
   const low = Math.min(...rows.map((r) => r.p10));
   const high = Math.max(...rows.map((r) => r.p10));
 
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: `Wholesale iPhone Screen Assemblies (${rows.length} SKUs)`,
+    category: 'Phone Replacement Screens',
+    brand: { '@type': 'Brand', name: 'PRSPARES' },
+    description:
+      'Factory-direct iPhone LCD/OLED screen assemblies in Original, Soft OLED, Hard OLED, Incell and LCD grades for iPhone 11 through iPhone 17, with tiered 10/50/200 wholesale pricing.',
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'USD',
+      lowPrice: low.toFixed(2),
+      highPrice: high.toFixed(2),
+      offerCount: rows.length,
+      availability: 'https://schema.org/InStock',
+      seller: { '@type': 'Organization', name: 'PRSPARES' },
+    },
+  };
+
   return (
     <section id="price-list" className="bg-white py-14 md:py-20">
+      <JsonLd data={schema} />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-sm font-bold text-[#0b6b45]">Live wholesale price list</p>
         <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-4xl">

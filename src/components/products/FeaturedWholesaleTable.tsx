@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import JsonLd from '@/components/JsonLd';
 import { FEATURED_WHOLESALE, type FeaturedSku } from '@/data/featured-wholesale-catalog';
 
 // Cross-category featured wholesale price table for the /products flagship
@@ -27,9 +28,31 @@ const money = (n: number) => `$${n.toFixed(2)}`;
 export default function FeaturedWholesaleTable() {
   const rows = FEATURED_WHOLESALE;
   const cats = Array.from(new Set(rows.map((r) => r.category)));
+  const low = Math.min(...rows.map((r) => r.p10));
+  const high = Math.max(...rows.map((r) => r.p10));
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Cell Phone Parts Wholesale — Factory-Direct Repair Parts',
+    category: 'Mobile Phone Repair Parts',
+    brand: { '@type': 'Brand', name: 'PRSPARES' },
+    description:
+      'Factory-direct cell phone parts wholesale: screens, batteries, cameras, charging ports and housings across all major brands, with tiered 10/50/200 wholesale pricing and a 12-month warranty.',
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'USD',
+      lowPrice: low.toFixed(2),
+      highPrice: high.toFixed(2),
+      offerCount: rows.length,
+      availability: 'https://schema.org/InStock',
+      seller: { '@type': 'Organization', name: 'PRSPARES' },
+    },
+  };
 
   return (
     <section id="featured-prices" className="bg-white py-14 md:py-20">
+      <JsonLd data={schema} />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-sm font-bold text-[#0b6b45]">Featured wholesale prices</p>
         <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-4xl">Real factory-direct pricing across every category</h2>
