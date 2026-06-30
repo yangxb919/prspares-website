@@ -18,6 +18,8 @@ interface LpInquiryPayload {
   source?: string;
   turnstileToken?: string;
   honeypot?: string;
+  /** First-touch content attribution captured client-side (best-effort). */
+  attribution?: Record<string, unknown> | null;
 }
 
 function isValidEmail(email: string): boolean {
@@ -83,6 +85,8 @@ export async function POST(request: NextRequest) {
     const company = body.company?.trim() || '';
     const phone = body.phone?.trim() || '';
     const productInterest = body.productInterest?.trim() || '';
+    const attribution =
+      body.attribution && typeof body.attribution === 'object' ? body.attribution : null;
 
     // Build a structured message that preserves all fields, since contact_submissions
     // only has name/email/message columns.
@@ -106,7 +110,7 @@ export async function POST(request: NextRequest) {
     // 1. Persist to Supabase contact_submissions (service-role bypasses RLS)
     try {
       const supabase = getAdminClient();
-      const { error } = await supabase.from('contact_submissions').insert({
+      const baseRow = {
         name,
         email,
         message: structuredMessage, // keep structured text for back-compat
@@ -117,7 +121,14 @@ export async function POST(request: NextRequest) {
         page_url: pageUrl || null,
         ip_address: ip || null,
         user_agent: userAgent || null,
-      });
+      };
+      let { error } = await supabase
+        .from('contact_submissions')
+        .insert({ ...baseRow, attribution });
+      // If the attribution column hasn't been migrated yet, never drop the lead.
+      if (error && /attribution/i.test(error.message || '')) {
+        ({ error } = await supabase.from('contact_submissions').insert(baseRow));
+      }
       if (error) throw error;
       dbOk = true;
     } catch (err: any) {

@@ -19,6 +19,7 @@ import {
 import JsonLd from '@/components/JsonLd';
 import ScrollAnimator from '@/components/ScrollAnimator';
 import CertificationBadges from '@/components/products/CertificationBadges';
+import FeaturedWholesaleTable from '@/components/products/FeaturedWholesaleTable';
 import {
   brandCatalogs,
   catalogMetrics,
@@ -37,9 +38,9 @@ function absoluteUrl(path: string) {
   return `${SITE_URL}${path}`;
 }
 
-const productsMetaTitle = 'Wholesale Phone Repair Parts Catalog & SKUs | PRSPARES';
+const productsMetaTitle = 'Cell Phone Parts Wholesale — Factory-Direct Catalog | PRSPARES';
 const productsMetaDescription =
-  'Wholesale phone repair parts catalog with 27,783 SKUs across screens, batteries, small parts, IC chips and tools. MOQ support and 24h quote today.';
+  'Cell phone parts wholesale, factory-direct from Shenzhen: 27,783 repair-part SKUs across screens, batteries, small parts, IC chips and tools. Tiered 10/50/200 pricing, 12-month warranty, 24h quote.';
 
 export const metadata: Metadata = {
   title: productsMetaTitle,
@@ -66,7 +67,7 @@ const productsJsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Wholesale Mobile Repair Parts Catalog',
+    name: 'Cell Phone Parts Wholesale Catalog',
     url: absoluteUrl('/products'),
     description: metadata.description,
     primaryImageOfPage: absoluteUrl('/hero/products.jpg'),
@@ -231,10 +232,11 @@ export default function ProductsPage() {
               Updated April 2026 inventory
             </div>
             <h1 className="max-w-4xl text-4xl font-black leading-[1.05] text-white sm:text-5xl lg:text-6xl">
-              Wholesale Phone Repair Parts — 27,000+ SKUs Across 8 Brands
+              Cell Phone Parts Wholesale — 27,000+ Repair SKUs Across 8 Brands
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100">
-              The product section is organized for wholesale buying: 27,783 repair-part SKUs across screens, batteries, small parts, IC chips, tools, tablets and smartwatch parts.
+              PRSPARES is a factory-direct cell phone parts wholesale supplier: 27,783 repair-part SKUs across screens, batteries, small parts, IC chips, tools, tablets and smartwatch parts — priced in 10/50/200 wholesale tiers with a{' '}
+              <Link href="/warranty-and-rma" className="font-semibold text-[#ffb36b] underline underline-offset-2 hover:text-white">12-month warranty</Link>.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -326,6 +328,8 @@ export default function ProductsPage() {
           </div>
         </div>
       </section>
+
+      <FeaturedWholesaleTable />
 
       <section className="bg-[#fffaf0] py-14 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

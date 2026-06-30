@@ -109,6 +109,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/warranty-and-rma" className="text-sm hover:text-[#00B140] transition-colors">
+                  Warranty &amp; After-Sales
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy-policy" className="text-sm hover:text-[#00B140] transition-colors">
                   Privacy Policy
                 </Link>

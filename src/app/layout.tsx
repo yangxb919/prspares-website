@@ -5,6 +5,7 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import AttributionTracker from "@/components/AttributionTracker";
 
 // Route-prefix-based locale for SEA landing pages (plan A MVP).
 // Keeps the site's single-root-layout architecture while giving /id and /th:
@@ -143,6 +144,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
+        <AttributionTracker />
         {chrome && <Header />}
         {children}
         {chrome && <Footer />}

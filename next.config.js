@@ -336,6 +336,36 @@ const nextConfig = {
         destination: '/blog/iphone-battery-wholesale-sourcing-guide-shenzhen',
         permanent: true,
       },
+
+      // --- Cluster consolidation 301s (content-arch, 2026-06-21) ---
+      // OEM-vs-aftermarket cannibalization: id89 (pos9) + id74 (pos7) both ranked
+      // for the same term, splitting authority. id74 is deeper (4868w, citability-
+      // done) and is already the pillar for this topic (the long-form insiders-guide
+      // slug above 301s into it). Merge id89 → id74; id89's unique "Common
+      // Misconceptions" section was grafted into id74 before this redirect. 28
+      // inbound internal links repointed id89 → id74 in the same change.
+      {
+        source: '/blog/oem-vs-aftermarket-phone-screens',
+        destination: '/blog/phone-screen-wholesale-oem-vs-aftermarket',
+        permanent: true,
+      },
+
+      // wholesale-iphone-screens over-fragmentation (HUB3): 6 posts all targeting
+      // the 90-vol "wholesale iphone screens" term, all 0 impressions. id90
+      // (pricing, best commercial slug) kept as pillar; id102 (MOQ/compare-quotes)
+      // and id101 (by-business-type) merged in — their unique sections ("5-Point
+      // Quote Comparison Framework", "Options by Business Type") grafted into id90
+      // first. id104/id155/id103 kept as distinct spokes. Inbound links repointed.
+      {
+        source: '/blog/wholesale-iphone-screens-grades-prices-moq',
+        destination: '/blog/wholesale-iphone-screens-pricing-guide',
+        permanent: true,
+      },
+      {
+        source: '/blog/iphone-screen-replacement-wholesale-repair-business',
+        destination: '/blog/wholesale-iphone-screens-pricing-guide',
+        permanent: true,
+      },
     ];
   },
 };

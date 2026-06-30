@@ -1,5 +1,7 @@
 'use client';
 
+import { getAttribution, type Attribution } from '@/lib/attribution';
+
 export interface RfqInput {
   name: string;
   email: string;
@@ -14,6 +16,8 @@ export interface RfqInput {
   turnstileToken?: string;
   /** Honeypot field — must be empty. Bots tend to fill every input. */
   honeypot?: string;
+  /** First-touch content attribution. Auto-captured if omitted. */
+  attribution?: Attribution;
 }
 
 export interface RfqPayload {
@@ -28,6 +32,7 @@ export interface RfqPayload {
   submittedAt: string;
   turnstileToken?: string;
   honeypot?: string;
+  attribution?: Attribution;
 }
 
 function normalizeIp(ip?: string): string {
@@ -89,6 +94,10 @@ export async function submitRfqAndNotify(input: RfqInput): Promise<RfqPayload> {
     submittedAt: input.submittedAt || new Date().toISOString(),
     turnstileToken: input.turnstileToken,
     honeypot: input.honeypot,
+    // First-touch content attribution: which page/referrer brought the buyer
+    // in. Auto-captured from the first-party cookie so every RFQ entry point
+    // (wholesale-inquiry, quote modals, SEA LPs) is covered without per-form wiring.
+    attribution: input.attribution || getAttribution(),
   };
 
   validate(payload);

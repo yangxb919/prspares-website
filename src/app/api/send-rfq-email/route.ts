@@ -10,6 +10,8 @@ export const runtime = 'nodejs';
 interface RfqEmailRequest extends Partial<RfqEmailInput> {
   turnstileToken?: string;
   honeypot?: string;
+  /** First-touch content attribution captured client-side (best-effort). */
+  attribution?: Record<string, unknown> | null;
 }
 
 function getClientIP(request: NextRequest): string {
@@ -81,6 +83,10 @@ export async function POST(request: NextRequest) {
     const pageUrl = body.pageUrl?.trim() || '';
     const submittedAt = body.submittedAt?.trim() || new Date().toISOString();
     const userAgent = request.headers.get('user-agent') || '';
+    // First-touch content attribution (landing/referrer/utm). Lets us trace an
+    // RFQ back to the page that drove it — page_url alone is just the form page.
+    const attribution =
+      body.attribution && typeof body.attribution === 'object' ? body.attribution : null;
 
     let dbOk = false;
     let emailOk = false;
@@ -93,7 +99,7 @@ export async function POST(request: NextRequest) {
     //     captures the inquiry.
     try {
       const supabase = getAdminClient();
-      const { error } = await supabase.from('contact_submissions').insert({
+      const baseRow = {
         name,
         email,
         message,
@@ -104,7 +110,15 @@ export async function POST(request: NextRequest) {
         page_url: pageUrl || null,
         ip_address: ip || null,
         user_agent: userAgent || null,
-      });
+      };
+      let { error } = await supabase
+        .from('contact_submissions')
+        .insert({ ...baseRow, attribution });
+      // If the attribution column hasn't been migrated yet, never drop the lead —
+      // retry the core row without it.
+      if (error && /attribution/i.test(error.message || '')) {
+        ({ error } = await supabase.from('contact_submissions').insert(baseRow));
+      }
       if (error) throw error;
       dbOk = true;
     } catch (err: any) {

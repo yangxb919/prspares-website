@@ -80,6 +80,12 @@ module.exports = {
     '/blog/substandard-battery-sourcing-certified-repair-shops',
     // Slug-rename source — old URL 301s to the renamed post.
     '/blog/2025-iphone-battery-wholesale-sourcing-guide-factory-direct-from-shenzhen',
+    // Cluster consolidation merges (content-arch, 2026-06-23) — stay
+    // status=publish in DB for graceful degradation but 301 to a pillar in
+    // next.config.js, so they must not appear in the sitemap.
+    '/blog/oem-vs-aftermarket-phone-screens', // → phone-screen-wholesale-oem-vs-aftermarket
+    '/blog/wholesale-iphone-screens-grades-prices-moq', // → wholesale-iphone-screens-pricing-guide
+    '/blog/iphone-screen-replacement-wholesale-repair-business', // → wholesale-iphone-screens-pricing-guide
   ],
   additionalPaths: async (config) => {
     const staticPaths = [
@@ -95,6 +101,7 @@ module.exports = {
       '/products/iphone-rear-camera-wholesale',
       '/products/ipad-battery-replacement-factory',
       '/wholesale-inquiry',
+      '/warranty-and-rma',
       // '/id/wholesale', // TODO: 部署后恢复（SEA landing — Bahasa Indonesia）
       // '/th/wholesale', // TODO: 部署后恢复（SEA landing — ภาษาไทย）
       '/blog',

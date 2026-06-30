@@ -242,6 +242,64 @@ export const CANDIDATES_301: Candidate301[] = [
     next_action:
       'Content team to confirm Pro Max coverage in pillar. Same options: salvage + 301, or keep as model-specific supporting (downgrade to do_not_301).',
   },
+
+  // ═════════════════════════════════════════════════════════════════════
+  // executed — content-architecture cluster consolidation (2026-06-23)
+  // Pillar chosen by rank/depth/inbound-links; unique IP grafted into pillar
+  // before redirect; inbound internal links repointed; source kept
+  // status=publish + added to next-sitemap exclude (graceful degradation).
+  // ═════════════════════════════════════════════════════════════════════
+  {
+    from_slug: 'oem-vs-aftermarket-phone-screens',
+    current_title: "OEM vs Aftermarket Phone Screens: A Wholesale Buyer's Guide to Quality",
+    to_pillar_slug: 'phone-screen-wholesale-oem-vs-aftermarket',
+    why_recommended_for_301:
+      'Same-intent OEM-vs-aftermarket explainer (2,635w, pos 9) cannibalizing the deeper pillar (4,768w, pos 7, citability-done). Both ranked for the same term, splitting authority.',
+    prerequisite_before_301:
+      'Done: grafted the unique "Common Misconceptions" (4 myths) section into the pillar; repointed all 28 inbound internal links to the pillar.',
+    suggested_observation_window: 'observation bypassed — clear cannibalization (two live rankings, one term)',
+    canonical_applied_on: '2026-06-23',
+    recheck_after: '2026-08-01',
+    status: 'executed',
+    decision_reason:
+      'Pillar is stronger on every axis except slug cleanliness (rank, depth, citability, inbound links after repoint). Hard 301 consolidates the split authority.',
+    review_date: '2026-06-23',
+    next_action: 'Redirect in next.config.js + sitemap exclude. Verify pillar holds/gains the term at D+28.',
+  },
+  {
+    from_slug: 'wholesale-iphone-screens-grades-prices-moq',
+    current_title: 'Wholesale iPhone Screens MOQ and Order Strategy',
+    to_pillar_slug: 'wholesale-iphone-screens-pricing-guide',
+    why_recommended_for_301:
+      'Part of a 6-post over-fragmentation cluster all targeting the 90-vol "wholesale iphone screens" term, all 0 impressions. MOQ/quote-comparison angle overlaps the pricing pillar.',
+    prerequisite_before_301:
+      'Done: grafted the "5-Point Quote Comparison Framework" section into the pillar; repointed 7 inbound links.',
+    suggested_observation_window: 'observation bypassed — 0-impression duplicate cluster',
+    canonical_applied_on: '2026-06-23',
+    recheck_after: '2026-08-01',
+    status: 'executed',
+    decision_reason:
+      'id90 (pricing-guide) chosen as pillar: best commercial slug, most inbound links. id104/id155/id103 kept as distinct spokes.',
+    review_date: '2026-06-23',
+    next_action: 'Redirect + sitemap exclude. Funnel pillar to /products/screens (done).',
+  },
+  {
+    from_slug: 'iphone-screen-replacement-wholesale-repair-business',
+    current_title: 'iPhone Screen Wholesale for Repair Shops: Grade Picks and 90-Day Setup',
+    to_pillar_slug: 'wholesale-iphone-screens-pricing-guide',
+    why_recommended_for_301:
+      'Same 6-post over-fragmentation cluster (0 impressions, 0 inbound links). "By business type / 90-day setup" angle overlaps the pricing pillar.',
+    prerequisite_before_301:
+      'Done: grafted the "Options by Business Type" section (3 shop-type tables + image) into the pillar; no inbound links to repoint.',
+    suggested_observation_window: 'observation bypassed — 0-impression duplicate cluster',
+    canonical_applied_on: '2026-06-23',
+    recheck_after: '2026-08-01',
+    status: 'executed',
+    decision_reason:
+      'Merged into the same pricing pillar as the MOQ variant above to consolidate the wholesale-iphone-screens cluster.',
+    review_date: '2026-06-23',
+    next_action: 'Redirect + sitemap exclude.',
+  },
 ];
 
 /** Convenience: only the entries currently flagged for hard 301 execution. */
