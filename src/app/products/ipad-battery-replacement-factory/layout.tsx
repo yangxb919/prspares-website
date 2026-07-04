@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
+import { IPAD_BATTERY_CATALOG } from '@/data/ipad-battery-catalog';
 
-const metaTitle = 'iPad Battery Wholesale — OEM Replacement from $8 | PRSPARES';
+const CATALOG_LOW = Math.min(...IPAD_BATTERY_CATALOG.map((r) => r.p10));
+const CATALOG_HIGH = Math.max(...IPAD_BATTERY_CATALOG.map((r) => r.p10));
+
+const metaTitle = 'iPad Battery Wholesale — Tiered Pricing from $5.02 | PRSPARES';
 const metaDescription =
-  'Wholesale iPad batteries from Shenzhen with OEM replacement options from $8. MOQ support, UN38.3 packing, batch QC and fast quote for shops worldwide.';
+  'Wholesale iPad batteries from Shenzhen: 16 real SKUs for iPad Pro, Air, mini and standard iPad with 10+/50+/200+ tiered pricing from $5.02, UN38.3 packing and 12-month warranty.';
 
 export const metadata: Metadata = {
   title: metaTitle,
@@ -35,17 +39,17 @@ export default function iPadBatteryLayout({
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": "Wholesale iPad Battery Replacement — OEM Batteries for All iPad Models",
-    "description": "OEM quality iPad replacement batteries for iPad Pro 12.9, iPad Pro 11, iPad Air, iPad mini, and standard iPad models. Factory-direct wholesale from Shenzhen.",
+    "name": "Wholesale iPad Battery Replacement — Batteries for iPad Pro, Air, mini & Standard",
+    "description": "iPad replacement batteries for iPad Pro 12.9, iPad Pro 11, iPad Pro 10.5, iPad Air, iPad mini, and standard iPad models. Factory-direct wholesale from Shenzhen with 10+/50+/200+ tiered pricing.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
     "additionalProperty": wholesaleProductProperties(10),
     "category": "iPad Batteries",
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "USD",
-      "lowPrice": "8",
-      "highPrice": "32",
-      "offerCount": "20",
+      "lowPrice": CATALOG_LOW.toFixed(2),
+      "highPrice": CATALOG_HIGH.toFixed(2),
+      "offerCount": String(IPAD_BATTERY_CATALOG.length),
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
       "eligibleQuantity": wholesaleMoq(10)
@@ -59,7 +63,7 @@ export default function iPadBatteryLayout({
       {
         "@type": "Question",
         "name": "How much does iPad battery replacement cost?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Apple charges $99-$149 depending on model. Third-party shops charge $79-$119. Wholesale battery cost: $8-$32 per unit. iPad Pro 12.9 batteries cost $22-$32, standard iPad models start at $10." },
+        "acceptedAnswer": { "@type": "Answer", "text": "Apple charges $99-$149 depending on model. Third-party shops charge $79-$119. Wholesale battery cost: $5.02-$19.84 per unit at the 10+ tier. iPad Pro 12.9 batteries run $11.38-$19.84, iPad 7/8/9 batteries cost $6.30, and iPad mini batteries start at $5.02." },
       },
       {
         "@type": "Question",

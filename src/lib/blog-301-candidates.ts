@@ -195,12 +195,12 @@ export const CANDIDATES_301: Candidate301[] = [
     suggested_observation_window: '4–6 weeks from canonical_applied_on',
     canonical_applied_on: '2026-04-22',
     recheck_after: '2026-06-03',
-    status: 'observe_longer',
+    status: 'do_not_301',
     decision_reason:
-      'Promoted from "ready" to "observe" on second review: 5,410-word body is a yellow flag — could be bloat (consumer fluff) but could also contain unique testing methodology that is not in the 2,620-word pillar. Need a human read.',
-    review_date: '2026-04-22',
+      'GSC verdict (06-05~07-02): page earns 2,408 impressions of PAA-type trust/reliability queries the pillar does not rank for — unique intent confirmed. Also: the canonical target slug (oem-vs-aftermarket-phone-screens) was itself 301-merged into phone-screen-wholesale-oem-vs-aftermarket on 2026-06-23, so the old canonical pointed at a redirecting URL. Page received citability upgrade (6 FAQ + schema) on 2026-06-20; CTR diagnosis 2026-06-30 classifies it as a GEO asset to keep.',
+    review_date: '2026-07-04',
     next_action:
-      'Content team to skim body for unique technical sections worth salvaging. If none, 301; if some, salvage then 301. Recheck around 2026-06-03.',
+      'Self-canonical restored in Supabase (2026-07-04, backup Analytics/_backups_post16-pre-canonical-2026-07-04.json). Keep as GEO/PAA asset; do not spend CTR budget on it.',
   },
   {
     from_slug:
@@ -215,12 +215,12 @@ export const CANDIDATES_301: Candidate301[] = [
     suggested_observation_window: '4–6 weeks from canonical_applied_on',
     canonical_applied_on: '2026-04-22',
     recheck_after: '2026-06-03',
-    status: 'observe_longer',
+    status: 'do_not_301',
     decision_reason:
-      'H1 was shortened in P6 to "iPhone 14 Pro Max Back Glass Repair Cost: When It\'s Worth Fixing for Repair Shops" — page is now usable for direct landings. Risk of premature 301: pillar may not mention "$89 vs $450" Pro Max cost data that this page features.',
-    review_date: '2026-04-22',
+      'GSC verdict (06-05~07-02): this page is the site-wide impression leader (6,489 imp / 17 clicks / pos 8.4) while the pillar it canonicaled to gets 689 imp with a pos-1.0/0-click AIO-suppressed query. Google ignored the hint and consolidated on THIS page. CTR diagnosis 2026-06-30 recommends the REVERSE merge (301 back-glass-replacement-iphone-guide INTO this page) pending query-overlap confirmation.',
+    review_date: '2026-07-04',
     next_action:
-      'Content team to confirm pillar covers Pro Max cost specifics. Then decide: 301, or keep as model-specific supporting page (in which case downgrade to do_not_301 + restore self-canonical).',
+      'Self-canonical restored in Supabase (2026-07-04, backup Analytics/_backups_post10-pre-canonical-2026-07-04.json). Next: run query×page overlap check; if confirmed, 301 the guide page into this one (opposite of original plan).',
   },
   {
     from_slug:
@@ -235,12 +235,12 @@ export const CANDIDATES_301: Candidate301[] = [
     suggested_observation_window: '4–6 weeks from canonical_applied_on',
     canonical_applied_on: '2026-04-22',
     recheck_after: '2026-06-03',
-    status: 'observe_longer',
+    status: 'do_not_301',
     decision_reason:
-      'Same Pro Max-specific concern as the back-glass variant above. Page sizes are similar (2,659 vs 2,537 words) — neither is a slam-dunk consolidation.',
-    review_date: '2026-04-22',
+      'GSC verdict (06-05~07-02): page earns 3,466 imp / 23 clicks / pos 8.7 including the commercial query "best iphone 14 pro max screen replacement" at pos 7.7, while the grade-decision pillar it canonicaled to is absent from top pages. Unique Pro Max intent confirmed by data — CTR diagnosis 2026-06-30 marked this the clearest Tier-1 fixable page.',
+    review_date: '2026-07-04',
     next_action:
-      'Content team to confirm Pro Max coverage in pillar. Same options: salvage + 301, or keep as model-specific supporting (downgrade to do_not_301).',
+      'Done 2026-07-04: self-canonical restored + retitled to front-load the query ("Best iPhone 14 Pro Max Screen Replacement…", SERP title 59 chars) + desktop meta description targeting repair shops (backup Analytics/_backups_post11-pre-title-2026-07-04.json). Watch GSC 28-day window (~08-01) for CTR/position on the target query.',
   },
 
   // ═════════════════════════════════════════════════════════════════════
