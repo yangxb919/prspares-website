@@ -81,7 +81,7 @@ type IconBlock = {
 };
 
 const heroStats: Stat[] = [
-  { value: '27k+', label: 'catalog lines', detail: 'Major phone repair categories' },
+  { value: '23k+', label: 'catalog lines', detail: 'Major phone repair categories' },
   { value: '4.4k+', label: 'screen assemblies', detail: 'LCD, OLED and with-frame options' },
   { value: '1.5k+', label: 'battery lines', detail: 'Standard and high-capacity supply' },
   { value: '10/50/200', label: 'price tiers', detail: 'Wholesale quantity logic' },
@@ -141,6 +141,33 @@ const productCategories: ProductCategory[] = [
     stock: '2,000+ tool / IC lines',
     detail: 'Testing, programming, soldering and opening tools',
     items: ['Screen testers', 'Programmers', 'Soldering tools'],
+  },
+  {
+    name: 'iPad Batteries',
+    href: '/products/ipad-battery-replacement-factory',
+    image: '/images/home-redesign/category-batteries.png',
+    from: 'From $5.02',
+    stock: '16 battery SKUs',
+    detail: 'OEM-quality cells for iPad Pro, Air, mini and standard iPad',
+    items: ['iPad Pro 12.9" / 11"', 'UN38.3 DG shipping', 'Real tiered price table'],
+  },
+  {
+    name: 'iPhone Rear Cameras',
+    href: '/products/iphone-rear-camera-wholesale',
+    image: '/images/home-redesign/category-small-parts.png',
+    from: 'From $0.65',
+    stock: '37 module SKUs',
+    detail: 'Tested rear camera modules across iPhone series',
+    items: ['Module & pcs options', 'Batch QC tested', '10/50/200 tiers'],
+  },
+  {
+    name: 'Tablet & Watch Parts',
+    href: '/products/tablet-watch',
+    image: '/images/home-redesign/category-screens.png',
+    from: 'From $1.06',
+    stock: '1,400+ part lines',
+    detail: 'iPad and Apple Watch screens, batteries and flex parts',
+    items: ['iPad Pro / Air / mini', 'Apple Watch series', 'Digitizers & batteries'],
   },
 ];
 
@@ -337,10 +364,19 @@ export default function Home() {
             <h2 className="mt-1 text-2xl font-black text-[#18212c]">Send a mixed parts list and get exact wholesale pricing.</h2>
           </div>
           <div className="grid grid-cols-2 gap-2 text-sm text-[#3c4652] sm:grid-cols-4">
-            {['iPhone OLED', 'Samsung AMOLED', 'Battery packing', 'Screen tester'].map((item) => (
-              <span key={item} className="rounded-md border border-[#e4d8c2] bg-white px-3 py-2 font-semibold">
-                {item}
-              </span>
+            {[
+              { label: 'iPhone OLED screens', href: '/products/screens' },
+              { label: 'Samsung AMOLED screens', href: '/products/screens' },
+              { label: 'Wholesale batteries', href: '/products/batteries' },
+              { label: 'Screen testers', href: '/products/repair-tools' },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="rounded-md border border-[#e4d8c2] bg-white px-3 py-2 font-semibold transition hover:border-[#0b6b45] hover:text-[#0b6b45]"
+              >
+                {item.label}
+              </Link>
             ))}
           </div>
           <TrackedLink

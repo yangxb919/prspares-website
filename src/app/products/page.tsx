@@ -40,7 +40,7 @@ function absoluteUrl(path: string) {
 
 const productsMetaTitle = 'Cell Phone Parts Wholesale — Factory-Direct Catalog | PRSPARES';
 const productsMetaDescription =
-  'Cell phone parts wholesale, factory-direct from Shenzhen: 27,783 repair-part SKUs across screens, batteries, small parts, IC chips and tools. Tiered 10/50/200 pricing, 12-month warranty, 24h quote.';
+  'Cell phone parts wholesale, factory-direct from Shenzhen: 23,374 repair-part SKUs across screens, batteries, small parts, IC chips and tools. Tiered 10/50/200 pricing, 12-month warranty, 24h quote.';
 
 export const metadata: Metadata = {
   title: productsMetaTitle,
@@ -235,7 +235,7 @@ export default function ProductsPage() {
               Cell Phone Parts Wholesale — 27,000+ Repair SKUs Across 8 Brands
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100">
-              PRSPARES is a factory-direct cell phone parts wholesale supplier: 27,783 repair-part SKUs across screens, batteries, small parts, IC chips, tools, tablets and smartwatch parts — priced in 10/50/200 wholesale tiers with a{' '}
+              PRSPARES is a factory-direct cell phone parts wholesale supplier: 23,374 repair-part SKUs across screens, batteries, small parts, IC chips, tools, tablets and smartwatch parts — priced in 10/50/200 wholesale tiers with a{' '}
               <Link href="/warranty-and-rma" className="font-semibold text-[#ffb36b] underline underline-offset-2 hover:text-white">12-month warranty</Link>.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">

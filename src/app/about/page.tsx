@@ -141,7 +141,7 @@ function MetricStrip() {
   const items: Array<[string, string, string]> = [
     ['10+', 'years', 'Huaqiangbei sourcing experience'],
     ['50+', 'countries', 'B2B shipping reach'],
-    ['27k+', 'catalog lines', 'Major repair categories covered'],
+    ['23k+', 'catalog lines', 'Major repair categories covered'],
     ['24h', 'quote response', 'Stock, price and route feedback'],
   ];
 

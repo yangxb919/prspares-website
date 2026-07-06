@@ -1,5 +1,5 @@
 export const catalogMetrics = [
-  ['27,783', 'SKUs in stock', 'Updated April 2026 inventory'],
+  ['23,374', 'SKUs in stock', 'Updated May 2026 inventory'],
   ['2,646', 'phone models', 'Compatible model and series coverage'],
   ['49', 'part categories', 'Screens, batteries, housings, boards, IC and tools'],
   ['10/50/200', 'price tiers', 'Tiered wholesale quote logic'],

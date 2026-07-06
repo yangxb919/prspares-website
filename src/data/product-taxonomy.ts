@@ -97,7 +97,7 @@ export const productMenuAllCatalog: ProductMenuItem = {
   name: 'All Product Catalog',
   path: '/products',
   detail: 'Updated catalog overview by product category',
-  count: '27,783 SKUs',
+  count: '23,374 SKUs',
   icon: 'catalog',
 };
 
