@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, FileText, Phone, Mail, User } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Phone, Mail, User, MessageCircle } from 'lucide-react';
 import InquiryModal from '@/components/InquiryModalLazy';
+import { trackEvent } from '@/lib/analytics';
+import { waLink } from '@/lib/whatsapp';
 
 // 前端组件专用的Product接口
 export interface ClientProduct {
@@ -163,13 +165,13 @@ const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
               {product.price && !isNaN(product.price) && product.price > 0 && (
                 <div className="flex items-baseline space-x-2 mb-3">
                   <span className="text-3xl font-bold text-green-600">${product.price.toFixed(2)}</span>
-                  <span className="text-lg text-gray-500 line-through">$19.11</span>
+                  <span className="text-sm text-gray-500">/ unit · wholesale</span>
                 </div>
               )}
 
               {/* Additional Info */}
               <div className="text-sm text-gray-600 mb-4">
-                <p>Free Opening Tool! Please review our Disclaimer, before purchase!</p>
+                <p>Volume pricing available on request — 10+ / 50+ / 200+ tiers.</p>
               </div>
 
               {/* Stock Status */}
@@ -179,7 +181,7 @@ const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
                   <span className="text-sm text-gray-600">In Stock</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Usually ships in 1-2 days</span>
+                  <span className="text-sm text-gray-600">Ships worldwide via DHL / FedEx</span>
                 </div>
               </div>
 
@@ -191,15 +193,23 @@ const ProductDetailClient = ({ product }: ProductDetailClientProps) => {
                 >
                   Request Quote
                 </button>
-
+                <a
+                  href={waLink(`Hi, I'm interested in wholesale ${product.name}${product.sku ? ` (SKU: ${product.sku})` : ''}. Please send your current tier pricing.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent('whatsapp_click', { event_label: `PDP WA: ${product.name}` })}
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 border border-green-600 text-green-700 hover:bg-green-50 py-2.5 px-4 rounded-lg font-medium transition-colors duration-200 text-sm"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp
+                </a>
               </div>
 
               {/* Guarantee Section */}
               <div className="bg-gray-50 rounded-lg p-4">
                 <h3 className="font-semibold text-gray-900 mb-2">Our Guarantee:</h3>
                 <p className="text-sm text-gray-700">
-                  100% Satisfaction Guarantee. All parts are tested and backed by our warranty.
-                  Quality Parts, Expert Repairs.
+                  All parts are tested before shipping and covered by our 12-month warranty.
                 </p>
               </div>
             </div>

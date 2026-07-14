@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { MessageSquare } from 'lucide-react';
 import QuoteModal from '@/components/QuoteModalLazy';
 import { trackEvent } from '@/lib/analytics';
+import { waLink, WA_PREFILL } from '@/lib/whatsapp';
 
 interface BatteriesQuoteButtonProps {
   label?: string;
@@ -25,7 +26,7 @@ export default function BatteriesQuoteButton({
   if (variant === 'footer-wa') {
     return (
       <a
-        href={`https://wa.me/85363902425?text=Hi,%20I'm%20interested%20in%20wholesale%20phone%20batteries`}
+        href={waLink(WA_PREFILL.batteries)}
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => trackEvent('whatsapp_click', { event_label: eventLabel })}

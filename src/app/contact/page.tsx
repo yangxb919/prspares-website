@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { TrackedLink } from '@/components/TrackedLink';
 import JsonLd from '@/components/JsonLd';
+import { waLink, WA_PREFILL } from '@/lib/whatsapp';
 
 const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -74,7 +75,7 @@ const contactCards: ContactCard[] = [
     title: 'WhatsApp',
     text: 'Best for urgent stock checks, model confirmation and fast negotiation.',
     action: 'Chat Now',
-    href: 'https://wa.me/85363902425?text=Hi,%20I%27m%20interested%20in%20wholesale%20phone%20parts',
+    href: waLink(WA_PREFILL.contact),
     event: 'whatsapp_click',
     external: true,
   },
@@ -180,7 +181,7 @@ function PageHero({
               <ArrowRight className="h-5 w-5" />
             </TrackedLink>
             <TrackedLink
-              href="https://wa.me/85363902425?text=Hi,%20I%27m%20interested%20in%20wholesale%20phone%20parts"
+              href={waLink(WA_PREFILL.contact)}
               event="whatsapp_click"
               params={{ event_label: 'Contact Hero WhatsApp' }}
               target="_blank"

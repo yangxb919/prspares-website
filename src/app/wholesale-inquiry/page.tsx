@@ -25,6 +25,7 @@ import {
 import { useTurnstile } from '@/components/common/Turnstile';
 import Honeypot from '@/components/common/Honeypot';
 import { markAsHumanVerified, trackEvent } from '@/lib/analytics';
+import { waLink, WA_PREFILL } from '@/lib/whatsapp';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
 
 interface FormData {
@@ -409,7 +410,11 @@ export default function WholesaleInquiryPage() {
                 <ArrowRight className="h-5 w-5" />
               </button>
               <a
-                href="https://wa.me/85363902425?text=Hi,%20I%27m%20interested%20in%20wholesale%20phone%20parts"
+                href={waLink(
+                  selectedProductLine?.name
+                    ? `Hi, I'd like a wholesale quote for ${selectedProductLine.name}. Please send tier pricing and MOQ.`
+                    : WA_PREFILL.wholesaleInquiry
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent('whatsapp_click', { event_label: 'Wholesale Hero WhatsApp' })}
@@ -731,7 +736,7 @@ export default function WholesaleInquiryPage() {
               <ClipboardCheck className="h-8 w-8 text-[#0b6b45]" />
               <h3 className="mt-5 text-xl font-black text-[#18212c]">Prefer direct contact?</h3>
               <div className="mt-4 space-y-3">
-                <a href="https://wa.me/85363902425?text=Hi,%20I%27m%20interested%20in%20wholesale%20phone%20parts" target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_click', { event_label: 'Inquiry Side WhatsApp' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
+                <a href={waLink(selectedProductLine?.name ? `Hi, I'd like a wholesale quote for ${selectedProductLine.name}. Please send tier pricing and MOQ.` : WA_PREFILL.wholesaleInquiry)} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_click', { event_label: 'Inquiry Side WhatsApp' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
                   <MessageSquare className="h-4 w-4" />
                   WhatsApp: +853 6390 2425
                 </a>

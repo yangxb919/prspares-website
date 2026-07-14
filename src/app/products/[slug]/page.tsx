@@ -304,8 +304,8 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-1">Fast Shipping</h3>
-              <p className="text-sm text-gray-600">Free shipping on orders over $50</p>
+              <h3 className="font-semibold text-gray-900 mb-1">Worldwide Shipping</h3>
+              <p className="text-sm text-gray-600">DHL / FedEx express shipping worldwide</p>
             </div>
 
             {/* Quality Guarantee */}
