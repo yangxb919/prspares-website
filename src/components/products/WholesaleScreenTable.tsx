@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import JsonLd from '@/components/JsonLd';
+import WaQuickLink from '@/components/products/WaQuickLink';
+import { waProductPrefill } from '@/lib/whatsapp';
 import { IPHONE_SCREEN_CATALOG, type ScreenSku } from '@/data/iphone-screen-catalog';
 
 // Server-rendered native <table> of real iPhone screen SKUs with tiered wholesale
@@ -118,6 +120,13 @@ export default function WholesaleScreenTable() {
                   <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-[#0b6b45]">{money(row.p200)}</td>
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     <Link href={quoteHref(row)} className="font-bold text-[#ff8a2a] hover:text-[#0b6b45]">Add →</Link>
+                    <WaQuickLink
+                      message={waProductPrefill(`${row.model} ${row.grade} screens`, row.p10)}
+                      eventLabel={`Screens Table WA: ${row.model} ${row.grade}`}
+                      className="ml-3 text-xs font-bold text-[#0b6b45] hover:text-[#1f7a52]"
+                    >
+                      WA
+                    </WaQuickLink>
                   </td>
                 </tr>
               ))}

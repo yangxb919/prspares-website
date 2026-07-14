@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import ScrollAnimator from '@/components/ScrollAnimator';
 import HeroFilterChips from '@/components/products/HeroFilterChips';
+import WaQuickLink from '@/components/products/WaQuickLink';
 import type { ProductCategoryPageData, QuoteLine } from '@/data/product-category-pages';
 import styles from '@/app/home.module.css';
 
@@ -83,6 +84,13 @@ export default function CatalogCategoryPage({ data }: { data: ProductCategoryPag
             <p className={`mt-6 max-w-2xl text-lg leading-8 text-slate-100 ${styles.heroText}`}>{data.intro}</p>
             <div className={`mt-8 flex flex-col gap-3 sm:flex-row ${styles.heroActions}`}>
               <QuoteLink product={data.quoteProduct}>Get Wholesale Quote</QuoteLink>
+              <WaQuickLink
+                message={`Hi, I'm interested in wholesale ${data.quoteProduct}. Please send your current 10/50/200+ tier price list.`}
+                eventLabel={`Category Hero WA: ${data.quoteProduct}`}
+                className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 bg-white/10 px-5 py-3 text-sm font-black text-white backdrop-blur transition hover:bg-white/20"
+              >
+                WhatsApp Sales
+              </WaQuickLink>
               <Link
                 href="#catalog-skus"
                 className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 bg-white/10 px-5 py-3 text-sm font-black text-white backdrop-blur transition hover:bg-white/20"
