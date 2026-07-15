@@ -72,7 +72,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'นโยบายการรับประกันเป็นอย่างไรครับ?',
-    a: 'ทุกสินค้ารับประกัน 12 เดือน อัตราเคลมของเราต่ำกว่า 1% สินค้าเสียเปลี่ยนให้ฟรีครับ',
+    a: 'ทุกสินค้ารับประกัน 12 เดือน เป้าหมายอัตราเคลมของเราต่ำกว่า 1% สินค้าเสียเปลี่ยนให้ฟรีครับ',
   },
 ];
 
@@ -108,7 +108,7 @@ const PRODUCT_CATEGORIES = [
 const TRUST_STATS = [
   { value: '10+', label: 'ปี ประสบการณ์', icon: Award },
   { value: '1,000+', label: 'ลูกค้า B2B', icon: Users },
-  { value: '<1%', label: 'อัตราเคลม', icon: Shield },
+  { value: '<1%', label: 'เป้าหมายอัตราเคลม', icon: Shield },
   { value: '24 ชม.', label: 'ตอบกลับ', icon: Clock },
 ];
 
@@ -407,7 +407,7 @@ export default function ThWholesalePage() {
               <Shield className={`h-8 w-8 text-[#0b6b45] ${styles.iconPulse}`} />
               <h3 className="mt-5 text-xl font-black text-[#18212c]">คุณภาพ OEM เกรดพรีเมียม</h3>
               <p className="mt-3 text-sm leading-6 text-[#52606d]">
-                ระบบ QC TQC อัตราเคลมต่ำกว่า 1% รองรับ True Tone สำหรับหน้าจอ iPhone · สินค้าทุกชิ้นผ่านมาตรฐาน CE / RoHS
+                ระบบ QC TQC เป้าหมายอัตราเคลมต่ำกว่า 1% รองรับ True Tone สำหรับหน้าจอ iPhone · สินค้าทุกชิ้นผ่านมาตรฐาน CE / RoHS
               </p>
             </div>
             <div data-scroll-reveal style={revealStyle(220)} className={`rounded-lg border border-[#ded6c8] bg-white p-6 shadow-sm ${styles.motionCard}`}>
@@ -486,7 +486,7 @@ export default function ThWholesalePage() {
               { title: 'MOQ ยืดหยุ่น', items: ['เริ่ม 10 ชิ้น (หน้าจอ)', 'เริ่ม 20 ชิ้น (แบตเตอรี่ / อะไหล่ชิ้นเล็ก)', 'คละรุ่น / คละสินค้าได้', 'รับสั่งตัวอย่าง'] },
               { title: 'วิธีการชำระเงิน', items: ['T/T (โอนผ่านธนาคาร)', 'PayPal', 'Western Union', 'Alibaba Trade Assurance'] },
               { title: 'ส่งเร็ว', items: ['ส่งวันเดียวกัน', 'DHL / FedEx / UPS', '3–7 วันทั่วโลก', 'มีขนส่งทางเรือสำหรับออเดอร์ใหญ่'] },
-              { title: 'รับประกัน 12 เดือน', items: ['ทุกสินค้ารับประกัน', 'อัตราเคลมต่ำกว่า 1%', 'เปลี่ยนของเสียฟรี', 'ตอบกลับภายใน 24 ชั่วโมง'] },
+              { title: 'รับประกัน 12 เดือน', items: ['ทุกสินค้ารับประกัน', 'เป้าหมายอัตราเคลมต่ำกว่า 1%', 'เปลี่ยนของเสียฟรี', 'ตอบกลับภายใน 24 ชั่วโมง'] },
             ].map((block, index) => (
               <div key={block.title} data-scroll-reveal="scale" style={revealStyle(index * 90)} className={`rounded-lg border border-[#ded6c8] bg-white p-5 shadow-sm ${styles.motionCard}`}>
                 <div className="font-mono text-sm font-black text-[#ff8a2a]">0{index + 1}</div>

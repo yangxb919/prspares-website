@@ -232,7 +232,7 @@ export default function ProductsPage() {
               Updated April 2026 inventory
             </div>
             <h1 className="max-w-4xl text-4xl font-black leading-[1.05] text-white sm:text-5xl lg:text-6xl">
-              Cell Phone Parts Wholesale — 27,000+ Repair SKUs Across 8 Brands
+              Cell Phone Parts Wholesale — 23,374 Repair SKUs Across 8 Brands
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100">
               PRSPARES is a factory-direct cell phone parts wholesale supplier: 23,374 repair-part SKUs across screens, batteries, small parts, IC chips, tools, tablets and smartwatch parts — priced in 10/50/200 wholesale tiers with a{' '}

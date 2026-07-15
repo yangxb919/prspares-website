@@ -59,7 +59,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Bagaimana kebijakan garansi?',
-    a: 'Semua produk bergaransi 12 bulan. RMA rate kami di bawah 1%. Barang cacat kami ganti gratis.',
+    a: 'Semua produk bergaransi 12 bulan. Target RMA rate kami di bawah 1%. Barang cacat kami ganti gratis.',
   },
 ];
 
@@ -95,7 +95,7 @@ const PRODUCT_CATEGORIES = [
 const TRUST_STATS = [
   { value: '10+', label: 'Tahun Pengalaman', icon: Award },
   { value: '1.000+', label: 'Klien B2B', icon: Users },
-  { value: '<1%', label: 'RMA Rate', icon: Shield },
+  { value: '<1%', label: 'Target RMA', icon: Shield },
   { value: '24 Jam', label: 'Fast Respon', icon: Clock },
 ];
 
@@ -314,7 +314,7 @@ export default function IdWholesalePage() {
               </p>
 
             <div className="mt-6 flex flex-wrap gap-2">
-                {['RMA Rate < 1%', 'QC Tested', 'MOQ Mulai 10 pcs', 'Garansi 12 Bulan'].map(badge => (
+                {['Target RMA < 1%', 'QC Tested', 'MOQ Mulai 10 pcs', 'Garansi 12 Bulan'].map(badge => (
                 <span key={badge} className="inline-flex items-center gap-2 rounded-md border border-white/25 bg-white/10 px-3 py-2 text-sm font-bold text-white backdrop-blur">
                   <CheckCircle className="h-4 w-4 text-[#51d88a]" />
                     {badge}
@@ -383,7 +383,7 @@ export default function IdWholesalePage() {
               <Shield className={`h-8 w-8 text-[#0b6b45] ${styles.iconPulse}`} />
               <h3 className="mt-5 text-xl font-black text-[#18212c]">Kualitas OEM Premium</h3>
               <p className="mt-3 text-sm leading-6 text-[#52606d]">
-                Sistem QC TQC dengan RMA rate di bawah 1%. Support True Tone untuk layar iPhone. Komponen bersertifikat CE &amp; RoHS.
+                Sistem QC TQC dengan target RMA di bawah 1%. Support True Tone untuk layar iPhone. Komponen bersertifikat CE &amp; RoHS.
               </p>
             </div>
             <div data-scroll-reveal style={revealStyle(220)} className={`rounded-lg border border-[#ded6c8] bg-white p-6 shadow-sm ${styles.motionCard}`}>
@@ -462,7 +462,7 @@ export default function IdWholesalePage() {
               { title: 'MOQ Fleksibel', items: ['Mulai 10 pcs (LCD HP)', 'Mulai 20 pcs (baterai / sparepart kecil)', 'Bisa mix antar kategori', 'Order sample tersedia'] },
               { title: 'Metode Pembayaran', items: ['T/T (Transfer Bank Internasional)', 'PayPal', 'Western Union', 'Alibaba Trade Assurance'] },
               { title: 'Pengiriman Cepat', items: ['Kirim di hari yang sama', 'DHL / FedEx / UPS', '3–7 hari ke seluruh dunia', 'Sea freight untuk order besar'] },
-              { title: 'Garansi 12 Bulan', items: ['Semua produk bergaransi', 'RMA rate < 1%', 'Ganti barang cacat gratis', 'Respon 24 jam dijamin'] },
+              { title: 'Garansi 12 Bulan', items: ['Semua produk bergaransi', 'Target RMA < 1%', 'Ganti barang cacat gratis', 'Respon 24 jam dijamin'] },
             ].map((block, index) => (
               <div key={block.title} data-scroll-reveal="scale" style={revealStyle(index * 90)} className={`rounded-lg border border-[#ded6c8] bg-white p-5 shadow-sm ${styles.motionCard}`}>
                 <div className="font-mono text-sm font-black text-[#ff8a2a]">0{index + 1}</div>

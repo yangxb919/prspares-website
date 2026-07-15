@@ -129,7 +129,7 @@ const productCategories: ProductCategory[] = [
     href: '/products/small-parts',
     image: '/images/home-redesign/category-small-parts.png',
     from: 'From $2',
-    stock: '15,000+ part lines',
+    stock: '14,000+ part lines',
     detail: 'Cameras, charging ports, flex cables and speakers',
     items: ['Camera modules', 'Charging ports', 'Back covers'],
   },

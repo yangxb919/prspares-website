@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
 const metaTitle = 'Wholesale iPhone Samsung Screens LCD/OLED | PRSPARES';
 const metaDescription =
@@ -39,47 +38,9 @@ export default function ScreensLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const productSchemas = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "iPhone Screen Replacements - Wholesale",
-      "description": "Wholesale iPhone LCD and OLED screen assemblies in multiple quality grades: OEM Original, Soft OLED, Hard OLED, and Incell. Compatible with iPhone 12 through iPhone 16 series.",
-      "brand": { "@type": "Brand", "name": "PRSPARES" },
-      "category": "Phone Replacement Screens",
-      "additionalProperty": wholesaleProductProperties(10),
-      "offers": {
-        "@type": "AggregateOffer",
-        "lowPrice": "19.00",
-        "highPrice": "339.00",
-        "priceCurrency": "USD",
-        "offerCount": "50",
-        "availability": "https://schema.org/InStock",
-        "seller": { "@type": "Organization", "name": "PRSPARES" },
-        "eligibleQuantity": wholesaleMoq(10)
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Samsung Screen Replacements - Wholesale",
-      "description": "Wholesale Samsung Galaxy OLED and TFT screen assemblies. Galaxy S24, S23, S22 Ultra and standard models. OEM and aftermarket options available.",
-      "brand": { "@type": "Brand", "name": "PRSPARES" },
-      "category": "Phone Replacement Screens",
-      "additionalProperty": wholesaleProductProperties(10),
-      "offers": {
-        "@type": "AggregateOffer",
-        "lowPrice": "35.00",
-        "highPrice": "290.00",
-        "priceCurrency": "USD",
-        "offerCount": "20",
-        "availability": "https://schema.org/InStock",
-        "seller": { "@type": "Organization", "name": "PRSPARES" },
-        "eligibleQuantity": wholesaleMoq(10)
-      }
-    }
-  ];
-
+  // Product schema 由 WholesaleScreenTable 从真实 catalog 计算输出（唯一一份）。
+  // 此处曾有两个硬编码 Product+AggregateOffer（iPhone $19-339 / Samsung $35-290），
+  // 数字无来源且与表格 schema 矛盾，2026-07-15 schema 审计（Phase 0.8）移除。
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -89,7 +50,7 @@ export default function ScreensLayout({
         "name": "What is the difference between OLED, Soft OLED, Hard OLED, and Incell LCD screens?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "OEM Original uses the genuine factory display with perfect color accuracy. Soft OLED is the best aftermarket option — flexible OLED panel achieving 90-95% of OEM color quality with 120Hz support. Hard OLED uses a rigid OLED panel, slightly lower contrast but very durable. Incell LCD is a budget option using LCD technology — no deep blacks, standard refresh rate, but works perfectly for basic repairs."
+          "text": "Original grade is a refurbished original panel — the factory OLED cell fitted with new glass — matching stock brightness, color and True Tone. Soft OLED is the closest aftermarket match: a flexible OLED panel at roughly 90-95% of original quality. Hard OLED uses a rigid OLED panel with slightly thicker glass — durable and priced for value. Incell is an in-cell LCD assembly, the budget tier: no deep blacks, but works reliably for basic repairs."
         }
       },
       {
@@ -121,7 +82,7 @@ export default function ScreensLayout({
         "name": "How much does iPhone screen replacement cost at wholesale?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Wholesale pricing depends on model and grade. iPhone 16 Pro Max: $39 (Incell) to $259 (OEM). iPhone 14 Pro Max: $29 (Incell) to $179 (OEM). iPhone 13: $19 (Incell) to $89 (OEM). Volume discounts of 8-15% for 50+ units."
+          "text": "Wholesale pricing depends on model and grade (July 2026 price list). iPhone 16 Pro Max runs $30 (Incell) to $242 (Original) per unit at the 10+ tier. iPhone 14 Pro Max: $15 to $130. iPhone 13: $11 to $57. Tiered 10/50/200 pricing applies, with 200-unit prices typically 2-4% below 10-unit prices. All 188 iPhone screen SKUs are listed with live prices on this page."
         }
       }
     ]
@@ -142,7 +103,7 @@ export default function ScreensLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([...productSchemas, breadcrumbSchema])
+          __html: JSON.stringify(breadcrumbSchema)
         }}
       />
       <script
