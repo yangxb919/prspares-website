@@ -97,7 +97,7 @@ export default function ScreensLayout({
         "name": "Will True Tone still work after replacing the screen?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "True Tone data is stored on the original screen's IC chip. When you replace the screen, True Tone needs to be transferred using a programmer (JC V1SE, i2C, or JCID). Soft OLED, Hard OLED, and OEM grade screens all support True Tone transfer."
+          "text": "True Tone data is stored on the original screen's IC chip. When you replace the screen, True Tone needs to be transferred using a programmer (JC V1SE, i2C, or JCID). Soft OLED, Hard OLED, and Original grade screens all support True Tone transfer."
         }
       },
       {
@@ -113,7 +113,7 @@ export default function ScreensLayout({
         "name": "What is the difference between OEM, aftermarket, and refurbished screens?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "OEM Original screens are genuine parts pulled from new devices. OEM Refurbished uses the original LCD/OLED panel with a new glass and touch digitizer — near-OEM quality at 40-60% lower cost. Aftermarket screens (Soft OLED, Hard OLED, Incell) are newly manufactured to match original specs."
+          "text": "PRSPARES Original grade is a refurbished original panel: the factory OLED cell is kept and fitted with new glass, so brightness, color and True Tone match the stock display. Aftermarket screens (Soft OLED, Hard OLED, Incell) are newly manufactured panels graded by display technology."
         }
       },
       {

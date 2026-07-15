@@ -3,28 +3,22 @@ import JsonLd from '@/components/JsonLd';
 import WaQuickLink from '@/components/products/WaQuickLink';
 import { waProductPrefill } from '@/lib/whatsapp';
 import { IPHONE_SCREEN_CATALOG, type ScreenSku } from '@/data/iphone-screen-catalog';
+import { GRADE_BY_LABEL } from '@/data/grade-taxonomy';
 
 // Server-rendered native <table> of real iPhone screen SKUs with tiered wholesale
 // pricing. Native HTML (not a JS grid) keeps it fully crawlable and easy for AI
 // engines to extract — the page-type-match play: this is the transactional asset
 // that should rank for "iphone screen wholesale", not a blog post.
 
-const GRADE_NOTE: Record<string, string> = {
-  Original: 'Genuine factory display — highest fidelity',
-  'Soft OLED': 'Flexible OLED, 90–95% of original quality',
-  'Hard OLED': 'Rigid OLED, durable, strong value',
-  OLED: 'Aftermarket OLED panel',
-  Incell: 'LCD-based budget option',
-  LCD: 'Standard LCD assembly',
-};
+const GRADE_NOTE: Record<string, string> = Object.fromEntries(
+  Object.entries(GRADE_BY_LABEL).map(([label, def]) => [label, def.note])
+);
 
 const GRADE_BADGE: Record<string, string> = {
   Original: 'bg-[#0b6b45] text-white',
   'Soft OLED': 'bg-[#1f7a52] text-white',
   'Hard OLED': 'bg-[#2f8f6a] text-white',
-  OLED: 'bg-[#e7f3ec] text-[#0b6b45]',
   Incell: 'bg-[#fff0dd] text-[#9a5a16]',
-  LCD: 'bg-[#f1ede4] text-[#52606d]',
 };
 
 function quoteHref(row: ScreenSku) {
@@ -51,7 +45,7 @@ export default function WholesaleScreenTable() {
     category: 'Phone Replacement Screens',
     brand: { '@type': 'Brand', name: 'PRSPARES' },
     description:
-      'Factory-direct iPhone LCD/OLED screen assemblies in Original, Soft OLED, Hard OLED, Incell and LCD grades for iPhone 11 through iPhone 17, with tiered 10/50/200 wholesale pricing.',
+      'Factory-direct iPhone LCD/OLED screen assemblies in Original, Soft OLED, Hard OLED and Incell grades for iPhone 11 through iPhone 17, with tiered 10/50/200 wholesale pricing.',
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'USD',
@@ -75,7 +69,7 @@ export default function WholesaleScreenTable() {
         <p className="mt-4 max-w-3xl text-base leading-7 text-[#52606d]">
           iPhone screen wholesale is the bulk supply of replacement display assemblies to repair shops and distributors.
           PRSPARES stocks {rows.length} factory-direct iPhone screen assemblies across {grades.length} quality grades
-          (Original, Soft OLED, Hard OLED, Incell and LCD) for iPhone 11 through iPhone 17, priced in {money(low)}–{money(high)}
+          (Original, Soft OLED, Hard OLED and Incell) for iPhone 11 through iPhone 17, priced in {money(low)}–{money(high)}
           per unit with tiered 10/50/200 wholesale pricing and a 12-month warranty. MOQ starts at 10 units; mix models and
           grades in one order.
         </p>
