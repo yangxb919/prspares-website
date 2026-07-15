@@ -44,7 +44,7 @@ export const productCategoryPages = {
     quoteProduct: 'LCD and OLED Screens',
     metrics: [
       { value: '5,263', label: 'screen SKUs', detail: 'Screen Assembly plus Screen Assembly with Frame' },
-      { value: '4,493', label: 'assemblies', detail: 'LCD, OLED, Incell, TFT and original options' },
+      { value: '4,493', label: 'assemblies', detail: 'LCD, OLED, Incell and Original grade options' },
       { value: '770', label: 'with-frame SKUs', detail: 'Useful for faster shop installation workflows' },
       { value: '10/50/200', label: 'price tiers', detail: 'Tiered wholesale quote logic' },
     ],

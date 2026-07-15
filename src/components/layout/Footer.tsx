@@ -40,7 +40,7 @@ const Footer = () => {
           <div className="md:col-span-2 lg:col-span-1 flex flex-col h-full">
             <h3 className="text-xl font-bold mb-4">PRSPARES</h3>
             <p className="text-sm mb-6 leading-relaxed flex-grow">
-              Leading supplier of high-quality mobile repair parts and OEM components based in Shenzhen Huaqiangbei electronics hub.
+              Leading B2B supplier of high-quality, OEM-grade mobile replacement parts based in Shenzhen Huaqiangbei electronics hub.
             </p>
             <div className="flex space-x-4 mt-auto">
               <a href="mailto:service.team@phonerepairspares.com" className="hover:text-[#00B140] transition-colors" aria-label="Email">
@@ -194,6 +194,11 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+          <p className="mx-auto mb-4 max-w-3xl text-xs leading-5 text-gray-500">
+            PRSPARES is an independent B2B parts supplier based in Shenzhen. Apple, iPhone, Samsung and other
+            brand names are used only to identify compatible replacement parts. PRSPARES is not affiliated
+            with or authorized by these manufacturers.
+          </p>
           <p>&copy; {new Date().getFullYear()} PRSPARES Mobile Repair Parts. All rights reserved.</p>
         </div>
       </div>

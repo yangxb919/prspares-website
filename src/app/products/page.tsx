@@ -229,7 +229,7 @@ export default function ProductsPage() {
           <div>
             <div className="mb-5 inline-flex items-center gap-2 border border-white/25 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur">
               <ClipboardCheck className="h-4 w-4 text-[#51d88a]" />
-              Updated April 2026 inventory
+              Updated May 2026 inventory
             </div>
             <h1 className="max-w-4xl text-4xl font-black leading-[1.05] text-white sm:text-5xl lg:text-6xl">
               Cell Phone Parts Wholesale — 23,374 Repair SKUs Across 8 Brands

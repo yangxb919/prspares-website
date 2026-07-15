@@ -13,7 +13,7 @@ const AboutContent = () => {
               PRSPARES <span className="text-[#00B140]">Mobile Parts Platform</span>
             </h2>
             <p className="text-gray-600">
-              We are a professional mobile repair parts supplier dedicated to providing high-quality OEM components. Since our founding in 2015, we have been committed to becoming the most trusted source for mobile repair parts in Shenzhen, helping countless repair shops and technicians enhance their service quality.
+              We are a professional mobile repair parts supplier dedicated to providing high-quality, OEM-grade replacement parts. Since our founding in 2015, we have been committed to becoming the most trusted source for mobile repair parts in Shenzhen, helping countless repair shops and technicians enhance their service quality.
             </p>
             <p className="text-gray-600">
               Our team consists of industry veterans, experienced quality control specialists, and technical support experts who possess deep knowledge of mobile device components and repair techniques. By combining authentic OEM parts with comprehensive technical support, we provide our customers with reliable solutions.
@@ -21,7 +21,7 @@ const AboutContent = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="text-lg font-bold text-[#333333] mb-2">Our Mission</h3>
-                <p className="text-gray-600">To empower repair professionals with genuine OEM parts and expert technical support for superior mobile device repairs.</p>
+                <p className="text-gray-600">To empower repair professionals with OEM-grade replacement parts and expert technical support for superior mobile device repairs.</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="text-lg font-bold text-[#333333] mb-2">Our Vision</h3>

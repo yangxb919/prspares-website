@@ -9,7 +9,7 @@ const AboutSection = () => {
           <div>
             <h2 className="text-3xl font-bold text-[#333333] mb-4">About PRSPARES</h2>
             <p className="text-gray-600 mb-6">
-              PRSPARES is a leading supplier of high-quality mobile repair parts and OEM components, based in Shenzhen Huaqiangbei electronics market. We specialize in providing genuine parts for all major phone brands.
+              PRSPARES is a leading supplier of high-quality, OEM-grade mobile replacement parts, based in Shenzhen Huaqiangbei electronics market. We specialize in replacement parts compatible with all major phone brands.
             </p>
             <p className="text-gray-600 mb-6">
               Our mission is to help repair shops and technicians succeed by providing reliable, authentic parts and expert technical support. We combine over 10 years of industry experience with cutting-edge quality control.

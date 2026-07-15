@@ -60,7 +60,7 @@ export default function iPadBatteryReplacementFactoryPage() {
               <span className="text-orange-400">— Tiered Pricing From ${PRICE_LOW.toFixed(2)}/Unit</span>
             </h1>
             <p className="text-lg text-blue-100 mb-8 leading-relaxed">
-              OEM quality replacement batteries for all iPad models — iPad Pro 12.9&quot;, iPad Pro 11&quot;,
+              OEM-grade replacement batteries for all iPad models — iPad Pro 12.9&quot;, iPad Pro 11&quot;,
               iPad Air, iPad mini &amp; standard iPad. Original capacity, CE/RoHS certified, factory-direct from Shenzhen.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
