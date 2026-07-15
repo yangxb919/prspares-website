@@ -124,15 +124,48 @@ jobs:
             echo ""
 
             # Install deps and build
+            # VPS 仅 1GB 内存：应用跑着时 build 会 OOM（07-14 两次 run 连败实锤），
+            # 必须先 stop pm2 再 build（代价≈3-5 分钟停机），并给 node 设 720M 上限。
+            echo "⏸️  停止应用释放内存（build 期间短暂停机）..."
+            pm2 stop prspares-website 2>/dev/null || true
+            echo ""
+
             echo "📦 安装依赖..."
             export HUSKY=0
-            npm ci --ignore-scripts || { echo "❌ 依赖安装失败"; exit 1; }
+            npm ci --ignore-scripts || { echo "❌ 依赖安装失败"; pm2 restart prspares-website 2>/dev/null || true; exit 1; }
             echo "✅ 依赖安装完成"
             echo ""
 
-            echo "🔨 构建应用..."
-            npm run build:fast || { echo "❌ 构建失败"; exit 1; }
-            echo "✅ 构建完成"
+            # 备份旧 .next：build 失败时回滚旧版本，避免挂站
+            if [ -d .next ]; then
+              rm -rf .next.bak
+              cp -a .next .next.bak || { echo "⚠️  .next 备份失败，继续（无回滚保护）"; rm -rf .next.bak; }
+            fi
+
+            echo "🔨 构建应用（内存上限 720M）..."
+            export NODE_OPTIONS="--max-old-space-size=720"
+            BUILD_OK=1
+            npm run build:fast || BUILD_OK=0
+            if [ "$BUILD_OK" = "0" ]; then
+              echo "⚠️  首次构建失败，清 .next 缓存重试一次（残留缓存是已知致因）..."
+              rm -rf .next
+              BUILD_OK=1
+              npm run build:fast || BUILD_OK=0
+            fi
+            if [ "$BUILD_OK" = "0" ] || [ ! -f .next/BUILD_ID ]; then
+              echo "❌ 构建失败或 BUILD_ID 缺失，回滚旧版本..."
+              rm -rf .next
+              if [ -d .next.bak ]; then
+                mv .next.bak .next
+                pm2 restart prspares-website 2>/dev/null || true
+                echo "✅ 已回滚旧版本并重启，本次部署未生效"
+              else
+                echo "🔴 无备份可回滚，站点处于停机状态，需人工介入"
+              fi
+              exit 1
+            fi
+            rm -rf .next.bak
+            echo "✅ 构建完成: BUILD_ID=$(cat .next/BUILD_ID)"
             echo ""
 
             # Start or reload via PM2
