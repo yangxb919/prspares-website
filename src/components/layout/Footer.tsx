@@ -8,6 +8,7 @@ import Honeypot from '@/components/common/Honeypot';
 
 const productCategoryLinks = [
   { label: 'Screens', href: '/products/screens' },
+  { label: 'Screen Grade Guide', href: '/products/screens-grade-guide' },
   { label: 'Batteries', href: '/products/batteries' },
   { label: 'Small Parts', href: '/products/small-parts' },
   { label: 'Repair Tools', href: '/products/repair-tools' },

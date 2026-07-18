@@ -112,7 +112,7 @@ const productCategories: ProductCategory[] = [
     image: '/images/home-redesign/category-screens.png',
     from: 'From $19',
     stock: '4,400+ assemblies',
-    detail: 'OEM, soft OLED, hard OLED and Incell LCD grades',
+    detail: 'Original, Soft OLED, Hard OLED and Incell grades',
     items: ['iPhone 6-16 series', 'Samsung S/A/Z series', 'True Tone support'],
   },
   {

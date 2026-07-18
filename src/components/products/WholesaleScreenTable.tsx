@@ -3,7 +3,7 @@ import JsonLd from '@/components/JsonLd';
 import WaQuickLink from '@/components/products/WaQuickLink';
 import { waProductPrefill } from '@/lib/whatsapp';
 import { IPHONE_SCREEN_CATALOG, type ScreenSku } from '@/data/iphone-screen-catalog';
-import { GRADE_BY_LABEL } from '@/data/grade-taxonomy';
+import { GRADE_BY_LABEL, GRADE_TAXONOMY } from '@/data/grade-taxonomy';
 
 // Server-rendered native <table> of real iPhone screen SKUs with tiered wholesale
 // pricing. Native HTML (not a JS grid) keeps it fully crawlable and easy for AI
@@ -72,6 +72,27 @@ export default function WholesaleScreenTable() {
           (Original, Soft OLED, Hard OLED and Incell) for iPhone 11 through iPhone 17, priced in {money(low)}–{money(high)}
           per unit with tiered 10/50/200 wholesale pricing and a 12-month warranty. MOQ starts at 10 units; mix models and
           grades in one order.
+        </p>
+
+        {/* Compact grade strip — canonical definitions live on the grade guide */}
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {GRADE_TAXONOMY.map((g) => {
+            const gradeRows = rows.filter((r) => r.grade === g.label);
+            const from = gradeRows.length ? Math.min(...gradeRows.map((r) => r.p10)) : 0;
+            return (
+              <div key={g.key} className="rounded-lg border border-[#e4dccb] bg-[#faf8f3] p-4">
+                <p className="text-sm font-black text-[#18212c]">{g.label}</p>
+                <p className="mt-1 text-xs leading-5 text-[#52606d]">{g.note}</p>
+                <p className="mt-2 font-mono text-sm font-bold text-[#0b6b45]">from {money(from)}</p>
+              </div>
+            );
+          })}
+        </div>
+        <p className="mt-3 text-sm text-[#52606d]">
+          Not sure which grade fits your market?{' '}
+          <Link href="/products/screens-grade-guide" className="font-bold text-[#0b6b45] underline decoration-2 underline-offset-2">
+            Full grade comparison guide →
+          </Link>
         </p>
 
         {/* Price-change disclaimer — prices move frequently and the page may lag */}
