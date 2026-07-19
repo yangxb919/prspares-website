@@ -94,6 +94,8 @@ module.exports = {
       '/contact',
       '/products',
       '/products/screens',
+      '/products/screens/gx',
+      '/products/screens/jk',
       '/products/screens-grade-guide',
       '/products/batteries',
       '/products/small-parts',

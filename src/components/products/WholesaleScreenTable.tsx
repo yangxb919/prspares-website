@@ -23,7 +23,7 @@ const GRADE_BADGE: Record<string, string> = {
 
 function quoteHref(row: ScreenSku) {
   const params = new URLSearchParams({
-    product: `${row.model} ${row.grade} Screen Assembly`,
+    product: [row.model, row.brand, row.grade].filter(Boolean).join(' ') + ' Screen Assembly',
     category: 'LCD/OLED Screens',
   });
   return `/wholesale-inquiry?${params.toString()}#quote-form`;
@@ -31,8 +31,13 @@ function quoteHref(row: ScreenSku) {
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 
-export default function WholesaleScreenTable() {
-  const rows = IPHONE_SCREEN_CATALOG;
+// Optional `brand` renders the brand-filtered variant (W3-4 brand pages): rows
+// limited to that panel brand, no Product/AggregateOffer schema — the full
+// /products/screens table stays the single price-authority page.
+export default function WholesaleScreenTable({ brand }: { brand?: string } = {}) {
+  const rows = brand
+    ? IPHONE_SCREEN_CATALOG.filter((r) => r.brand === brand)
+    : IPHONE_SCREEN_CATALOG;
   const models = new Set(rows.map((r) => r.model)).size;
   const grades = Array.from(new Set(rows.map((r) => r.grade)));
   const low = Math.min(...rows.map((r) => r.p10));
@@ -59,24 +64,35 @@ export default function WholesaleScreenTable() {
 
   return (
     <section id="price-list" className="bg-white py-14 md:py-20">
-      <JsonLd data={schema} />
+      {!brand && <JsonLd data={schema} />}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-sm font-bold text-[#0b6b45]">Live wholesale price list</p>
         <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-4xl">
-          iPhone Screen Wholesale — {rows.length} SKUs, {models} Models
+          {brand
+            ? `${brand} iPhone Screens — ${rows.length} SKUs, ${models} Models`
+            : `iPhone Screen Wholesale — ${rows.length} SKUs, ${models} Models`}
         </h2>
         {/* Definitional / AI-citable opener */}
-        <p className="mt-4 max-w-3xl text-base leading-7 text-[#52606d]">
-          iPhone screen wholesale is the bulk supply of replacement display assemblies to repair shops and distributors.
-          PRSPARES stocks {rows.length} factory-direct iPhone screen assemblies across {grades.length} quality grades
-          (Original, Soft OLED, Hard OLED and Incell) for iPhone 11 through iPhone 17, priced in {money(low)}–{money(high)}
-          per unit with tiered 10/50/200 wholesale pricing and a 12-month warranty. MOQ starts at 10 units; mix models and
-          grades in one order.
-        </p>
+        {brand ? (
+          <p className="mt-4 max-w-3xl text-base leading-7 text-[#52606d]">
+            PRSPARES stocks {rows.length} {brand} iPhone screen assemblies in{' '}
+            {grades.join(' and ')} grade{grades.length > 1 ? 's' : ''}, covering {models} iPhone models at{' '}
+            {money(low)}–{money(high)} per unit (10+ tier) with tiered 10/50/200 wholesale pricing and a 12-month
+            warranty. MOQ starts at 10 units; mix {brand} SKUs with any other grades and models in one order.
+          </p>
+        ) : (
+          <p className="mt-4 max-w-3xl text-base leading-7 text-[#52606d]">
+            iPhone screen wholesale is the bulk supply of replacement display assemblies to repair shops and distributors.
+            PRSPARES stocks {rows.length} factory-direct iPhone screen assemblies across {grades.length} quality grades
+            (Original, Soft OLED, Hard OLED and Incell) for iPhone 11 through iPhone 17, priced in {money(low)}–{money(high)}
+            per unit with tiered 10/50/200 wholesale pricing and a 12-month warranty. MOQ starts at 10 units; mix models and
+            grades in one order.
+          </p>
+        )}
 
         {/* Compact grade strip — canonical definitions live on the grade guide */}
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {GRADE_TAXONOMY.map((g) => {
+          {GRADE_TAXONOMY.filter((g) => !brand || rows.some((r) => r.grade === g.label)).map((g) => {
             const gradeRows = rows.filter((r) => r.grade === g.label);
             const from = gradeRows.length ? Math.min(...gradeRows.map((r) => r.p10)) : 0;
             return (
@@ -93,6 +109,18 @@ export default function WholesaleScreenTable() {
           <Link href="/products/screens-grade-guide" className="font-bold text-[#0b6b45] underline decoration-2 underline-offset-2">
             Full grade comparison guide →
           </Link>
+          {!brand && (
+            <>
+              {' '}· Shop by panel brand:{' '}
+              <Link href="/products/screens/gx" className="font-bold text-[#0b6b45] underline decoration-2 underline-offset-2">
+                GX
+              </Link>{' '}
+              /{' '}
+              <Link href="/products/screens/jk" className="font-bold text-[#0b6b45] underline decoration-2 underline-offset-2">
+                JK
+              </Link>
+            </>
+          )}
         </p>
 
         {/* Price-change disclaimer — prices move frequently and the page may lag */}
@@ -136,8 +164,8 @@ export default function WholesaleScreenTable() {
                   <td className="whitespace-nowrap px-4 py-3 text-right">
                     <Link href={quoteHref(row)} className="font-bold text-[#ff8a2a] hover:text-[#0b6b45]">Add →</Link>
                     <WaQuickLink
-                      message={waProductPrefill(`${row.model} ${row.grade} screens`, row.p10)}
-                      eventLabel={`Screens Table WA: ${row.model} ${row.grade}`}
+                      message={waProductPrefill(`${[row.model, row.brand, row.grade].filter(Boolean).join(' ')} screens`, row.p10)}
+                      eventLabel={`${brand ? `${brand} Table` : 'Screens Table'} WA: ${row.model} ${row.grade}`}
                       className="ml-3 text-xs font-bold text-[#0b6b45] hover:text-[#1f7a52]"
                     >
                       WA
@@ -150,9 +178,22 @@ export default function WholesaleScreenTable() {
         </div>
 
         <p className="mt-4 text-xs leading-5 text-[#8a94a0]">
-          Indicative factory-direct unit pricing (USD), updated from the live wholesale price sheet. Final quote confirms stock,
-          batch QC and shipping route. Samsung, iPad and other-brand screens available on request — this list shows iPhone
-          assemblies only.
+          {brand ? (
+            <>
+              Indicative factory-direct unit pricing (USD), updated from the live wholesale price sheet. Final quote
+              confirms stock, batch QC and shipping route. This list shows {brand} iPhone assemblies only — see the{' '}
+              <Link href="/products/screens#price-list" className="font-bold text-[#0b6b45] underline decoration-2 underline-offset-2">
+                full iPhone screen price list
+              </Link>{' '}
+              for all brands and grades.
+            </>
+          ) : (
+            <>
+              Indicative factory-direct unit pricing (USD), updated from the live wholesale price sheet. Final quote confirms stock,
+              batch QC and shipping route. Samsung, iPad and other-brand screens available on request — this list shows iPhone
+              assemblies only.
+            </>
+          )}
         </p>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
