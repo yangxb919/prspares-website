@@ -38,6 +38,7 @@ interface FormData {
   models: string;
   quantity: string;
   quality: string;
+  heardAbout: string;
   message: string;
 }
 
@@ -219,6 +220,7 @@ export default function WholesaleInquiryPage() {
     models: '',
     quantity: '',
     quality: '',
+    heardAbout: '',
     message: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -348,6 +350,7 @@ export default function WholesaleInquiryPage() {
       const qualityLabel = formData.quality ? ` | Quality: ${formData.quality}` : '';
       const modelsLabel = formData.models ? `\nModels/Brands: ${formData.models}` : '';
       const countryLabel = formData.country ? `\nCountry: ${formData.country}` : '';
+      const heardAboutLabel = formData.heardAbout ? `\nHeard about us: ${formData.heardAbout}` : '';
       const msgParts = [
         '[Wholesale Inquiry]',
         `Products: ${productLabel}${qtyLabel}${qualityLabel}`,
@@ -355,6 +358,7 @@ export default function WholesaleInquiryPage() {
         selectedProductUrl,
         modelsLabel,
         countryLabel,
+        heardAboutLabel,
         formData.message ? `\nDetails: ${formData.message}` : '',
       ]
         .filter(Boolean)
@@ -375,7 +379,11 @@ export default function WholesaleInquiryPage() {
         honeypot: honeypotRef.current?.value,
       });
 
-      trackEvent('generate_lead', { currency: 'USD', value: 100 });
+      trackEvent('generate_lead', {
+        currency: 'USD',
+        value: 100,
+        heard_about: formData.heardAbout || '(not set)',
+      });
       router.push('/thank-you');
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error';
@@ -636,6 +644,28 @@ export default function WholesaleInquiryPage() {
                   </select>
                   {errors.quantity && <p className="mt-1 text-sm text-red-500">{errors.quantity}</p>}
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="heardAbout" className="mb-1.5 block text-sm font-black text-[#18212c]">
+                  How did you hear about us? <span className="font-normal text-[#52606d]">(optional)</span>
+                </label>
+                <select
+                  id="heardAbout"
+                  name="heardAbout"
+                  value={formData.heardAbout}
+                  onChange={handleChange}
+                  className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15"
+                >
+                  <option value="">Select a source</option>
+                  <option value="Google Search">Google Search</option>
+                  <option value="ChatGPT / AI assistant">ChatGPT or another AI assistant</option>
+                  <option value="YouTube">YouTube</option>
+                  <option value="Reddit / Forums">Reddit or forums</option>
+                  <option value="Referral">Referral / word of mouth</option>
+                  <option value="Returning customer">I&apos;ve ordered before</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
 
               <div className="overflow-hidden rounded-lg border border-[#ded6c8]">
