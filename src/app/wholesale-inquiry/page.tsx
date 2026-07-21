@@ -719,9 +719,10 @@ export default function WholesaleInquiryPage() {
                         <select id="monthlyVolume" name="monthlyVolume" value={formData.monthlyVolume} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
                           <option value="">Select monthly volume</option>
                           <option value="Under $1,000 / month">Under $1,000 / month</option>
-                          <option value="$1,000 - $5,000 / month">$1,000 - $5,000 / month</option>
-                          <option value="$5,000 - $20,000 / month">$5,000 - $20,000 / month</option>
-                          <option value="$20,000+ / month">$20,000+ / month</option>
+                          <option value="$1,000 - $3,000 / month">$1,000 - $3,000 / month</option>
+                          <option value="$3,000 - $10,000 / month">$3,000 - $10,000 / month</option>
+                          <option value="$10,000 - $30,000 / month">$10,000 - $30,000 / month</option>
+                          <option value="$30,000+ / month">$30,000+ / month</option>
                         </select>
                       </div>
                     </div>
