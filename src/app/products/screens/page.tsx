@@ -1,6 +1,8 @@
 import JsonLd from '@/components/JsonLd';
 import CatalogCategoryPage from '@/components/products/CatalogCategoryPage';
 import WholesaleScreenTable from '@/components/products/WholesaleScreenTable';
+import ScreenGradeTable from '@/components/products/ScreenGradeTable';
+import Link from 'next/link';
 import { productCategoryPages } from '@/data/product-category-pages';
 
 // FAQ/Breadcrumb schema live here (not in layout.tsx) so they render on the
@@ -71,6 +73,25 @@ export default function ScreensPage() {
       <JsonLd data={faqSchema} />
       <CatalogCategoryPage data={productCategoryPages.screens} />
       <WholesaleScreenTable />
+      <section className="bg-[#f5f3ee] py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-black text-[#18212c] md:text-3xl">iPhone screen grades at a glance</h2>
+          <p className="mt-4 max-w-3xl text-base leading-7 text-[#52606d]">
+            Every SKU in the price list above is labeled with one of four grades. This matrix shows what each
+            grade means in practice — panel type, display quality, True Tone and Face ID behaviour, plus the
+            live wholesale price range computed from the current catalog.
+          </p>
+          <div className="mt-8">
+            <ScreenGradeTable />
+          </div>
+          <p className="mt-4 text-sm leading-6 text-[#52606d]">
+            Need the full buying guide with per-model comparisons and FAQ?{' '}
+            <Link href="/products/screens-grade-guide" className="font-bold text-[#0b6b45] hover:text-[#ff8a2a]">
+              Read the iPhone Screen Grade Guide →
+            </Link>
+          </p>
+        </div>
+      </section>
     </>
   );
 }

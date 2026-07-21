@@ -39,6 +39,7 @@ interface FormData {
   quantity: string;
   quality: string;
   heardAbout: string;
+  monthlyVolume: string;
   message: string;
 }
 
@@ -221,6 +222,7 @@ export default function WholesaleInquiryPage() {
     quantity: '',
     quality: '',
     heardAbout: '',
+    monthlyVolume: '',
     message: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -351,6 +353,7 @@ export default function WholesaleInquiryPage() {
       const modelsLabel = formData.models ? `\nModels/Brands: ${formData.models}` : '';
       const countryLabel = formData.country ? `\nCountry: ${formData.country}` : '';
       const heardAboutLabel = formData.heardAbout ? `\nHeard about us: ${formData.heardAbout}` : '';
+      const monthlyVolumeLabel = formData.monthlyVolume ? `\nMonthly purchase volume: ${formData.monthlyVolume}` : '';
       const msgParts = [
         '[Wholesale Inquiry]',
         `Products: ${productLabel}${qtyLabel}${qualityLabel}`,
@@ -359,6 +362,7 @@ export default function WholesaleInquiryPage() {
         modelsLabel,
         countryLabel,
         heardAboutLabel,
+        monthlyVolumeLabel,
         formData.message ? `\nDetails: ${formData.message}` : '',
       ]
         .filter(Boolean)
@@ -699,15 +703,27 @@ export default function WholesaleInquiryPage() {
                         <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="iPhone 15 Pro, Samsung S24..." />
                       </div>
                     </div>
-                    <div>
-                      <label htmlFor="quality" className="mb-1.5 block text-sm font-black text-[#18212c]">Quality Requirement</label>
-                      <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
-                        <option value="">Select quality grade</option>
-                        <option value="OEM Original">OEM Original</option>
-                        <option value="Premium Aftermarket">Premium Aftermarket</option>
-                        <option value="Standard Aftermarket">Standard Aftermarket</option>
-                        <option value="Mixed Grades">Mixed Grades</option>
-                      </select>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label htmlFor="quality" className="mb-1.5 block text-sm font-black text-[#18212c]">Quality Requirement</label>
+                        <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
+                          <option value="">Select quality grade</option>
+                          <option value="OEM Original">OEM Original</option>
+                          <option value="Premium Aftermarket">Premium Aftermarket</option>
+                          <option value="Standard Aftermarket">Standard Aftermarket</option>
+                          <option value="Mixed Grades">Mixed Grades</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label htmlFor="monthlyVolume" className="mb-1.5 block text-sm font-black text-[#18212c]">Monthly Purchase Volume</label>
+                        <select id="monthlyVolume" name="monthlyVolume" value={formData.monthlyVolume} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
+                          <option value="">Select monthly volume</option>
+                          <option value="Under $1,000 / month">Under $1,000 / month</option>
+                          <option value="$1,000 - $5,000 / month">$1,000 - $5,000 / month</option>
+                          <option value="$5,000 - $20,000 / month">$5,000 - $20,000 / month</option>
+                          <option value="$20,000+ / month">$20,000+ / month</option>
+                        </select>
+                      </div>
                     </div>
                     <div>
                       <label htmlFor="message" className="mb-1.5 block text-sm font-black text-[#18212c]">Additional Requirements</label>

@@ -35,14 +35,14 @@ function absoluteUrl(path: string) {
 }
 
 export const metadata: Metadata = {
-  title: 'Wholesale Phone Repair Parts Supplier | PRSPARES',
+  title: 'Wholesale Phone Repair Parts Supplier in China | PRSPARES',
   description:
     'PRSPARES supplies wholesale mobile phone repair parts from Shenzhen: LCD and OLED screens, batteries, small parts, IC chips and repair tools for B2B buyers.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Wholesale Phone Repair Parts Supplier | PRSPARES',
+    title: 'Wholesale Phone Repair Parts Supplier in China | PRSPARES',
     description:
       'Wholesale mobile phone repair parts from Shenzhen for repair shops, wholesalers and sourcing teams.',
     type: 'website',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wholesale Phone Repair Parts Supplier | PRSPARES',
+    title: 'Wholesale Phone Repair Parts Supplier in China | PRSPARES',
     description:
       'Wholesale mobile phone repair parts from Shenzhen for repair shops, wholesalers and sourcing teams.',
     images: ['/hero/home.jpg'],
@@ -255,7 +255,7 @@ const homeJsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Wholesale Phone Repair Parts Supplier | PRSPARES',
+    name: 'Wholesale Phone Repair Parts Supplier in China | PRSPARES',
     url: SITE_URL,
     description: metadata.description,
     primaryImageOfPage: absoluteUrl('/hero/home.jpg'),

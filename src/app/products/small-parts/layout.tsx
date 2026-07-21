@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
-const metaTitle = 'Wholesale Phone Small Parts Camera Ports | PRSPARES';
+const metaTitle = 'Wholesale Phone Small Parts Camera Ports from China | PRSPARES';
 const metaDescription =
   'Wholesale phone small parts for repair shops: cameras, charging ports, flex cables and speakers. MOQ support, broad model coverage and fast B2B quote.';
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
-const metaTitle = 'Phone Repair Tools & IC Chips Wholesale | PRSPARES';
+const metaTitle = 'Phone Repair Tools & IC Chips Wholesale from China | PRSPARES';
 const metaDescription =
   'Wholesale phone repair tools, IC chips and programmers for repair shops. MOQ support, bench stock planning, Shenzhen sourcing and fast B2B quote.';
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
 
-const metaTitle = 'Wholesale Phone Batteries iPhone Samsung | PRSPARES';
+const metaTitle = 'Wholesale Phone Batteries iPhone Samsung from China | PRSPARES';
 const metaDescription =
   'Wholesale iPhone and Samsung batteries from Shenzhen. MOQ 20 pcs, UN38.3 packing, QC, warranty support and fast quote for repair shops worldwide.';
 

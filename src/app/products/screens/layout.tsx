@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const metaTitle = 'Wholesale iPhone Samsung Screens LCD/OLED | PRSPARES';
+const metaTitle = 'Wholesale iPhone Samsung Screens LCD/OLED from China | PRSPARES';
 const metaDescription =
   'Wholesale iPhone and Samsung LCD/OLED screens from Shenzhen. MOQ 10 pcs, grade options, batch QC, warranty support and fast quote for shops worldwide.';
 

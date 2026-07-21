@@ -38,7 +38,7 @@ function absoluteUrl(path: string) {
   return `${SITE_URL}${path}`;
 }
 
-const productsMetaTitle = 'Cell Phone Parts Wholesale — Factory-Direct Catalog | PRSPARES';
+const productsMetaTitle = 'Cell Phone Parts Wholesale — China Factory-Direct Catalog | PRSPARES';
 const productsMetaDescription =
   'Cell phone parts wholesale, factory-direct from Shenzhen: 23,374 repair-part SKUs across screens, batteries, small parts, IC chips and tools. Tiered 10/50/200 pricing, 12-month warranty, 24h quote.';
 
