@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import B2BFactsTable from '@/components/products/B2BFactsTable';
 import {
   ArrowRight,
   CheckCircle2,
@@ -285,6 +286,8 @@ export default function CatalogCategoryPage({ data }: { data: ProductCategoryPag
           </div>
         </div>
       </section>
+
+      <B2BFactsTable />
 
       <section className="bg-white py-14 md:py-18">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
