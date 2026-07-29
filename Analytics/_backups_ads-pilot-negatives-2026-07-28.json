@@ -1,0 +1,394 @@
+{
+  "date": "2026-07-28",
+  "dst_campaign": "Search | PRSPARES | pilot-geo-2026w28 | CA-AU-EU | EN",
+  "added": [
+    {
+      "text": "local",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "price",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "review",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "used",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "job",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "jobs",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "guide",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "cheap",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "cost",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "training",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "retail",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "motorola",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "broken",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "class",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "hiring",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "low price",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "refurbished",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "cover",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "ebay",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "case",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "course",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "career",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "second hand",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "tcl",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "salary",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "https",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "accessories",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "pdf",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "motherboard",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "infocus",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "http",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "screen protector",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "amazon",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "gsx",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "one piece",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "repair service",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "apple store",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "tempered glass",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "back glass",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "how much",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "oppo",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "reddit",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "youtube",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "temu",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "fixing service",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "siren wireless",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "fix my phone",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "ishine",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "folder price",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "redmi",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "cell phone parts store",
+      "match_type": "PHRASE"
+    },
+    {
+      "text": "middle frame",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "aliexpress",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "repair shop near me",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "realme",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "injured gadgets",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "display price",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "panel price",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "mobilesentrix",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "maxbhi",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "mobile centrix",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "single piece",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "apple oem",
+      "match_type": "PHRASE"
+    },
+    {
+      "text": "iphone parts for sale",
+      "match_type": "PHRASE"
+    },
+    {
+      "text": "iphone 7 plus oem screen replacement",
+      "match_type": "EXACT"
+    },
+    {
+      "text": "mighty wireless",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "phone parts usa",
+      "match_type": "EXACT"
+    },
+    {
+      "text": "mobile defenders",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "combo price",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "mobile sentrix",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "original price",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "samsung phone parts usa",
+      "match_type": "EXACT"
+    },
+    {
+      "text": "mobiledefenders",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "ishine mobile accessories",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "used phone parts",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "broshop",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "replacement screen repair",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "broken screen near me",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "brophone",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "maya cellular",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "genuine apple",
+      "match_type": "PHRASE"
+    },
+    {
+      "text": "mengtor",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "maya cellular parts",
+      "match_type": "EXACT"
+    },
+    {
+      "text": "ishine wireless",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "chinese phone parts market",
+      "match_type": "EXACT"
+    },
+    {
+      "text": "mobilecentric",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "honor x6b",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "hmd vibe",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "movil centrix",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "iphone 16 oem screen replacement",
+      "match_type": "EXACT"
+    },
+    {
+      "text": "mobile centric",
+      "match_type": "PHRASE"
+    },
+    {
+      "text": "oneplus 12r display price original",
+      "match_type": "EXACT"
+    },
+    {
+      "text": "reno 14 original display price",
+      "match_type": "EXACT"
+    },
+    {
+      "text": "mobile defenders parts",
+      "match_type": "PHRASE"
+    },
+    {
+      "text": "mobil centrix",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "supreme phone parts",
+      "match_type": "BROAD"
+    },
+    {
+      "text": "mighty wireless wholesale",
+      "match_type": "PHRASE"
+    }
+  ]
+}

@@ -14,6 +14,9 @@ interface LpInquiryPayload {
   phone?: string;
   productInterest?: string;
   message?: string;
+  /** Optional qualifiers mirroring /wholesale-inquiry — never required (06-17 leak lesson). */
+  monthlyVolume?: string;
+  heardAbout?: string;
   pageUrl?: string;
   source?: string;
   turnstileToken?: string;
@@ -85,6 +88,8 @@ export async function POST(request: NextRequest) {
     const company = body.company?.trim() || '';
     const phone = body.phone?.trim() || '';
     const productInterest = body.productInterest?.trim() || '';
+    const monthlyVolume = body.monthlyVolume?.trim() || '';
+    const heardAbout = body.heardAbout?.trim() || '';
     const attribution =
       body.attribution && typeof body.attribution === 'object' ? body.attribution : null;
 
@@ -97,6 +102,8 @@ export async function POST(request: NextRequest) {
       `company: ${company || 'N/A'}`,
       `phone: ${phone || 'N/A'}`,
       `productInterest: ${productInterest || 'N/A'}`,
+      `monthly purchase volume: ${monthlyVolume || 'N/A'}`,
+      `heard about us: ${heardAbout || 'N/A'}`,
       `source: ${source || 'N/A'}`,
       `pageUrl: ${pageUrl || 'N/A'}`,
       `submittedAt: ${now}`,
@@ -144,7 +151,14 @@ export async function POST(request: NextRequest) {
         company,
         phone,
         productInterest: productInterest || source,
-        message: message || `Landing page inquiry from: ${source || pageUrl}`,
+        // 邮件正文也带上两个限定字段——买家规模信号要在收件箱直接可见（大单插队判断依赖它）
+        message: [
+          message || `Landing page inquiry from: ${source || pageUrl}`,
+          monthlyVolume ? `Monthly purchase volume: ${monthlyVolume}` : '',
+          heardAbout ? `Heard about us: ${heardAbout}` : '',
+        ]
+          .filter(Boolean)
+          .join('\n'),
         pageUrl,
         ip,
         submittedAt: now,

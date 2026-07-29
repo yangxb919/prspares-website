@@ -1,0 +1,319 @@
+{
+  "date": "2026-07-28",
+  "window": [
+    "2026-06-29",
+    "2026-07-28"
+  ],
+  "customer_id": "1642005192",
+  "ad_group_paused": {
+    "campaign": "PRSPARES-Search-FactoryDirect-US-01",
+    "campaign_id": 23703407758,
+    "id": 195564699540,
+    "status": "ENABLED",
+    "resource_name": "customers/1642005192/adGroups/195564699540"
+  },
+  "keywords_paused": [
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 15384485549,
+      "text": "phone battery wholesale",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~15384485549",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 17996540428,
+      "text": "wholesale iphone parts",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~17996540428",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 295983288360,
+      "text": "wholesale mobile phone parts usa",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~295983288360",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 298691143348,
+      "text": "cell phone parts wholesale",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~298691143348",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 1014515336072,
+      "text": "buy phone parts in bulk",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~1014515336072",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2479168035838,
+      "text": "iphone parts supplier wholesale",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~2479168035838",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2479168035998,
+      "text": "samsung oem parts wholesale",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~2479168035998",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2479168036078,
+      "text": "oem phone parts supplier",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~2479168036078",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Phone Repair Parts B2B",
+      "ad_group_id": 192624199377,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2499573003114,
+      "text": "lcd screen wholesale supplier",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/192624199377~2499573003114",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Wholesale Parts Supplier",
+      "ad_group_id": 200024571772,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 298494688255,
+      "text": "wholesale mobile phone parts",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/200024571772~298494688255",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Wholesale Parts Supplier",
+      "ad_group_id": 200024571772,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 997383693117,
+      "text": "phone parts wholesale supplier",
+      "match_type": "EXACT",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/200024571772~997383693117",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Wholesale Parts Supplier",
+      "ad_group_id": 200024571772,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2468094970763,
+      "text": "phone parts wholesale supplier",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/200024571772~2468094970763",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Wholesale Parts Supplier",
+      "ad_group_id": 200024571772,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2478219305704,
+      "text": "wholesale phone repair parts supplier",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/200024571772~2478219305704",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Wholesale Parts Supplier",
+      "ad_group_id": 200024571772,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2478219305744,
+      "text": "OEM phone parts wholesale",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/200024571772~2478219305744",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Wholesale Parts Supplier",
+      "ad_group_id": 200024571772,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2479052644485,
+      "text": "iphone parts wholesale supplier",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/200024571772~2479052644485",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Wholesale Parts Supplier",
+      "ad_group_id": 200024571772,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2543399439277,
+      "text": "wholesale cell phone parts supplier",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/200024571772~2543399439277",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "ad_group": "Wholesale Parts Supplier",
+      "ad_group_id": 200024571772,
+      "ad_group_status": "ENABLED",
+      "criterion_id": 2543399439317,
+      "text": "bulk phone screen supplier",
+      "match_type": "PHRASE",
+      "status": "ENABLED",
+      "resource_name": "customers/1642005192/adGroupCriteria/200024571772~2543399439317",
+      "impressions": 0,
+      "clicks": 0,
+      "cost": 0.0,
+      "conversions": 0.0
+    }
+  ],
+  "negatives_added": [
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "accessories",
+      "match_type": "BROAD"
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "motorola",
+      "match_type": "BROAD"
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "tcl",
+      "match_type": "BROAD"
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "gsx",
+      "match_type": "BROAD"
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "apple oem",
+      "match_type": "PHRASE"
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "genuine apple",
+      "match_type": "PHRASE"
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "phone parts usa",
+      "match_type": "EXACT"
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "samsung phone parts usa",
+      "match_type": "EXACT"
+    },
+    {
+      "campaign": "Search | PR Spares | Factory Direct | US-UK | EN",
+      "text": "chinese phone parts market",
+      "match_type": "EXACT"
+    }
+  ]
+}

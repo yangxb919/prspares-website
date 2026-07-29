@@ -1,0 +1,30 @@
+{
+  "date": "2026-07-28",
+  "old_ad": {
+    "ad_group": "customers/1642005192/adGroups/197406496999",
+    "ad_resource": "customers/1642005192/adGroupAds/197406496999~815709569659",
+    "ad_id": 815709569659,
+    "strength": "AVERAGE",
+    "final_urls": [
+      "https://www.phonerepairspares.com/lp/google-ads-factory-direct.html"
+    ],
+    "headlines": [
+      "Wholesale Phone Repair Parts",
+      "Factory-Direct From Shenzhen",
+      "iPhone Screens Wholesale",
+      "12-Month Warranty On Parts",
+      "MOQ From 10 Pcs",
+      "Transparent Tiered Pricing",
+      "24h Wholesale Quote",
+      "OEM & Aftermarket Grades",
+      "Ships DHL/FedEx 3-7 Days",
+      "For Repair Shops & Resellers"
+    ],
+    "descriptions": [
+      "Factory-direct iPhone & Samsung parts. QC'd batches, 12-month warranty, DHL 3-7 days.",
+      "Transparent tiered pricing for repair shops & distributors. Get your quote in 24 hours.",
+      "Skip the middleman markup. Original, OEM & aftermarket grades, honestly labeled.",
+      "500+ SKUs in stock: screens, batteries, cameras, flex cables. MOQ from 10 pcs."
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-07-28",
+  "created": {
+    "campaign": "customers/1642005192/campaigns/24080130871",
+    "ad_group": "customers/1642005192/adGroups/199492342700",
+    "ad": "customers/1642005192/adGroupAds/199492342700~818703036431"
+  },
+  "main_campaign_budget_before_micros": 50000000,
+  "main_campaign_budget_resource": "customers/1642005192/campaignBudgets/15461538668",
+  "main_campaign_uk_criterion_removed": "customers/1642005192/campaignCriteria/23707210318~2826",
+  "uk_keywords": [
+    [
+      "phone parts distributor",
+      "PHRASE"
+    ],
+    [
+      "mobile repair parts distributor",
+      "PHRASE"
+    ],
+    [
+      "mobile parts wholesale",
+      "PHRASE"
+    ],
+    [
+      "wholesale phone screens",
+      "PHRASE"
+    ],
+    [
+      "wholesale phone parts",
+      "PHRASE"
+    ],
+    [
+      "phone parts supplier",
+      "EXACT"
+    ]
+  ]
+}

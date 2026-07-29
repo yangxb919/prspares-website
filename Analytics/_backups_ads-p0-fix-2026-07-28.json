@@ -1,0 +1,52 @@
+{
+  "date": "2026-07-28",
+  "removed_from": "PRSPARES-Search-FactoryDirect-US-01",
+  "added_to": "Search | PR Spares | Factory Direct | US-UK | EN",
+  "criteria": [
+    {
+      "text": "motorola",
+      "match_type": "BROAD",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~10055680"
+    },
+    {
+      "text": "tcl",
+      "match_type": "BROAD",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~10312471"
+    },
+    {
+      "text": "accessories",
+      "match_type": "BROAD",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~10363921"
+    },
+    {
+      "text": "gsx",
+      "match_type": "BROAD",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~12783266"
+    },
+    {
+      "text": "apple oem",
+      "match_type": "PHRASE",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~303612440623"
+    },
+    {
+      "text": "phone parts usa",
+      "match_type": "EXACT",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~327348118975"
+    },
+    {
+      "text": "samsung phone parts usa",
+      "match_type": "EXACT",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~356896996531"
+    },
+    {
+      "text": "genuine apple",
+      "match_type": "PHRASE",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~494241834192"
+    },
+    {
+      "text": "chinese phone parts market",
+      "match_type": "EXACT",
+      "resource_name": "customers/1642005192/campaignCriteria/23703407758~950942023628"
+    }
+  ]
+}
