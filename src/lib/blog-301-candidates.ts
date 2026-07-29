@@ -300,6 +300,59 @@ export const CANDIDATES_301: Candidate301[] = [
     review_date: '2026-06-23',
     next_action: 'Redirect + sitemap exclude.',
   },
+
+  // ═════════════════════════════════════════════════════════════════════
+  // observe_longer — first-order / MOQ cluster consolidation (2026-07-29)
+  //
+  // Context: 11 posts (~28,000 words) all cover the same funnel stage —
+  // "how a new buyer places a first wholesale order from China". 9 of the 11
+  // had zero impressions in the 06-29~07-26 GSC window. Hub chosen:
+  // `moq-sample-orders-lead-time-wholesale` (id 156), upgraded 2026-07-29 with
+  // the no-single-model-MOQ policy, a real 10-piece $60.65 starter order, and
+  // spoke navigation. The two entries below are the heaviest overlaps.
+  //
+  // Per this file's own rule, do NOT graduate these to 301 until the hub is
+  // demonstrably consolidating impressions — the hub itself was at 0 when the
+  // canonical was applied, so there is nothing to verify yet.
+  // ═════════════════════════════════════════════════════════════════════
+  {
+    from_slug: 'how-small-repair-shops-buy-phone-parts-mixed-orders',
+    current_title:
+      'How Small Repair Shops Can Start Buying Phone Parts Wholesale in Mixed Orders',
+    to_pillar_slug: 'moq-sample-orders-lead-time-wholesale',
+    why_recommended_for_301:
+      '15,923-char post whose H2s (when wholesale saves money / what is a mixed order / how to structure your first order / what to look for in a supplier / cash flow / common mistakes) sit almost entirely inside the hub after the 2026-07-29 upgrade. 0 impressions in the 06-29~07-26 window.',
+    prerequisite_before_301:
+      'Hub must first show it is consolidating impressions for first-order/MOQ queries. Also salvage the cash-flow section if the hub still lacks it at recheck.',
+    suggested_observation_window: '28 days from canonical application',
+    canonical_applied_on: '2026-07-29',
+    recheck_after: '2026-08-26',
+    status: 'observe_longer',
+    decision_reason:
+      'Canonical applied same day as the hub upgrade. Cannot judge consolidation yet — hub had 0 impressions at the time, so the file rule against premature 301 applies.',
+    review_date: '2026-07-29',
+    next_action:
+      'At recheck: pull GSC for the hub and both spokes. If hub is gaining impressions on first-order/MOQ queries and these two remain at 0, graduate to ready_for_301; if either spoke picks up unique queries, flip to do_not_301 and restore self-canonical.',
+  },
+  {
+    from_slug: 'prepare-mixed-order-list-before-contacting-supplier',
+    current_title:
+      'How Repair Shops Should Prepare a Mixed Order List Before Contacting a Supplier',
+    to_pillar_slug: 'moq-sample-orders-lead-time-wholesale',
+    why_recommended_for_301:
+      '14,944-char post covering what suppliers need in order to quote + a mixed-order-list template. Same buyer step and same query face as the hub and as `how-small-repair-shops-buy-phone-parts-mixed-orders`. 0 impressions in the 06-29~07-26 window.',
+    prerequisite_before_301:
+      'Salvage the order-list template into the hub before any hard 301 — it is the one asset here the hub does not reproduce.',
+    suggested_observation_window: '28 days from canonical application',
+    canonical_applied_on: '2026-07-29',
+    recheck_after: '2026-08-26',
+    status: 'observe_longer',
+    decision_reason:
+      'Same cluster, same reasoning. Note this post carries a completed citability pass, so its copy is worth salvaging rather than discarding at 301 time.',
+    review_date: '2026-07-29',
+    next_action:
+      'At recheck: same GSC comparison as the sibling entry. Graft the order-list template into the hub first if graduating to 301.',
+  },
 ];
 
 /** Convenience: only the entries currently flagged for hard 301 execution. */
