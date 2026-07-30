@@ -16,7 +16,10 @@ export const B2B_FACTS: B2BFact[] = [
   },
   {
     label: 'MOQ',
-    value: '10 pcs for screens — mixed models count toward the minimum, so 5 + 5 across two models qualifies.',
+    // 单一事实源（2026-07-30 用户拍板统一）：跨品类可凑 10 件；试单 5 件起、单价仍按 10+ 档。
+    // 全站博客已按此口径统一（见 changelogs/2026-07-30.md）——改这里必须同步扫描博客。
+    value:
+      'No single-model MOQ — mix models and categories; the published 10+ tier applies once the order totals 10 pcs. Trial orders from 5 pcs at the same 10+ unit price.',
   },
   {
     label: 'Pricing structure',
