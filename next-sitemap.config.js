@@ -1,6 +1,38 @@
 /** @type {import('next-sitemap').IConfig} */
 const { createClient } = require('@supabase/supabase-js');
 
+/**
+ * 🔴 next-sitemap 是独立进程，**不会**自动加载 .env / .env.production / .env.local
+ * （Next.js 只在 `next build` 自己的进程里加载）。项目也没装 dotenv。
+ *
+ * 后果（2026-07-30 查实）：`process.env.NEXT_PUBLIC_SUPABASE_*` 在生成 sitemap 时
+ * 一直是 undefined → fetchPostSlugs / fetchProductSlugs 一直返回空数组 →
+ * additionalPaths 长期只贡献 23 条静态路径，线上 sitemap 里的 160 条其实是
+ * next-sitemap 自己扫构建产物得到的。直接症状：榜单文（id202）等未被预渲染的
+ * 文章根本没进 sitemap，且所有 URL 都没有 lastmod。
+ *
+ * 这里手工解析 env 文件（零新增依赖，与项目脚本一致的做法），已存在的环境变量优先。
+ */
+(function loadEnvFiles() {
+  const fs = require('fs');
+  const path = require('path');
+  for (const name of ['.env.production', '.env.local', '.env']) {
+    try {
+      const p = path.join(__dirname, name);
+      if (!fs.existsSync(p)) continue;
+      for (const line of fs.readFileSync(p, 'utf8').split('\n')) {
+        const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+        if (!m) continue;
+        const key = m[1];
+        if (process.env[key]) continue;
+        process.env[key] = m[2].trim().replace(/^["']|["']$/g, '');
+      }
+    } catch (_) {
+      /* 读不到就跳过，绝不阻塞构建 */
+    }
+  }
+})();
+
 async function fetchProductSlugs() {
   try {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
