@@ -37,6 +37,82 @@ async function fetchPostSlugs() {
   }
 }
 
+/**
+ * 真实 lastmod 映射（2026-07-30 修）。
+ *
+ * 为什么必须有：GSC 实测 161 条 URL 全部没有 lastmod（配置里 autoLastmod: false，
+ * transform 也没输出该字段）。Google 只用 lastmod 判断哪些页面需要重新抓取，
+ * changefreq / priority 是被忽略的 —— 结果就是 sitemap 天天被抓（07-29 20:28
+ * 最后一次），但新页和改动过的页迟迟不被抓取，只能靠 GSC 逐个手动请求收录。
+ *
+ * 这里取数据库真实的 updated_at（回退 published_at），不用 autoLastmod：
+ * autoLastmod 会给所有 URL 盖同一个构建时间戳、每次部署都变，Google 会学会
+ * 不信任它，反而更糟。查不到记录的静态页宁可不输出 lastmod，也不编时间。
+ */
+/**
+ * 静态路由（/about、/products/screens/jk、/products/screens-grade-guide 等）在
+ * 数据库里没有记录，取该路由源码目录的最后一次 git 提交时间作为 lastmod。
+ * 这样改了页面就自动更新，不需要有人手工维护日期表。取不到（无 git / 未找到文件）
+ * 就不输出 lastmod。
+ */
+function gitLastmodForRoute(routePath) {
+  try {
+    const { execFileSync } = require('child_process');
+    const fsMod = require('fs');
+    const pathMod = require('path');
+    const rel =
+      routePath === '/' ? 'src/app/page.tsx' : `src/app${routePath}`;
+    const abs = pathMod.join(__dirname, rel);
+    if (!fsMod.existsSync(abs)) return null;
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', rel], {
+      cwd: __dirname,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return out ? new Date(out).toISOString() : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+let _lastmodPromise = null;
+async function loadLastmodMap() {
+  if (_lastmodPromise) return _lastmodPromise;
+  _lastmodPromise = (async () => {
+    const map = new Map();
+    try {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (!url || !anon) return map;
+      const supabase = createClient(url, anon, { auth: { persistSession: false } });
+      const [posts, products] = await Promise.all([
+        supabase
+          .from('posts')
+          .select('slug, updated_at, published_at')
+          .eq('status', 'publish')
+          .not('slug', 'is', null),
+        supabase
+          .from('products')
+          .select('slug, updated_at, created_at')
+          .eq('status', 'publish')
+          .not('slug', 'is', null),
+      ]);
+      for (const r of posts.data || []) {
+        const ts = r.updated_at || r.published_at;
+        if (r.slug && ts) map.set(`/blog/${r.slug}`, new Date(ts).toISOString());
+      }
+      for (const r of products.data || []) {
+        const ts = r.updated_at || r.created_at;
+        if (r.slug && ts) map.set(`/products/${r.slug}`, new Date(ts).toISOString());
+      }
+    } catch (_) {
+      // 取不到就退回“无 lastmod”，与修复前行为一致，绝不阻塞构建
+    }
+    return map;
+  })();
+  return _lastmodPromise;
+}
+
 const siteUrl =
   process.env.SITE_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -135,12 +211,18 @@ module.exports = {
     return Promise.all(allPaths.map((p) => config.transform(config, p)));
   },
   transform: async (config, path) => {
+    // 真实 lastmod（数据库 updated_at）——Google 唯一会用来排抓取优先级的字段。
+    // 查不到的静态页不输出该字段，不编时间。
+    const lastmodMap = await loadLastmodMap();
+    const lastmod = lastmodMap.get(path) || gitLastmodForRoute(path);
+
     // Custom priority for B2B wholesale pages
     if (path.includes('wholesale') || path.includes('factory') || path.includes('manufacturer') || path.includes('supplier') || path.includes('oem') || path.includes('odm')) {
       return {
         loc: path,
         changefreq: 'weekly',
         priority: 0.9,
+        ...(lastmod ? { lastmod } : {}),
       }
     }
 
@@ -149,6 +231,7 @@ module.exports = {
       loc: path,
       changefreq: config.changefreq,
       priority: config.priority,
+      ...(lastmod ? { lastmod } : {}),
     }
   },
 }
