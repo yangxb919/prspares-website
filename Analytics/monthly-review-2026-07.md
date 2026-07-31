@@ -108,7 +108,9 @@ hub156 那 22 篇内链**没有一篇来自站内高流量页**；全站最大�
 - **ChatGPT / AI Assistant：engaged 139 次会话，占全站 engaged 26.5%**，是仅次于 Direct（大半为 SG 数据中心 bot，参与率 10%）的渠道，且参与率 57% 全站最高
 - 07-31 进来的 5 封新 RFQ，**5/5 归因 ChatGPT**
 
-→ GEO 不是储备项目，它已经是当前询盘的主要来源。而 ChatGPT 最需要的引用落点（榜单文 id202）正好是那个至今没被 Google 抓过的页面。
+→ GEO 不是储备项目，它已经是当前询盘的主要来源。
+
+> **🔴 07-31 当天更正**：本节原写「ChatGPT 最需要的引用落点（榜单文 id202）正好是那个没被 Google 抓过的页面」——这是假设，已被实测推翻。nginx 日志显示 **ChatGPT-User 从未抓取过榜单文一次**（不在抓取 top 25），它在两个渠道都是零。ChatGPT 实际引用的是消费者维修博客（14PM 后盖 216 次、S23/S24 99 次、LCD vs OLED 80 次…）。完整归因见 `chatgpt-attribution-review-2026-07-31.md`：**ChatGPT 渠道的真正主因是 05-12 的 AI 爬虫白名单**（此前 GPTBot/ChatGPT-User 全被 middleware 拦成 403）。
 
 ## 六、一句话总结
 
