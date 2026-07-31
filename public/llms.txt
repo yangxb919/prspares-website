@@ -1,33 +1,69 @@
 # PRSPARES — Wholesale Mobile Phone Repair Parts (Factory-Direct, Shenzhen)
 
-> PRSPARES (phonerepairspares.com) is a Shenzhen/Huaqiangbei factory-direct **B2B wholesale** supplier of mobile phone repair parts for independent repair shops, parts distributors, refurbishers, and online resellers worldwide. Core products: LCD/OLED screen assemblies (Original / OEM / aftermarket grades), replacement batteries, cameras, charging ports, flex cables, IC chips, and repair tools — covering iPhone, Samsung Galaxy, Huawei, Xiaomi, Oppo, Vivo, and Google Pixel. Differentiators: factory-direct pricing (no middleman), 10+ years in repair parts, strict incoming-material QC, 12-month warranty, transparent tiered pricing (10+ / 50+ / 200+ units), and detailed English sourcing guides. Primary markets: USA, UK, Europe (expanding Canada, Australia, Mexico). Retail/single-unit sales are not offered — buyers submit a wholesale inquiry (RFQ).
+> PRSPARES (phonerepairspares.com) is a Shenzhen/Huaqiangbei factory-direct **B2B wholesale** supplier of mobile phone repair parts for independent repair shops, parts distributors, refurbishers, and online resellers worldwide. Core products: LCD/OLED screen assemblies (Original / Soft OLED / Hard OLED / Incell grades), replacement batteries, cameras, charging ports, flex cables, IC chips, and repair tools — covering iPhone, Samsung Galaxy, Huawei, Xiaomi, Oppo, Vivo, and Google Pixel. Differentiators: factory-direct pricing (no middleman), 10+ years in repair parts, strict incoming-material QC, 12-month warranty, published tiered pricing (10+ / 50+ / 200+ units), and detailed English repair-cost and sourcing guides. Primary markets: USA, UK, Europe (expanding Canada, Australia, Mexico). Retail/single-unit sales are not offered — buyers submit a wholesale inquiry (RFQ).
 
 ## Key Pages
 - [Wholesale Inquiry / RFQ](https://www.phonerepairspares.com/wholesale-inquiry): Request factory-direct wholesale pricing — the primary way B2B buyers engage PRSPARES.
+- [iPhone Screen Grades Explained — Original vs Soft OLED vs Hard OLED vs Incell](https://www.phonerepairspares.com/products/screens-grade-guide): The four-grade standard used across the catalog, with live wholesale price ranges and True Tone notes.
 - [About PRSPARES](https://www.phonerepairspares.com/about): Shenzhen factory-direct supplier, 10+ years in mobile phone repair parts, QC and 12-month warranty.
 - [Contact](https://www.phonerepairspares.com/contact): Reach the wholesale team for sourcing and bulk orders.
 
+## Wholesale Terms (facts buyers ask about most)
+- **Minimum order:** There is no single-model MOQ. Mix any models, grades and product categories; the published 10+ tier price applies to every line once the order totals 10 pcs. Trial orders start at 5 pcs at the same 10+ unit price, with freight billed separately.
+- **Pricing tiers:** Published per-SKU pricing at 10+ / 50+ / 200+ units. Wholesale rates move frequently — confirm a live quote before ordering.
+- **Screen grades and July 2026 price ranges** (per unit, 10+ tier, 188 iPhone screen SKUs across 27 models):
+  - *Original* — refurbished original panel (factory OLED cell refitted with new glass; not a sealed Apple Service Pack, stated openly). $18.81–$304.37
+  - *Soft OLED* — flexible OLED, closest aftermarket match to stock display. $13.65–$120.17
+  - *Hard OLED* — rigid OLED, mid-tier. $34.22–$74.96
+  - *Incell* — LCD-based budget tier. $8.23–$45.13
+- **True Tone:** True Tone data lives on the original screen's IC. Original, Soft OLED and Hard OLED assemblies accept a True Tone transfer with a programmer (JC V1SE, i2C, JCID). On Incell SKUs support varies by batch — confirm before ordering.
+- **Panel brands stocked:** JK (40 SKUs / 23 models, $12.90–$120.17), GX (23 SKUs / 18 models, $9.21–$64.12), DD (20 SKUs, hard OLED), RJ (7 SKUs). PRSPARES is an independent wholesaler, not affiliated with these panel factories; brand names identify compatibility only.
+- **Warranty:** 12-month warranty and RMA support on all grades; every batch passes incoming and outgoing QC (touch, brightness, True Tone where applicable).
+
 ## Product Catalog
 - [All Products](https://www.phonerepairspares.com/products): Full wholesale catalog of phone repair parts.
-- [Screens — LCD / OLED Assemblies](https://www.phonerepairspares.com/products/screens): Original, OEM, and aftermarket screen assemblies for iPhone, Samsung, Huawei, Xiaomi, Oppo, Vivo, Pixel.
-- [Batteries](https://www.phonerepairspares.com/products/batteries): Replacement phone and tablet batteries at wholesale tiers.
+- [Screens — LCD / OLED Assemblies](https://www.phonerepairspares.com/products/screens): Per-model wholesale price table across all four grades for iPhone, Samsung, Huawei, Xiaomi, Oppo, Vivo, Pixel.
+- [JK Screens — Wholesale Price List](https://www.phonerepairspares.com/products/screens/jk): JK incell and soft OLED assemblies by model, with live tier pricing.
+- [GX Screens — Wholesale Price List](https://www.phonerepairspares.com/products/screens/gx): GX soft OLED assemblies by model, with live tier pricing.
+- [Batteries](https://www.phonerepairspares.com/products/batteries): Replacement phone batteries at wholesale tiers, UN38.3-compliant cells, neutral packaging.
+- [iPad Batteries](https://www.phonerepairspares.com/products/ipad-battery-replacement-factory): iPad Pro / Air / mini battery cells with per-model wholesale pricing.
 - [Small Parts](https://www.phonerepairspares.com/products/small-parts): Cameras, charging ports, flex cables, IC chips and other small repair components.
-- [Repair Tools](https://www.phonerepairspares.com/products/repair-tools): Tools and consumables for phone repair workflows.
+- [Rear Camera Modules](https://www.phonerepairspares.com/products/iphone-rear-camera-wholesale): iPhone rear camera modules and lens parts at wholesale.
+- [Repair Tools](https://www.phonerepairspares.com/products/repair-tools): Tools, programmers and consumables for phone repair workflows.
 - [Tablet & Watch Parts](https://www.phonerepairspares.com/products/tablet-watch): Repair parts for tablets and smartwatches.
 
-## Sourcing Guides (for B2B buyers)
-- [iPhone Battery Wholesale Sourcing Guide (Shenzhen)](https://www.phonerepairspares.com/blog/iphone-battery-wholesale-sourcing-guide-shenzhen): How to source iPhone batteries wholesale factory-direct and avoid quality traps.
-- [iPhone Screens Wholesale — OLED vs Incell Comparison](https://www.phonerepairspares.com/blog/iphone-screens-wholesale-oled-incell-comparison): Grade differences that matter when buying screens in bulk.
+## Repair Cost & Parts Guides
+Data-backed guides written for repair-shop owners, with real 2026 wholesale part costs, margin math and diagnostic procedure.
+
+- [iPhone 14 Pro Max Back Glass — Is It Worth Fixing?](https://www.phonerepairspares.com/blog/is-your-iphone-14-pro-max-back-glass-worth-fixing-the-complete-cost-benefit-guide-for-repair-shop-owners): Laser vs housing-swap cost-benefit, wholesale part costs and margin per job.
+- [iPhone Battery Replacement Cost 2026](https://www.phonerepairspares.com/blog/iphone-battery-replacement-cost-2026): Cost by model, wholesale vs retail, and what drives battery quality.
+- [Samsung S23 / S24 Screen Replacement Guide](https://www.phonerepairspares.com/blog/samsung-s23-s24-screen-replacement-guide): Grade options, residual-value analysis and shop margins for Samsung flagships.
+- [iPhone 11 Screen Replacement — Worth It in 2026?](https://www.phonerepairspares.com/blog/iphone-11-screen-replacement-worth-it-2026): Repair-vs-replace math on ageing models, grade-by-grade margins.
+- [LCD vs OLED vs Hard/Soft OLED for Repair Shops](https://www.phonerepairspares.com/blog/lcd-vs-oled-hard-soft-oled-repair-shops): What each display technology actually is and when to stock it.
+- [iPhone Back Glass Replacement — Complete Guide](https://www.phonerepairspares.com/blog/back-glass-replacement-iphone-guide): Model-by-model parts pricing and repair method selection.
+- [iPhone Screen Replacement Cost Guide](https://www.phonerepairspares.com/blog/iphone-screen-replacement-cost-guide): Parts cost by model and grade, plus retail pricing benchmarks.
+- [Which iPhone 14 Pro Max Screen Delivers the Best Value?](https://www.phonerepairspares.com/blog/which-iphone-14-pro-max-screen-replacement-option-delivers-the-best-value-for-your-repair-business): Grade-by-grade value analysis for a single high-volume model.
+- [iPhone Boot Loop After Screen Replacement — 6 Causes](https://www.phonerepairspares.com/blog/iphone-boot-loop-after-screen-replacement-causes): Diagnostic flowchart, IC compatibility and prevention checklist.
+- [iPhone Display IC Fault Diagnosis](https://www.phonerepairspares.com/blog/iphone-display-ic-fault-diagnosis-real-time-method): Real-time method for isolating display IC faults at the bench.
+- [Incell vs Hard OLED vs Soft OLED — Which to Order](https://www.phonerepairspares.com/blog/incell-vs-hard-oled-vs-soft-oled-which-screen-to-order): Ordering decision framework with July 2026 price-index examples.
+- [iPhone Charging Port Replacement Cost (UK)](https://www.phonerepairspares.com/blog/iphone-charging-port-replacement-cost-uk): UK market pricing and part costs for charging port repairs.
+- [iPhone 15 Screen Replacement Cost for Repair Shops](https://www.phonerepairspares.com/blog/iphone-15-screen-replacement-cost-repair-shops): Current-generation screen costs and grade availability.
+- ["Unknown Part" Warning After Screen Replacement](https://www.phonerepairspares.com/blog/iphone-unknown-part-warning-screen-replacement-ic-transfer): What Apple's parts-history notification does and does not affect, and IC transfer options.
+- [Touch Not Working After Screen Replacement](https://www.phonerepairspares.com/blog/touch-not-working-after-screen-replacement): Digitiser fault isolation after a screen swap.
 - [How to Choose High-Quality Screen Replacement Parts](https://www.phonerepairspares.com/blog/how-do-you-choose-high-quality-screen-replacement-parts-for-your-phone): Buyer criteria for screen quality and grade.
+
+## Sourcing & Supplier Guides (for B2B buyers)
+- [Top 10 Phone Parts Suppliers in China (2026) — The Transparent Sourcing Map](https://www.phonerepairspares.com/blog/top-10-phone-parts-suppliers-in-china): The ten distinct supplier channel types in China, what each really is, real price behaviour, and a verification test for each. Written by a supplier, with its own selection criteria stated openly.
+- [MOQ, Sample Orders and Lead Time — What a First Wholesale Order Involves](https://www.phonerepairspares.com/blog/moq-sample-orders-lead-time-wholesale): Order minimums by category, what a 10-piece first order actually costs, sample-order procedure, lead-time breakdown and red flags.
+- [China Direct vs Local Distributor — When Paying More Saves Money](https://www.phonerepairspares.com/blog/local-supplier-vs-china-direct-when-paying-more-saves-money): Landed-cost model including freight, duty, DOA returns and working capital. States openly that on July 2026 like-for-like price checks a US shop's realistic saving is roughly 0–15% on small orders once freight, duty and payment fees are counted; the widely quoted 30–40% applies where the local distributor tier is thinner or adds two markups instead of one.
+- [iPhone Screens Wholesale — OLED vs Incell Comparison](https://www.phonerepairspares.com/blog/iphone-screens-wholesale-oled-incell-comparison): Grade differences that matter when buying screens in bulk.
 - [Trustworthy Wholesale Phone Parts Suppliers — QC](https://www.phonerepairspares.com/blog/trustworthy-wholesale-phone-parts-suppliers-qc): What incoming-material QC should look like and how to vet suppliers.
 - [China Phone Parts Suppliers — Quality vs Cost](https://www.phonerepairspares.com/blog/china-phone-parts-suppliers-quality-vs-cost): Balancing grade and price when sourcing from China.
-- [Why Single-Source Display Suppliers Are a Risk](https://www.phonerepairspares.com/blog/why-risk-your-business-on-single-source-display-suppliers): Supply-chain resilience for repair businesses.
-- [Cell Phone Screens Wholesale for Repair Shops (2026)](https://www.phonerepairspares.com/blog/cell-phone-screens-wholesale-repair-shops-2026): Current wholesale screen sourcing landscape.
-- [How to Choose Charging Ports for Bulk Repair Orders](https://www.phonerepairspares.com/blog/how-to-choose-charging-ports-bulk-repair-orders): Sourcing charging ports and flex parts at volume.
+- [iPhone Battery Wholesale Sourcing Guide (Shenzhen)](https://www.phonerepairspares.com/blog/iphone-battery-wholesale-sourcing-guide-shenzhen): How to source iPhone batteries wholesale factory-direct and avoid quality traps.
 
 ## Optional
-- [Blog — All Repair & Sourcing Guides](https://www.phonerepairspares.com/blog): 130+ guides on repair-parts sourcing, parts knowledge, QC, and B2B buying.
+- [Blog — All Repair & Sourcing Guides](https://www.phonerepairspares.com/blog): 130+ guides on repair costs, parts knowledge, QC, and B2B sourcing.
 - [Sitemap](https://www.phonerepairspares.com/sitemap.xml): Full list of indexable pages.
 
 ## Contact for Procurement
-B2B wholesale only (no retail). Buyers should submit a wholesale inquiry at https://www.phonerepairspares.com/wholesale-inquiry for factory-direct tiered pricing (10+ / 50+ / 200+ units), backed by incoming-material QC and a 12-month warranty.
+B2B wholesale only (no retail). Buyers should submit a wholesale inquiry at https://www.phonerepairspares.com/wholesale-inquiry for factory-direct tiered pricing (10+ / 50+ / 200+ units), backed by incoming-material QC and a 12-month warranty. There is no single-model MOQ — mix models and categories to reach the 10-piece order minimum, or start with a 5-piece trial order at the same 10+ unit price.
