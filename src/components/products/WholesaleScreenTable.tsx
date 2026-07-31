@@ -78,15 +78,17 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
             PRSPARES stocks {rows.length} {brand} iPhone screen assemblies in{' '}
             {grades.join(' and ')} grade{grades.length > 1 ? 's' : ''}, covering {models} iPhone models at{' '}
             {money(low)}–{money(high)} per unit (10+ tier) with tiered 10/50/200 wholesale pricing and a 12-month
-            warranty. MOQ starts at 10 units; mix {brand} SKUs with any other grades and models in one order.
+            warranty. There is no single-model MOQ — mix {brand} SKUs with any other models, grades and product
+            categories, and the published 10+ tier price applies to every line once the order totals 10 pcs.
           </p>
         ) : (
           <p className="mt-4 max-w-3xl text-base leading-7 text-[#52606d]">
             iPhone screen wholesale is the bulk supply of replacement display assemblies to repair shops and distributors.
             PRSPARES stocks {rows.length} factory-direct iPhone screen assemblies across {grades.length} quality grades
             (Original, Soft OLED, Hard OLED and Incell) for iPhone 11 through iPhone 17, priced in {money(low)}–{money(high)}
-            per unit with tiered 10/50/200 wholesale pricing and a 12-month warranty. MOQ starts at 10 units; mix models and
-            grades in one order.
+            per unit with tiered 10/50/200 wholesale pricing and a 12-month warranty. There is no single-model MOQ —
+            mix models, grades and product categories, and the published 10+ tier price applies to every line once the
+            order totals 10 pcs.
           </p>
         )}
 

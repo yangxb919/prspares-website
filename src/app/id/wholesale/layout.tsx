@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Grosir Sparepart HP Langsung dari Pabrik Shenzhen | PRSPARES',
   description:
-    'Grosir sparepart HP langsung dari pabrik Shenzhen. Kualitas OEM, hemat 30-40% tanpa perantara. MOQ mulai 10 pcs, garansi 12 bulan. Melayani 1.000+ teknisi, konter HP & reseller di Indonesia.',
+    'Grosir sparepart HP langsung dari pabrik Shenzhen. Kualitas OEM, hemat 30-40% tanpa perantara. Tanpa MOQ per model - campur model dan kategori sampai total 10 pcs, garansi 12 bulan. Melayani 1.000+ teknisi, konter HP & reseller di Indonesia.',
   keywords:
     'grosir sparepart hp, distributor sparepart hp, supplier sparepart hp, grosir lcd hp, grosir baterai hp, pabrik sparepart hp shenzhen, sparepart hp grosir murah',
   alternates: {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Grosir Sparepart HP Langsung dari Pabrik Shenzhen | PRSPARES',
     description:
-      'Grosir sparepart HP dari pabrik Shenzhen. Hemat 30-40% tanpa perantara. MOQ 10 pcs, garansi 12 bulan.',
+      'Grosir sparepart HP dari pabrik Shenzhen. Hemat 30-40% tanpa perantara. Tanpa MOQ per model, total order 10 pcs, garansi 12 bulan.',
     type: 'website',
     url: '/id/wholesale',
     locale: 'id_ID',

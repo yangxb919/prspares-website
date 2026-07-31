@@ -85,7 +85,7 @@ export default function iPadBatteryReplacementFactoryPage() {
             {[
               { value: String(SKU_COUNT), label: 'Battery SKUs' },
               { value: `$${PRICE_LOW.toFixed(2)}`, label: 'Starting Price (10+)' },
-              { value: 'MOQ 10', label: 'Per Model' },
+              { value: '10 pcs', label: 'Order Minimum (mix models)' },
               { value: '12 Mo', label: 'Warranty' },
             ].map((s) => (
               <div key={s.label}>
@@ -143,7 +143,7 @@ export default function iPadBatteryReplacementFactoryPage() {
           <p className="text-gray-600 text-center mb-10">Standard 10+ / 50+ / 200+ tiers — exact per-tier prices are shown in the table above. Mix iPad models in one order.</p>
           <div className="grid sm:grid-cols-4 gap-4">
             {[
-              { qty: '10+ pcs', discount: 'Base Wholesale', note: 'MOQ per model', highlight: false },
+              { qty: '10+ pcs', discount: 'Base Wholesale', note: 'Order minimum, mix models', highlight: false },
               { qty: '50+ pcs', discount: 'Lower Unit Price', note: 'Multi-location shops', highlight: true },
               { qty: '200+ pcs', discount: 'Best Rate', note: 'Distributor tier', highlight: false },
               { qty: 'Mixed order', discount: 'Custom Quote', note: 'Combine models & series', highlight: false },

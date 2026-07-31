@@ -1,0 +1,172 @@
+[
+ {
+  "url": "/blog/moq-sample-orders-lead-time-wholesale",
+  "verdict": "NEUTRAL",
+  "coverage": "已发现 - 尚未编入索引",
+  "lastCrawl": "",
+  "googleCanonical": "",
+  "userCanonical": "",
+  "robots": "ROBOTS_TXT_STATE_UNSPECIFIED",
+  "fetch": "PAGE_FETCH_STATE_UNSPECIFIED",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://www.phonerepairspares.com/blog?tag=iphone%2014%20screen%20grade"
+  ]
+ },
+ {
+  "url": "/blog/top-10-phone-parts-suppliers-in-china",
+  "verdict": "NEUTRAL",
+  "coverage": "已发现 - 尚未编入索引",
+  "lastCrawl": "",
+  "googleCanonical": "",
+  "userCanonical": "",
+  "robots": "ROBOTS_TXT_STATE_UNSPECIFIED",
+  "fetch": "PAGE_FETCH_STATE_UNSPECIFIED",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://www.phonerepairspares.com/blog/trustworthy-wholesale-phone-parts-suppliers-qc"
+  ]
+ },
+ {
+  "url": "/products/screens/jk",
+  "verdict": "NEUTRAL",
+  "coverage": "已抓取 - 尚未编入索引",
+  "lastCrawl": "2026-07-28T12:25:16",
+  "googleCanonical": "",
+  "userCanonical": "",
+  "robots": "ALLOWED",
+  "fetch": "SUCCESSFUL",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": []
+ },
+ {
+  "url": "/products/screens-grade-guide",
+  "verdict": "PASS",
+  "coverage": "已提交，且已编入索引",
+  "lastCrawl": "2026-07-28T12:23:16",
+  "googleCanonical": "/products/screens-grade-guide",
+  "userCanonical": "/products/screens-grade-guide",
+  "robots": "ALLOWED",
+  "fetch": "SUCCESSFUL",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://www.phonerepairspares.com/blog/test-order-evaluate-phone-parts-supplier"
+  ]
+ },
+ {
+  "url": "/products/screens/gx",
+  "verdict": "PASS",
+  "coverage": "已提交，且已编入索引",
+  "lastCrawl": "2026-07-23T08:35:37",
+  "googleCanonical": "/products/screens/gx",
+  "userCanonical": "/products/screens/gx",
+  "robots": "ALLOWED",
+  "fetch": "SUCCESSFUL",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://www.phonerepairspares.com/sitemap-0.xml"
+  ]
+ },
+ {
+  "url": "/blog/iphone-boot-loop-after-screen-replacement-causes",
+  "verdict": "PASS",
+  "coverage": "已提交，且已编入索引",
+  "lastCrawl": "2026-07-23T17:08:33",
+  "googleCanonical": "/blog/iphone-boot-loop-after-screen-replacement-causes",
+  "userCanonical": "/blog/iphone-boot-loop-after-screen-replacement-causes",
+  "robots": "ALLOWED",
+  "fetch": "SUCCESSFUL",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://www.phonerepairspares.com/sitemap-0.xml"
+  ]
+ },
+ {
+  "url": "/blog/samsung-s23-s24-screen-replacement-guide",
+  "verdict": "PASS",
+  "coverage": "已提交，且已编入索引",
+  "lastCrawl": "2026-07-23T17:44:48",
+  "googleCanonical": "/blog/samsung-s23-s24-screen-replacement-guide",
+  "userCanonical": "/blog/samsung-s23-s24-screen-replacement-guide",
+  "robots": "ALLOWED",
+  "fetch": "SUCCESSFUL",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://prspares.xyz/blog/samsung-s23-s24-screen-replacement-guide",
+   "https://www.phonerepairspares.com/blog"
+  ]
+ },
+ {
+  "url": "/blog/iphone-11-screen-replacement-worth-it-2026",
+  "verdict": "PASS",
+  "coverage": "已提交，且已编入索引",
+  "lastCrawl": "2026-07-23T17:31:43",
+  "googleCanonical": "/blog/iphone-11-screen-replacement-worth-it-2026",
+  "userCanonical": "/blog/iphone-11-screen-replacement-worth-it-2026",
+  "robots": "ALLOWED",
+  "fetch": "SUCCESSFUL",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://prspares.xyz/blog/iphone-11-screen-replacement-worth-it-2026",
+   "https://www.phonerepairspares.com/blog?tag=iphone%2014%20screen%20grade"
+  ]
+ },
+ {
+  "url": "/blog/local-supplier-vs-china-direct-when-paying-more-saves-money",
+  "verdict": "PASS",
+  "coverage": "已提交，且已编入索引",
+  "lastCrawl": "2026-07-30T10:41:54",
+  "googleCanonical": "/blog/local-supplier-vs-china-direct-when-paying-more-saves-money",
+  "userCanonical": "/blog/local-supplier-vs-china-direct-when-paying-more-saves-money",
+  "robots": "ALLOWED",
+  "fetch": "SUCCESSFUL",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://www.phonerepairspares.com/blog?tag=phone%20screen%20issues"
+  ]
+ },
+ {
+  "url": "/blog/how-small-repair-shops-buy-phone-parts-mixed-orders",
+  "verdict": "PASS",
+  "coverage": "已提交，且已编入索引",
+  "lastCrawl": "2026-07-28T21:09:29",
+  "googleCanonical": "/blog/how-small-repair-shops-buy-phone-parts-mixed-orders",
+  "userCanonical": "/blog/how-small-repair-shops-buy-phone-parts-mixed-orders",
+  "robots": "ALLOWED",
+  "fetch": "SUCCESSFUL",
+  "sitemap": [
+   "https://www.phonerepairspares.com/sitemap-0.xml",
+   "https://www.phonerepairspares.com/sitemap.xml"
+  ],
+  "referringUrls": [
+   "https://www.phonerepairspares.com/blog?tag=iphone%2014%20screen%20grade"
+  ]
+ }
+]

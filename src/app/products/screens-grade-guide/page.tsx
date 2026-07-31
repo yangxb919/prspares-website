@@ -86,7 +86,7 @@ export default function ScreenGradeGuidePage() {
     },
     {
       q: 'Can I mix screen grades and models in one wholesale order?',
-      a: 'Yes. MOQ starts at 10 units and you can combine any models and grades in a single order — tiered 10/50/200 pricing applies per line. Mixed-grade orders are the norm: shops typically pair Soft OLED for premium repairs with Incell for budget jobs.',
+      a: 'Yes. There is no single-model MOQ — combine any models, grades and product categories in one order, and the published 10+ tier price applies per line once the order totals 10 pcs. Mixed-grade orders are the norm: shops typically pair Soft OLED for premium repairs with Incell for budget jobs. Trial orders start at 5 pcs at the same 10+ unit price, with freight billed separately.',
     },
     {
       q: 'What warranty applies to each screen grade?',

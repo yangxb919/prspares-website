@@ -41,7 +41,9 @@ export default function WholesaleIpadBatteryTable() {
           refurbishers. PRSPARES stocks factory-direct iPad battery cells covering iPad Pro 12.9&quot; (2015–2021),
           iPad Pro 11&quot; (2018–2021), iPad Pro 10.5&quot;, iPad Air 3/4/5 and Air 11&quot; (2024), iPad 7/8/9 and
           iPad mini 4/5/6/7 — priced from {money(low)} to {money(high)} per unit at the 10+ tier, with 50+ and 200+
-          volume pricing, UN38.3-compliant packing and a 12-month warranty. MOQ starts at 10 units per model.
+          volume pricing, UN38.3-compliant packing and a 12-month warranty. There is no per-model MOQ — mix iPad
+          battery models with any other categories, and the published 10+ tier price applies to every line once the
+          order totals 10 pcs.
         </p>
 
         {/* Price-change disclaimer — prices move frequently and the page may lag */}

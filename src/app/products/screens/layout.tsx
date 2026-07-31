@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 const metaTitle = 'Wholesale iPhone Samsung Screens LCD/OLED from China | PRSPARES';
 const metaDescription =
-  'Wholesale iPhone and Samsung LCD/OLED screens from Shenzhen. MOQ 10 pcs, grade options, batch QC, warranty support and fast quote for shops worldwide.';
+  'Wholesale iPhone and Samsung LCD/OLED screens from Shenzhen. No single-model MOQ - mix models and categories to reach the 10-pcs order minimum. Grade options, batch QC, warranty support and fast quote for shops worldwide.';
 
 export const metadata: Metadata = {
   title: metaTitle,

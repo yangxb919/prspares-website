@@ -47,7 +47,7 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 const FAQ_ITEMS = [
   {
     q: 'Berapa MOQ (minimum order) kalian?',
-    a: 'MOQ kami fleksibel — mulai 10 pcs untuk LCD HP dan 20 pcs untuk baterai / sparepart kecil. Kami melayani dari toko kecil sampai distributor besar.',
+    a: 'Tidak ada MOQ per model. Anda bebas mencampur model dan kategori (LCD, baterai, sparepart kecil) dalam satu order — harga tier 10+ yang kami publikasikan berlaku untuk setiap baris begitu total order mencapai 10 pcs. Order percobaan bisa mulai 5 pcs dengan harga tier 10+ yang sama, ongkir dihitung terpisah.',
   },
   {
     q: 'Berapa lama lead time pengiriman?',
@@ -314,7 +314,7 @@ export default function IdWholesalePage() {
               </p>
 
             <div className="mt-6 flex flex-wrap gap-2">
-                {['Target RMA < 1%', 'QC Tested', 'MOQ Mulai 10 pcs', 'Garansi 12 Bulan'].map(badge => (
+                {['Target RMA < 1%', 'QC Tested', 'Tanpa MOQ per Model', 'Garansi 12 Bulan'].map(badge => (
                 <span key={badge} className="inline-flex items-center gap-2 rounded-md border border-white/25 bg-white/10 px-3 py-2 text-sm font-bold text-white backdrop-blur">
                   <CheckCircle className="h-4 w-4 text-[#51d88a]" />
                     {badge}
@@ -390,7 +390,7 @@ export default function IdWholesalePage() {
               <Zap className={`h-8 w-8 text-[#0b6b45] ${styles.iconPulse}`} />
               <h3 className="mt-5 text-xl font-black text-[#18212c]">Pengiriman Cepat &amp; MOQ Fleksibel</h3>
               <p className="mt-3 text-sm leading-6 text-[#52606d]">
-                Kirim di hari yang sama untuk stok ready. MOQ fleksibel — mulai 10 pcs untuk LCD HP, 20 pcs untuk baterai dan sparepart kecil.
+                Kirim di hari yang sama untuk stok ready. Tanpa MOQ per model — campur LCD, baterai dan sparepart kecil dalam satu order, harga tier 10+ berlaku begitu total mencapai 10 pcs.
               </p>
             </div>
           </div>
@@ -459,7 +459,7 @@ export default function IdWholesalePage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { title: 'MOQ Fleksibel', items: ['Mulai 10 pcs (LCD HP)', 'Mulai 20 pcs (baterai / sparepart kecil)', 'Bisa mix antar kategori', 'Order sample tersedia'] },
+              { title: 'Tanpa MOQ per Model', items: ['Total order 10 pcs (bebas campur)', 'Berlaku lintas kategori: LCD, baterai, sparepart kecil', 'Harga tier 10+ per baris', 'Order percobaan mulai 5 pcs'] },
               { title: 'Metode Pembayaran', items: ['T/T (Transfer Bank Internasional)', 'PayPal', 'Western Union', 'Alibaba Trade Assurance'] },
               { title: 'Pengiriman Cepat', items: ['Kirim di hari yang sama', 'DHL / FedEx / UPS', '3–7 hari ke seluruh dunia', 'Sea freight untuk order besar'] },
               { title: 'Garansi 12 Bulan', items: ['Semua produk bergaransi', 'Target RMA < 1%', 'Ganti barang cacat gratis', 'Respon 24 jam dijamin'] },
