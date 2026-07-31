@@ -62,6 +62,17 @@ export default function BrandScreenPage({ brand }: { brand: ScreenBrandDef }) {
   const hasOled = stats.some((s) => s.def.key === 'soft-oled' || s.def.key === 'hard-oled');
   const hasIncell = stats.some((s) => s.def.key === 'incell');
 
+  // Model-coverage delta vs the sibling brand — computed, so each brand page
+  // renders a different concrete list instead of shared template prose.
+  const siblingRows = brandRows(sibling.label);
+  const siblingModelSet = new Set(siblingRows.map((r) => r.model));
+  const brandModelList = [...new Set(rows.map((r) => r.model))];
+  const onlyHere = brandModelList.filter((m) => !siblingModelSet.has(m));
+  const siblingLow = Math.min(...siblingRows.map((r) => r.p10));
+  const siblingHigh = Math.max(...siblingRows.map((r) => r.p10));
+  const topGrade = [...stats].sort((a, b) => b.skuCount - a.skuCount)[0];
+  const linePct = Math.round((topGrade.skuCount / rows.length) * 100);
+
   // Visible FAQ and FAQPage schema render from this single array (no drift).
   const faqs: { q: string; a: string }[] = [
     {
@@ -81,12 +92,18 @@ export default function BrandScreenPage({ brand }: { brand: ScreenBrandDef }) {
       a: `Both are established aftermarket panel brands and the choice follows your repair menu. GX is ${gradeMixSentence('GX').includes('Soft OLED') ? 'almost entirely soft OLED' : 'mainly soft OLED'} (${gradeMixSentence('GX')}) and suits shops selling "like-original" OLED repairs. JK spans two price points (${gradeMixSentence('JK')}), so it fits shops running a premium OLED tier plus a budget incell tier from one brand. Many buyers stock both and split by job type.`,
     },
     {
+      q: `Which iPhone models does ${brand.label} cover that ${sibling.label} does not?`,
+      a: onlyHere.length
+        ? `On the current price sheet ${onlyHere.length} model${onlyHere.length > 1 ? 's are' : ' is'} available under the ${brand.label} label but not under ${sibling.label}: ${onlyHere.join(', ')}. ${brand.label} spans ${models} iPhone models at ${money(low)}–${money(high)} per unit versus ${siblingModelSet.size} models at ${money(siblingLow)}–${money(siblingHigh)} for ${sibling.label}, so model coverage — not just grade — is often what decides which brand a shop standardises on.`
+        : `Every iPhone model we stock under ${brand.label} is also available under ${sibling.label}, so the choice between them comes down to grade mix and price rather than model coverage.`,
+    },
+    {
       q: `Do ${brand.label} screens support True Tone?`,
       a: `${hasOled ? `${brand.label} soft OLED${stats.some((s) => s.def.key === 'hard-oled') ? ' and hard OLED' : ''} screens accept a True Tone transfer using a programmer such as JC V1SE, i2C or JCID.` : ''}${hasIncell ? ` On ${brand.label} incell SKUs True Tone support varies by batch, so confirm it with us before ordering.` : ''}`.trim(),
     },
     {
       q: `What warranty applies to ${brand.label} screens?`,
-      a: `Every ${brand.label} screen ships with the same 12-month warranty and RMA support as the rest of our catalog. Batches pass incoming and outgoing QC (touch, brightness, True Tone where applicable) before dispatch, and you can mix ${brand.label} SKUs with other grades and models in one order from 10 units.`,
+      a: `Every ${brand.label} screen ships with the same 12-month warranty and RMA support as the rest of our catalog. Batches pass incoming and outgoing QC (touch, brightness, True Tone where applicable) before dispatch. There is no single-model MOQ: mix ${brand.label} SKUs with any other models, grades and product categories, and the published 10+ tier price applies to every line once the order totals 10 pieces.`,
     },
     {
       q: `Is PRSPARES affiliated with the ${brand.label} factory?`,
@@ -138,7 +155,8 @@ export default function BrandScreenPage({ brand }: { brand: ScreenBrandDef }) {
           <p className="mt-5 max-w-3xl text-base leading-7 text-[#c3ccd6]">
             {brand.definition} PRSPARES stocks {rows.length} {brand.label} iPhone screen assemblies covering {models}{' '}
             iPhone models at {money(low)}–{money(high)} per unit, with tiered 10/50/200 wholesale pricing and a
-            12-month warranty. MOQ starts at 10 units.
+            12-month warranty. There is no single-model MOQ — mix models and categories to reach the 10-piece order
+            minimum.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -236,6 +254,44 @@ export default function BrandScreenPage({ brand }: { brand: ScreenBrandDef }) {
                 See {sibling.label} prices →
               </Link>
             </div>
+          </div>
+
+          {/* Model-coverage delta — computed per brand, so this block differs on every brand page */}
+          <div className="mt-8 rounded-lg border border-[#e4dccb] bg-white p-6">
+            <h3 className="text-lg font-black text-[#18212c]">
+              Model coverage: what only {brand.label} covers
+            </h3>
+            {onlyHere.length > 0 ? (
+              <>
+                <p className="mt-3 text-sm leading-6 text-[#52606d]">
+                  {onlyHere.length} iPhone model{onlyHere.length > 1 ? 's are' : ' is'} currently on our price sheet
+                  under the {brand.label} label but not under {sibling.label}. If your repair menu leans on{' '}
+                  {onlyHere.length > 1 ? 'these models' : 'this model'}, standardising on {brand.label} keeps one panel
+                  brand across the bench instead of splitting suppliers by model.
+                </p>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {onlyHere.map((m) => (
+                    <li
+                      key={m}
+                      className="rounded border border-[#e4dccb] bg-[#faf8f3] px-3 py-1 text-sm font-bold text-[#18212c]"
+                    >
+                      {m}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="mt-3 text-sm leading-6 text-[#52606d]">
+                Every model we stock under {brand.label} is also available under {sibling.label}, so the decision comes
+                down to grade mix and price rather than coverage.
+              </p>
+            )}
+            <p className="mt-4 text-sm leading-6 text-[#52606d]">
+              Line balance: {linePct}% of the {rows.length} {brand.label} SKUs we stock are {topGrade.def.label}
+              {stats.length > 1 ? `, with the rest split across ${stats.length - 1} other grade${stats.length > 2 ? 's' : ''}` : ''}
+              . {brand.label} spans {money(low)}–{money(high)} at the 10+ tier; {sibling.label} spans {money(siblingLow)}
+              –{money(siblingHigh)}.
+            </p>
           </div>
         </div>
       </section>

@@ -82,10 +82,35 @@ async function fetchPostSlugs() {
  * 不信任它，反而更糟。查不到记录的静态页宁可不输出 lastmod，也不编时间。
  */
 /**
+ * 静态路由的额外依赖（2026-07-31 补）。
+ *
+ * 为什么需要：品牌页 /products/screens/{gx,jk} 的 page.tsx 只有 30 行壳子，真正的
+ * 内容全在共享组件与目录数据里。只看路由目录的话，改了组件/价目也不会更新 lastmod，
+ * Google 就收不到「这页变了」的信号——JK 页 07-31 补强后 lastmod 仍停在 07-19 就是
+ * 这个坑。这里显式登记依赖，git log 会取所有 pathspec 里最新的一次提交。
+ */
+const ROUTE_EXTRA_DEPS = {
+  '/products/screens/gx': [
+    'src/components/products/BrandScreenPage.tsx',
+    'src/data/screen-brands.ts',
+    'src/data/iphone-screen-catalog.ts',
+  ],
+  '/products/screens/jk': [
+    'src/components/products/BrandScreenPage.tsx',
+    'src/data/screen-brands.ts',
+    'src/data/iphone-screen-catalog.ts',
+  ],
+  '/products/screens-grade-guide': [
+    'src/data/grade-taxonomy.ts',
+    'src/data/iphone-screen-catalog.ts',
+  ],
+};
+
+/**
  * 静态路由（/about、/products/screens/jk、/products/screens-grade-guide 等）在
- * 数据库里没有记录，取该路由源码目录的最后一次 git 提交时间作为 lastmod。
- * 这样改了页面就自动更新，不需要有人手工维护日期表。取不到（无 git / 未找到文件）
- * 就不输出 lastmod。
+ * 数据库里没有记录，取该路由源码目录（含 ROUTE_EXTRA_DEPS 登记的共享依赖）的最后一次
+ * git 提交时间作为 lastmod。这样改了页面或它依赖的组件/数据就自动更新，不需要有人
+ * 手工维护日期表。取不到（无 git / 未找到文件）就不输出 lastmod。
  */
 function gitLastmodForRoute(routePath) {
   try {
@@ -96,7 +121,10 @@ function gitLastmodForRoute(routePath) {
       routePath === '/' ? 'src/app/page.tsx' : `src/app${routePath}`;
     const abs = pathMod.join(__dirname, rel);
     if (!fsMod.existsSync(abs)) return null;
-    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', rel], {
+    const deps = (ROUTE_EXTRA_DEPS[routePath] || []).filter((d) =>
+      fsMod.existsSync(pathMod.join(__dirname, d))
+    );
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', rel, ...deps], {
       cwd: __dirname,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],

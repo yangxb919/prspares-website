@@ -37,7 +37,7 @@ export const SCREEN_BRANDS: ScreenBrandDef[] = [
     gradeFaqQ: 'Is GX a soft OLED or a hard OLED screen?',
     metaTitle: 'GX iPhone Screens Wholesale — Soft OLED Price List & SKUs | PRSPARES',
     metaDescription:
-      'GX iPhone screen wholesale: GX soft OLED assemblies (plus hard OLED and incell SKUs) with live 10/50/200 tier pricing, factory-direct QC and a 12-month warranty. MOQ 10 units — mix GX with any grades in one order.',
+      'GX iPhone screen wholesale: GX soft OLED assemblies (plus hard OLED and incell SKUs) with live 10/50/200 tier pricing, factory-direct QC and a 12-month warranty. No single-model MOQ — mix GX with any models and categories to reach the 10-piece order minimum.',
     keywords:
       'gx screen, gx iphone screen, gx soft oled, gx oled screen, gx display wholesale, gx screen supplier',
   },
@@ -54,7 +54,7 @@ export const SCREEN_BRANDS: ScreenBrandDef[] = [
     gradeFaqQ: 'Is JK an incell or an OLED screen?',
     metaTitle: 'JK iPhone Screens Wholesale — Incell & Soft OLED Price List | PRSPARES',
     metaDescription:
-      'JK iPhone screen wholesale: JK incell and JK soft OLED assemblies with live 10/50/200 tier pricing, factory-direct QC and a 12-month warranty. MOQ 10 units — mix JK models and grades in one order.',
+      'JK iPhone screen wholesale: JK incell and JK soft OLED assemblies with live 10/50/200 tier pricing, factory-direct QC and a 12-month warranty. No single-model MOQ — mix JK models, grades and categories to reach the 10-piece order minimum.',
     keywords:
       'jk screen, jk incell, jk iphone screen, jk oled, jk display wholesale, jk incell screen supplier',
   },
