@@ -50,6 +50,11 @@ Data-backed guides written for repair-shop owners, with real 2026 wholesale part
 - [iPhone 15 Screen Replacement Cost for Repair Shops](https://www.phonerepairspares.com/blog/iphone-15-screen-replacement-cost-repair-shops): Current-generation screen costs and grade availability.
 - ["Unknown Part" Warning After Screen Replacement](https://www.phonerepairspares.com/blog/iphone-unknown-part-warning-screen-replacement-ic-transfer): What Apple's parts-history notification does and does not affect, and IC transfer options.
 - [Touch Not Working After Screen Replacement](https://www.phonerepairspares.com/blog/touch-not-working-after-screen-replacement): Digitiser fault isolation after a screen swap.
+- [iPhone Charging Port Replacement Cost — Clean, Repair or Replace](https://www.phonerepairspares.com/blog/iphone-charging-port-replacement-cost): When cleaning beats replacing, parts cost by model and shop margins.
+- [iPhone 16 Pro Max Screen Replacement — UK Guide](https://www.phonerepairspares.com/blog/iphone-16-pro-max-screen-replacement-uk-guide): UK repair pricing (£180–£280 at shops vs £599 at Apple) and titanium-frame complications.
+- [Galaxy Z Flip & Z Fold Inner Screen Replacement](https://www.phonerepairspares.com/blog/samsung-galaxy-z-flip-fold-inner-screen-replacement-guide): Foldable screen replacement costs, tools, pitfalls and margins before a shop's first Z Flip/Fold job.
+- [iPhone 13 Screen Replacement — Still Worth Repairing in 2026?](https://www.phonerepairspares.com/blog/iphone-13-screen-replacement-worth-it-2026): Grade comparison, repair margins and residual-value math.
+- [iPhone 15 Screen Replacement — What Repair Shops Need to Know](https://www.phonerepairspares.com/blog/iphone-15-screen-replacement): Grades, wholesale costs, 120Hz ProMotion compatibility and IC transfer.
 - [How to Choose High-Quality Screen Replacement Parts](https://www.phonerepairspares.com/blog/how-do-you-choose-high-quality-screen-replacement-parts-for-your-phone): Buyer criteria for screen quality and grade.
 
 ## Sourcing & Supplier Guides (for B2B buyers)
