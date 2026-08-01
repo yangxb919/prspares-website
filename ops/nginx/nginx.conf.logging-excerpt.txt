@@ -1,0 +1,16 @@
+	##
+	# Logging Settings
+	##
+
+	# combined + host/rt（2026-08-01）。两个域名共用一份日志，此前无 $host 字段导致
+	# 无法区分 prspares.xyz 与主域的爬虫抓取量；$request_time 用于分析 Googlebot 的响应耗时。
+	# 🔴 新字段一律追加在行尾，前 8 个字段与 combined 保持一致，
+	# 这样 awk '{print $7}' 取 URL、'$9' 取状态码的既有脚本和历史日志都不受影响。
+	log_format main_host '$remote_addr - $remote_user [$time_local] "$request" '
+	                     '$status $body_bytes_sent "$http_referer" '
+	                     '"$http_user_agent" host=$host rt=$request_time';
+
+	access_log /var/log/nginx/access.log main_host;
+	error_log /var/log/nginx/error.log;
+
+	##

@@ -51,3 +51,37 @@ nginx -t && systemctl reload nginx || cp $BK/prspares-site.orig /etc/nginx/sites
 ```
 
 改完必须验证：主域 200、xyz 301、两个 /healthz 200、`/api/products` 在两个域名都 200。
+
+## 日志格式（2026-08-01 起）
+
+`nginx.conf` 里定义了 `main_host`，在 combined 基础上**行尾追加** `host=` 与 `rt=`：
+
+```
+log_format main_host '$remote_addr - $remote_user [$time_local] "$request" '
+                     '$status $body_bytes_sent "$http_referer" '
+                     '"$http_user_agent" host=$host rt=$request_time';
+```
+
+### 🔴 为什么必须追加在行尾
+前 8 个字段与 combined 完全一致，所以 `awk '{print $7}'` 取 URL、`$9` 取状态码的既有脚本
+和**全部历史日志**都继续可用。把新字段插在开头会让所有字段位移，之前写的爬虫分析命令全废。
+
+### 为什么要加这两个字段
+- `host=`：两个域名共用一份 access.log，此前无法区分 `prspares.xyz` 与主域的抓取量。
+  2026-07-31 统计出的「Googlebot 1218 次」其实是**两域合计**，主域实际值更低。
+- `rt=`：此前无法验证 Googlebot 的响应耗时（曾被怀疑是 1GB VPS 的抓取瓶颈，但因日志缺字段无法证实）。
+
+### 常用查询
+
+```bash
+# 只看主域的 Googlebot 抓取（2026-08-01 之后的日志才有 host 字段）
+grep -a 'host=www.phonerepairspares.com' access.log | grep -a Googlebot | awk '{print $7}' | sort | uniq -c | sort -rn
+
+# 各域名的爬虫抓取量对比
+grep -a Googlebot access.log | grep -oE 'host=[^ ]+' | sort | uniq -c
+
+# Googlebot 响应耗时分布（找慢请求）
+grep -a Googlebot access.log | grep -oE 'rt=[0-9.]+' | cut -d= -f2 | sort -rn | head -20
+```
+
+历史日志（08-01 之前）没有这两个字段，按 host 过滤会得到空结果 —— 这是预期行为，不是脚本坏了。
