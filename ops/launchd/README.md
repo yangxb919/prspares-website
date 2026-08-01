@@ -3,12 +3,12 @@
 `com.prspares.crawl-cohort.plist` 是 `~/Library/LaunchAgents/` 下同名文件的副本，**仅供追溯**。
 改动要改真身再复制回来，或 `cp ops/launchd/*.plist ~/Library/LaunchAgents/ && launchctl unload/load`。
 
-## crawl-cohort：每天 10:00 跑 20 URL 抓取快照
+## crawl-cohort：每天 20:30 跑 20 URL 抓取快照
 
 链路：
 
 ```
-launchd (10:00)
+launchd (20:30)
   └─ ~/.local/bin/prspares-cohort-daily.sh        ← 跳板，只有一行 exec
        └─ Analytics/scripts/cohort_daily.sh        ← 真正的逻辑（随 git 走）
             └─ Analytics/scripts/crawl_cohort.py --compare

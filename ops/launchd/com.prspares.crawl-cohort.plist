@@ -2,24 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Label</key>
-	<string>com.prspares.crawl-cohort</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>/Users/yangxiaobo/.local/bin/prspares-cohort-daily.sh</string>
-	</array>
-	<key>RunAtLoad</key>
-	<false/>
-	<key>StandardErrorPath</key>
-	<string>/Users/yangxiaobo/Desktop/prspares-website/Analytics/cohort/_launchd.err</string>
-	<key>StandardOutPath</key>
-	<string>/Users/yangxiaobo/Desktop/prspares-website/Analytics/cohort/_launchd.out</string>
-	<key>StartCalendarInterval</key>
-	<dict>
-		<key>Hour</key>
-		<integer>10</integer>
-		<key>Minute</key>
-		<integer>0</integer>
-	</dict>
+    <key>Label</key>
+    <string>com.prspares.crawl-cohort</string>
+
+    <!-- 指向 ~/.local/bin 的跳板，不能直接指项目里的脚本：
+         launchd 执行 ~/Desktop 下的文件会被 macOS TCC 拒绝（Operation not permitted）。
+         跳板只有一行 exec，真正的逻辑在 Analytics/scripts/cohort_daily.sh。 -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/yangxiaobo/.local/bin/prspares-cohort-daily.sh</string>
+    </array>
+
+    <!-- 每天 20:30（2026-08-01 由 10:00 改为此时间）。
+         选 launchd 而非 cron 的原因：机器睡眠/关机错过时间点后，launchd 会在下次唤醒时
+         补跑一次，cron 直接跳过——这个任务断档一天就少一个观测点。
+         ⚠️ 用 plistlib 改这个文件会剥掉全部 XML 注释，改完记得把注释写回来。 -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key><integer>20</integer>
+        <key>Minute</key><integer>30</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/yangxiaobo/Desktop/prspares-website/Analytics/cohort/_launchd.out</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/yangxiaobo/Desktop/prspares-website/Analytics/cohort/_launchd.err</string>
 </dict>
 </plist>
