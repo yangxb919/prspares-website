@@ -105,12 +105,33 @@ def fetch_log_stats(paths):
     return stats
 
 
-def fetch_gsc(paths):
-    """URL Inspection：coverage / lastCrawl / googleCanonical。"""
+def load_creds_noninteractive():
+    """只用缓存 token，绝不弹浏览器。
+
+    🔴 不能直接用 gsc_fetch.load_credentials()：它在 token 失效时会调用
+    flow.run_local_server(open_browser=True)，在 launchd 定时任务里没有人去点授权，
+    进程会**永久阻塞**并占住端口。这里改成失效即抛异常，由调用方降级为「仅日志」快照。
+    """
     sys.path.insert(0, str(ROOT / "Analytics" / "scripts"))
     import gsc_fetch as G
+    from google.oauth2.credentials import Credentials
+    from google.auth.transport.requests import Request
+
+    if not G.TOKEN_FILE.exists():
+        raise RuntimeError("无 GSC token 缓存，需先人工跑一次 gsc_fetch.py 授权")
+    creds = Credentials.from_authorized_user_file(str(G.TOKEN_FILE), G.SCOPES)
+    if creds.expired and creds.refresh_token:
+        creds.refresh(Request())  # 失败直接抛（Testing 态每 7 天会到期），正是期望行为
+        G.TOKEN_FILE.write_text(creds.to_json(), encoding="utf-8")
+    if not creds.valid:
+        raise RuntimeError("GSC token 失效，需人工跑 gsc_fetch.py 重新授权")
+    return creds
+
+
+def fetch_gsc(paths):
+    """URL Inspection：coverage / lastCrawl / googleCanonical。"""
     from googleapiclient.discovery import build
-    svc = build("searchconsole", "v1", credentials=G.load_credentials(0))
+    svc = build("searchconsole", "v1", credentials=load_creds_noninteractive())
     out = {}
     for p in paths:
         try:
@@ -134,7 +155,7 @@ def fetch_impressions(paths, days=7):
     sys.path.insert(0, str(ROOT / "Analytics" / "scripts"))
     import gsc_fetch as G
     from googleapiclient.discovery import build
-    svc = build("searchconsole", "v1", credentials=G.load_credentials(0))
+    svc = build("searchconsole", "v1", credentials=load_creds_noninteractive())
     end = date.today() - timedelta(days=1)
     start = end - timedelta(days=days)
     rows = G.query_search_analytics(svc, SITE, start.isoformat(), end.isoformat(), ["page"], 1000)
@@ -172,8 +193,14 @@ def main():
     logs = fetch_log_stats(paths)
     gsc, impr = {}, {}
     if not a.no_gsc:
+        # GSC token 在 Testing 态下每 7 天过期 —— 认证挂掉时降级为「只有日志」的快照，
+        # 而不是整次采集失败。断档一天会让 08-07 的对比失去中间过程。
         print("拉 GSC URL Inspection…", flush=True)
-        gsc = fetch_gsc(paths)
+        try:
+            gsc = fetch_gsc(paths)
+        except Exception as e:
+            print(f"  🔴 GSC 认证/调用失败，本次降级为仅日志快照: {str(e)[:110]}", file=sys.stderr)
+            print("     修复：跑 gsc_fetch.py 走一次浏览器授权", file=sys.stderr)
         print("拉 GSC 曝光数据…", flush=True)
         try:
             impr = fetch_impressions(paths)
@@ -199,6 +226,23 @@ def main():
 
     SNAP_DIR.mkdir(parents=True, exist_ok=True)
     out_f = SNAP_DIR / f"{today}.json"
+
+    # 同日重跑时做字段级合并，不整体覆盖：--no-gsc 或 token 失效时 GSC 字段为空，
+    # 直接写入会把当天已采到的 coverage/lastCrawl/曝光抹掉，等于丢一个观测点。
+    if out_f.exists():
+        try:
+            prev_rows = {r["path"]: r for r in json.loads(out_f.read_text())["rows"]}
+            for r in snap["rows"]:
+                old = prev_rows.get(r["path"], {})
+                for k in ("coverage", "lastCrawl", "canonical"):
+                    if not r.get(k) and old.get(k):
+                        r[k] = old[k]
+                for k in ("impr", "clicks"):
+                    if not r.get(k) and old.get(k):
+                        r[k] = old[k]
+        except Exception as e:
+            print(f"  ⚠ 合并旧快照失败，按新数据写入: {str(e)[:60]}", file=sys.stderr)
+
     out_f.write_text(json.dumps(snap, ensure_ascii=False, indent=1))
 
     # ── 输出表格 ──

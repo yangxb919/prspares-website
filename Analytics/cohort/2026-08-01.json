@@ -49,7 +49,7 @@
     "301": 1
    },
    "ai": 13,
-   "coverage": "已发现 - 尚未编入索引",
+   "coverage": "Google 无法识别此网址",
    "lastCrawl": "",
    "canonical": "",
    "impr": 0,
@@ -314,7 +314,7 @@
    "gbot_codes": {
     "200": 4
    },
-   "ai": 78,
+   "ai": 79,
    "coverage": "已提交，且已编入索引",
    "lastCrawl": "2026-07-25",
    "canonical": "/blog/which-iphone-14-pro-max-screen-replacement-option-delivers-the-best-value-for-your-repair-business",
@@ -351,7 +351,7 @@
     "301": 32,
     "200": 38
    },
-   "ai": 3834,
+   "ai": 3838,
    "coverage": "已提交，且已编入索引",
    "lastCrawl": "2026-07-25",
    "canonical": "/",

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.prspares.crawl-cohort</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/yangxiaobo/.local/bin/prspares-cohort-daily.sh</string>
+	</array>
+	<key>RunAtLoad</key>
+	<false/>
+	<key>StandardErrorPath</key>
+	<string>/Users/yangxiaobo/Desktop/prspares-website/Analytics/cohort/_launchd.err</string>
+	<key>StandardOutPath</key>
+	<string>/Users/yangxiaobo/Desktop/prspares-website/Analytics/cohort/_launchd.out</string>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>10</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+</dict>
+</plist>

@@ -1,0 +1,36 @@
+════════ 2026-08-01 17:49:38 ════════
+抓取 cohort（20 个 URL）· 2026-08-01
+
+拉 nginx 日志…
+拉 GSC URL Inspection…
+拉 GSC 曝光数据…
+
+组  页面                                             Gbot   主域         最后抓取    AI    曝光  收录状态
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+A  /blog/iphone-16-pro-max-screen-replacement-u      1    0  21/Jul/2026    20     0  🟡 已发现 - 尚未编入索引
+A  /blog/iphone-13-screen-replacement-worth-it-      5    0  23/Jul/2026    21     0  🟡 已发现 - 尚未编入索引
+A  /blog/common-iphone-screen-problems-2026         11    0  01/Aug/2026    13     0  🟡 Google 无法识别此网址
+A  /blog/iphone-11-screen-replacement                1    0  21/Jul/2026     8     0  🟡 已发现 - 尚未编入索引
+A  /blog/best-phone-screen-models-stock-bulk-20      2    0  31/Jul/2026     5     0  🟡 已发现 - 尚未编入索引
+A  /blog/first-wholesale-order-templates-repair      2    0  19/Jul/2026     1     0  🟡 已发现 - 尚未编入索引
+A  /blog/buying-iphone-batteries-bulk-repair-bu      1    0  23/Jul/2026     4     0  🟡 已发现 - 尚未编入索引
+A  /blog/cell-phone-parts-wholesale-sourcing-gu      1    0  24/Jul/2026     7     0  🟡 已发现 - 尚未编入索引
+A  /blog/black-screen-display-vs-board-problem       1    0  21/Jul/2026     0     0  🟡 已发现 - 尚未编入索引
+A  /blog/iphone-8-screen-replacement                 1    0  21/Jul/2026     0     0  🟡 已发现 - 尚未编入索引
+B  /blog/moq-sample-orders-lead-time-wholesale       0    0            —     3     0  🔴 已发现 - 尚未编入索引
+B  /blog/top-10-phone-parts-suppliers-in-china       0    0            —     1     0  🔴 已发现 - 尚未编入索引
+B  /products/screens/jk                              1    0  28/Jul/2026     7     0  🟡 已抓取 - 尚未编入索引
+B  /products/screens/gx                              2    0  23/Jul/2026    14    39  ✅ 已提交，且已编入索引
+B  /products/screens-grade-guide                     5    2  01/Aug/2026    36    76  ✅ 已提交，且已编入索引
+C  /blog/iphone-boot-loop-after-screen-replacem      9    0  23/Jul/2026    57  1561  ✅ 已提交，且已编入索引
+C  /blog/samsung-s23-s24-screen-replacement-gui      8    0  31/Jul/2026   124  1508  ✅ 已提交，且已编入索引
+C  /blog/which-iphone-14-pro-max-screen-replace      4    0  25/Jul/2026    79   413  ✅ 已提交，且已编入索引
+C  /blog/is-your-iphone-14-pro-max-back-glass-w      5    0  01/Aug/2026   223  1339  ✅ 已提交，且已编入索引
+C  /                                                70    0  01/Aug/2026  3838    86  ✅ 已提交，且已编入索引
+
+汇总：7/20 已收录 · 18/20 有 Googlebot 抓取记录
+快照 → Analytics/cohort/2026-08-01.json
+
+（无历史快照可对比）
+exit=0
+
