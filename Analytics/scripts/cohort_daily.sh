@@ -22,6 +22,11 @@ mkdir -p "$PROJ/Analytics/cohort"
   "$PY" Analytics/scripts/crawl_cohort.py --compare 2>&1
   echo "exit=$?"
   echo
+  # 第二条证据线：Googlebot 预算花在哪。与 cohort 独立——cohort 看 20 个 URL 的状态迁移，
+  # 这个看全站预算结构。只取最近 7 天，避免历史数据稀释掉近期变化。
+  echo "──── Googlebot 分桶（近 7 天）────"
+  "$PY" Analytics/scripts/gbot_buckets.py --days 7 2>&1
+  echo
 } >> "$LOG" 2>&1
 
 # 日志只留最近 2000 行，避免无限增长

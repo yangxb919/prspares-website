@@ -1,0 +1,32 @@
+{
+ "date": "2026-08-02",
+ "ua": "Googlebot",
+ "scope": "全部保留日志",
+ "total": 1260,
+ "buckets": {
+  "canonical-blog": 355,
+  "redirect": 114,
+  "robots·sitemap": 272,
+  "other": 109,
+  "static": 307,
+  "product": 46,
+  "tag·query": 26,
+  "404": 31
+ },
+ "codes": {
+  "200": 1106,
+  "301": 87,
+  "308": 27,
+  "404": 31,
+  "304": 8,
+  "400": 1
+ },
+ "by_host": {
+  "www.phonerepairspares.com": 43,
+  "phonerepairspares.com": 1,
+  "prspares.xyz": 2,
+  "www.prspares.xyz": 3
+ },
+ "rt_p50": 0.1,
+ "rt_p95": 2.09
+}

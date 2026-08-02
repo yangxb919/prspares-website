@@ -366,6 +366,23 @@ const nextConfig = {
         destination: '/blog/wholesale-iphone-screens-pricing-guide',
         permanent: true,
       },
+
+      // --- Missing /blog prefix (2026-08-02) ---
+      // GSC「未找到 404」里这两条各被 Googlebot 抓过（07-22 / 04-30），而两篇文章本身
+      // 都在（id170 / id147，均 publish）。grep 过 src/：站内没有任何链接指向这两个
+      // 无前缀的 URL —— 所以来源是外部链接或历史索引，意味着**有外链权重正打在 404 上**。
+      // 301 回正确路径把它收回来。这是 08-07 观察窗口内允许做的技术 hygiene：
+      // 不涉及 cohort 那 20 个 URL 的内容，不污染判据。
+      {
+        source: '/charging-port-failures-after-replacement',
+        destination: '/blog/charging-port-failures-after-replacement',
+        permanent: true,
+      },
+      {
+        source: '/iphone-unknown-part-warning-screen-replacement-ic-transfer',
+        destination: '/blog/iphone-unknown-part-warning-screen-replacement-ic-transfer',
+        permanent: true,
+      },
     ];
   },
 };
