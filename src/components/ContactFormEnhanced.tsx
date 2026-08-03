@@ -7,6 +7,7 @@ import { FormWrapper } from '@/components/common/FormWrapper';
 import { FormInput, FormTextarea, FormSelect } from '@/components/common/FormComponents';
 import { Mail, Phone, MessageSquare, User, Building } from 'lucide-react';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
+import { trackEvent } from '@/lib/analytics';
 import { useTurnstile } from '@/components/common/Turnstile';
 import Honeypot from '@/components/common/Honeypot';
 
@@ -68,6 +69,7 @@ export default function ContactFormEnhanced({ className, showTitle = true, onSuc
         honeypot: honeypotRef.current?.value,
       });
 
+      trackEvent('generate_lead', { currency: 'USD', value: 100 });
       router.push('/thank-you');
 
       if (onSuccess) {

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Send } from 'lucide-react';
 import { submitRfqAndNotify } from '@/lib/rfq-client';
+import { trackEvent } from '@/lib/analytics';
 import { useTurnstile } from '@/components/common/Turnstile';
 import Honeypot from '@/components/common/Honeypot';
 
@@ -151,6 +152,7 @@ const ContactForm = () => {
         honeypot: honeypotRef.current?.value,
       });
 
+      trackEvent('generate_lead', { currency: 'USD', value: 100 });
       router.push('/thank-you');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
