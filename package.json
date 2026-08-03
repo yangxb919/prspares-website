@@ -14,7 +14,9 @@
     "optimize:images": "node scripts/optimize-images.js",
     "optimize:images:force": "rm -rf public/images/optimized && npm run optimize:images",
     "prepare": "husky install",
-    "pre-push": "npm run type-check && npm run lint"
+    "pre-push": "npm run type-check && npm run lint",
+    "audit:tracking": "node scripts/audit-tracking.mjs",
+    "test:tracking": "node --test scripts/tracking-contract.test.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
