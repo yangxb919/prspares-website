@@ -11,7 +11,7 @@ import { useFormAutoSave, useFormRecovery, useFormChanges, useFormSubmission, us
 import { submitRfqAndNotify } from '@/lib/rfq-client';
 import { useTurnstile } from '@/components/common/Turnstile';
 import Honeypot from '@/components/common/Honeypot';
-import { markAsHumanVerified } from '@/lib/analytics';
+import { markAsHumanVerified, trackEvent } from '@/lib/analytics';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -132,6 +132,7 @@ export default function QuoteModalEnhanced({ isOpen, onClose, productName, artic
         honeypot: honeypotRef.current?.value,
       });
 
+      trackEvent('generate_lead', { currency: 'USD', value: 100 });
       setSuccess('Quote request submitted successfully! We will send you a detailed quote within 24 hours.');
 
       clearSavedData();
