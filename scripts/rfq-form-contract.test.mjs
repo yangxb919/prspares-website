@@ -5,23 +5,33 @@ import {
   discoverTargets,
 } from './tracking-contract.mjs';
 import {
+  ALLOWED_CONTROL_NAMES,
   DEEPLINK_TEMPLATE_SENTENCE,
   LANDING_PAGE_PATH,
+  OPTIONAL_CONTROL_NAMES,
+  REMOVED_CONTROL_NAMES,
+  REQUIRED_CONTROL_NAMES,
   REQUIRED_PAYLOAD_KEYS,
   SERVER_REQUIRED_FIELDS,
   WHOLESALE_INQUIRY_PATH,
   checkLandingPageForm,
   checkServerInvariants,
+  checkWholesaleFormShape,
   checkWholesaleInquiryForm,
   describesModelTimesQuantity,
   extractClientRequiredFields,
+  extractClearDeepLinkSelectionBody,
   extractDeepLinkEffect,
+  extractFormControlNames,
   extractSelectValues,
   extractSubmitPayload,
   extractTemplateConstant,
   extractTextareaElement,
   extractTextareaInnerText,
   extractValidateBody,
+  loadBuildProductInterest,
+  loadBuildRfqMessage,
+  loadClearDeepLinkParams,
   loadResolveDeepLink,
   payloadSendsKey,
   readSource,
@@ -150,7 +160,7 @@ test('A4: a selected product line is still surfaced to the buyer', () => {
 
 const DEEP_LINK_FIXTURES = [
   {
-    name: 'product-only, specific product line (no productUrl) — the P0 case',
+    name: 'product + category, specific product line (no productUrl) — the P0 case',
     url: 'https://www.phonerepairspares.com/wholesale-inquiry?product=iPhone+13+Pro+Max+OLED+Screen+Assembly&category=LCD%2FOLED+Screens#quote-form',
     expectCategory: 'LCD/OLED Screens',
     expectProductName: 'iPhone 13 Pro Max OLED Screen Assembly',
@@ -181,6 +191,48 @@ const DEEP_LINK_FIXTURES = [
     name: 'category alias Small Parts is a category hint, not a product',
     url: 'https://www.phonerepairspares.com/wholesale-inquiry?product=Small%20Parts',
     expectCategory: 'Small Parts',
+    expectProductName: null,
+    expectProductUrl: null,
+  },
+  {
+    name: 'real producer category iPad Batteries canonicalises to Batteries',
+    url: 'https://www.phonerepairspares.com/wholesale-inquiry?category=iPad+Batteries',
+    expectCategory: 'Batteries',
+    expectProductName: null,
+    expectProductUrl: null,
+  },
+  {
+    name: 'real producer category Screen canonicalises to LCD/OLED Screens',
+    url: 'https://www.phonerepairspares.com/wholesale-inquiry?category=Screen',
+    expectCategory: 'LCD/OLED Screens',
+    expectProductName: null,
+    expectProductUrl: null,
+  },
+  {
+    name: 'real producer category Rear Camera canonicalises to Small Parts',
+    url: 'https://www.phonerepairspares.com/wholesale-inquiry?category=Rear+Camera',
+    expectCategory: 'Small Parts',
+    expectProductName: null,
+    expectProductUrl: null,
+  },
+  {
+    name: 'real producer category Charging Port canonicalises to Small Parts',
+    url: 'https://www.phonerepairspares.com/wholesale-inquiry?category=Charging+Port',
+    expectCategory: 'Small Parts',
+    expectProductName: null,
+    expectProductUrl: null,
+  },
+  {
+    name: 'unknown but explicit cleaned category is safely preserved',
+    url: 'https://www.phonerepairspares.com/wholesale-inquiry?category=Tablet+Flex+Cables',
+    expectCategory: 'Tablet Flex Cables',
+    expectProductName: null,
+    expectProductUrl: null,
+  },
+  {
+    name: 'productUrl-only does not invent a product or category',
+    url: 'https://www.phonerepairspares.com/wholesale-inquiry?productUrl=%2Fproducts%2Fscreens%23line-one',
+    expectCategory: '',
     expectProductName: null,
     expectProductUrl: null,
   },
@@ -241,7 +293,7 @@ test('P0-1: the page renders the source link only when a productUrl exists', () 
   const source = readSource(WHOLESALE_INQUIRY_PATH);
   assert.match(
     source,
-    /selectedProductLine\.url\s*&&\s*\(/,
+    /selectedProductLine\?\.url\s*&&\s*\(/,
     'the "View product source" link must stay conditional on a non-empty url',
   );
   assert.match(
@@ -362,15 +414,260 @@ test('P0-2: the buyer-facing error explains what to write', () => {
   assert.ok(message.length > 10, `error copy should be actionable, got: ${JSON.stringify(message)}`);
 });
 
-test('B: quantity, quality and category are downgraded to optional but not deleted', () => {
+// ---------------------------------------------------------------------------
+// V2 (2026-08-05) — the four deleted controls are gone; the three required and
+// five optional controls stay; the deep-link category survives the deletion.
+// ---------------------------------------------------------------------------
+
+test('V2: the four deleted controls no longer render as form controls', () => {
+  const controls = extractFormControlNames(readSource(WHOLESALE_INQUIRY_PATH));
+  for (const name of ['products', 'quantity', 'quality', 'monthlyVolume']) {
+    assert.equal(
+      controls.includes(name),
+      false,
+      `name="${name}" must not render as an <input>/<select>/<textarea> control any more`,
+    );
+  }
+});
+
+test('V2: buyer-facing control names are the exact allowed set, each exactly once', () => {
+  const controls = extractFormControlNames(readSource(WHOLESALE_INQUIRY_PATH));
+  assert.deepEqual(controls, ALLOWED_CONTROL_NAMES);
+  assert.equal(new Set(controls).size, controls.length, 'duplicate buyer-facing control name detected');
+});
+
+test('V2: the three required upper controls still render', () => {
+  const controls = extractFormControlNames(readSource(WHOLESALE_INQUIRY_PATH));
+  for (const name of ['name', 'email', 'message']) {
+    assert.ok(controls.includes(name), `required control name="${name}" must stay on the form`);
+  }
+  assert.deepEqual([...REQUIRED_CONTROL_NAMES].sort(), ['email', 'message', 'name']);
+});
+
+test('V2: the five optional lower controls still render and never block submission', () => {
   const source = readSource(WHOLESALE_INQUIRY_PATH);
-  for (const field of ['quantity', 'quality', 'products']) {
-    assert.match(source, new RegExp(`name="${field}"`), `${field} must still exist on the form`);
+  const controls = extractFormControlNames(source);
+  for (const name of ['heardAbout', 'company', 'country', 'phone', 'models']) {
+    assert.ok(controls.includes(name), `optional control name="${name}" must stay on the form`);
   }
+  assert.deepEqual([...OPTIONAL_CONTROL_NAMES].sort(), ['company', 'country', 'heardAbout', 'models', 'phone']);
+
+  // None of the five may become a hard gate — only name/email/message block.
   const required = extractClientRequiredFields(source);
-  for (const field of ['quantity', 'products']) {
-    assert.equal(required.includes(field), false, `${field} must no longer block submission`);
+  for (const name of OPTIONAL_CONTROL_NAMES) {
+    assert.equal(required.includes(name), false, `optional field ${name} must not block submission`);
   }
+});
+
+test('V2: the deleted dropdown fields do not gate submission', () => {
+  const required = extractClientRequiredFields(readSource(WHOLESALE_INQUIRY_PATH));
+  for (const name of REMOVED_CONTROL_NAMES) {
+    assert.equal(required.includes(name), false, `deleted field ${name} must not block submission`);
+  }
+});
+
+test('V2: the deep-link category survives the dropdown removal', () => {
+  const source = readSource(WHOLESALE_INQUIRY_PATH);
+  // products has no control...
+  assert.equal(extractFormControlNames(source).includes('products'), false, 'products must not render a control');
+  // ...but its state and payload path stay intact.
+  assert.match(source, /formData\.products/, 'formData.products must still feed the payload');
+  const effect = extractDeepLinkEffect(source);
+  assert.match(effect, /(^|[{,\s])products\s*:/, 'the ?product= effect must still write the category into products');
+
+  // And a real product-line deep link still resolves to a name + category.
+  const resolveDeepLink = loadResolveDeepLink();
+  const resolved = resolveDeepLink('iPhone 13 Pro Max OLED Screen Assembly', 'LCD/OLED Screens', '');
+  assert.equal(resolved.category, 'LCD/OLED Screens');
+  assert.equal(resolved.selectedProduct.name, 'iPhone 13 Pro Max OLED Screen Assembly');
+});
+
+test('V2: category-only context is visibly surfaced through the same Remove path', () => {
+  const source = readSource(WHOLESALE_INQUIRY_PATH);
+  assert.match(source, /\{\(selectedProductLine\s*\|\|\s*formData\.products\)\s*&&\s*\(/);
+  assert.match(source, /'Selected category'/, 'category-only summary must identify the selected category');
+  assert.match(source, /onClick=\{clearDeepLinkSelection\}/, 'the visible Remove button must use the unified handler');
+});
+
+test('V2: Remove clears both states and is wired to exact URL cleanup', () => {
+  const source = readSource(WHOLESALE_INQUIRY_PATH);
+  const clearBody = extractClearDeepLinkSelectionBody(source);
+  assert.notEqual(clearBody, '', 'clearDeepLinkSelection handler not found');
+  assert.match(clearBody, /setSelectedProductLine\(null\)/);
+  assert.match(clearBody, /products:\s*''/);
+  assert.match(clearBody, /replaceState\([\s\S]*clearDeepLinkParams\(window\.location\.href\)/);
+  assert.match(source, /onClick=\{clearDeepLinkSelection\}/);
+});
+
+test('V2: deep-link URL cleanup removes only selection params and preserves attribution/hash', async (t) => {
+  const clearDeepLinkParams = loadClearDeepLinkParams();
+  const fixtures = [
+    {
+      name: 'product-only',
+      input: 'https://www.phonerepairspares.com/wholesale-inquiry?utm_source=google&product=Screen&gclid=abc#quote-form',
+      expected: '/wholesale-inquiry?utm_source=google&gclid=abc#quote-form',
+    },
+    {
+      name: 'product + category',
+      input: 'https://www.phonerepairspares.com/wholesale-inquiry?product=iPhone+13+OLED&category=Screen&utm_medium=cpc#quote-form',
+      expected: '/wholesale-inquiry?utm_medium=cpc#quote-form',
+    },
+    {
+      name: 'category-only',
+      input: 'https://www.phonerepairspares.com/wholesale-inquiry?category=Rear+Camera&utm_campaign=parts#details',
+      expected: '/wholesale-inquiry?utm_campaign=parts#details',
+    },
+    {
+      name: 'productUrl',
+      input: 'https://www.phonerepairspares.com/wholesale-inquiry?productUrl=%2Fproducts%2Fscreens%23one&gclid=xyz#quote-form',
+      expected: '/wholesale-inquiry?gclid=xyz#quote-form',
+    },
+  ];
+
+  for (const fixture of fixtures) {
+    await t.test(fixture.name, () => {
+      assert.equal(clearDeepLinkParams(fixture.input), fixture.expected);
+    });
+  }
+});
+
+test('V2: productInterest joins non-empty parts and never leads with a separator', () => {
+  const buildProductInterest = loadBuildProductInterest();
+
+  // Product-only deep link: category is empty (the Products dropdown is gone),
+  // so productInterest must be exactly the product name — no leading " | ".
+  assert.equal(
+    buildProductInterest('', 'iPhone 13 Pro Max OLED Screen Assembly'),
+    'iPhone 13 Pro Max OLED Screen Assembly',
+    'a product-only deep link must not produce a leading " | " separator',
+  );
+
+  // Category + product still joins as "Category | Product".
+  assert.equal(
+    buildProductInterest('LCD/OLED Screens', 'iPhone 13 Pro Max OLED Screen Assembly'),
+    'LCD/OLED Screens | iPhone 13 Pro Max OLED Screen Assembly',
+  );
+
+  // Category-only (no selected product line) is exactly the category.
+  assert.equal(buildProductInterest('LCD/OLED Screens', ''), 'LCD/OLED Screens');
+
+  // Neither present -> empty string, never a bare separator.
+  assert.equal(buildProductInterest('', ''), '');
+});
+
+test('V2: checkWholesaleFormShape rejects a leading-separator productInterest', () => {
+  const broken = readSource(WHOLESALE_INQUIRY_PATH).replace(
+    /function buildProductInterest\(category: string, productName: string\): string \{[\s\S]*?\n\}/,
+    'function buildProductInterest(category: string, productName: string): string {\n  return `${category} | ${productName}`;\n}',
+  );
+  const codesOut = codes(checkWholesaleFormShape(broken, 'fixture'));
+  assert.ok(codesOut.includes('PRODUCT_INTEREST_LEADING_SEP'), JSON.stringify(codesOut));
+});
+
+test('V2: retained fields assemble into the exact deterministic admin message', () => {
+  const buildRfqMessage = loadBuildRfqMessage();
+  assert.equal(
+    buildRfqMessage(
+      'Small Parts',
+      'Rear Camera',
+      'https://www.phonerepairspares.com/products/small-parts#rear-camera',
+      'iPhone 15 Pro, Samsung S24',
+      'Kenya',
+      'Google Search',
+      'Please quote 20 pieces.\nOEM and aftermarket options.',
+    ),
+    [
+      '[Wholesale Inquiry]',
+      'Selected product: Rear Camera',
+      'Product source: https://www.phonerepairspares.com/products/small-parts#rear-camera',
+      'Products: Small Parts',
+      'Models/Brands: iPhone 15 Pro, Samsung S24',
+      'Country: Kenya',
+      'Heard about us: Google Search',
+      'Details: Please quote 20 pieces.',
+      'OEM and aftermarket options.',
+    ].join('\n'),
+  );
+});
+
+test('V2: cleared selection cannot leak into message, productInterest, or submitted pageUrl', () => {
+  const source = readSource(WHOLESALE_INQUIRY_PATH);
+  const buildRfqMessage = loadBuildRfqMessage();
+  const buildProductInterest = loadBuildProductInterest();
+  const clearDeepLinkParams = loadClearDeepLinkParams();
+  const message = buildRfqMessage('', '', '', 'iPhone 15 Pro', 'Kenya', 'Referral', 'Need 20 pieces.');
+
+  assert.match(source, /productInterest:\s*buildProductInterest\(formData\.products,/);
+  assert.match(source, /message:\s*msgParts/);
+  assert.match(source, /pageUrl:\s*window\.location\.href/);
+
+  assert.equal(
+    message,
+    '[Wholesale Inquiry]\nModels/Brands: iPhone 15 Pro\nCountry: Kenya\nHeard about us: Referral\nDetails: Need 20 pieces.',
+  );
+  assert.doesNotMatch(message, /Products:|Selected product:|Product source:/);
+  assert.equal(buildProductInterest('', ''), '');
+  assert.equal(
+    clearDeepLinkParams(
+      'https://www.phonerepairspares.com/wholesale-inquiry?utm_source=google&product=Screen&category=Screen&productUrl=%2Fproducts%2Fscreens#g',
+    ),
+    '/wholesale-inquiry?utm_source=google#g',
+  );
+});
+
+test('V2: retained company/phone stay top-level and models/country/heardAbout stay in message assembly', () => {
+  const source = readSource(WHOLESALE_INQUIRY_PATH);
+  const payload = extractSubmitPayload(source);
+  assert.match(payload, /company:\s*formData\.company\.trim\(\)/);
+  assert.match(payload, /phone:\s*formData\.phone\.trim\(\)/);
+  assert.match(
+    source,
+    /buildRfqMessage\([\s\S]*formData\.models,[\s\S]*formData\.country,[\s\S]*formData\.heardAbout,[\s\S]*formData\.message/,
+  );
+});
+
+test('V2: deleted-field values are no longer assembled into the email body', () => {
+  const source = readSource(WHOLESALE_INQUIRY_PATH);
+  for (const ref of ['formData.quantity', 'formData.quality', 'formData.monthlyVolume']) {
+    assert.equal(source.includes(ref), false, `${ref} must no longer be read`);
+  }
+});
+
+test('V2: checkWholesaleFormShape passes against the real page', () => {
+  const result = checkWholesaleFormShape(readSource(WHOLESALE_INQUIRY_PATH));
+  assert.equal(result.ok, true, JSON.stringify(result.violations, null, 2));
+});
+
+test('V2: checkWholesaleFormShape catches a re-added deleted control', () => {
+  const withQuantity = `${readSource(WHOLESALE_INQUIRY_PATH)}
+    <select id="quantity" name="quantity"><option value="">x</option></select>`;
+  const codesOut = codes(checkWholesaleFormShape(withQuantity, 'fixture'));
+  assert.ok(codesOut.includes('CONTROL_NOT_REMOVED'), JSON.stringify(codesOut));
+});
+
+test('V2: checkWholesaleFormShape catches an unexpected ninth control and duplicates', () => {
+  const source = readSource(WHOLESALE_INQUIRY_PATH);
+  const withNinth = `${source}\n<input name="fax" />`;
+  assert.ok(codes(checkWholesaleFormShape(withNinth, 'fixture')).includes('CONTROL_SET_MISMATCH'));
+
+  const withDuplicate = `${source}\n<input name="email" />`;
+  const duplicateCodes = codes(checkWholesaleFormShape(withDuplicate, 'fixture'));
+  assert.ok(duplicateCodes.includes('CONTROL_SET_MISMATCH'));
+  assert.ok(duplicateCodes.includes('CONTROL_DUPLICATE'));
+});
+
+test('V2: custom message validation and optional accordion expose ARIA state', () => {
+  const source = readSource(WHOLESALE_INQUIRY_PATH);
+  const messageElement = /<textarea[\s\S]*?name="message"[\s\S]*?\/>/.exec(source)?.[0] ?? '';
+  assert.notEqual(messageElement, '', 'message textarea not found');
+  assert.doesNotMatch(messageElement, /\srequired(?:\s|=|\/>)/, 'native required would bypass the custom error path');
+  assert.match(messageElement, /aria-required="true"/);
+  assert.match(messageElement, /aria-invalid=\{Boolean\(errors\.message\)\}/);
+  assert.match(messageElement, /aria-describedby=\{errors\.message/);
+  assert.match(source, /id="message-error"\s+role="alert"/);
+  assert.match(source, /aria-expanded=\{showOptional\}/);
+  assert.match(source, /aria-controls="wholesale-optional-details"/);
+  assert.match(source, /id="wholesale-optional-details"/);
 });
 
 test('C: LP category values are mergeable with main-site categories', () => {
@@ -406,6 +703,11 @@ test('safety: Supabase write still precedes the admin email, and only a double f
 
 test('aggregate: wholesale-inquiry form satisfies the whole contract', () => {
   const result = checkWholesaleInquiryForm(readSource(WHOLESALE_INQUIRY_PATH));
+  assert.equal(result.ok, true, JSON.stringify(result.violations, null, 2));
+});
+
+test('aggregate: wholesale-inquiry V2 form shape satisfies the whole contract', () => {
+  const result = checkWholesaleFormShape(readSource(WHOLESALE_INQUIRY_PATH));
   assert.equal(result.ok, true, JSON.stringify(result.violations, null, 2));
 });
 

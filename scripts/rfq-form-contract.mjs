@@ -33,6 +33,28 @@ export const SEND_RFQ_EMAIL_PATH = 'src/lib/email/sendRfqEmail.ts';
 export const REQUIRED_PAYLOAD_KEYS = ['name', 'email', 'message', 'productInterest', 'pageUrl'];
 
 /**
+ * V2 form shape (2026-08-05). The buyer-facing form renders exactly these
+ * controls and no others:
+ *   - three required upper controls: name, email, message;
+ *   - five optional lower controls: heardAbout (its own row) + company /
+ *     country / phone / models inside the "More details" collapsible.
+ */
+export const REQUIRED_CONTROL_NAMES = ['email', 'message', 'name'];
+export const OPTIONAL_CONTROL_NAMES = ['company', 'country', 'heardAbout', 'models', 'phone'];
+export const ALLOWED_CONTROL_NAMES = [...REQUIRED_CONTROL_NAMES, ...OPTIONAL_CONTROL_NAMES].sort();
+
+/**
+ * Controls deleted from the form in V2. These must NOT render as `<input>` /
+ * `<select>` / `<textarea>` controls any more.
+ *
+ * `products` is a deliberate special case: its dropdown is deleted, so it must
+ * not appear as a control, BUT the `products` *state field* survives to carry a
+ * deep-link category into the payload. checkWholesaleInquiryForm asserts both:
+ * no `name="products"` control, and `formData.products` still referenced.
+ */
+export const REMOVED_CONTROL_NAMES = ['monthlyVolume', 'products', 'quality', 'quantity'];
+
+/**
  * What the RFQ path actually rejects on:
  *   src/app/api/send-rfq-email/route.ts:70 -> `if (!name || !email || !message)`
  *   src/lib/rfq-client.ts validate()       -> throws 'Message is required'
@@ -101,6 +123,11 @@ export function extractDeepLinkEffect(source) {
   return sliceBalanced(source, /useEffect\(\s*\(\)\s*=>\s*\{[\s\S]{0,400}?searchParams\.get\(\s*'product'/);
 }
 
+/** Body of the visible Remove action used by the deep-link summary. */
+export function extractClearDeepLinkSelectionBody(source) {
+  return sliceBalanced(source, /const\s+clearDeepLinkSelection\s*=\s*\(\)\s*=>/);
+}
+
 /** The argument object literal passed to `submitRfqAndNotify(...)`. */
 export function extractSubmitPayload(source) {
   return sliceBalanced(source, /await\s+submitRfqAndNotify\s*\(/, '{', '}');
@@ -154,6 +181,61 @@ export function loadResolveDeepLink(source = readSource(WHOLESALE_INQUIRY_PATH))
   return new Function(program)();
 }
 
+/**
+ * Lift `buildProductInterest` out of the page and return it as a live, callable
+ * function. Like loadResolveDeepLink this executes the production code itself so
+ * the contract asserts real behaviour: a product-only deep link (empty category)
+ * must never produce a leading `" | "` separator, and category + product must
+ * join as `Category | Product`.
+ */
+export function loadBuildProductInterest(source = readSource(WHOLESALE_INQUIRY_PATH)) {
+  const fnStart = source.indexOf('function buildProductInterest');
+  if (fnStart === -1) throw new Error('buildProductInterest not found in the page source');
+  const fnBody = sliceBalanced(source.slice(fnStart), /function\s+buildProductInterest/);
+  if (!fnBody) throw new Error('buildProductInterest body could not be sliced');
+
+  const signature = source
+    .slice(fnStart, source.indexOf('{', fnStart))
+    .replace('category: string, productName: string', 'category, productName')
+    .replace(': string', '');
+
+  const program = `
+    ${signature}${fnBody}
+    return buildProductInterest;
+  `;
+
+  // A SyntaxError here means an annotation escaped the strip list — fail loudly.
+  return new Function(program)();
+}
+
+/** Execute the production URL-selection cleanup helper. */
+export function loadClearDeepLinkParams(source = readSource(WHOLESALE_INQUIRY_PATH)) {
+  const fnStart = source.indexOf('function clearDeepLinkParams');
+  if (fnStart === -1) throw new Error('clearDeepLinkParams not found in the page source');
+  const fnBody = sliceBalanced(source.slice(fnStart), /function\s+clearDeepLinkParams/);
+  if (!fnBody) throw new Error('clearDeepLinkParams body could not be sliced');
+
+  const signature = source
+    .slice(fnStart, source.indexOf('{', fnStart))
+    .replace(/: string/g, '');
+
+  return new Function(`${signature}${fnBody}\nreturn clearDeepLinkParams;`)();
+}
+
+/** Execute the production deterministic admin-message assembler. */
+export function loadBuildRfqMessage(source = readSource(WHOLESALE_INQUIRY_PATH)) {
+  const fnStart = source.indexOf('function buildRfqMessage');
+  if (fnStart === -1) throw new Error('buildRfqMessage not found in the page source');
+  const fnBody = sliceBalanced(source.slice(fnStart), /function\s+buildRfqMessage/);
+  if (!fnBody) throw new Error('buildRfqMessage body could not be sliced');
+
+  const signature = source
+    .slice(fnStart, source.indexOf('{', fnStart))
+    .replace(/: string/g, '');
+
+  return new Function(`${signature}${fnBody}\nreturn buildRfqMessage;`)();
+}
+
 /** Value of a named template-literal constant, e.g. REQUIREMENT_PLACEHOLDER. */
 export function extractTemplateConstant(source, constantName) {
   const pattern = new RegExp(`const\\s+${constantName}\\s*=\\s*\`([\\s\\S]*?)\``);
@@ -180,6 +262,24 @@ export function extractTextareaInnerText(element) {
 export function extractAttribute(element, attributeName) {
   const pattern = new RegExp(`${attributeName}="([^"]*)"`);
   return pattern.exec(element)?.[1] ?? '';
+}
+
+/**
+ * The `name="..."` of every `<input>` / `<select>` / `<textarea>` control in the
+ * source, sorted without de-duplication. Keeping repeated names is deliberate:
+ * the V2 contract must fail if a buyer-facing control is rendered twice. This
+ * reads the actual rendered controls, so
+ * a field can be dropped from the form (no control) while its state key lives on
+ * in `formData` — exactly what `products` needs post-V2. `[^>]` spans the
+ * newlines inside multi-line JSX tags but stops at the tag's closing `>`, so the
+ * first `name=` captured always belongs to the control that opened the tag.
+ */
+export function extractFormControlNames(source) {
+  const names = [];
+  for (const match of source.matchAll(/<(?:input|select|textarea)\b[^>]*?\bname="([^"]+)"/g)) {
+    names.push(match[1]);
+  }
+  return names.sort();
 }
 
 /** `<option value="...">` values of a `<select>` with the given id. */
@@ -292,6 +392,177 @@ export function checkWholesaleInquiryForm(source, label = WHOLESALE_INQUIRY_PATH
         'MESSAGE_GATE_NOT_BUYER_TEXT',
         `${label}: the message gate must validate formData.message, not system-generated text.`,
       ),
+    );
+  }
+
+  return result(label, violations);
+}
+
+/**
+ * V2 form-shape contract (2026-08-05). Separate from checkWholesaleInquiryForm
+ * so the payload/deep-link/gate fixtures stay minimal: this checker is only ever
+ * run against the real page, where the full control set exists.
+ *
+ * It asserts, structurally:
+ *   - the three required upper controls + five optional lower controls all
+ *     render (by `name=`), so removing dropdowns never removed a kept field;
+ *   - the four deleted controls (Products Interested, Estimated Quantity,
+ *     Quality Requirement, Monthly Purchase Volume) no longer render;
+ *   - the deep-link category still survives — `products` stays out of the
+ *     controls but keeps flowing through `formData.products` and the effect;
+ *   - the RFQ email never emits a bare "Products:" line.
+ */
+export function checkWholesaleFormShape(source, label = WHOLESALE_INQUIRY_PATH) {
+  const violations = [];
+
+  const controlNames = extractFormControlNames(source);
+  if (JSON.stringify(controlNames) !== JSON.stringify(ALLOWED_CONTROL_NAMES)) {
+    violations.push(
+      violation(
+        'CONTROL_SET_MISMATCH',
+        `${label}: buyer-facing controls must be exactly ${ALLOWED_CONTROL_NAMES.join(', ')}; got ${controlNames.join(', ')}.`,
+      ),
+    );
+  }
+  const duplicateNames = [...new Set(controlNames.filter((name, index) => controlNames.indexOf(name) !== index))];
+  if (duplicateNames.length > 0) {
+    violations.push(
+      violation('CONTROL_DUPLICATE', `${label}: duplicate buyer-facing controls: ${duplicateNames.join(', ')}.`),
+    );
+  }
+  for (const name of [...REQUIRED_CONTROL_NAMES, ...OPTIONAL_CONTROL_NAMES]) {
+    if (!controlNames.includes(name)) {
+      violations.push(violation('CONTROL_MISSING', `${label}: expected form control name="${name}" is missing.`));
+    }
+  }
+  for (const name of REMOVED_CONTROL_NAMES) {
+    if (controlNames.includes(name)) {
+      violations.push(
+        violation('CONTROL_NOT_REMOVED', `${label}: name="${name}" must no longer render as a form control.`),
+      );
+    }
+  }
+
+  // The deep-link category must survive the dropdown removal: it still lives in
+  // `formData.products` and the effect is now its only writer.
+  if (!/formData\.products/.test(source)) {
+    violations.push(
+      violation('CATEGORY_STATE_DROPPED', `${label}: deep-link category (formData.products) must survive in state/payload.`),
+    );
+  }
+  const deepLinkEffect = extractDeepLinkEffect(source);
+  if (deepLinkEffect && !/(^|[{,\s])products\s*:/.test(deepLinkEffect)) {
+    violations.push(
+      violation('DEEPLINK_CATEGORY_LOST', `${label}: the ?product= effect must still route the category into "products".`),
+    );
+  }
+
+  if (!/\{\(selectedProductLine\s*\|\|\s*formData\.products\)\s*&&\s*\(/.test(source)) {
+    violations.push(
+      violation('CATEGORY_CONTEXT_HIDDEN', `${label}: category-only deep links must render the removable summary.`),
+    );
+  }
+
+  const clearBody = extractClearDeepLinkSelectionBody(source);
+  if (!clearBody) {
+    violations.push(violation('CLEAR_HANDLER_MISSING', `${label}: deep-link Remove handler is missing.`));
+  } else {
+    if (!/setSelectedProductLine\(null\)/.test(clearBody) || !/products:\s*''/.test(clearBody)) {
+      violations.push(
+        violation('CLEAR_STATE_INCOMPLETE', `${label}: Remove must clear selected product and hidden category state.`),
+      );
+    }
+    if (!/replaceState\([\s\S]*clearDeepLinkParams\(window\.location\.href\)/.test(clearBody)) {
+      violations.push(
+        violation('CLEAR_URL_MISSING', `${label}: Remove must replace the URL with selection params removed.`),
+      );
+    }
+  }
+  if (!/onClick=\{clearDeepLinkSelection\}/.test(source)) {
+    violations.push(
+      violation('CLEAR_HANDLER_NOT_WIRED', `${label}: the visible Remove button must use clearDeepLinkSelection.`),
+    );
+  }
+
+  // No bare "Products:" line — the old unconditional 'Not specified' fallback is
+  // gone, and the category line is gated on a real value.
+  if (/'Not specified'/.test(source)) {
+    violations.push(
+      violation('EMPTY_PRODUCTS_LINE', `${label}: the RFQ email must not emit a bare "Products:" line (drop 'Not specified').`),
+    );
+  }
+
+  // productInterest must join only non-empty parts. Removing the Products
+  // dropdown left the category empty for a product-only deep link, so a
+  // `${category} | ${name}` template would emit a stray leading " | ". Execute
+  // the real buildProductInterest to prove it does not.
+  try {
+    const buildProductInterest = loadBuildProductInterest(source);
+    if (buildProductInterest('', 'iPhone 13 Pro Max OLED Screen Assembly') !== 'iPhone 13 Pro Max OLED Screen Assembly') {
+      violations.push(
+        violation('PRODUCT_INTEREST_LEADING_SEP', `${label}: productInterest must not start with " | " when the category is empty.`),
+      );
+    }
+    if (
+      buildProductInterest('LCD/OLED Screens', 'iPhone 13 Pro Max OLED Screen Assembly') !==
+      'LCD/OLED Screens | iPhone 13 Pro Max OLED Screen Assembly'
+    ) {
+      violations.push(
+        violation('PRODUCT_INTEREST_JOIN', `${label}: category + product must join as "Category | Product".`),
+      );
+    }
+  } catch (err) {
+    violations.push(
+      violation('PRODUCT_INTEREST_UNLOADABLE', `${label}: buildProductInterest could not be extracted: ${err.message}`),
+    );
+  }
+
+
+  try {
+    const clearDeepLinkParams = loadClearDeepLinkParams(source);
+    const cleaned = clearDeepLinkParams(
+      'https://www.phonerepairspares.com/wholesale-inquiry?utm_source=google&product=Screen&gclid=abc&category=Screen&productUrl=%2Fproducts%2Fscreens#quote-form',
+    );
+    if (cleaned !== '/wholesale-inquiry?utm_source=google&gclid=abc#quote-form') {
+      violations.push(
+        violation('CLEAR_URL_BEHAVIOUR', `${label}: URL cleanup must preserve unrelated params and hash.`),
+      );
+    }
+  } catch (err) {
+    violations.push(
+      violation('CLEAR_URL_UNLOADABLE', `${label}: clearDeepLinkParams could not be extracted: ${err.message}`),
+    );
+  }
+
+  try {
+    const buildRfqMessage = loadBuildRfqMessage(source);
+    const actual = buildRfqMessage(
+      'Small Parts',
+      'Rear Camera',
+      'https://www.phonerepairspares.com/products/small-parts#rear-camera',
+      'iPhone 15 Pro',
+      'Kenya',
+      'Google Search',
+      'Please quote 20 pieces.',
+    );
+    const expected = [
+      '[Wholesale Inquiry]',
+      'Selected product: Rear Camera',
+      'Product source: https://www.phonerepairspares.com/products/small-parts#rear-camera',
+      'Products: Small Parts',
+      'Models/Brands: iPhone 15 Pro',
+      'Country: Kenya',
+      'Heard about us: Google Search',
+      'Details: Please quote 20 pieces.',
+    ].join('\n');
+    if (actual !== expected) {
+      violations.push(
+        violation('MESSAGE_FORMAT', `${label}: retained RFQ sections must use deterministic single-newline spacing.`),
+      );
+    }
+  } catch (err) {
+    violations.push(
+      violation('MESSAGE_BUILDER_UNLOADABLE', `${label}: buildRfqMessage could not be extracted: ${err.message}`),
     );
   }
 
