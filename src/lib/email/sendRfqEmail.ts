@@ -438,7 +438,7 @@ export function buildRfqCustomerAckContent(input: RfqCustomerAckInput): RfqCusto
  * it short but with margin after the earlier work. On overrun the socket is torn
  * down and the captured-lead response returns regardless.
  */
-export const CUSTOMER_ACK_TIMEOUT_MS = 5_000;
+export const CUSTOMER_ACK_TIMEOUT_MS = 15_000;
 
 /**
  * Send the buyer acknowledgement. Throws on any failure (env missing, SMTP

@@ -290,9 +290,9 @@ test('timeout: the mailer bounds the ack but leaves the admin email unbounded', 
   const mailer = readSource(SEND_RFQ_EMAIL_PATH);
 
   // A real, positive bound, opted into only by the customer sender, kept short
-  // (<= 5s) since no route/platform maxDuration bounds the request otherwise.
+  // (<= 15s) since no route/platform maxDuration bounds the request otherwise.
   const boundMs = Number((/export const CUSTOMER_ACK_TIMEOUT_MS = ([\d_]+);/.exec(mailer)?.[1] ?? '').replace(/_/g, ''));
-  assert.ok(boundMs > 0 && boundMs <= 5_000, `customer bound must be a positive value <= 5000ms, got ${boundMs}`);
+  assert.ok(boundMs > 0 && boundMs <= 15_000, `customer bound must be a positive value <= 15000ms, got ${boundMs}`);
   const ack = sliceBalanced(mailer, /export\s+async\s+function\s+sendRfqCustomerAck/);
   assert.match(ack, /overallTimeoutMs:\s*CUSTOMER_ACK_TIMEOUT_MS/, 'the ack passes the bound');
 
