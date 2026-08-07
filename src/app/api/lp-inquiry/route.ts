@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminClient } from '@/lib/supabase/admin';
-import { sendRfqEmail } from '@/lib/email/sendRfqEmail';
+import { sendRfqEmail, sendRfqCustomerAck } from '@/lib/email/sendRfqEmail';
 import { verifyTurnstileToken } from '@/lib/security/verifyTurnstile';
 import { checkSubmission } from '@/lib/security/spam-checks';
 import { checkRateLimit } from '@/lib/rate-limit';
@@ -182,7 +182,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ success: true, dbOk, emailOk });
+    // Buyer acknowledgement — NOT a capture channel. Only attempted once the lead
+    // is safely captured (dbOk || emailOk true here). Echo only the buyer's own
+    // message and their selected productInterest — never the internal `source`
+    // fallback or the structured admin message. Failure is logged but never
+    // downgrades a captured RFQ, and it is tracked separately from emailOk.
+    let customerAckOk = false;
+    let customerAckError: string | null = null;
+    if (dbOk || emailOk) {
+      try {
+        await sendRfqCustomerAck({ name, email, productInterest, message });
+        customerAckOk = true;
+      } catch (err) {
+        customerAckError = err instanceof Error ? err.message : String(err);
+        console.error('[LP Inquiry] Customer acknowledgement failed:', customerAckError);
+      }
+    }
+
+    return NextResponse.json({ success: true, dbOk, emailOk, customerAckOk });
   } catch (error) {
     console.error('[LP Inquiry] Failed:', error);
     return NextResponse.json(

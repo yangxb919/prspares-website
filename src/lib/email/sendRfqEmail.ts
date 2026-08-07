@@ -113,9 +113,18 @@ function sanitizeHeaderValue(value: string): string {
   return value.replace(/[\r\n]+/g, ' ').trim();
 }
 
-async function openSocket(host: string, port: number, timeoutMs: number): Promise<net.Socket> {
+async function openSocket(
+  host: string,
+  port: number,
+  timeoutMs: number,
+  onSocket?: (socket: net.Socket) => void
+): Promise<net.Socket> {
   return new Promise<net.Socket>((resolve, reject) => {
     const socket = net.createConnection({ host, port });
+    // Expose the socket synchronously so an overall-timeout guard can destroy it
+    // even while the connection is still being established (a destroy(err) here
+    // rejects this promise via the 'error' listener below).
+    if (onSocket) onSocket(socket);
     socket.setTimeout(timeoutMs);
     socket.once('connect', () => resolve(socket));
     socket.once('timeout', () => {
@@ -124,6 +133,24 @@ async function openSocket(host: string, port: number, timeoutMs: number): Promis
     });
     socket.once('error', reject);
   });
+}
+
+/**
+ * Arm a one-shot overall-timeout for an SMTP exchange. When it fires it destroys
+ * whatever socket `getSocket()` currently returns, so no SMTP work continues in
+ * the background — a real teardown, not a timeout that leaves the socket running.
+ * Returns a disposer that cancels the timer. `timeoutMs <= 0`
+ * disables it (used by the admin path, whose behaviour must stay unchanged).
+ *
+ * Pure of network I/O so it is unit-testable with a fake socket and a short timer.
+ */
+export function armSmtpOverallTimeout(timeoutMs: number, getSocket: () => SocketLike | null): () => void {
+  if (!(timeoutMs > 0)) return () => {};
+  const timer = setTimeout(() => {
+    const socket = getSocket();
+    if (socket) socket.destroy(new Error('SMTP overall timeout'));
+  }, timeoutMs);
+  return () => clearTimeout(timer);
 }
 
 async function upgradeSocketToTLS(socket: net.Socket, host: string, timeoutMs: number): Promise<tls.TLSSocket> {
@@ -166,69 +193,101 @@ async function sendMailWithSmtp(params: {
   to: string;
   subject: string;
   textBody: string;
+  /** Display name for the From header. Defaults to the admin RFQ identity. */
+  fromName?: string;
+  /** Extra headers (e.g. Auto-Submitted). Key + value are injection-sanitised. */
+  headers?: Record<string, string>;
+  /**
+   * Optional wall-clock cap on the whole exchange. When it fires the active
+   * socket is destroyed so the exchange cannot hang past this bound. `<= 0`
+   * (the default) disables it, preserving the admin path's existing behaviour.
+   */
+  overallTimeoutMs?: number;
 }) {
   const timeoutMs = 15000;
   const ehloName = process.env.SMTP_EHLO_NAME || 'localhost';
   const fromAddress = sanitizeHeaderValue(params.user);
   const toAddress = sanitizeHeaderValue(params.to);
+  const fromName = sanitizeHeaderValue(params.fromName || 'PRSPARES RFQ');
 
-  const plainSocket = await openSocket(params.host, params.port, timeoutMs);
-  let plainReader = new SmtpResponseReader(plainSocket);
+  // Bound the whole exchange (connect through QUIT) and tear the socket down if
+  // it overruns. activeSocket always points at the socket currently in use.
+  let activeSocket: SocketLike | null = null;
+  const cancelOverallTimeout = armSmtpOverallTimeout(params.overallTimeoutMs ?? 0, () => activeSocket);
 
   try {
-    const greeting = await plainReader.nextResponse();
-    if (greeting.code !== 220) {
-      throw new Error(`SMTP greeting failed (${greeting.code}): ${greeting.lines.join(' | ')}`);
-    }
-    await sendCommand(plainSocket, plainReader, `EHLO ${ehloName}`, [250], 'EHLO');
-    await sendCommand(plainSocket, plainReader, 'STARTTLS', [220], 'STARTTLS');
-    plainReader.dispose();
-
-    const secureSocket = await upgradeSocketToTLS(plainSocket, params.host, timeoutMs);
-    const secureReader = new SmtpResponseReader(secureSocket);
+    const plainSocket = await openSocket(params.host, params.port, timeoutMs, (socket) => {
+      activeSocket = socket;
+    });
+    let plainReader = new SmtpResponseReader(plainSocket);
 
     try {
-      await sendCommand(secureSocket, secureReader, `EHLO ${ehloName}`, [250], 'EHLO after STARTTLS');
-      await sendCommand(secureSocket, secureReader, 'AUTH LOGIN', [334], 'AUTH LOGIN');
-      await sendCommand(
-        secureSocket, secureReader,
-        Buffer.from(params.user, 'utf8').toString('base64'),
-        [334], 'SMTP username'
-      );
-      await sendCommand(
-        secureSocket, secureReader,
-        Buffer.from(params.pass, 'utf8').toString('base64'),
-        [235], 'SMTP password'
-      );
-      await sendCommand(secureSocket, secureReader, `MAIL FROM:<${fromAddress}>`, [250], 'MAIL FROM');
-      await sendCommand(secureSocket, secureReader, `RCPT TO:<${toAddress}>`, [250, 251], 'RCPT TO');
-      await sendCommand(secureSocket, secureReader, 'DATA', [354], 'DATA');
-
-      const emailMessage = [
-        `From: PRSPARES RFQ <${fromAddress}>`,
-        `To: ${toAddress}`,
-        `Subject: ${sanitizeHeaderValue(params.subject)}`,
-        `Date: ${new Date().toUTCString()}`,
-        'MIME-Version: 1.0',
-        'Content-Type: text/plain; charset=UTF-8',
-        'Content-Transfer-Encoding: 8bit',
-        '',
-        params.textBody,
-      ].join('\r\n').replace(/^\./gm, '..');
-
-      secureSocket.write(`${emailMessage}\r\n.\r\n`);
-      const dataResponse = await secureReader.nextResponse();
-      if (dataResponse.code !== 250) {
-        throw new Error(`Message body rejected (${dataResponse.code}): ${dataResponse.lines.join(' | ')}`);
+      const greeting = await plainReader.nextResponse();
+      if (greeting.code !== 220) {
+        throw new Error(`SMTP greeting failed (${greeting.code}): ${greeting.lines.join(' | ')}`);
       }
-      await sendCommand(secureSocket, secureReader, 'QUIT', [221], 'QUIT');
-      secureSocket.end();
+      await sendCommand(plainSocket, plainReader, `EHLO ${ehloName}`, [250], 'EHLO');
+      await sendCommand(plainSocket, plainReader, 'STARTTLS', [220], 'STARTTLS');
+      plainReader.dispose();
+
+      const secureSocket = await upgradeSocketToTLS(plainSocket, params.host, timeoutMs);
+      activeSocket = secureSocket;
+      const secureReader = new SmtpResponseReader(secureSocket);
+
+      try {
+        await sendCommand(secureSocket, secureReader, `EHLO ${ehloName}`, [250], 'EHLO after STARTTLS');
+        await sendCommand(secureSocket, secureReader, 'AUTH LOGIN', [334], 'AUTH LOGIN');
+        await sendCommand(
+          secureSocket, secureReader,
+          Buffer.from(params.user, 'utf8').toString('base64'),
+          [334], 'SMTP username'
+        );
+        await sendCommand(
+          secureSocket, secureReader,
+          Buffer.from(params.pass, 'utf8').toString('base64'),
+          [235], 'SMTP password'
+        );
+        await sendCommand(secureSocket, secureReader, `MAIL FROM:<${fromAddress}>`, [250], 'MAIL FROM');
+        await sendCommand(secureSocket, secureReader, `RCPT TO:<${toAddress}>`, [250, 251], 'RCPT TO');
+        await sendCommand(secureSocket, secureReader, 'DATA', [354], 'DATA');
+
+        const headerLines = [
+          `From: ${fromName} <${fromAddress}>`,
+          `To: ${toAddress}`,
+          `Subject: ${sanitizeHeaderValue(params.subject)}`,
+          `Date: ${new Date().toUTCString()}`,
+          'MIME-Version: 1.0',
+          'Content-Type: text/plain; charset=UTF-8',
+          'Content-Transfer-Encoding: 8bit',
+        ];
+        // Optional extra headers. Sanitise both key and value so a caller can never
+        // inject a CRLF (fake header) or a stray colon into the header block.
+        for (const [rawKey, rawValue] of Object.entries(params.headers || {})) {
+          const key = sanitizeHeaderValue(rawKey).replace(/[\s:]+$/, '').replace(/[\s:]+/g, '-');
+          const value = sanitizeHeaderValue(rawValue);
+          if (key && value) headerLines.push(`${key}: ${value}`);
+        }
+
+        const emailMessage = [...headerLines, '', params.textBody]
+          .join('\r\n')
+          .replace(/^\./gm, '..');
+
+        secureSocket.write(`${emailMessage}\r\n.\r\n`);
+        const dataResponse = await secureReader.nextResponse();
+        if (dataResponse.code !== 250) {
+          throw new Error(`Message body rejected (${dataResponse.code}): ${dataResponse.lines.join(' | ')}`);
+        }
+        await sendCommand(secureSocket, secureReader, 'QUIT', [221], 'QUIT');
+        secureSocket.end();
+      } finally {
+        secureReader.dispose();
+      }
     } finally {
-      secureReader.dispose();
+      plainReader.dispose();
+      plainSocket.end();
     }
   } finally {
-    plainReader.dispose();
-    plainSocket.end();
+    cancelOverallTimeout();
   }
 }
 
@@ -291,4 +350,138 @@ export async function sendRfqEmail(input: RfqEmailInput): Promise<void> {
   console.info('[RFQ email] Notification sent successfully:', {
     to: adminEmail, requester: payload.email, submittedAt: payload.submittedAt,
   });
+}
+
+export interface RfqCustomerAckInput {
+  /** Buyer's name — used only for a friendly greeting. */
+  name?: string;
+  /** Buyer's email — the acknowledgement recipient. Required. */
+  email: string;
+  /** Buyer-facing product interest. Never the internal source fallback. */
+  productInterest?: string;
+  /** The buyer's own message. Internal channel markers are stripped on echo. */
+  message?: string;
+}
+
+export interface RfqCustomerAckContent {
+  subject: string;
+  textBody: string;
+}
+
+/**
+ * Build the plain-text buyer acknowledgement (subject + body).
+ *
+ * Pure and deterministic — no env, no I/O, no clock — so it is unit-testable
+ * without SMTP. It only ever emits buyer-facing content: the buyer's own name,
+ * the product interest they selected, and their own message. It deliberately
+ * does NOT accept (so cannot echo) IP, user-agent, attribution, UTM/gclid,
+ * internal source values, pageUrl, admin subject prefixes, or SMTP config.
+ * Any internal channel markers that slipped into an assembled message
+ * (`[Wholesale Inquiry]`, `Product source: <url>`) are stripped before echo.
+ */
+export function buildRfqCustomerAckContent(input: RfqCustomerAckInput): RfqCustomerAckContent {
+  // Lines that must never be shown to the buyer even if they appear inside an
+  // assembled admin message: internal channel markers, the internal product-source
+  // URL, and the "heard about us" marketing-attribution answer. Everything else
+  // (models, country, selected product, the buyer's own details) is their own text.
+  const internalLine = /^\s*(\[(?:wholesale inquiry|landing page inquiry|rfq)\]|product source\s*:|(?:how did you hear|heard) about us\s*:)/i;
+
+  const trimmedName = (input.name || '').replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+  const name = trimmedName || 'there';
+  const productInterest = (input.productInterest || '')
+    .replace(/[\r\n\t]+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
+  // Evolving-array pattern (let + push) keeps this annotation-free so the same
+  // source can be lifted and executed directly by the contract test.
+  let keptLines = [];
+  for (const rawLine of String(input.message || '').split(/\r?\n/)) {
+    const line = rawLine.replace(/\t+/g, ' ').replace(/\s+$/, '');
+    if (internalLine.test(line)) continue;
+    keptLines.push(line);
+  }
+  let message = keptLines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  if (message.length > 1500) message = `${message.slice(0, 1500).trim()}…`;
+
+  const lines = [
+    `Hi ${name},`,
+    '',
+    'Thank you for contacting PRSPARES — we have received your inquiry.',
+    'Our sales team will review your request and get back to you within 24 hours.',
+  ];
+  if (productInterest) lines.push('', `Product interest: ${productInterest}`);
+  if (message) lines.push('', 'Your message:', message);
+  lines.push(
+    '',
+    'If anything is missing, simply reply to this email with the exact models and quantities you need and we will send you an accurate quote.',
+    '',
+    'Best regards,',
+    'PRSPARES Sales Team',
+  );
+
+  return {
+    // ASCII-only Subject: the raw SMTP client does not RFC 2047-encode headers
+    // nor negotiate SMTPUTF8, so a non-ASCII subject would be mojibake on the
+    // wire. Body UTF-8 is fine (8bit + charset=UTF-8).
+    subject: 'PRSPARES - Inquiry received, response within 24 hours',
+    textBody: lines.join('\n'),
+  };
+}
+
+/**
+ * Wall-clock cap for the buyer acknowledgement exchange. It runs after the lead
+ * is already captured (DB + admin notification), so a slow/hung SMTP server must
+ * not keep the request open — that would make the courtesy behave like a fatal
+ * step and invite duplicate client retries. No route/platform maxDuration is
+ * configured in this repo, so this bound is what keeps the request bounded; keep
+ * it short but with margin after the earlier work. On overrun the socket is torn
+ * down and the captured-lead response returns regardless.
+ */
+export const CUSTOMER_ACK_TIMEOUT_MS = 15_000;
+
+/**
+ * Send the buyer acknowledgement. Throws on any failure (env missing, SMTP
+ * error, missing recipient, overall timeout). This is a best-effort courtesy,
+ * NOT a capture channel: callers must catch and must never fail a captured RFQ
+ * on its account.
+ */
+export async function sendRfqCustomerAck(input: RfqCustomerAckInput): Promise<void> {
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPortRaw = process.env.SMTP_PORT || '587';
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpPort = Number(smtpPortRaw);
+
+  if (!smtpHost || !smtpUser || !smtpPass || Number.isNaN(smtpPort)) {
+    throw new Error('SMTP is not fully configured (need SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS).');
+  }
+
+  const recipient = sanitizeHeaderValue(input.email || '');
+  if (!recipient) {
+    throw new Error('Customer acknowledgement requires a recipient email address.');
+  }
+
+  const { subject, textBody } = buildRfqCustomerAckContent(input);
+
+  await sendMailWithSmtp({
+    host: smtpHost,
+    port: smtpPort,
+    user: smtpUser,
+    pass: smtpPass,
+    to: recipient,
+    subject,
+    textBody,
+    fromName: 'PRSPARES Sales',
+    // RFC 3834 — mark as automated so the buyer's mailbox does not fire an
+    // out-of-office/auto-reply back into the RFQ inbox and start a loop.
+    headers: {
+      'Auto-Submitted': 'auto-generated',
+      'X-Auto-Response-Suppress': 'All',
+    },
+    // Bound the courtesy so it can never hang a captured request.
+    overallTimeoutMs: CUSTOMER_ACK_TIMEOUT_MS,
+  });
+
+  console.info('[RFQ ack] Customer acknowledgement sent:', { to: recipient });
 }
