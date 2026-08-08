@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminClient } from '@/lib/supabase/admin';
-import { sendRfqEmail, type RfqEmailInput } from '@/lib/email/sendRfqEmail';
+import { sendRfqEmail, sendRfqCustomerAck, type RfqEmailInput } from '@/lib/email/sendRfqEmail';
 import { verifyTurnstileToken } from '@/lib/security/verifyTurnstile';
 import { checkSubmission } from '@/lib/security/spam-checks';
 import { checkRateLimit } from '@/lib/rate-limit';
@@ -155,7 +155,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ success: true, dbOk, emailOk });
+    // 5c. Buyer acknowledgement — NOT a capture channel. Only attempted once the
+    //     lead is safely captured (dbOk || emailOk true here), echoes only safe
+    //     buyer-facing fields, and its failure is logged but never downgrades a
+    //     captured RFQ to a 5xx. Tracked with a dedicated status field so it is
+    //     never conflated with the admin notification (emailOk).
+    let customerAckOk = false;
+    let customerAckError: string | null = null;
+    if (dbOk || emailOk) {
+      try {
+        await sendRfqCustomerAck({ name, email, productInterest, message });
+        customerAckOk = true;
+      } catch (err) {
+        customerAckError = err instanceof Error ? err.message : String(err);
+        console.error('[RFQ email] Customer acknowledgement failed:', customerAckError);
+      }
+    }
+
+    return NextResponse.json({ success: true, dbOk, emailOk, customerAckOk });
   } catch (error) {
     console.error('[RFQ email] Failed to send notification:', error);
     return NextResponse.json(

@@ -21,6 +21,7 @@ import {
   Send,
   ShieldCheck,
   Truck,
+  X,
 } from 'lucide-react';
 import { useTurnstile } from '@/components/common/Turnstile';
 import Honeypot from '@/components/common/Honeypot';
@@ -34,12 +35,13 @@ interface FormData {
   email: string;
   phone: string;
   country: string;
+  // `products` is the routing category. Its dropdown was removed in the V2 form
+  // pass, but the field stays: a `?product=`/`?category=` deep link still writes
+  // the category here so sales keeps the product source. It just no longer has a
+  // buyer-facing control.
   products: string;
   models: string;
-  quantity: string;
-  quality: string;
   heardAbout: string;
-  monthlyVolume: string;
   message: string;
 }
 
@@ -85,6 +87,36 @@ const quoteSteps = [
   ['1', 'Pick category', 'Screens, batteries, small parts, tools or mixed order.'],
   ['2', 'List models', 'Paste model names, brands, SKUs or a short procurement note.'],
   ['3', 'Confirm quote', 'Sales returns stock, grade choices, price tiers and shipping route.'],
+];
+
+/**
+ * The requirement box is the primary field. Buyers copy the shape of a concrete
+ * example far more reliably than they follow an abstract instruction, so this
+ * shows a real model x quantity list rather than telling them to "paste a list".
+ * Kept as a named constant so scripts/rfq-form-contract.mjs can assert on it.
+ */
+const REQUIREMENT_PLACEHOLDER = `Example:
+
+iPhone 13 OLED (soft) x20
+iPhone 14 battery x30
+Samsung A54 screen assembly x10
+
+Ship to: Addis Ababa, Ethiopia
+I run 2 repair shops, currently buying from a local trader.
+Not sure about grades — please send Original / OEM / aftermarket
+prices so I can compare.`;
+
+/**
+ * One tap appends a prompt line to the requirement box. This collects the same
+ * qualifying signals a set of extra dropdowns would, without adding fields the
+ * buyer has to answer before they can submit.
+ */
+const REQUIREMENT_CHIPS: { label: string; snippet: string }[] = [
+  { label: '+ Models & qty', snippet: 'Models & qty:\n- ' },
+  { label: '+ Grade', snippet: 'Grade: not sure — please compare Original / OEM / aftermarket' },
+  { label: '+ Ship to', snippet: 'Ship to: ' },
+  { label: '+ Current supplier', snippet: 'Currently buying from: ' },
+  { label: '+ My business', snippet: 'My business: ' },
 ];
 
 const procurementDecisionPoints = [
@@ -208,9 +240,111 @@ function absoluteProductUrl(value: string) {
   return new URL(value, window.location.origin).toString();
 }
 
+/** `?product=` / `?category=` values that are category aliases, not product lines. */
+const DEEP_LINK_CATEGORY_MAP: Record<string, string> = {
+  Screens: 'LCD/OLED Screens',
+  Screen: 'LCD/OLED Screens',
+  'LCD/OLED Screens': 'LCD/OLED Screens',
+  'LCD and OLED Screens': 'LCD/OLED Screens',
+  'Screen Assembly': 'LCD/OLED Screens',
+  'Screen Assembly with Frame': 'LCD/OLED Screens',
+  Batteries: 'Batteries',
+  Battery: 'Batteries',
+  'Phone Batteries': 'Batteries',
+  'iPad Batteries': 'Batteries',
+  'Small Parts': 'Small Parts',
+  'Rear Camera': 'Small Parts',
+  'Charging Port': 'Small Parts',
+  'Repair Tools': 'IC Chips & Repair Tools',
+  'Repair Tools and IC Chips': 'IC Chips & Repair Tools',
+  Multiple: 'Multiple Categories',
+  'Multiple Categories': 'Multiple Categories',
+  'IC Chips & Repair Tools': 'IC Chips & Repair Tools',
+};
+
+type DeepLinkResolution = {
+  category: string;
+  selectedProduct: SelectedProductLine | null;
+};
+
+/**
+ * Resolve an inbound `?product=` / `?category=` / `?productUrl=` deep link.
+ *
+ * `productUrl` is OPTIONAL and only ever becomes a "view source" link. Most live
+ * deep links carry no productUrl at all (e.g.
+ * `?product=iPhone+13+Pro+Max+OLED+Screen+Assembly&category=LCD%2FOLED+Screens`),
+ * and gating the product name on productUrl silently dropped it for those.
+ *
+ * A `product` value that is itself a category alias is only a category hint;
+ * anything else names a real product line and must survive.
+ *
+ * Kept as a plain, side-effect-free function so scripts/rfq-form-contract.mjs
+ * can extract and execute this exact code against real inbound URLs.
+ */
+function resolveDeepLink(productParam: string, categoryParam: string, productUrl: string): DeepLinkResolution {
+  const cleaned = productParam.replace(/\+/g, ' ').trim();
+  const cleanedCategory = categoryParam.replace(/\+/g, ' ').trim();
+  const category = cleanedCategory
+    ? DEEP_LINK_CATEGORY_MAP[cleanedCategory] || cleanedCategory
+    : DEEP_LINK_CATEGORY_MAP[cleaned] || '';
+  const isCategoryAlias = Boolean(cleaned) && Boolean(DEEP_LINK_CATEGORY_MAP[cleaned]);
+  const selectedProduct = cleaned && !isCategoryAlias ? { name: cleaned, url: productUrl } : null;
+  return { category, selectedProduct };
+}
+
+/** Remove only RFQ selection params while preserving attribution and the hash. */
+function clearDeepLinkParams(currentUrl: string): string {
+  const url = new URL(currentUrl);
+  url.searchParams.delete('product');
+  url.searchParams.delete('category');
+  url.searchParams.delete('productUrl');
+  return `${url.pathname}${url.search}${url.hash}`;
+}
+
+/**
+ * Build the `productInterest` payload field from the routing category and the
+ * selected product line. Joins only the non-empty parts with ` | `, so a
+ * product-only deep link (a selected product with no category) yields exactly
+ * the product name — never a leading `" | "` separator — while category +
+ * product stays `Category | Product`. Removing the Products dropdown made the
+ * category empty for such links, which the old `${category} | ${name}` template
+ * would have turned into a stray leading separator.
+ *
+ * Kept as a plain, side-effect-free function so scripts/rfq-form-contract.mjs
+ * can extract and execute this exact code.
+ */
+function buildProductInterest(category: string, productName: string): string {
+  return [category, productName].filter(Boolean).join(' | ');
+}
+
+/** Assemble the admin message with one deterministic newline between sections. */
+function buildRfqMessage(
+  category: string,
+  productName: string,
+  productUrl: string,
+  models: string,
+  country: string,
+  heardAbout: string,
+  buyerMessage: string,
+): string {
+  return [
+    '[Wholesale Inquiry]',
+    productName ? `Selected product: ${productName}` : '',
+    productUrl ? `Product source: ${productUrl}` : '',
+    category ? `Products: ${category}` : '',
+    models ? `Models/Brands: ${models}` : '',
+    country ? `Country: ${country}` : '',
+    heardAbout ? `Heard about us: ${heardAbout}` : '',
+    buyerMessage ? `Details: ${buyerMessage}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+}
+
 export default function WholesaleInquiryPage() {
   const router = useRouter();
   const formRef = useRef<HTMLDivElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const [formData, setFormData] = useState<FormData>({
     company: '',
     name: '',
@@ -219,10 +353,7 @@ export default function WholesaleInquiryPage() {
     country: '',
     products: '',
     models: '',
-    quantity: '',
-    quality: '',
     heardAbout: '',
-    monthlyVolume: '',
     message: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -234,46 +365,24 @@ export default function WholesaleInquiryPage() {
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    const productParam = url.searchParams.get('product');
-    const categoryParam = url.searchParams.get('category');
-    const productUrl = normalizeProductUrl(url.searchParams.get('productUrl'));
+    const { category, selectedProduct } = resolveDeepLink(
+      url.searchParams.get('product') || '',
+      url.searchParams.get('category') || '',
+      normalizeProductUrl(url.searchParams.get('productUrl')),
+    );
 
-    const cleaned = productParam?.replace(/\+/g, ' ').trim() || '';
-    const cleanedCategory = categoryParam?.replace(/\+/g, ' ').trim() || '';
-    const mapping: Record<string, string> = {
-      Screens: 'LCD/OLED Screens',
-      'LCD/OLED Screens': 'LCD/OLED Screens',
-      'LCD and OLED Screens': 'LCD/OLED Screens',
-      'Screen Assembly': 'LCD/OLED Screens',
-      'Screen Assembly with Frame': 'LCD/OLED Screens',
-      Batteries: 'Batteries',
-      Battery: 'Batteries',
-      'Phone Batteries': 'Batteries',
-      'Small Parts': 'Small Parts',
-      'Repair Tools': 'IC Chips & Repair Tools',
-      'Repair Tools and IC Chips': 'IC Chips & Repair Tools',
-      Multiple: 'Multiple Categories',
-      'Multiple Categories': 'Multiple Categories',
-      'IC Chips & Repair Tools': 'IC Chips & Repair Tools',
-    };
-
-    const hasSpecificProductLine = Boolean(cleaned && productUrl);
-
-    if (hasSpecificProductLine) {
-      setSelectedProductLine({ name: cleaned, url: productUrl });
+    // The product name is kept whether or not a productUrl came with it.
+    if (selectedProduct) {
+      setSelectedProductLine(selectedProduct);
     }
 
-    const matched = mapping[cleanedCategory] || mapping[cleaned] || '';
-    if (matched || hasSpecificProductLine) {
-      setFormData((prev) => ({
-        ...prev,
-        products: matched || prev.products,
-        models: hasSpecificProductLine && !prev.models ? cleaned : prev.models,
-        message:
-          hasSpecificProductLine && !prev.message
-            ? `Please quote a better wholesale price for this product line: ${cleaned}`
-            : prev.message,
-      }));
+    // A deep link may pre-select the routing category, and nothing else. It must
+    // never write into `models` or `message`: a box that already contains words
+    // stops the buyer writing their own, which is how RFQs used to arrive with a
+    // canned sentence and mutually contradictory fields. The chosen product line
+    // still reaches sales through `productInterest` and the summary panel below.
+    if (category) {
+      setFormData((prev) => ({ ...prev, products: category }));
     }
   }, []);
 
@@ -294,24 +403,59 @@ export default function WholesaleInquiryPage() {
     trackEvent('quote_cta_click', { event_label: 'Wholesale Inquiry Hero CTA' });
   };
 
+  const markFormStarted = () => {
+    if (formStarted) return;
+    setFormStarted(true);
+    trackEvent('begin_form', { form_name: 'wholesale_inquiry' });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name as keyof FormData]) setErrors((prev) => ({ ...prev, [name]: undefined }));
     if (submitError) setSubmitError('');
-    if (!formStarted) {
-      setFormStarted(true);
-      trackEvent('begin_form', { form_name: 'wholesale_inquiry' });
-    }
+    markFormStarted();
   };
 
+  const clearDeepLinkSelection = () => {
+    setSelectedProductLine(null);
+    setFormData((prev) => ({ ...prev, products: '' }));
+    window.history.replaceState(window.history.state, '', clearDeepLinkParams(window.location.href));
+  };
+
+  const insertRequirementSnippet = (snippet: string) => {
+    markFormStarted();
+    setFormData((prev) => {
+      const base = prev.message.replace(/\s+$/, '');
+      return { ...prev, message: base ? `${base}\n${snippet}` : snippet };
+    });
+    requestAnimationFrame(() => {
+      const field = messageRef.current;
+      if (!field) return;
+      field.focus();
+      field.setSelectionRange(field.value.length, field.value.length);
+    });
+  };
+
+  // Gate on exactly what the server gates on: /api/send-rfq-email:70 rejects a
+  // submission unless name, email AND message are present, and rfq-client's own
+  // validate() throws 'Message is required' before that.
+  //
+  // The catch: this page always prefixes the payload with '[Wholesale Inquiry]',
+  // so a buyer who typed nothing still satisfied the server's `!message` check
+  // with system-generated text. Validating `formData.message` — the buyer's own
+  // words — is what makes the client gate honest rather than stricter: without
+  // it the requirement box is decorative and RFQs arrive with nothing to quote.
+  //
+  // Only name, email and the buyer-authored message block submission. The five
+  // retained lower fields (company, country, phone, models, heardAbout) are
+  // optional context and never gate; the four V2-deleted dropdowns are gone.
   const validate = (): boolean => {
     const errs: FormErrors = {};
     if (!formData.name.trim()) errs.name = 'Name is required';
     if (!formData.email.trim()) errs.email = 'Email is required';
     else if (!/^\S+@\S+\.\S+$/.test(formData.email)) errs.email = 'Please enter a valid email';
-    if (!formData.products) errs.products = 'Please select a product category';
-    if (!formData.quantity) errs.quantity = 'Please select a quantity range';
+    if (!formData.message.trim()) errs.message = 'Please tell us what you need so we can quote';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -341,41 +485,22 @@ export default function WholesaleInquiryPage() {
     setSubmitError('');
 
     try {
-      const productLabel = formData.products;
-      const selectedProductLabel = selectedProductLine?.name
-        ? `\nSelected product line: ${selectedProductLine.name}`
-        : '';
-      const selectedProductUrl = selectedProductLine?.url
-        ? `\nProduct source link: ${absoluteProductUrl(selectedProductLine.url)}`
-        : '';
-      const qtyLabel = formData.quantity ? ` | Qty: ${formData.quantity}` : '';
-      const qualityLabel = formData.quality ? ` | Quality: ${formData.quality}` : '';
-      const modelsLabel = formData.models ? `\nModels/Brands: ${formData.models}` : '';
-      const countryLabel = formData.country ? `\nCountry: ${formData.country}` : '';
-      const heardAboutLabel = formData.heardAbout ? `\nHeard about us: ${formData.heardAbout}` : '';
-      const monthlyVolumeLabel = formData.monthlyVolume ? `\nMonthly purchase volume: ${formData.monthlyVolume}` : '';
-      const msgParts = [
-        '[Wholesale Inquiry]',
-        `Products: ${productLabel}${qtyLabel}${qualityLabel}`,
-        selectedProductLabel,
-        selectedProductUrl,
-        modelsLabel,
-        countryLabel,
-        heardAboutLabel,
-        monthlyVolumeLabel,
-        formData.message ? `\nDetails: ${formData.message}` : '',
-      ]
-        .filter(Boolean)
-        .join('\n');
+      const msgParts = buildRfqMessage(
+        formData.products,
+        selectedProductLine?.name ?? '',
+        selectedProductLine?.url ? absoluteProductUrl(selectedProductLine.url) : '',
+        formData.models,
+        formData.country,
+        formData.heardAbout,
+        formData.message,
+      );
 
       await submitRfqAndNotify({
         name: formData.name.trim(),
         email: formData.email.trim(),
         company: formData.company.trim(),
         phone: formData.phone.trim(),
-        productInterest: selectedProductLine?.name
-          ? `${formData.products} | ${selectedProductLine.name}`
-          : formData.products,
+        productInterest: buildProductInterest(formData.products, selectedProductLine?.name ?? ''),
         message: msgParts,
         pageUrl: window.location.href,
         submittedAt: new Date().toISOString(),
@@ -538,29 +663,48 @@ export default function WholesaleInquiryPage() {
               <p className="text-sm font-bold text-[#0b6b45]">Quote request</p>
               <h2 className="mt-2 text-3xl font-black text-[#18212c]">Get your wholesale quote in 24 hours.</h2>
               <p className="mt-3 text-sm leading-6 text-[#52606d]">
-                Required fields are intentionally short. Add model details if you already have a procurement list.
+                Name, email and what you need — that is all we require. Everything below that is optional context.
               </p>
             </div>
 
-            {selectedProductLine && (
+            {(selectedProductLine || formData.products) && (
               <div className="mb-6 rounded-lg border border-[#ffd8b6] bg-[#fffaf0] p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
-                    <p className="text-xs font-black uppercase tracking-[0.12em] text-[#0b6b45]">Selected product line</p>
-                    <h3 className="mt-2 text-base font-black leading-6 text-[#18212c]">{selectedProductLine.name}</h3>
+                    <p className="text-xs font-black uppercase tracking-[0.12em] text-[#0b6b45]">
+                      {selectedProductLine ? 'Selected product' : 'Selected category'}
+                    </p>
+                    <h3 className="mt-2 text-base font-black leading-6 text-[#18212c]">
+                      {selectedProductLine?.name ?? formData.products}
+                    </h3>
+                    {selectedProductLine && formData.products && (
+                      <p className="mt-1 text-sm font-semibold text-[#52606d]">Category: {formData.products}</p>
+                    )}
                     <p className="mt-2 text-sm leading-6 text-[#52606d]">
-                      This line has been added to the form so sales can quote a better wholesale price.
+                      Sales will see this context with your inquiry. Remove it if you came for something else — your own
+                      wording below is what we quote from.
                     </p>
                   </div>
-                  {selectedProductLine.url && (
-                    <Link
-                      href={selectedProductLine.url}
-                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md border border-[#ded6c8] bg-white px-3 py-2 text-xs font-black text-[#18212c] transition hover:border-[#ff8a2a] hover:text-[#ff8a2a]"
+                  <div className="flex shrink-0 items-center gap-2">
+                    {selectedProductLine?.url && (
+                      <Link
+                        href={selectedProductLine.url}
+                        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md border border-[#ded6c8] bg-white px-3 py-2 text-xs font-black text-[#18212c] transition hover:border-[#ff8a2a] hover:text-[#ff8a2a]"
+                      >
+                        View product source
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Link>
+                    )}
+                    <button
+                      type="button"
+                      onClick={clearDeepLinkSelection}
+                      aria-label="Remove selected inquiry context"
+                      className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md border border-[#ded6c8] bg-white px-3 py-2 text-xs font-black text-[#52606d] transition hover:border-red-300 hover:text-red-500"
                     >
-                      View product source
-                      <ExternalLink className="h-3.5 w-3.5" />
-                    </Link>
-                  )}
+                      <X className="h-3.5 w-3.5" />
+                      Remove
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -605,49 +749,45 @@ export default function WholesaleInquiryPage() {
                 </div>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="products" className="mb-1.5 block text-sm font-black text-[#18212c]">
-                    Products Interested <span className="text-[#ff8a2a]">*</span>
-                  </label>
-                  <select
-                    id="products"
-                    name="products"
-                    required
-                    value={formData.products}
-                    onChange={handleChange}
-                    className={`w-full rounded-md border bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.products ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
-                  >
-                    <option value="">Select category</option>
-                    <option value="LCD/OLED Screens">LCD/OLED Screens</option>
-                    <option value="Batteries">Batteries</option>
-                    <option value="Small Parts">Small Parts</option>
-                    <option value="IC Chips & Repair Tools">IC Chips & Repair Tools</option>
-                    <option value="Multiple Categories">Multiple Categories</option>
-                  </select>
-                  {errors.products && <p className="mt-1 text-sm text-red-500">{errors.products}</p>}
+              {/* Primary field. Everything below it is optional context. */}
+              <div className="rounded-lg border-2 border-[#0b6b45]/35 bg-[#f7fdf9] p-4 sm:p-5">
+                <label htmlFor="message" className="block text-base font-black text-[#18212c]">
+                  What do you need? <span className="text-[#ff8a2a]">*</span>
+                </label>
+                <p id="message-help" className="mt-1.5 text-sm leading-6 text-[#52606d]">
+                  Models, quantities, and anything else that helps us quote. Your own wording is what sales reads first.
+                </p>
+                <textarea
+                  id="message"
+                  name="message"
+                  ref={messageRef}
+                  value={formData.message}
+                  onChange={handleChange}
+                  aria-required="true"
+                  aria-invalid={Boolean(errors.message)}
+                  aria-describedby={errors.message ? 'message-help message-error' : 'message-help'}
+                  rows={8}
+                  className={`mt-3 w-full rounded-md border bg-white px-4 py-3 text-base leading-6 text-[#18212c] outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 sm:text-sm ${errors.message ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
+                  placeholder={REQUIREMENT_PLACEHOLDER}
+                />
+                {errors.message && <p id="message-error" role="alert" className="mt-1.5 text-sm text-red-500">{errors.message}</p>}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {REQUIREMENT_CHIPS.map((chip) => (
+                    <button
+                      key={chip.label}
+                      type="button"
+                      onClick={() => insertRequirementSnippet(chip.snippet)}
+                      className="rounded-full border border-[#0b6b45]/30 bg-white px-3 py-1.5 text-xs font-black text-[#0b6b45] transition hover:border-[#0b6b45] hover:bg-[#0b6b45] hover:text-white"
+                    >
+                      {chip.label}
+                    </button>
+                  ))}
                 </div>
-                <div>
-                  <label htmlFor="quantity" className="mb-1.5 block text-sm font-black text-[#18212c]">
-                    Estimated Quantity <span className="text-[#ff8a2a]">*</span>
-                  </label>
-                  <select
-                    id="quantity"
-                    name="quantity"
-                    required
-                    value={formData.quantity}
-                    onChange={handleChange}
-                    className={`w-full rounded-md border bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15 ${errors.quantity ? 'border-red-400 bg-red-50' : 'border-[#ded6c8]'}`}
-                  >
-                    <option value="">Select quantity range</option>
-                    <option value="10-50 units">10-50 units</option>
-                    <option value="50-100 units">50-100 units</option>
-                    <option value="100-500 units">100-500 units</option>
-                    <option value="500-1000 units">500-1,000 units</option>
-                    <option value="1000+ units">1,000+ units</option>
-                  </select>
-                  {errors.quantity && <p className="mt-1 text-sm text-red-500">{errors.quantity}</p>}
-                </div>
+                {formData.message.trim().length > 0 && formData.message.trim().length < 25 && (
+                  <p className="mt-3 text-xs leading-5 text-[#8a7a5c]">
+                    Buyers who list models + quantities usually get pricing the same day.
+                  </p>
+                )}
               </div>
 
               <div>
@@ -676,13 +816,15 @@ export default function WholesaleInquiryPage() {
                 <button
                   type="button"
                   onClick={() => setShowOptional((current) => !current)}
+                  aria-expanded={showOptional}
+                  aria-controls="wholesale-optional-details"
                   className="flex w-full items-center justify-between gap-4 bg-[#fffaf0] px-4 py-3 text-left text-sm font-black text-[#18212c] transition hover:bg-[#fff3df]"
                 >
                   <span>More details for a better quote</span>
                   {showOptional ? <Minus className="h-4 w-4 text-[#0b6b45]" /> : <Plus className="h-4 w-4 text-[#0b6b45]" />}
                 </button>
                 {showOptional && (
-                  <div className="space-y-4 border-t border-[#ded6c8] bg-white p-4">
+                  <div id="wholesale-optional-details" className="space-y-4 border-t border-[#ded6c8] bg-white p-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label htmlFor="company" className="mb-1.5 block text-sm font-black text-[#18212c]">Company Name</label>
@@ -702,33 +844,6 @@ export default function WholesaleInquiryPage() {
                         <label htmlFor="models" className="mb-1.5 block text-sm font-black text-[#18212c]">Model / Brand List</label>
                         <input type="text" id="models" name="models" value={formData.models} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="iPhone 15 Pro, Samsung S24..." />
                       </div>
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <label htmlFor="quality" className="mb-1.5 block text-sm font-black text-[#18212c]">Quality Requirement</label>
-                        <select id="quality" name="quality" value={formData.quality} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
-                          <option value="">Select quality grade</option>
-                          <option value="OEM Original">OEM Original</option>
-                          <option value="Premium Aftermarket">Premium Aftermarket</option>
-                          <option value="Standard Aftermarket">Standard Aftermarket</option>
-                          <option value="Mixed Grades">Mixed Grades</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label htmlFor="monthlyVolume" className="mb-1.5 block text-sm font-black text-[#18212c]">Monthly Purchase Volume</label>
-                        <select id="monthlyVolume" name="monthlyVolume" value={formData.monthlyVolume} onChange={handleChange} className="w-full rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15">
-                          <option value="">Select monthly volume</option>
-                          <option value="Under $1,000 / month">Under $1,000 / month</option>
-                          <option value="$1,000 - $3,000 / month">$1,000 - $3,000 / month</option>
-                          <option value="$3,000 - $10,000 / month">$3,000 - $10,000 / month</option>
-                          <option value="$10,000 - $30,000 / month">$10,000 - $30,000 / month</option>
-                          <option value="$30,000+ / month">$30,000+ / month</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div>
-                      <label htmlFor="message" className="mb-1.5 block text-sm font-black text-[#18212c]">Additional Requirements</label>
-                      <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={4} className="w-full resize-none rounded-md border border-[#ded6c8] bg-white px-4 py-3 text-base text-[#18212c] sm:text-sm outline-none transition focus:border-[#0b6b45] focus:ring-2 focus:ring-[#0b6b45]/15" placeholder="Paste model list, preferred shipping route, packing needs or target quantity..." />
                     </div>
                   </div>
                 )}
