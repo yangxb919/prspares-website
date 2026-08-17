@@ -58,19 +58,19 @@ export async function generateMetadata({
   };
 }
 
+// 仅按标题判断：列表查询不再拉 content（egress 保护，见下方 select 注释）。
 function getDefaultCoverImage(post: any) {
   const title = (post.title || '').toLowerCase();
-  const content = (post.content || '').toLowerCase();
   if (/screen|display|lcd|oled/.test(title)) {
     return '/prspares-mobile-phone-lcd-oled-display-screens-replacement-parts.jpg';
   }
-  if (/battery/.test(title) || /battery/.test(content)) {
+  if (/battery/.test(title)) {
     return '/prspares-smartphone-battery-high-capacity-lithium-original-replacement.jpg';
   }
-  if (/repair|tool/.test(title) || /repair/.test(content)) {
+  if (/repair|tool/.test(title)) {
     return '/prspares-professional-phone-repair-tools-screwdriver-heat-gun-equipment.jpg';
   }
-  if (/parts|component/.test(title) || /parts/.test(content)) {
+  if (/parts|component/.test(title)) {
     return '/prspares-mobile-phone-parts-camera-speakers-charging-ports-components.jpg';
   }
   return '/prspares-mobile-repair-parts-hero-banner-professional-oem-quality.jpg';
@@ -112,7 +112,9 @@ export default async function BlogCategoryPage({
   const { data: postsDataRaw } = await supabase
     .from('posts')
     .select(
-      'id, title, slug, excerpt, content, published_at, meta, author_id',
+      // 不 select content：5 个分类页各自拉一遍全文会成倍放大 Supabase egress
+      // （2026-08-10 停服事故的同一根因）。正文只在 /blog/[slug] 按需取。
+      'id, title, slug, excerpt, published_at, meta, author_id',
     )
     .eq('status', 'publish')
     .contains('meta', JSON.stringify({ category: cat.slug }))
@@ -135,8 +137,11 @@ export default async function BlogCategoryPage({
   }
 
   const articles: ArticleCard[] = postsData.map((post: any) => {
-    const wordCount = post.content ? post.content.split(/\s+/).length : 0;
-    const readTimeMin = Math.max(1, Math.ceil(wordCount / 200));
+    // 字数只取 meta 里现成的；列表页不再拉正文，取不到就不显示阅读时长。
+    const wordCount = Number(
+      post.meta?.word_count ?? post.meta?.structured_data?.wordCount ?? 0,
+    );
+    const readTimeMin = wordCount > 0 ? Math.max(1, Math.ceil(wordCount / 200)) : 0;
     const publishDate = post.published_at
       ? new Date(post.published_at).toLocaleDateString('en-US')
       : '';
@@ -146,17 +151,12 @@ export default async function BlogCategoryPage({
       id: String(post.id),
       slug: post.slug,
       title: post.title,
-      excerpt: pickPostDescription(
-        post.meta,
-        post.excerpt,
-        post.content ? post.content.substring(0, 150) + '...' : '',
-      ),
+      excerpt: pickPostDescription(post.meta, post.excerpt, ''),
       category: post.meta?.category || cat.slug,
       author: authorProfile?.display_name || 'PRSPARES Team',
       date: publishDate,
-      readTime: `${readTimeMin} min read`,
+      readTime: readTimeMin > 0 ? `${readTimeMin} min read` : '',
       imageSrc: normalizeCoverImage(coverRaw),
-      content: post.content,
     };
   });
 

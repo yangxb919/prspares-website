@@ -48,7 +48,9 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
           <span>{article.author}</span>
           <div className="flex space-x-4">
             <span>{article.date}</span>
-            <span>{article.readTime}</span>
+            {/* 列表查询不再拉 content（egress 保护），拿不到字数时宁可不显示，
+                也不编一个阅读时长。 */}
+            {article.readTime ? <span>{article.readTime}</span> : null}
           </div>
         </div>
       </div>

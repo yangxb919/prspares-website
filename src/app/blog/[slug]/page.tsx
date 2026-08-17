@@ -237,7 +237,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!supabaseUrl || !supabaseAnon) {
-    notFound();
+    // 配置缺失是基础设施故障，不是「这篇文章不存在」。返回 404 会让 Google
+    // 把已收录的文章移出索引（2026-08-10 Supabase 停服时全站 137 篇就是这么
+    // 丢的），5xx 才是「暂时不可用，别动我的索引」。
+    throw new Error('Supabase env vars missing — refusing to serve a 404 for a real post');
   }
   const supabase = createPublicClient();
   
@@ -635,11 +638,22 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       </>
     );
   } catch (error) {
+    // notFound() / redirect() 靠抛特殊错误实现，必须原样放行，否则真正的
+    // 「文章不存在」会被当成故障。
+    const digest = (error as { digest?: unknown })?.digest;
+    const isNavigationSignal =
+      typeof digest === 'string' &&
+      (digest === 'NEXT_NOT_FOUND' || digest.startsWith('NEXT_REDIRECT'));
+    if (isNavigationSignal) throw error;
+
     console.error('Guide page rendering error:', error);
     console.error('Error details:', {
       message: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined
     });
-    notFound();
+    // 🔴 这里以前是 notFound()。任何一次 Supabase 故障都会把全站文章变成 404，
+    // Google 连抓几天就会把它们移出索引（2026-08-10 事故：137 篇全 404 持续 7 天）。
+    // 基础设施故障必须上抛成 5xx —— 搜索引擎按「临时不可用」处理并保留索引。
+    throw error;
   }
 }

@@ -147,6 +147,12 @@ export default async function BlogPage({
   let error: any = null;
 
   try {
+    // 🔴 绝不要在列表查询里 select content。这个页面读了 searchParams，Next.js
+    // 会强制动态渲染，`export const revalidate` 对它不生效 —— 也就是每一次
+    // /blog 请求都会真的打一次数据库。带上 content 就是每次拉全部 142 篇正文
+    // （实测均 17.1 KB/篇 ≈ 2.4 MB/次），按 ~300 次/天算就是 ~21 GB/月，直接
+    // 撑爆 Supabase egress 配额（2026-08-10 项目被停服、全站博客 404 的根因）。
+    // 列表只需要卡片字段；正文由 /blog/[slug] 单篇按需取。
     let query = supabase
       .from('posts') // Assuming 'posts' table is used for guides/articles
       .select(`
@@ -154,7 +160,6 @@ export default async function BlogPage({
         title,
         slug,
         excerpt,
-        content,
         status,
         published_at,
         created_at,
@@ -213,22 +218,35 @@ export default async function BlogPage({
     error = err;
   }
 
+  // 数据库出错时绝不渲染一个「No repair guides found」的 200 空页 —— 那是软 404，
+  // Google 会照样降权/去索引。抛出去变成 5xx，让搜索引擎按「临时不可用」重试。
+  // 注意区分：查询成功但确实一篇都没有，仍然正常渲染空状态。
+  if (error) {
+    throw error instanceof Error
+      ? error
+      : new Error(`Blog list query failed: ${JSON.stringify(error)}`);
+  }
+
   const articles: ArticleCard[] = postsData.map((post: any) => {
-    const wordCount = post.content ? post.content.split(/\s+/).length : 0;
-    const readTimeMin = Math.max(1, Math.ceil(wordCount / 200));
+    // 字数只从 meta 里取现成的（正文页写入的 wordCount）。列表页不再拉 content，
+    // 取不到就不显示阅读时长 —— ArticleCard 对空值做了条件渲染。
+    const wordCount = Number(
+      post.meta?.word_count ?? post.meta?.structured_data?.wordCount ?? 0,
+    );
+    const readTimeMin = wordCount > 0 ? Math.max(1, Math.ceil(wordCount / 200)) : 0;
     const publishDate = post.published_at ? new Date(post.published_at).toLocaleDateString('en-US') : '';
-    // 为不同类型的文章提供更相关的默认图片
+    // 为不同类型的文章提供更相关的默认图片（仅按标题判断：列表页没有正文，
+    // 而标题关键词已覆盖绝大多数情况，兜底图仍在）
     const getDefaultCoverImage = (post: any) => {
       const title = post.title.toLowerCase();
-      const content = post.content?.toLowerCase() || '';
 
       if (title.includes('screen') || title.includes('display') || title.includes('lcd') || title.includes('oled')) {
         return '/prspares-mobile-phone-lcd-oled-display-screens-replacement-parts.jpg';
-      } else if (title.includes('battery') || content.includes('battery')) {
+      } else if (title.includes('battery')) {
         return '/prspares-smartphone-battery-high-capacity-lithium-original-replacement.jpg';
-      } else if (title.includes('repair') || title.includes('tool') || content.includes('repair')) {
+      } else if (title.includes('repair') || title.includes('tool')) {
         return '/prspares-professional-phone-repair-tools-screwdriver-heat-gun-equipment.jpg';
-      } else if (title.includes('parts') || title.includes('component') || content.includes('parts')) {
+      } else if (title.includes('parts') || title.includes('component')) {
         return '/prspares-mobile-phone-parts-camera-speakers-charging-ports-components.jpg';
       } else {
         return '/prspares-mobile-repair-parts-hero-banner-professional-oem-quality.jpg';
@@ -256,17 +274,12 @@ export default async function BlogPage({
       id: post.id.toString(),
       slug: post.slug,
       title: post.title,
-      excerpt: pickPostDescription(
-        post.meta,
-        post.excerpt,
-        post.content ? post.content.substring(0, 150) + '...' : '',
-      ),
+      excerpt: pickPostDescription(post.meta, post.excerpt, ''),
       category: post.meta?.category || 'parts-knowledge',
       author: authorName,
       date: publishDate,
-      readTime: `${readTimeMin} min read`,
+      readTime: readTimeMin > 0 ? `${readTimeMin} min read` : '',
       imageSrc: coverImage,
-      content: post.content
     };
   });
 
