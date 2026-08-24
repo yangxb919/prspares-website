@@ -82,11 +82,15 @@ export default function ScreenGradeGuidePage() {
     },
     {
       q: 'How much cheaper is Incell than Original grade?',
-      a: `On the July 2026 price list an iPhone 13 Incell assembly starts at ${money(i13Incell)} at the 10-unit tier versus ${money(i13Original)} for Original grade — about ${i13SavingPct}% less on the same model. Across all iPhone models, Incell runs ${money(stats[3].minP10)}-${money(stats[3].maxP10)} while Original runs ${money(stats[0].minP10)}-${money(stats[0].maxP10)}.`,
+      a: `On the price list reviewed August 2026 an iPhone 13 Incell assembly starts at ${money(i13Incell)} at the 10-unit tier versus ${money(i13Original)} for Original grade — about ${i13SavingPct}% less on the same model. Across all iPhone models, Incell runs ${money(stats[3].minP10)}-${money(stats[3].maxP10)} while Original runs ${money(stats[0].minP10)}-${money(stats[0].maxP10)}.`,
     },
     {
       q: 'Can I mix screen grades and models in one wholesale order?',
       a: 'Yes. There is no single-model MOQ — combine any models, grades and product categories in one order, and the published 10+ tier price applies per line once the order totals 10 pcs. Mixed-grade orders are the norm: shops typically pair Soft OLED for premium repairs with Incell for budget jobs. Trial orders start at 5 pcs at the same 10+ unit price, with freight billed separately.',
+    },
+    {
+      q: 'Is JK or GX Soft OLED more expensive?',
+      a: 'Neither brand is always more expensive. In the PRSPARES wholesale index, JK Soft OLED sits above GX on the iPhone 16 Pro Max (about $73-75 vs about $59-64), while GX sits above JK on the iPhone 15 Pro Max (about $54-59 vs about $40-44), across the same 10/50/200 tiers and the same canonical grade. Source rows are valid through May 27, 2026. Compare the exact model and request a current quotation — price alone does not establish display quality.',
     },
     {
       q: 'What warranty applies to each screen grade?',
@@ -127,7 +131,7 @@ export default function ScreenGradeGuidePage() {
       {/* Hero + short answer */}
       <section className="bg-[#18212c] py-14 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-sm font-bold text-[#7ee2b0]">Screen grade guide · updated July 2026</p>
+          <p className="text-sm font-bold text-[#7ee2b0]">Screen grade guide · updated August 2026</p>
           <h1 className="mt-3 max-w-4xl text-3xl font-black text-white md:text-5xl">
             iPhone Screen Grades Explained — Original vs Soft OLED vs Hard OLED vs Incell
           </h1>
@@ -135,7 +139,7 @@ export default function ScreenGradeGuidePage() {
             iPhone replacement screens are sold in four wholesale quality grades. Original is a refurbished original
             panel (factory OLED cell with new glass), Soft OLED and Hard OLED are aftermarket OLED panels, and Incell
             is the budget in-cell LCD tier. PRSPARES stocks {totalSkus} iPhone screen SKUs across all four grades at{' '}
-            {money(allMin)}–{money(allMax)} per unit with tiered 10/50/200 pricing and a 12-month warranty.
+            {money(allMin)}–{money(allMax)} per unit with tiered 10/50/200 pricing and a 12-month warranty. Grade is the starting point, not the whole answer — within a single grade the price order between brands can reverse from one model to the next, so compare the exact model and tier rather than a brand-wide ranking.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
