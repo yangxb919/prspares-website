@@ -70,7 +70,7 @@ const RMA_STEPS = [
   {
     icon: FileCheck2,
     title: '1. Report within the warranty window',
-    text: 'Within 12 months of receiving the goods, send photos or a short video of the defect plus the order or batch number. Report obvious DOA units within your incoming-inspection window so we can isolate the batch.',
+    text: 'Within 12 months of receiving the goods, send photos or a short video of the defect plus the order or batch number. Report obvious DOA units within 7 days of receiving the goods so we can isolate the batch.',
   },
   {
     icon: ShieldCheck,
