@@ -625,6 +625,56 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Buying guides. Also the only homepage entry point into the sourcing hubs —
+          /blog/top-10-phone-parts-suppliers-in-china and /blog/moq-sample-orders-lead-time-wholesale
+          had no link from any high-authority page, and Googlebot had never fetched either
+          (GSC lastCrawl empty as of 2026-08-28). */}
+      <section data-scroll-reveal className="border-t border-[#e4dccb] bg-[#faf8f3] py-14 md:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="text-sm font-bold text-[#0b6b45]">Buying guides</p>
+          <h2 className="mt-2 text-3xl font-black text-[#18212c] md:text-4xl">
+            Know what you are ordering before you order it.
+          </h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                href: '/blog/top-10-phone-parts-suppliers-in-china',
+                title: 'Top 10 phone parts suppliers in China',
+                text: 'The ten supplier channel types, what each is good for, and what to verify before the first batch lands.',
+              },
+              {
+                href: '/blog/moq-sample-orders-lead-time-wholesale',
+                title: 'MOQ, samples and lead time',
+                text: 'What a first wholesale order from China actually involves — order minimums, trial quantities and realistic timing.',
+              },
+              {
+                href: '/products/screens-grade-guide',
+                title: 'iPhone screen grades compared',
+                text: 'Original, Soft OLED, Hard OLED and Incell side by side, with wholesale price bands per grade.',
+              },
+              {
+                href: '/faq',
+                title: 'Official answers on terms',
+                text: 'Catalog size, MOQ by category, warranty and DOA window, payment and shipping — each with the date it was confirmed.',
+              },
+            ].map(({ href, title, text }) => (
+              <Link
+                key={href}
+                href={href}
+                className="group flex flex-col rounded-lg border border-[#e4dccb] bg-white p-5 transition hover:border-[#0b6b45]"
+              >
+                <div className="text-base font-black leading-6 text-[#18212c] group-hover:text-[#0b6b45]">{title}</div>
+                <p className="mt-2 text-sm leading-6 text-[#52606d]">{text}</p>
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-[#0b6b45]">
+                  Read guide
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section data-scroll-reveal className="bg-[#0b6b45] py-14 text-white md:py-16">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:px-6 md:flex-row md:items-center lg:px-8">
           <div>

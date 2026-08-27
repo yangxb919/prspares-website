@@ -90,6 +90,29 @@ export default function ScreensPage() {
               Read the iPhone Screen Grade Guide →
             </Link>
           </p>
+          {/* Sourcing hubs. This category page is one of the strongest internal link
+              sources on the site; before 2026-08-28 neither hub had a link from it. */}
+          <p className="mt-3 text-sm leading-6 text-[#52606d]">
+            First order from China?{' '}
+            <Link
+              href="/blog/moq-sample-orders-lead-time-wholesale"
+              className="font-bold text-[#0b6b45] hover:text-[#ff8a2a]"
+            >
+              MOQ, samples and lead time
+            </Link>{' '}
+            covers order minimums and realistic timing, and{' '}
+            <Link
+              href="/blog/top-10-phone-parts-suppliers-in-china"
+              className="font-bold text-[#0b6b45] hover:text-[#ff8a2a]"
+            >
+              the ten China supplier channel types
+            </Link>{' '}
+            explains what to verify before a first batch. Order terms are answered on the{' '}
+            <Link href="/faq" className="font-bold text-[#0b6b45] hover:text-[#ff8a2a]">
+              official FAQ
+            </Link>
+            .
+          </p>
         </div>
       </section>
     </>

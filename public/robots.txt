@@ -19,6 +19,7 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 
 User-agent: OAI-SearchBot
 Allow: /
@@ -41,6 +42,7 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 
 User-agent: ChatGPT-User
 Allow: /
@@ -63,6 +65,7 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 
 User-agent: PerplexityBot
 Allow: /
@@ -85,6 +88,7 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 
 User-agent: Perplexity-User
 Allow: /
@@ -107,6 +111,7 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 
 User-agent: ClaudeBot
 Allow: /
@@ -129,6 +134,7 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 
 User-agent: Claude-User
 Allow: /
@@ -151,6 +157,7 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 
 User-agent: CCBot
 Allow: /
@@ -173,6 +180,7 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 
 User-agent: *
 Allow: /
@@ -195,4 +203,5 @@ Disallow: /blog?
 Disallow: /*?category=
 Disallow: /*?tag=
 Disallow: /*?page=
+Disallow: /*?product=
 Sitemap: https://www.phonerepairspares.com/sitemap.xml

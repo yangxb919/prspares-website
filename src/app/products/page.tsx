@@ -682,6 +682,41 @@ export default function ProductsPage() {
         </section>
       )}
 
+      {/* Sourcing hubs — see homepage note. Catalog index is a top internal link source. */}
+      <section className="border-t border-[#e4dccb] bg-[#faf8f3] py-12 md:py-14">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-black text-[#18212c] md:text-3xl">Before you place the first order</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {[
+              {
+                href: '/blog/moq-sample-orders-lead-time-wholesale',
+                title: 'MOQ, samples and lead time',
+                text: 'Order minimums, trial quantities and realistic timing on a first China order.',
+              },
+              {
+                href: '/blog/top-10-phone-parts-suppliers-in-china',
+                title: 'The ten China supplier channels',
+                text: 'What each supplier type is good for, and what to verify before a batch lands.',
+              },
+              {
+                href: '/faq',
+                title: 'Official order terms',
+                text: 'MOQ by category, warranty, DOA window, payment and shipping — each dated.',
+              },
+            ].map(({ href, title, text }) => (
+              <Link
+                key={href}
+                href={href}
+                className="group rounded-lg border border-[#e4dccb] bg-white p-5 transition hover:border-[#0b6b45]"
+              >
+                <div className="text-base font-black text-[#18212c] group-hover:text-[#0b6b45]">{title}</div>
+                <p className="mt-2 text-sm leading-6 text-[#52606d]">{text}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section data-scroll-reveal className="bg-[#0b6b45] py-14 text-white md:py-16">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-4 sm:px-6 md:flex-row md:items-center lg:px-8">
           <div>
