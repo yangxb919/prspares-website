@@ -80,8 +80,12 @@ function convertToInfoTabsProduct(dbProduct: Product): InfoTabsProduct {
   };
 }
 
-// 强制重新验证每次请求
-export const revalidate = 0;
+// 2026-09-02：原本是 revalidate = 0（每个请求都直接打 Supabase）。
+// 这条动态路由排在 /products/screens 等静态路由之后，也就是说凡是命中不到的
+// 路径都会落到这里、各打一次库 —— 爬虫扫一批不存在的 URL 就能把库打满，
+// 而 08-10 那次全站 404 的根因正是 Supabase 出站流量撑爆额度。
+// 放宽爬虫闸之前必须先堵上。缓存 1 小时，与 /blog 系列保持一致。
+export const revalidate = 3600;
 
 // Function to get related products from database
 async function getRelatedProducts(currentProductId: string | number, limit: number = 3) {
