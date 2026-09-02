@@ -148,6 +148,24 @@ const nextConfig = {
         destination: '/products',
         permanent: true,
       },
+      // --- 竞品文案清理 / 薄页合并 (2026-09-02) ---
+      // /products/iphone-12-rear-camera 是早年导入的残留：正文、meta description、
+      // og:description 三处都带竞品 Fixez 的电话与邮箱。GSC 近 4 个月 0 点击、
+      // 1~2 次曝光/月，而同主题自建页 /products/iphone-rear-camera-wholesale 有
+      // 339 次曝光；标价 $19.11 还是零售价，与批发定位冲突 —— 所以合并而非改写。
+      // 数据库里该行已同步改 draft 并清掉抄来的文案；next-sitemap 的
+      // fetchProductSlugs() 只取 status='publish'，下次构建自动从 sitemap 剔除。
+      // 旧版 WooCommerce 路径 /product/... 直接指向终点，避免走两跳。
+      {
+        source: '/product/iphone-12-rear-camera',
+        destination: '/products/iphone-rear-camera-wholesale',
+        permanent: true,
+      },
+      {
+        source: '/products/iphone-12-rear-camera',
+        destination: '/products/iphone-rear-camera-wholesale',
+        permanent: true,
+      },
       {
         source: '/product/for-ipad-mini-2-repair-parts',
         destination: '/products',
