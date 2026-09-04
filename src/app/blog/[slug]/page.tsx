@@ -18,7 +18,12 @@ import { pickPostDescription } from '@/lib/post-description';
 
 export const revalidate = 3600;
 export const dynamicParams = true;
-export const fetchCache = 'force-no-store';
+// 🔴 这里以前有 export const fetchCache = 'force-no-store'（2026-04-21 946f37a 加的，
+// 为了解决「Next.js 跨构建复用 .next/cache/fetch-cache 里的旧 Supabase 响应，
+// 导致部署后 HTML 还是旧标题」）。但它的副作用是把整条 /blog/[slug] 打回动态渲染 ——
+// 146 篇文章每次请求都真打一次库、响应 1.6 秒，ISR 完全没生效。
+// 陈旧问题改由部署流程解决：deploy.yml 在构建前删掉 .next/cache/fetch-cache，
+// 效果一样但不牺牲 ISR。
 
 export async function generateStaticParams() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -26,11 +31,16 @@ export async function generateStaticParams() {
   if (!supabaseUrl || !supabaseAnon) return [];
   try {
     const supabase = createPublicClient();
+    // 只预渲染最近 30 篇。VPS 只有 957MB 内存、构建上限 720MB，
+    // 把 146 篇全部预渲染会把构建打爆。其余文章靠 dynamicParams=true
+    // 按需生成，首次访问后同样按 revalidate 缓存 1 小时。
     const { data } = await supabase
       .from('posts')
       .select('slug')
       .eq('status', 'publish')
-      .not('slug', 'is', null);
+      .not('slug', 'is', null)
+      .order('published_at', { ascending: false })
+      .limit(30);
     return (data || [])
       .map((row: any) => row?.slug)
       .filter((s: any): s is string => typeof s === 'string' && s.length > 0)
@@ -264,6 +274,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       .single();
 
     if (error) {
+      // PGRST116 = .single() 查到 0 行，也就是「这个 slug 确实没有已发布的文章」。
+      // 这是真 404，不是故障 —— 必须走 notFound()，否则任何不存在的 /blog/* 路径
+      // 都返回 500，爬虫扫一批就能让 Google 判定整站不稳定并放慢抓取。
+      // 其余错误（连接失败、402 超额、超时）才是基础设施故障，保持上抛成 5xx，
+      // 让搜索引擎按「临时不可用」处理并保留索引（2026-08-10 事故的教训）。
+      if ((error as { code?: string }).code === 'PGRST116') {
+        notFound();
+      }
       console.error('Error fetching post:', error);
       throw error;
     }
