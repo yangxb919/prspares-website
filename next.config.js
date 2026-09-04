@@ -177,6 +177,26 @@ const nextConfig = {
         permanent: true,
       },
 
+      // --- Missing /blog prefix (2026-09-04) ---
+      // GSC「未找到 (404)」里这 3 条是历史外链/旧站残留写成了根路径。
+      // 目标页线上均为 200，补前缀即可回收这些链接的权重。
+      // 前一批 2 条已在 bafebf4 处理，这是剩下的。
+      {
+        source: '/iphone-charging-port-replacement-guide',
+        destination: '/blog/iphone-charging-port-replacement-guide',
+        permanent: true,
+      },
+      {
+        source: '/phone-screen-repair-pricing-strategy',
+        destination: '/blog/phone-screen-repair-pricing-strategy',
+        permanent: true,
+      },
+      {
+        source: '/wholesale-phone-parts-supplier-uk',
+        destination: '/blog/wholesale-phone-parts-supplier-uk',
+        permanent: true,
+      },
+
       // --- Duplicate post merges (T8, 2026-04-21) ---
       {
         source: '/blog/iphone-screen-replacement-cost-uk-complete-price-guide-by-model-2026',
