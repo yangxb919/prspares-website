@@ -217,15 +217,14 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Propagate the pathname as a response header so server layouts can read it
-  // via next/headers — used to pick html lang + hide Header/Footer on SEA landing pages.
-  const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-pathname', request.nextUrl.pathname)
-
-  // Create a simple response object
-  let response = NextResponse.next({
-    request: { headers: requestHeaders },
-  })
+  // 🔴 这里以前会注入 x-pathname 请求头，供根 layout 用 next/headers 读取，
+  // 用来决定 <html lang> 和是否显示页头页脚。已于 2026-09-04 移除 ——
+  // 根 layout 只要调用 headers()，App Router 就把整棵渲染树打成动态渲染，
+  // 全站静态生成和 ISR 会同时失效（实测：静态路由 0 条，移除后 72 条 + 2 条 ISR）。
+  // 那两个判断已下沉到客户端组件 SiteChrome（usePathname，不触发动态渲染）。
+  //
+  // ⚠️ 不要为了图省事再把路径塞回请求头让服务端组件读 —— 那等于把这个坑重新挖开。
+  let response = NextResponse.next()
 
   // Auth gating only matters on these routes. Everything else (blog, products,
   // home — the entire anonymous surface) returns immediately: the Supabase

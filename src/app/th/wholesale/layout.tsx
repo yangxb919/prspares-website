@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SetHtmlLang } from '@/components/layout/SiteChrome';
 import { Noto_Sans_Thai } from 'next/font/google';
 
 const notoSansThai = Noto_Sans_Thai({
@@ -45,5 +46,10 @@ export default function ThWholesaleLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className={notoSansThai.variable} style={{ fontFamily: 'var(--font-noto-thai), ui-sans-serif, system-ui' }}>{children}</div>;
+  return (
+    <>
+      <SetHtmlLang lang="th" />
+      <div className={notoSansThai.variable} style={{ fontFamily: 'var(--font-noto-thai), ui-sans-serif, system-ui' }}>{children}</div>
+    </>
+  );
 }

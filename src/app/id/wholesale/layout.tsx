@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SetHtmlLang } from '@/components/layout/SiteChrome';
 
 export const metadata: Metadata = {
   title: 'Grosir Sparepart HP Langsung dari Pabrik Shenzhen | PRSPARES',
@@ -38,5 +39,10 @@ export default function IdWholesaleLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <SetHtmlLang lang="id" />
+      {children}
+    </>
+  );
 }

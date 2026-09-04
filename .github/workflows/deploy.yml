@@ -142,6 +142,13 @@ jobs:
               cp -a .next .next.bak || { echo "⚠️  .next 备份失败，继续（无回滚保护）"; rm -rf .next.bak; }
             fi
 
+            # 清掉跨构建的 fetch 缓存。Next.js 会把 Supabase 响应存在
+            # .next/cache/fetch-cache 并在下次构建复用，导致改了库里的文章
+            # 却部署出旧标题（2026-04-21 946f37a 当时是靠 fetchCache=
+            # 'force-no-store' 绕过，代价是全站博客页退回动态渲染）。
+            # 这里删掉即可，既保证数据新鲜又不牺牲 ISR。
+            rm -rf .next/cache/fetch-cache
+
             echo "🔨 构建应用（内存上限 720M）..."
             export NODE_OPTIONS="--max-old-space-size=720"
             BUILD_OK=1

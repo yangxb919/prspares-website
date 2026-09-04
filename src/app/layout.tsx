@@ -1,22 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
-import { headers } from "next/headers";
 import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import { SiteHeader, SiteFooter } from "@/components/layout/SiteChrome";
 import AttributionTracker from "@/components/AttributionTracker";
-
-// Route-prefix-based locale for SEA landing pages (plan A MVP).
-// Keeps the site's single-root-layout architecture while giving /id and /th:
-//   - correct <html lang> for accessibility + SEO
-//   - a "naked" layout without English Header/Footer (so SEA ad traffic
-//     cannot click their way back into the English site)
-function localeForPath(pathname: string): { lang: string; chrome: boolean } {
-  if (pathname.startsWith('/id/')) return { lang: 'id', chrome: false };
-  if (pathname.startsWith('/th/')) return { lang: 'th', chrome: false };
-  return { lang: 'en', chrome: true };
-}
 
 
 const inter = Inter({
@@ -78,22 +65,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = headers().get('x-pathname') || '/';
-  const { lang, chrome } = localeForPath(pathname);
+  // 🔴 这里以前调用 headers() 读 x-pathname 和 host。根 layout 一旦调用它，
+  // App Router 会把整棵渲染树标记为动态渲染，全站静态生成与 ISR 同时失效
+  // （2026-09-04 实测：构建产物静态路由 0 条，去掉后 72 条 + 2 条 ISR）。后果是全站响应
+  // 3.4-3.9 秒、Google 按响应速度降低抓取频率、66 个页面从未被抓过。
+  // 现在两个用途都改成不依赖请求头：
+  //   · 页头页脚的显示判断 → 下沉到客户端组件 SiteChrome（usePathname）
+  //   · GTM 的环境判断     → 改用下面的构建期环境变量
 
-  // Only load GTM (which loads GA4 + Ads + Clarity) on the real production
-  // host. This prevents local dev / preview traffic from polluting analytics —
-  // e.g. localhost:3100 sessions were leaking into the production Clarity
-  // project (2026-06-02). Gate on BOTH NODE_ENV (blocks `next dev`) and the
-  // request host (blocks a production build run locally, where NODE_ENV=production).
-  const host = (headers().get('host') || '').toLowerCase();
-  const isLocalHost =
-    host.startsWith('localhost') ||
-    host.startsWith('127.0.0.1') ||
-    host.startsWith('0.0.0.0') ||
-    host.startsWith('[::1]') ||
-    host.endsWith('.local');
-  const analyticsEnabled = process.env.NODE_ENV === 'production' && !isLocalHost;
+  // 只在真正的生产站点加载 GTM（它会带出 GA4 + Ads + Clarity），避免本地
+  // 开发/预览流量污染统计（2026-06-02 曾有 localhost:3100 的会话漏进线上
+  // Clarity）。两道闸：NODE_ENV 挡住 `next dev`；NEXT_PUBLIC_SITE_URL 挡住
+  // 「在本地跑生产构建」——该变量只存在于 VPS 的 .env.production，本地没有。
+  const analyticsEnabled =
+    process.env.NODE_ENV === 'production' &&
+    (process.env.NEXT_PUBLIC_SITE_URL || '').includes('phonerepairspares.com');
 
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -131,7 +117,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang={lang}>
+    <html lang="en">
       <head>
         <script
           type="application/ld+json"
@@ -145,9 +131,9 @@ export default function RootLayout({
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
         <AttributionTracker />
-        {chrome && <Header />}
+        <SiteHeader />
         {children}
-        {chrome && <Footer />}
+        <SiteFooter />
       </body>
     </html>
   );

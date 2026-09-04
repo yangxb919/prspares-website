@@ -113,7 +113,8 @@ export async function generateMetadata({
 
 // ISR: regenerate the list page at most every hour
 export const revalidate = 3600;
-export const fetchCache = 'force-no-store';
+// fetchCache = 'force-no-store' 已移除：它让 /blog 列表页退回动态渲染。
+// 构建缓存的陈旧问题改由 deploy.yml 在构建前清 .next/cache/fetch-cache 解决。
 
 // Get article data from Supabase
 export default async function BlogPage({
