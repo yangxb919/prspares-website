@@ -522,7 +522,7 @@ export default function ProductsPage() {
             {[
               { icon: ShieldCheck, title: 'QC before packing', text: 'Screens, batteries and small parts can be checked by batch before shipment.' },
               { icon: Truck, title: 'Route by cargo type', text: 'Battery and mixed orders need practical freight suggestions, not generic shipping text.' },
-              { icon: MessageSquare, title: 'Sales reply within 24h', text: 'The quote response should include model status, tier price, MOQ and alternatives.' },
+              { icon: MessageSquare, title: 'Sales reply within 24h', text: 'Every quote states model status, tier price, MOQ and alternatives for your list.' },
             ].map((item, index) => (
               <div
                 key={item.title}

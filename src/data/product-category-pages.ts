@@ -52,7 +52,7 @@ export const productCategoryPages = {
       { title: 'Apple iPhone', value: 'iPhone 17 to legacy', text: 'iPhone Pro Max, Pro, Plus, Air and older series organized for grade comparison.' },
       { title: 'Samsung Galaxy', value: 'A / S / Tab / Z', text: 'High-volume Galaxy A SKUs plus premium S, foldable and tablet repair demand.' },
       { title: 'Android long tail', value: 'Google, Xiaomi, OPPO, Vivo', text: 'Pixel, Redmi, POCO, Reno, Vivo X/Y and OnePlus screen SKUs for mixed orders.' },
-      { title: 'Quality lanes', value: 'OLED / TFT / Incell', text: 'The page explains buying lanes so buyers can ask for grade, MOQ and warranty together.' },
+      { title: 'Quality lanes', value: 'OLED / TFT / Incell', text: 'Every screen lane is grade-labeled, so you can ask for grade, MOQ and warranty in one message.' },
     ],
     quoteLines: [
       {
@@ -117,7 +117,7 @@ export const productCategoryPages = {
     eyebrow: 'Battery Catalog',
     title: 'Wholesale Phone Batteries — iPhone, Samsung, Huawei from $4.62',
     intro:
-      'Battery pages need to show model depth, packing discussion and quote tiers. This design keeps batteries as a procurement lane instead of a retail listing.',
+      'Factory-direct iPhone battery cells with live 10/50/200 tier prices, plus Samsung, Huawei and other Android batteries quoted on request. Send your model list and quantities — we confirm stock, capacity rating, UN38.3 packing and the shipping route within 24 hours.',
     heroImage: '/hero/products-batteries.jpg',
     quoteProduct: 'Phone Batteries',
     metrics: [
@@ -181,7 +181,7 @@ export const productCategoryPages = {
     ],
     buyingNotes: [
       'Battery buyers should include model number, target capacity, destination country and preferred shipping route.',
-      'The page avoids instant checkout because DG packing and route confirmation affect the final quote.',
+      'Batteries are quoted rather than checked out instantly: dangerous-goods packing and the shipping route change the final price.',
       'Battery SKUs are best paired with screen and small-part stock replenishment lists.',
     ],
     workflow: [
@@ -195,7 +195,7 @@ export const productCategoryPages = {
     eyebrow: 'Small Parts Catalog',
     title: 'Wholesale Phone Small Parts — Cameras, Charging Ports & Flex Cables',
     intro:
-      'Small parts are the deepest part of the catalog, so the page needs a structured procurement map: flex, camera, charging, housing, SIM tray and speaker SKUs.',
+      'Small parts are the deepest section of the catalog: flex cables, camera modules, charging ports, housings, SIM trays and speakers, organised by model so a mixed replenishment list is quoted in one pass.',
     heroImage: '/hero/products-small-parts.jpg',
     quoteProduct: 'Small Parts',
     metrics: [
@@ -258,8 +258,8 @@ export const productCategoryPages = {
       },
     ],
     buyingNotes: [
-      'Use the page to guide buyers into category-based mixed lists rather than one-off SKU browsing.',
-      'Small parts should be quoted with model, color/version, grade and expected repeat quantity.',
+      'A category-based mixed list is quoted faster than one-off SKU requests.',
+      'List small parts with model, color/version, grade and expected repeat quantity.',
       'The strongest CTA is to upload or paste a repair-shop replenishment list.',
     ],
     workflow: [
@@ -273,7 +273,7 @@ export const productCategoryPages = {
     eyebrow: 'Small Parts / Camera Modules',
     title: 'Wholesale iPhone Camera Modules and Lens Parts',
     intro:
-      'Camera parts belong inside the small-parts buying lane. This page turns the iPhone catalog into a focused quote page for rear camera modules, front cameras, camera lenses and ring-frame parts.',
+      'iPhone rear camera modules, front cameras, camera lenses and ring-frame parts, quoted per model with stock status and lead time so camera lines slot into a mixed small-parts order.',
     heroImage: '/images/home-redesign/category-small-parts.png',
     quoteProduct: 'iPhone Camera Modules',
     metrics: [
@@ -284,7 +284,7 @@ export const productCategoryPages = {
     ],
     coverage: [
       { title: 'Rear modules', value: 'Pro / Pro Max demand', text: 'High-value rear camera modules need exact model confirmation before quote.' },
-      { title: 'Front cameras', value: 'Face ID workflow', text: 'Front camera SKUs should be discussed with repair workflow and compatibility notes.' },
+      { title: 'Front cameras', value: 'Face ID workflow', text: 'Front camera SKUs are quoted with repair-workflow and compatibility notes.' },
       { title: 'Lens and rings', value: 'Low-cost repeat parts', text: 'Camera lens, ring frame and bracket SKUs are useful add-ons for mixed small-part lists.' },
       { title: 'Small-part bundles', value: 'Camera + housing', text: 'Camera orders often pair with back covers, adhesive, brackets and tools for one repair batch.' },
     ],
@@ -314,7 +314,7 @@ export const productCategoryPages = {
         source: 'iPhone catalog / iPhone 16 Pro Max',
         image: 'https://pub-3d088e9c8cac4da89ab00382fa664592.r2.dev/products/EDA007201801.jpg',
         tiers: ['$18.01', '$17.64', '$17.46'],
-        note: 'Front camera demand should be quoted with compatibility and repair workflow notes.',
+        note: 'Front cameras are quoted with compatibility and repair-workflow notes.',
       },
       {
         model: 'Apple iPhone 14 Pro Max',
@@ -346,7 +346,7 @@ export const productCategoryPages = {
     ],
     buyingNotes: [
       'Ask camera buyers for exact iPhone model, rear/front position, lens-only or full-module need and target quantity.',
-      'Keep this page quote-led because camera compatibility, pull grade and testing status affect the final offer.',
+      'Camera parts are quote-led: compatibility, pull grade and testing status set the final offer.',
       'Camera modules are best presented as a small-parts subcategory, not a standalone ecommerce collection.',
     ],
     workflow: [
@@ -360,7 +360,7 @@ export const productCategoryPages = {
     eyebrow: 'Tablet & Watch Catalog',
     title: 'Wholesale Tablet & Smartwatch Repair Parts — iPad, Galaxy Tab, Apple Watch',
     intro:
-      'Tablet and smartwatch repair buyers need exact model matching before price confirmation. This page groups iPad, Galaxy Tab, Apple Watch and Android wearable parts into one quote-ready lane.',
+      'iPad, Galaxy Tab, Apple Watch and Android wearable parts in one quote lane. Tablet and watch parts vary by generation and size, so we confirm the exact model match before pricing.',
     heroImage: '/hero/products-tablet-watch.jpg',
     quoteProduct: 'Tablet & Smartwatch Repair Parts',
     metrics: [
@@ -439,7 +439,7 @@ export const productCategoryPages = {
     eyebrow: 'Tools & IC Catalog',
     title: 'Phone Repair Tools, IC Chips & Programmers Wholesale',
     intro:
-      'The tools page should feel like a workshop procurement list: IC chips, power test cables, programmers, screwdriver sets and tool kits grouped by repair workflow.',
+      'IC chips, power test cables, programmers, screwdriver sets and tool kits grouped by repair workflow — a workshop procurement list rather than a retail shelf.',
     heroImage: '/hero/products-repair-tools.jpg',
     quoteProduct: 'Repair Tools and IC Chips',
     metrics: [
@@ -494,8 +494,8 @@ export const productCategoryPages = {
     ],
     buyingNotes: [
       'Tool and IC buyers need compatibility, tool version and use case before quote confirmation.',
-      'The page should guide buyers to send a bench-stock list instead of browsing unrelated tools.',
-      'High-ticket programmers should remain quote-led because availability and firmware version matter.',
+      'Send a bench-stock list — the whole list is quoted together rather than one tool at a time.',
+      'High-ticket programmers are quote-led: availability and firmware version matter.',
     ],
     workflow: [
       { title: 'Identify repair workflow', text: 'Buyer separates diagnostic tools, hand tools, programmers and IC chip demand.' },

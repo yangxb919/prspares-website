@@ -287,7 +287,7 @@ export default function CatalogCategoryPage({ data }: { data: ProductCategoryPag
         </div>
       </section>
 
-      <B2BFactsTable />
+      <B2BFactsTable showScreenGrades={/screen/i.test(data.slug)} />
 
       <section className="bg-white py-14 md:py-18">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

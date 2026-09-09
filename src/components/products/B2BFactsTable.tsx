@@ -5,7 +5,10 @@ import { B2B_FACTS } from '@/data/b2b-facts';
 // Visible content only — no schema output here; Product/AggregateOffer authority
 // stays on /products/screens (0.8 schema audit discipline).
 
-export default function B2BFactsTable() {
+// `showScreenGrades` — the grade row and grade-guide link are screen facts;
+// battery / small-parts / tools pages must not repeat them (2026-09-10 audit).
+export default function B2BFactsTable({ showScreenGrades = true }: { showScreenGrades?: boolean }) {
+  const facts = showScreenGrades ? B2B_FACTS : B2B_FACTS.filter((f) => f.label !== 'Screen grades');
   return (
     <section className="border-t border-[#e4dccb] bg-[#f5f3ee] py-14 md:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -19,7 +22,7 @@ export default function B2BFactsTable() {
         </p>
         <div className="mt-8 overflow-hidden rounded-lg border border-[#e4dccb] bg-white">
           <dl className="divide-y divide-[#efe9dc]">
-            {B2B_FACTS.map((fact) => (
+            {facts.map((fact) => (
               <div key={fact.label} className="grid gap-1 px-5 py-4 sm:grid-cols-[200px_1fr] sm:gap-6">
                 <dt className="text-sm font-black text-[#18212c]">{fact.label}</dt>
                 <dd className="text-sm leading-6 text-[#52606d]">{fact.value}</dd>
@@ -27,12 +30,14 @@ export default function B2BFactsTable() {
             ))}
           </dl>
         </div>
-        <p className="mt-4 text-sm leading-6 text-[#52606d]">
-          Full grade definitions with live wholesale prices:{' '}
-          <Link href="/products/screens-grade-guide" className="font-bold text-[#0b6b45] hover:text-[#ff8a2a]">
-            iPhone Screen Grade Guide →
-          </Link>
-        </p>
+        {showScreenGrades && (
+          <p className="mt-4 text-sm leading-6 text-[#52606d]">
+            Full grade definitions with live wholesale prices:{' '}
+            <Link href="/products/screens-grade-guide" className="font-bold text-[#0b6b45] hover:text-[#ff8a2a]">
+              iPhone Screen Grade Guide →
+            </Link>
+          </p>
+        )}
       </div>
     </section>
   );

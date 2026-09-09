@@ -531,9 +531,9 @@ export default function WholesaleInquiryPage() {
           <div>
             <div className="mb-5 inline-flex items-center gap-2 border border-white/25 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur">
               <BadgeCheck className="h-4 w-4 text-[#51d88a]" />
-              Wholesale inquiry / quote workflow
+              B2B quote request · reply within 24 hours
             </div>
-            <h1 className="max-w-4xl text-4xl font-black leading-[1.05] sm:text-5xl lg:text-6xl">A Faster Quote Page for Mixed Parts Lists</h1>
+            <h1 className="max-w-4xl text-4xl font-black leading-[1.05] sm:text-5xl lg:text-6xl">Wholesale Phone Parts — Factory-Direct Pricing on Your Model List</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100">
               Send category, model list and quantity tier. PRSPARES returns stock status, grade options, price tiers and shipping route without forcing buyers through a retail cart.
             </p>
@@ -608,9 +608,9 @@ export default function WholesaleInquiryPage() {
       <section className="bg-white py-14 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionTitle
-            eyebrow="Form logic"
-            title="Ask only what sales needs to quote."
-            text="The page uses procurement-oriented fields and trust proof near the form, reducing hesitation before submission."
+            eyebrow="How to get a quote"
+            title="Send only what sales needs to quote."
+            text="Category, models, quantity range, grade and destination country are enough for a first reply within 24 hours — no account, no cart."
           />
           <div className="grid gap-4 lg:grid-cols-3">
             {quoteSteps.map(([num, title, text]) => (

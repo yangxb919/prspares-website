@@ -222,6 +222,11 @@ module.exports = {
     '/blog/oem-vs-aftermarket-phone-screens', // → phone-screen-wholesale-oem-vs-aftermarket
     '/blog/wholesale-iphone-screens-grades-prices-moq', // → wholesale-iphone-screens-pricing-guide
     '/blog/iphone-screen-replacement-wholesale-repair-business', // → wholesale-iphone-screens-pricing-guide
+    // Internal redesign previews — live for review only, canonical → '/'.
+    // Must never be advertised to crawlers (was in sitemap-0.xml until 2026-09-10).
+    '/homepage-redesign-preview',
+    '/page-redesign-preview',
+    '/page-redesign-preview/*',
   ],
   additionalPaths: async (config) => {
     const staticPaths = [
