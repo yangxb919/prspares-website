@@ -47,7 +47,7 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 const FAQ_ITEMS = [
   {
     q: 'Berapa MOQ (minimum order) kalian?',
-    a: 'Tidak ada MOQ per model. Anda bebas mencampur model dan kategori (LCD, baterai, sparepart kecil) dalam satu order — harga tier 10+ yang kami publikasikan berlaku untuk setiap baris begitu total order mencapai 10 pcs. Order percobaan bisa mulai 5 pcs dengan harga tier 10+ yang sama, ongkir dihitung terpisah.',
+    a: 'Tidak ada MOQ per model. Order campuran yang berisi layar cukup total 10 pcs (bebas campur model, grade dan kategori) — harga tier 10+ berlaku untuk setiap baris. Jika dipesan sendiri: layar mulai 10 pcs, baterai dan sparepart kecil mulai 20 pcs, alat reparasi mulai 5 pcs. Ongkir dihitung terpisah.',
   },
   {
     q: 'Berapa lama lead time pengiriman?',
@@ -459,7 +459,7 @@ export default function IdWholesalePage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { title: 'Tanpa MOQ per Model', items: ['Total order 10 pcs (bebas campur)', 'Berlaku lintas kategori: LCD, baterai, sparepart kecil', 'Harga tier 10+ per baris', 'Order percobaan mulai 5 pcs'] },
+              { title: 'Tanpa MOQ per Model', items: ['Order campuran dengan layar: total 10 pcs', 'Layar saja: mulai 10 pcs', 'Baterai / sparepart kecil saja: mulai 20 pcs', 'Alat reparasi: mulai 5 pcs'] },
               { title: 'Metode Pembayaran', items: ['T/T (Transfer Bank Internasional)', 'PayPal', 'Western Union', 'Alibaba Trade Assurance'] },
               { title: 'Pengiriman Cepat', items: ['Kirim di hari yang sama', 'DHL / FedEx / UPS', '3–7 hari ke seluruh dunia', 'Sea freight untuk order besar'] },
               { title: 'Garansi 12 Bulan', items: ['Semua produk bergaransi', 'Target RMA < 1%', 'Ganti barang cacat gratis', 'Respon 24 jam dijamin'] },

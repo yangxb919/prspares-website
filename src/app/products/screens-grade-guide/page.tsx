@@ -86,7 +86,7 @@ export default function ScreenGradeGuidePage() {
     },
     {
       q: 'Can I mix screen grades and models in one wholesale order?',
-      a: 'Yes. There is no single-model MOQ — combine any models, grades and product categories in one order, and the published 10+ tier price applies per line once the order totals 10 pcs. Mixed-grade orders are the norm: shops typically pair Soft OLED for premium repairs with Incell for budget jobs. Trial orders start at 5 pcs at the same 10+ unit price, with freight billed separately.',
+      a: 'Yes. There is no single-model MOQ — combine any models, grades and product categories in one order, and the published 10+ tier price applies per line once the order totals 10 pcs. Mixed-grade orders are the norm: shops typically pair Soft OLED for premium repairs with Incell for budget jobs. Freight is quoted separately.',
     },
     {
       q: 'Is JK or GX Soft OLED more expensive?',

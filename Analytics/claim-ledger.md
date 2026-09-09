@@ -45,6 +45,7 @@
 | iPad 电池 `$5.02-19.84`、16 SKUs | 真实价表（07-04 上线时已验证） |
 | 屏幕表 188 SKUs、$8.23-304.37、10/50/200 阶梯 | iphone-screen-catalog.ts（生成器+断言套件） |
 | `12-month warranty`、MOQ 10 units、DHL/FedEx worldwide | 对客标准口径（2026-06-12 拍板） |
+| MOQ 口径（2026-09-10 拍板，取代 06-12「10 units」、07-30「跨品类凑 10 + 试单 5」、08-24「纯分品类」）：含屏幕的混单整单满 10 件；单品类单独下单 屏 10 / 电池 20 / 小件 20 / 工具 5；不再写「试单 5 件」 | 单一事实源 src/data/b2b-facts.ts + /faq；博客按 Analytics/scripts/_fix_moq_wording_20260910.mjs 回扫 |
 | Soft OLED "90-95% of original quality" | 行业通用口径，词典 SoT 收录（grade-taxonomy.ts） |
 | `24h quote` | 业务承诺（用户可确认，暂视为有据） |
 

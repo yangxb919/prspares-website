@@ -38,7 +38,7 @@ export default function SmallPartsLayout({
     "name": "Wholesale Cell Phone Replacement Parts — Cameras, Charging Ports, Back Glass",
     "description": "Wholesale cell phone replacement parts including cameras, charging ports, back glass panels, speakers, and flex cables for iPhone and Samsung devices.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
-    "additionalProperty": wholesaleProductProperties(10),
+    "additionalProperty": wholesaleProductProperties(20),
     "category": "Phone Small Parts",
     "offers": {
       "@type": "AggregateOffer",
@@ -48,7 +48,7 @@ export default function SmallPartsLayout({
       "offerCount": "65",
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
-      "eligibleQuantity": wholesaleMoq(10)
+      "eligibleQuantity": wholesaleMoq(20)
     },
   };
 

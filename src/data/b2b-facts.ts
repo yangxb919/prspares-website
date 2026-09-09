@@ -16,10 +16,11 @@ export const B2B_FACTS: B2BFact[] = [
   },
   {
     label: 'MOQ',
-    // 单一事实源（2026-07-30 用户拍板统一）：跨品类可凑 10 件；试单 5 件起、单价仍按 10+ 档。
-    // 全站博客已按此口径统一（见 changelogs/2026-07-30.md）——改这里必须同步扫描博客。
+    // 单一事实源（2026-09-10 用户拍板，取代 07-30「跨品类凑 10 + 试单 5」与 08-24「纯分品类」两版）：
+    // 含屏幕的混单整单满 10 件即可；单品类单独下单：屏 10 / 电池 20 / 小件 20 / 工具 5；不再写「试单 5 件」。
+    // 全站博客已按此口径回扫（见 changelogs/2026-09-10.md）——改这里必须同步跑 Analytics/scripts/_scan_moq.mjs 扫博客。
     value:
-      'No single-model MOQ — mix models and categories; the published 10+ tier applies once the order totals 10 pcs. Trial orders from 5 pcs at the same 10+ unit price.',
+      'No single-model MOQ. A mixed order that includes screens qualifies once it totals 10 pcs across models, grades and categories, and the published 10+ tier price applies to every line. Ordered on their own, screens start at 10 pcs, batteries and small parts at 20 pcs, repair tools at 5 pcs. Freight is quoted separately.',
   },
   {
     label: 'Pricing structure',

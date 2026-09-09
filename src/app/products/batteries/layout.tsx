@@ -3,7 +3,7 @@ import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-sche
 
 const metaTitle = 'Wholesale Phone Batteries iPhone Samsung from China | PRSPARES';
 const metaDescription =
-  'Wholesale iPhone and Samsung batteries from Shenzhen. No separate battery MOQ - battery lines count toward the same 10-pcs order minimum. UN38.3 packing, QC, warranty support and fast quote for repair shops worldwide.';
+  'Wholesale iPhone and Samsung batteries from Shenzhen. Battery-only orders from 20 pcs (mix models); 10 pcs total in a mixed order with screens. UN38.3 packing, QC, warranty support and fast quote for repair shops worldwide.';
 
 export const metadata: Metadata = {
   title: metaTitle,

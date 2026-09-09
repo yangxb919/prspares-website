@@ -58,7 +58,7 @@ export default function iPhoneCameraLayout({
     "name": "Wholesale iPhone Camera Modules and Lens Parts",
     "description": "Wholesale iPhone camera replacement parts including rear camera modules, front cameras, camera lens covers and ring-frame parts for iPhone 11-16 model families.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
-    "additionalProperty": wholesaleProductProperties(10),
+    "additionalProperty": wholesaleProductProperties(20),
     "category": "Phone Camera Replacement Parts",
     "offers": {
       "@type": "AggregateOffer",
@@ -68,7 +68,7 @@ export default function iPhoneCameraLayout({
       "offerCount": "6",
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
-      "eligibleQuantity": wholesaleMoq(10)
+      "eligibleQuantity": wholesaleMoq(20)
     },
   };
 

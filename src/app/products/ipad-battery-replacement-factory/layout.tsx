@@ -42,7 +42,7 @@ export default function iPadBatteryLayout({
     "name": "Wholesale iPad Battery Replacement — Batteries for iPad Pro, Air, mini & Standard",
     "description": "iPad replacement batteries for iPad Pro 12.9, iPad Pro 11, iPad Pro 10.5, iPad Air, iPad mini, and standard iPad models. Factory-direct wholesale from Shenzhen with 10+/50+/200+ tiered pricing.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
-    "additionalProperty": wholesaleProductProperties(10),
+    "additionalProperty": wholesaleProductProperties(20),
     "category": "iPad Batteries",
     "offers": {
       "@type": "AggregateOffer",
@@ -52,7 +52,7 @@ export default function iPadBatteryLayout({
       "offerCount": String(IPAD_BATTERY_CATALOG.length),
       "availability": "https://schema.org/InStock",
       "seller": { "@type": "Organization", "name": "PRSPARES" },
-      "eligibleQuantity": wholesaleMoq(10)
+      "eligibleQuantity": wholesaleMoq(20)
     },
   };
 

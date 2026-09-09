@@ -60,9 +60,9 @@ export default function WholesaleBatteryTable() {
           iPhone battery wholesale is the bulk supply of replacement lithium-ion batteries to repair shops and distributors.
           PRSPARES stocks factory-direct iPhone battery cells for iPhone 8 through iPhone 16, with original-capacity ratings,
           priced from {money(low)} per unit with tiered 10/50/200 wholesale pricing and a 12-month warranty. Batteries ship in
-          neutral packaging with UN38.3-compliant cells. There is no separate battery MOQ — battery lines count toward
-          the same 10-pcs order minimum as screens and small parts, and the published 10+ tier price applies to every
-          line once the order totals 10 pcs.
+          neutral packaging with UN38.3-compliant cells. Battery-only orders start at 20 pcs with models mixed
+          freely; in a mixed order with screens the whole order qualifies at 10 pcs, and the published 10+ tier price
+          applies to every line.
         </p>
 
         {/* Price-change disclaimer — prices move frequently and the page may lag */}

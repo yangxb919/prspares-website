@@ -46,7 +46,7 @@ type FaqItem = {
   next: string;
 };
 
-const AS_OF = 'August 25, 2026';
+const AS_OF = 'September 10, 2026';
 
 const FAQ_ITEMS: FaqItem[] = [
   {
@@ -72,9 +72,9 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'What is the PRSPARES minimum order quantity?',
-    answer: `As of ${AS_OF}, the screen MOQ is 10 pieces and buyers may mix screen models within that order. Batteries and small parts start at 20 pieces, repair tools at 5 pieces per bulk order. PRSPARES publishes 10 / 50 / 200 wholesale price tiers; the applicable tier and final unit price are confirmed on the quotation.`,
+    answer: `As of ${AS_OF}, a mixed order that includes screens qualifies once it totals 10 pieces across models, grades and categories. Ordered on their own, screens start at 10 pieces (mixed models allowed), batteries and small parts at 20 pieces, and repair tools at 5 pieces. PRSPARES publishes 10 / 50 / 200 wholesale price tiers; the applicable tier and final unit price are confirmed on the quotation.`,
     basis:
-      'There is no single-model MOQ — models, grades and categories combine to reach the order minimum. Do not infer a battery, small-parts or repair-tools MOQ from an older language page, an old indexed answer or another category.',
+      'There is no single-model MOQ. The 10-piece total applies to mixed orders that include screens; the 20-piece battery and small-parts minimums and the 5-piece repair-tools minimum apply when a category is ordered on its own. Do not infer a different MOQ from an older language page, an old indexed answer or another category.',
     next: 'Put the category, models and quantities in the wholesale inquiry so the MOQ and tier are stated in writing.',
   },
   {

@@ -6,8 +6,9 @@
  * Shopping/rich-results and AI engines can extract these B2B facts directly.
  *
  * Grounded in .agents/product-marketing.md: tiers 10+/50+/200+, 12-month
- * warranty, factory-direct from Shenzhen. MOQ is per-category (screens 10,
- * batteries 20, others default to the 10+ base tier). Do not add fabricated
+ * warranty, factory-direct from Shenzhen. MOQ is per-category when ordered alone
+ * (screens 10, batteries 20, small parts 20, repair tools 5; a mixed order with
+ * screens qualifies at 10 total — user decision 2026-09-10). Do not add fabricated
  * per-tier absolute prices — the AggregateOffer price range stays per-page.
  */
 

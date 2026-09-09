@@ -37,7 +37,7 @@ export default function BatteryCard({ model, gradeLabel, gradeColor, priceFrom, 
           <div className="text-2xl font-bold text-gray-900 mb-1">
             From <span className="text-orange-500">${priceFrom}</span>
           </div>
-          <div className="text-xs text-gray-500 mb-3">per unit · 10+ tier · no separate battery MOQ</div>
+          <div className="text-xs text-gray-500 mb-3">per unit · 10+ tier · 20-pc battery-only minimum, 10 pcs in a mixed order with screens</div>
           <ul className="space-y-1.5">
             {features.map((f) => (
               <li key={f} className="flex items-center gap-1.5 text-xs text-gray-600">
