@@ -5,6 +5,7 @@
  * Standard events:
  *   generate_lead   — form submitted successfully (GA4 recommended event)
  *   quote_cta_click — click on "Get Wholesale Quote" CTA buttons
+ *   category_tile_click — click on product category tiles
  *   whatsapp_click  — click on WhatsApp links/buttons
  *   email_click     — click on mailto: links (split out from contact_click 2026-05-19)
  *   phone_click     — click on tel: links (split out from contact_click 2026-05-19)

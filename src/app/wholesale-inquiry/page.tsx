@@ -398,9 +398,13 @@ export default function WholesaleInquiryPage() {
     if (isTurnstileVerified) markAsHumanVerified();
   }, [isTurnstileVerified]);
 
-  const scrollToForm = () => {
+  const scrollToForm = (slot: 'hero_primary' | 'hero_quick_form') => {
     formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    trackEvent('quote_cta_click', { event_label: 'Wholesale Inquiry Hero CTA' });
+    trackEvent('quote_cta_click', {
+      event_label: 'Wholesale Inquiry Hero CTA',
+      from_page: '/wholesale-inquiry',
+      slot,
+    });
   };
 
   const markFormStarted = () => {
@@ -540,7 +544,7 @@ export default function WholesaleInquiryPage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
-                onClick={scrollToForm}
+                onClick={() => scrollToForm('hero_primary')}
                 className="inline-flex items-center justify-center gap-2 rounded-md bg-[#ff8a2a] px-6 py-4 text-base font-bold text-white shadow-lg shadow-black/25 transition hover:bg-[#e97313]"
               >
                 Get Wholesale Quote
@@ -554,7 +558,11 @@ export default function WholesaleInquiryPage() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => trackEvent('whatsapp_click', { event_label: 'Wholesale Hero WhatsApp' })}
+                onClick={() => trackEvent('whatsapp_click', {
+                  event_label: 'Wholesale Hero WhatsApp',
+                  from_page: '/wholesale-inquiry',
+                  slot: 'hero_whatsapp',
+                })}
                 className="inline-flex items-center justify-center gap-2 rounded-md border border-white/35 bg-white/10 px-6 py-4 text-base font-bold text-white backdrop-blur transition hover:bg-white/20"
               >
                 WhatsApp Sales
@@ -576,7 +584,7 @@ export default function WholesaleInquiryPage() {
                   {field}
                 </div>
               ))}
-              <button type="button" onClick={scrollToForm} className="mt-1 rounded-md bg-[#ff8a2a] px-4 py-3 text-sm font-black text-white">
+              <button type="button" onClick={() => scrollToForm('hero_quick_form')} className="mt-1 rounded-md bg-[#ff8a2a] px-4 py-3 text-sm font-black text-white">
                 Start Quote Request
               </button>
             </div>
@@ -619,38 +627,6 @@ export default function WholesaleInquiryPage() {
                 <h3 className="mt-4 text-xl font-black text-[#18212c]">{title}</h3>
                 <p className="mt-3 text-sm leading-6 text-[#52606d]">{text}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[#fffaf0] py-14 md:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionTitle
-            eyebrow="Product range"
-            title="Quote by category, not shopping cart."
-            text="Buyers can start from a category, then send model and quantity details for exact stock and price confirmation."
-          />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {productCategories.map((category) => (
-              <Link key={category.name} href={category.href} className="group rounded-lg border border-[#e4e0d8] bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
-                  <Image src={category.image} alt={category.name} fill className="object-cover transition duration-300 group-hover:scale-[1.03]" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/10 to-transparent" />
-                  <h3 className="absolute bottom-3 left-3 right-3 text-lg font-black leading-6 text-white">{category.name}</h3>
-                </div>
-                <div className="p-5">
-                  <div className="font-mono text-xs font-bold text-[#0b6b45]">{category.metric}</div>
-                  <ul className="mt-4 space-y-2">
-                    {category.items.map((item) => (
-                      <li key={item} className="flex items-center gap-2 text-sm font-semibold text-[#27313c]">
-                        <CheckCircle className="h-4 w-4 text-[#0b6b45]" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Link>
             ))}
           </div>
         </div>
@@ -898,7 +874,7 @@ export default function WholesaleInquiryPage() {
               <ClipboardCheck className="h-8 w-8 text-[#0b6b45]" />
               <h3 className="mt-5 text-xl font-black text-[#18212c]">Prefer direct contact?</h3>
               <div className="mt-4 space-y-3">
-                <a href={waLink(selectedProductLine?.name ? `Hi, I'd like a wholesale quote for ${selectedProductLine.name}. Please send tier pricing and MOQ.` : WA_PREFILL.wholesaleInquiry)} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_click', { event_label: 'Inquiry Side WhatsApp' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
+                <a href={waLink(selectedProductLine?.name ? `Hi, I'd like a wholesale quote for ${selectedProductLine.name}. Please send tier pricing and MOQ.` : WA_PREFILL.wholesaleInquiry)} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_click', { event_label: 'Inquiry Side WhatsApp', from_page: '/wholesale-inquiry', slot: 'form_sidebar_whatsapp' })} className="flex items-center gap-3 text-sm font-semibold text-[#52606d] transition hover:text-[#0b6b45]">
                   <MessageSquare className="h-4 w-4" />
                   WhatsApp: +853 6390 2425
                 </a>
@@ -918,6 +894,48 @@ export default function WholesaleInquiryPage() {
               <div className="absolute bottom-4 left-4 rounded-md bg-white px-3 py-2 text-sm font-black text-[#18212c]">SKU coverage check</div>
             </div>
           </aside>
+        </div>
+      </section>
+
+      <section className="bg-[#fffaf0] py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            eyebrow="Product range"
+            title="Quote by category, not shopping cart."
+            text="Buyers can start from a category, then send model and quantity details for exact stock and price confirmation."
+          />
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {productCategories.map((category) => (
+              <Link
+                key={category.name}
+                href={category.href}
+                onClick={() => trackEvent('category_tile_click', {
+                  from_page: '/wholesale-inquiry',
+                  category_name: category.name,
+                  href: category.href,
+                  slot: 'inquiry_product_range',
+                })}
+                className="group rounded-lg border border-[#e4e0d8] bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              >
+                <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
+                  <Image src={category.image} alt={category.name} fill className="object-cover transition duration-300 group-hover:scale-[1.03]" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/72 via-black/10 to-transparent" />
+                  <h3 className="absolute bottom-3 left-3 right-3 text-lg font-black leading-6 text-white">{category.name}</h3>
+                </div>
+                <div className="p-5">
+                  <div className="font-mono text-xs font-bold text-[#0b6b45]">{category.metric}</div>
+                  <ul className="mt-4 space-y-2">
+                    {category.items.map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-sm font-semibold text-[#27313c]">
+                        <CheckCircle className="h-4 w-4 text-[#0b6b45]" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
