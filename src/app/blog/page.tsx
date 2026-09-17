@@ -26,6 +26,7 @@ import SafeImage from '@/components/SafeImage';
 import BlogNewsletterSubscribe from '@/components/features/BlogNewsletterSubscribe';
 import ScrollAnimator from '@/components/ScrollAnimator';
 import { BLOG_CATEGORIES } from '@/lib/blog-categories';
+import { BLOG_LIST_REDIRECT_SOURCE_SLUGS } from '@/lib/blog-301-candidates';
 import { pickPostDescription } from '@/lib/post-description';
 
 const baseMetadata: Metadata = {
@@ -178,7 +179,9 @@ export default async function BlogPage({
     console.log('Query conditions:', { category });
 
     const result = await query;
-    postsData = result.data || [];
+    postsData = (result.data || []).filter(
+      (post: any) => !BLOG_LIST_REDIRECT_SOURCE_SLUGS.has(post.slug),
+    );
     error = result.error;
 
     // Fetch author profiles separately for all posts

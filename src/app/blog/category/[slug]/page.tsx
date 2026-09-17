@@ -9,6 +9,7 @@ import {
   BLOG_CATEGORIES,
   getCategoryBySlug,
 } from '@/lib/blog-categories';
+import { BLOG_LIST_REDIRECT_SOURCE_SLUGS } from '@/lib/blog-301-candidates';
 import { pickPostDescription } from '@/lib/post-description';
 import type { ArticleCard } from '@/types/blog';
 
@@ -121,7 +122,9 @@ export default async function BlogCategoryPage({
     .order('published_at', { ascending: false })
     .limit(100);
 
-  const postsData: any[] = postsDataRaw || [];
+  const postsData: any[] = (postsDataRaw || []).filter(
+    (post: any) => !BLOG_LIST_REDIRECT_SOURCE_SLUGS.has(post.slug),
+  );
 
   // Attach author display names
   const authorIds = Array.from(

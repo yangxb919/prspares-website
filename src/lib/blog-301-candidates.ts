@@ -159,12 +159,12 @@ export const CANDIDATES_301: Candidate301[] = [
     suggested_observation_window: '6 weeks from canonical_applied_on (+ content merge window)',
     canonical_applied_on: '2026-04-21',
     recheck_after: '2026-06-02',
-    status: 'observe_longer',
+    status: 'do_not_301',
     decision_reason:
-      'Page sizes are similar (2,283 vs 2,347 words). Birmingham anecdote was specifically called out as potentially salvageable. A hard 301 is premature without the content team confirming the anecdote either was merged or is not worth merging.',
-    review_date: '2026-04-22',
+      '2026-09-16 recheck: URL Inspection reports PASS/indexed and Google-selected canonical is this source page even though the user canonical points to the pillar. The latest complete 28-day GSC window (2026-08-17 through 2026-09-13) shows 3 clicks / 46 impressions for this source, while query-by-page overlap is unavailable because GSC returned no rows. Preserve the indexed source instead of forcing a merge.',
+    review_date: '2026-09-16',
     next_action:
-      'Content team to read the Birmingham section and decide: (a) merge into pillar then 301, (b) confirm not worth merging then 301, (c) discover unique angle and reposition. Recheck around 2026-06-02.',
+      'Self-canonical restored in Supabase on 2026-09-17. Keep the page in the sitemap and do not add a hard redirect. Recheck only if a future complete query-by-page window can prove overlap.',
   },
   {
     from_slug: 'why-risk-your-business-on-single-source-display-suppliers',
@@ -327,12 +327,12 @@ export const CANDIDATES_301: Candidate301[] = [
     suggested_observation_window: '28 days from canonical application',
     canonical_applied_on: '2026-07-29',
     recheck_after: '2026-08-26',
-    status: 'observe_longer',
+    status: 'do_not_301',
     decision_reason:
-      'Canonical applied same day as the hub upgrade. Cannot judge consolidation yet — hub had 0 impressions at the time, so the file rule against premature 301 applies.',
-    review_date: '2026-07-29',
+      '2026-09-16 recheck: T005/D-88743ecae581 ruled that this source should not be redirected. URL Inspection reports PASS/indexed and Google-selected canonical is this source page, while the declared canonical points to the MOQ hub; the hub is discovered but not indexed and has never been crawled. The latest complete 28-day GSC window (2026-08-17 through 2026-09-13) shows 0 clicks / 13 impressions for the source and no page row for the hub.',
+    review_date: '2026-09-16',
     next_action:
-      'At recheck: pull GSC for the hub and both spokes. If hub is gaining impressions on first-order/MOQ queries and these two remain at 0, graduate to ready_for_301; if either spoke picks up unique queries, flip to do_not_301 and restore self-canonical.',
+      'Self-canonical restored in Supabase on 2026-09-17. Keep the source in the sitemap and do not add a hard redirect. Re-evaluate only after the hub has two complete 28-day windows with first-order/MOQ query data.',
   },
   {
     from_slug: 'prepare-mixed-order-list-before-contacting-supplier',
@@ -359,3 +359,18 @@ export const CANDIDATES_301: Candidate301[] = [
 export const READY_FOR_301: Candidate301[] = CANDIDATES_301.filter(
   (c) => c.status === 'ready_for_301',
 );
+
+/**
+ * Published fallback posts whose public URLs are already permanent redirects.
+ * Keep the records published for rollback safety, but never render links to the
+ * redirect sources from blog listing pages. Each slug below was rechecked as a
+ * live 308 on 2026-09-17 and matches a source in next.config.js.
+ */
+export const BLOG_LIST_REDIRECT_SOURCE_SLUGS: ReadonlySet<string> = new Set([
+  'iphone-screen-replacement-wholesale-repair-business',
+  'oem-vs-aftermarket-phone-screens',
+  'oled-vs-lcd-comparison-guide',
+  'substandard-battery-sourcing-certified-repair-shops',
+  'whats-the-real-difference-between-oled-and-lcd-phone-screens',
+  'wholesale-iphone-screens-grades-prices-moq',
+]);
