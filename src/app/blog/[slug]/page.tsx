@@ -13,6 +13,7 @@ import { BlogInlineCTA, BlogStickyCTA, BlogSidebarCTA } from '@/components/blog/
 import { getBlogCtaContext, wholesaleInquiryHref } from '@/lib/blog-cta-context';
 import { TrackedLink } from '@/components/TrackedLink';
 import { extractFAQs, buildFaqSchema } from '@/lib/extract-faqs';
+import { extractHowToSteps, buildHowToSchema } from '@/lib/extract-howto';
 import { pickRelatedByTitle } from '@/lib/related-posts';
 import { pickPostDescription } from '@/lib/post-description';
 
@@ -457,6 +458,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
     const faqs = extractFAQs(typedPost.content);
     const faqSchema = buildFaqSchema(faqs);
+    // HowTo 仅对正文含 <!-- schema:howto --> 标记、且紧跟连续 `## Step N:` 标题的文章输出，
+    // step 文本逐字取自可见正文，避免 schema 与页面内容不一致。
+    const howToSchema = buildHowToSchema({
+      name: typedPost.title,
+      description: pickPostDescription(typedPost.meta as any, typedPost.excerpt),
+      url: articleUrl,
+      steps: extractHowToSteps(typedPost.content),
+    });
 
     // Blog CTA 上下文（腿1 转化漏桶）：按 category/tags/title 推断品类，做上下文文案 + 预填深链
     const ctaCtx = getBlogCtaContext(
@@ -485,6 +494,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          />
+        )}
+        {howToSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
           />
         )}
 
