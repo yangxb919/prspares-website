@@ -27,34 +27,34 @@ export const SCREEN_BRANDS: ScreenBrandDef[] = [
   {
     key: 'gx',
     label: 'GX',
-    h1: 'GX iPhone Screens — Wholesale Soft OLED Price List',
+    h1: 'GX iPhone Screens — Wholesale OLED Price List',
     definition:
-      'GX is a third-party aftermarket panel brand best known for soft OLED iPhone replacement screens, and one of the most-requested aftermarket OLED names among repair shops and distributors.',
+      'GX is a third-party aftermarket panel brand that makes both soft (flexible) and hard (rigid) OLED iPhone replacement screens. A GX screen listed simply as "GX OLED" is the soft version; hard GX assemblies are always labeled hard.',
     positioning:
-      'GX sits in the premium aftermarket band: shops that quote "like-original" OLED repairs without paying Original-grade prices typically stock GX soft OLED. Nearly the whole GX line is flexible (soft) OLED, so color, contrast and touch feel stay close to the stock display.',
+      'GX is an OLED line rather than an incell one: shops use it to offer an OLED repair below Original-grade prices. Grades are labeled per SKU from the supplier listing — check the grade column, because the same brand name covers both hard and soft OLED assemblies.',
     bestFor:
-      'Customer-facing OLED repairs where the shop wants a recognized aftermarket panel name at soft OLED pricing.',
+      'OLED repairs where the shop wants a recognized aftermarket panel name below Original-grade pricing.',
     gradeFaqQ: 'Is GX a soft OLED or a hard OLED screen?',
-    metaTitle: 'GX iPhone Screens Wholesale — Soft OLED Price List & SKUs | PRSPARES',
+    metaTitle: 'GX iPhone Screens Wholesale — OLED Price List & SKUs | PRSPARES',
     metaDescription:
-      'GX iPhone screen wholesale: GX soft OLED assemblies (plus hard OLED and incell SKUs) with live 10/50/200 tier pricing, factory-direct QC and a 12-month warranty. No single-model MOQ — mix GX with any models and categories to reach the 10-piece order minimum.',
+      'GX iPhone screen wholesale: GX hard and soft OLED assemblies with live 10/50/200 tier pricing and a 12-month warranty. No single-model MOQ — mix GX with any models and categories to reach the 10-piece order minimum.',
     keywords:
-      'gx screen, gx iphone screen, gx soft oled, gx oled screen, gx display wholesale, gx screen supplier',
+      'gx screen, gx iphone screen, gx hard oled, gx oled screen, gx display wholesale, gx screen supplier',
   },
   {
     key: 'jk',
     label: 'JK',
-    h1: 'JK iPhone Screens — Wholesale Incell & Soft OLED Price List',
+    h1: 'JK iPhone Screens — Wholesale Incell & OLED Price List',
     definition:
-      'JK is a third-party aftermarket panel brand that makes both incell LCD and soft OLED iPhone replacement screens, known for value-priced incell assemblies alongside its OLED line.',
+      'JK is a third-party aftermarket panel brand that makes incell LCD, soft OLED and hard OLED iPhone replacement screens, known for value-priced incell assemblies alongside its OLED lines.',
     positioning:
-      'JK runs two lines: soft OLED for customer-facing repairs and incell for budget quotes. That two-tier range makes JK a common single-brand answer for shops that want one panel maker across both price points, and JK incell is one of the most-searched budget screen options in the trade.',
+      'JK covers every aftermarket price point: soft and hard OLED for customer-facing repairs and incell for budget quotes. That range makes JK a common single-brand answer for shops that want one panel maker across their whole repair menu, and JK incell is one of the most-searched budget screen options in the trade.',
     bestFor:
       'Shops running a two-tier repair menu (premium OLED + budget incell) that prefer one consistent panel brand.',
     gradeFaqQ: 'Is JK an incell or an OLED screen?',
-    metaTitle: 'JK iPhone Screens Wholesale — Incell & Soft OLED Price List | PRSPARES',
+    metaTitle: 'JK iPhone Screens Wholesale — Incell & OLED Price List | PRSPARES',
     metaDescription:
-      'JK iPhone screen wholesale: JK incell and JK soft OLED assemblies with live 10/50/200 tier pricing, factory-direct QC and a 12-month warranty. No single-model MOQ — mix JK models, grades and categories to reach the 10-piece order minimum.',
+      'JK iPhone screen wholesale: JK incell, soft OLED and hard OLED assemblies with live 10/50/200 tier pricing and a 12-month warranty. No single-model MOQ — mix JK models, grades and categories to reach the 10-piece order minimum.',
     keywords:
       'jk screen, jk incell, jk iphone screen, jk oled, jk display wholesale, jk incell screen supplier',
   },

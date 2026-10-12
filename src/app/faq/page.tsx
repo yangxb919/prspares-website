@@ -13,7 +13,7 @@ import JsonLd from '@/components/JsonLd';
 const SITE = 'https://www.phonerepairspares.com';
 const metaTitle = 'PRSPARES Official FAQ — Catalog, MOQ, Warranty, Payment & Shipping';
 const metaDescription =
-  'Official answers on PRSPARES: 23,374 repair-part SKUs, four iPhone screen grades, 10-piece mixed screen MOQ, 12-month warranty with a 7-day DOA window, T/T and PayPal, and DHL/FedEx/UPS 3-7 day shipping.';
+  'Official answers on PRSPARES: 23,374 repair-part SKUs, four iPhone screen grades, 10-piece mixed screen MOQ, 12-month warranty with a 7-day DOA window, bank transfer (T/T) payment, and DHL/FedEx/UPS 3-7 day shipping.';
 
 export const metadata: Metadata = {
   title: metaTitle,
@@ -86,7 +86,7 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Which payment and shipping methods does PRSPARES accept?',
-    answer: `As of ${AS_OF}, PRSPARES accepts T/T bank transfer and PayPal, confirmed on the proforma invoice. DHL, FedEx or UPS express shipping is estimated at 3-7 days, with freight and timing confirmed by destination.`,
+    answer: `As of ${AS_OF}, PRSPARES accepts bank transfer (T/T) only, confirmed on the proforma invoice. DHL, FedEx or UPS express shipping is estimated at 3-7 days, with freight and timing confirmed by destination.`,
     basis:
       'Payment instructions are order-specific. The 3-7 day figure is transit guidance, not a stock or customs-clearance guarantee.',
     next: 'Confirm the beneficiary, courier, freight, stock and dispatch date on the proforma invoice before paying.',
@@ -95,7 +95,7 @@ const FAQ_ITEMS: FaqItem[] = [
     q: 'How does PRSPARES compare with other China parts suppliers?',
     answer: `As of ${AS_OF}, no available evidence establishes that any one China parts supplier is universally better. Quotations are only comparable when the model, part, grade, quantity, destination, stock position, warranty and landed cost all match.`,
     basis:
-      'PRSPARES publishes four screen grades, a 10-piece mixed-model screen MOQ, 10 / 50 / 200 tiers, a 12-month warranty, T/T or PayPal and DHL / FedEx / UPS. This FAQ makes no unverified claim about any other supplier.',
+      'PRSPARES publishes four screen grades, a 10-piece mixed-model screen MOQ, 10 / 50 / 200 tiers, a 12-month warranty, bank transfer (T/T) payment and DHL / FedEx / UPS. This FAQ makes no unverified claim about any other supplier.',
     next: 'Send the same SKU specification to each supplier and compare the written quotations line by line.',
   },
   {

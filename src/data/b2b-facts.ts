@@ -36,11 +36,11 @@ export const B2B_FACTS: B2BFact[] = [
   },
   {
     label: 'Warranty',
-    value: '12-month defect replacement warranty on all parts.',
+    value: '12 months from receipt on screens, standard batteries and small parts; 30 days on zero-cycle diagnostic batteries (return or exchange within 30 days) and on tools. Test before installation; physical, liquid and installation damage are not covered. Confirmed defects are replaced with your next order or credited to it.',
   },
   {
     label: 'Shipping',
-    value: 'DHL / FedEx / UPS express, typically 3-7 days door-to-door; freight quoted per destination.',
+    value: 'Orders are tested and dispatched the day after payment arrives, by DHL / FedEx / UPS express, typically 3-7 days door-to-door; freight quoted per destination.',
   },
   {
     label: 'Trade terms',
@@ -48,7 +48,7 @@ export const B2B_FACTS: B2BFact[] = [
   },
   {
     label: 'Payment',
-    value: 'Bank transfer (T/T) or PayPal, confirmed on the proforma invoice.',
+    value: 'Bank transfer (T/T) only, confirmed on the proforma invoice.',
   },
   {
     label: 'Screen grades',

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { wholesaleMoq, wholesaleProductProperties } from '@/utils/wholesale-schema';
+import { batteriesBuyingFaqs } from '@/data/category-buying-faqs';
 
 const metaTitle = 'Wholesale Phone Batteries iPhone Samsung from China | PRSPARES';
 const metaDescription =
@@ -36,7 +37,7 @@ export default function BatteriesLayout({
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "Wholesale iPhone Replacement Batteries",
-    "description": "OEM original, high-capacity, and standard replacement batteries for iPhone 13–16 series. TI/ATL cells with UN38.3 safety certification.",
+    "description": "OEM original, high-capacity, and standard replacement batteries for iPhone 13–16 series. TI/ATL cells, shipped in UN38.3-compliant packing.",
     "brand": { "@type": "Brand", "name": "PRSPARES" },
     "additionalProperty": wholesaleProductProperties(20),
     "category": "iPhone Batteries",
@@ -76,6 +77,11 @@ export default function BatteriesLayout({
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      ...batteriesBuyingFaqs().map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": { "@type": "Answer", "text": f.a },
+      })),
       {
         "@type": "Question",
         "name": "Is it worth replacing an iPhone battery at 80% health?",
@@ -99,7 +105,7 @@ export default function BatteriesLayout({
       {
         "@type": "Question",
         "name": "What safety certifications should wholesale phone batteries have?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Legitimate wholesale batteries must carry: UN38.3 (mandatory for shipping), UL 2054 or IEC 62133 (safety standards), CE marking (EU compliance), and FCC (US). All PRSPARES batteries carry these certifications." },
+        "acceptedAnswer": { "@type": "Answer", "text": "Legitimate wholesale batteries must carry: UN38.3 (mandatory for shipping), UL 2054 or IEC 62133 (safety standards), CE marking (EU compliance), and FCC (US). Ask for the test documents of the exact battery model before you order." },
       },
     ],
   };

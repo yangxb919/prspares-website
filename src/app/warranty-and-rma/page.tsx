@@ -12,7 +12,7 @@ const SITE_URL = (
 
 const metaTitle = 'Warranty & After-Sales Standard — 12-Month Coverage | PRSPARES';
 const metaDescription =
-  'PRSPARES backs every wholesale phone part with a 12-month warranty from receipt of goods and a sub-1% RMA target. See what is covered, what is not, the per-model screen coverage list, and the RMA claim process.';
+  'PRSPARES backs wholesale screens, batteries and small parts with a 12-month warranty from receipt of goods (zero-cycle diagnostic batteries and tools: 30 days) and a sub-1% RMA target. See what is covered, what is not, the per-model screen coverage list, and the RMA claim process.';
 
 export const metadata: Metadata = {
   title: metaTitle,
@@ -47,6 +47,8 @@ const NOT_COVERED = [
   'Liquid or moisture damage from misuse',
   'Frame bent or deformed by drops or crushing',
   'Damage from incorrect installation or use of non-standard tools',
+  'Parts installed without testing first, or with QC labels removed',
+  'Normal battery capacity wear from use',
 ];
 
 // Representative subset of the screen catalog the 12-month warranty applies to.
@@ -80,14 +82,18 @@ const RMA_STEPS = [
   {
     icon: PackageCheck,
     title: '3. Resolution',
-    text: 'Covered units are resolved by replacement or credit on your next order. If a single batch exceeds the expected defect rate, we process the affected batch together rather than unit by unit.',
+    text: 'Covered units are resolved by replacement shipped with your next order or credit on your next order, so you never pay to ship faulty parts back to China. Defective batteries do not need to be returned — photos are enough. If a single batch exceeds the expected defect rate, we process the affected batch together rather than unit by unit.',
   },
 ];
 
 const FAQ = [
   {
     q: 'How long is the PRSPARES warranty and when does it start?',
-    a: 'Every PRSPARES part carries a 12-month warranty that starts from the date you receive the goods, not the order date. Our target RMA rate across all grades is under 1%.',
+    a: 'Screens, standard batteries and small parts carry a 12-month warranty that starts from the date you receive the goods, not the order date. Zero-cycle diagnostic batteries carry a 30-day warranty and can be returned or exchanged within 30 days of receipt. Tools carry a 30-day warranty. Our target RMA rate across all grades is under 1%.',
+  },
+  {
+    q: 'Do I need to test parts before installation?',
+    a: 'Yes. Connect and power on every part with the protective film still on before you fit it. A part damaged during installation is not covered, so testing first protects your claim.',
   },
   {
     q: 'What screen defects are covered under warranty?',
@@ -153,12 +159,12 @@ export default function WarrantyPage() {
         <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <p className="text-sm font-bold text-[#51d88a]">Warranty &amp; After-Sales Standard</p>
           <h1 className="mt-3 max-w-3xl text-4xl font-black leading-[1.05] sm:text-5xl">
-            A 12-month warranty on every part — from the day it reaches you.
+            A 12-month warranty on screens, batteries and small parts — from the day it reaches you.
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">
             PRSPARES is a Shenzhen factory-direct B2B wholesale supplier. Every screen, battery and small part is checked by
             incoming QC before it ships and is backed by a <strong>12-month warranty from receipt of goods</strong>, with a target
-            RMA rate <strong>under 1%</strong>.
+            RMA rate <strong>under 1%</strong>. Zero-cycle diagnostic batteries and tools are covered for 30 days.
           </p>
           <div className="mt-7 grid max-w-xl grid-cols-3 gap-3">
             {[['12 mo', 'warranty from receipt'], ['<1%', 'RMA target'], ['All grades', 'Original→Incell']].map(([v, l]) => (
@@ -177,7 +183,7 @@ export default function WarrantyPage() {
         <p className="mt-3 max-w-3xl text-base leading-7 text-[#52606d]">
           The warranty covers <strong>manufacturing and functional defects</strong> — faults that exist when the part leaves our
           QC bench. <strong>Physical and accidental damage</strong> that happens after the part is in your hands is outside any
-          screen warranty.
+          screen warranty. Please test every part before installation — connect and power on with the protective film still on.
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           <div className="rounded-lg border border-[#bfe6cf] bg-white p-6 shadow-sm">

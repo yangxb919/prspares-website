@@ -1,4 +1,4 @@
-import { CheckCircle, ArrowRight, Shield, Zap, Package } from 'lucide-react';
+import { CheckCircle, ArrowRight, Zap, Package } from 'lucide-react';
 import IPadBatteryQuoteButton from './iPadBatteryQuoteButton';
 import WholesaleIpadBatteryTable from '@/components/products/WholesaleIpadBatteryTable';
 import { IPAD_BATTERY_CATALOG } from '@/data/ipad-battery-catalog';
@@ -61,7 +61,7 @@ export default function iPadBatteryReplacementFactoryPage() {
             </h1>
             <p className="text-lg text-blue-100 mb-8 leading-relaxed">
               OEM-grade replacement batteries for all iPad models — iPad Pro 12.9&quot;, iPad Pro 11&quot;,
-              iPad Air, iPad mini &amp; standard iPad. Original capacity, CE/RoHS certified, factory-direct from Shenzhen.
+              iPad Air, iPad mini &amp; standard iPad. Original capacity, factory-direct from Shenzhen.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <IPadBatteryQuoteButton label="Get Wholesale Quote" variant="primary" eventLabel="Hero CTA" />
@@ -158,22 +158,11 @@ export default function iPadBatteryReplacementFactoryPage() {
         </div>
       </section>
 
-      {/* ═══ 6. CERTIFICATIONS & QUALITY ═══ */}
+      {/* ═══ 6. QUALITY & SHIPPING ═══ */}
       <section className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">Quality &amp; Certifications</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-6 border border-gray-100">
-              <Shield className="w-8 h-8 text-[#1e3a5f] mb-4" />
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Safety Certified</h3>
-              <ul className="space-y-2">
-                {['CE Certified', 'RoHS Compliant', 'FCC Approved', 'UN38.3 Tested'].map((c) => (
-                  <li key={c} className="flex items-center gap-2 text-sm text-gray-600">
-                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" /> {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">Quality &amp; Shipping</h2>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="bg-white rounded-xl p-6 border border-gray-100">
               <Zap className="w-8 h-8 text-[#1e3a5f] mb-4" />
               <h3 className="text-lg font-bold text-gray-900 mb-3">100% Tested</h3>

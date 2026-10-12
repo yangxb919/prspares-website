@@ -2,8 +2,9 @@ import Link from 'next/link';
 import JsonLd from '@/components/JsonLd';
 import WaQuickLink from '@/components/products/WaQuickLink';
 import { waProductPrefill } from '@/lib/whatsapp';
-import { IPHONE_SCREEN_CATALOG, type ScreenSku } from '@/data/iphone-screen-catalog';
+import { IPHONE_SCREEN_CATALOG, type ScreenSku } from '@/data/screen-catalog';
 import { GRADE_BY_LABEL, GRADE_TAXONOMY } from '@/data/grade-taxonomy';
+import { SCREEN_MODEL_PAGE_BY_MODEL } from '@/data/screen-model-pages';
 
 // Server-rendered native <table> of real iPhone screen SKUs with tiered wholesale
 // pricing. Native HTML (not a JS grid) keeps it fully crawlable and easy for AI
@@ -34,10 +35,15 @@ const money = (n: number) => `$${n.toFixed(2)}`;
 // Optional `brand` renders the brand-filtered variant (W3-4 brand pages): rows
 // limited to that panel brand, no Product/AggregateOffer schema — the full
 // /products/screens table stays the single price-authority page.
-export default function WholesaleScreenTable({ brand }: { brand?: string } = {}) {
+// Optional `model` renders the single-model variant (model pages): rows limited
+// to that model, no hub schema, model column not linked back to itself.
+export default function WholesaleScreenTable({ brand, model }: { brand?: string; model?: string } = {}) {
   const rows = brand
     ? IPHONE_SCREEN_CATALOG.filter((r) => r.brand === brand)
-    : IPHONE_SCREEN_CATALOG;
+    : model
+      ? IPHONE_SCREEN_CATALOG.filter((r) => r.model === model)
+      : IPHONE_SCREEN_CATALOG;
+  const isHub = !brand && !model;
   const models = new Set(rows.map((r) => r.model)).size;
   const grades = Array.from(new Set(rows.map((r) => r.grade)));
   const low = Math.min(...rows.map((r) => r.p10));
@@ -48,7 +54,6 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
     '@type': 'Product',
     name: `Wholesale iPhone Screen Assemblies (${rows.length} SKUs)`,
     category: 'Phone Replacement Screens',
-    brand: { '@type': 'Brand', name: 'PRSPARES' },
     description:
       'Factory-direct iPhone LCD/OLED screen assemblies in Original, Soft OLED, Hard OLED and Incell grades for iPhone 11 through iPhone 17, with tiered 10/50/200 wholesale pricing.',
     offers: {
@@ -64,16 +69,24 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
 
   return (
     <section id="price-list" className="bg-white py-14 md:py-20">
-      {!brand && <JsonLd data={schema} />}
+      {isHub && <JsonLd data={schema} />}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-sm font-bold text-[#0b6b45]">Live wholesale price list</p>
         <h2 className="mt-3 text-3xl font-black text-[#18212c] md:text-4xl">
           {brand
             ? `${brand} iPhone Screens — ${rows.length} SKUs, ${models} Models`
-            : `iPhone Screen Wholesale — ${rows.length} SKUs, ${models} Models`}
+            : model
+              ? `${model} Screen Price List — ${rows.length} SKUs`
+              : `iPhone Screen Wholesale — ${rows.length} SKUs, ${models} Models`}
         </h2>
         {/* Definitional / AI-citable opener */}
-        {brand ? (
+        {model ? (
+          <p className="mt-4 max-w-3xl text-base leading-7 text-[#52606d]">
+            Every {model} screen assembly we list, by grade and panel brand, with 10+ / 50+ / 200+ unit prices in USD.
+            Listed prices apply from 10 pcs — mix this model with any other screens, batteries or parts to reach the
+            10-piece order minimum.
+          </p>
+        ) : brand ? (
           <p className="mt-4 max-w-3xl text-base leading-7 text-[#52606d]">
             PRSPARES stocks {rows.length} {brand} iPhone screen assemblies in{' '}
             {grades.join(' and ')} grade{grades.length > 1 ? 's' : ''}, covering {models} iPhone models at{' '}
@@ -92,7 +105,9 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
           </p>
         )}
 
-        {/* Compact grade strip — canonical definitions live on the grade guide */}
+        {/* Compact grade strip — canonical definitions live on the grade guide.
+            Model pages carry their own grade cards above the table, so skip it there. */}
+        {!model && (<>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {GRADE_TAXONOMY.filter((g) => !brand || rows.some((r) => r.grade === g.label)).map((g) => {
             const gradeRows = rows.filter((r) => r.grade === g.label);
@@ -111,7 +126,7 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
           <Link href="/products/screens-grade-guide" className="font-bold text-[#0b6b45] underline decoration-2 underline-offset-2">
             Full grade comparison guide →
           </Link>
-          {!brand && (
+          {isHub && (
             <>
               {' '}· Shop by panel brand:{' '}
               <Link href="/products/screens/gx" className="font-bold text-[#0b6b45] underline decoration-2 underline-offset-2">
@@ -132,10 +147,12 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
           </svg>
           <p className="text-sm leading-6 text-[#7a4a12]">
             <strong>Please confirm pricing before ordering.</strong> Wholesale phone-part prices change frequently and the
-            figures on this page may not reflect the latest rates — they are for reference only. Contact us for a live,
-            up-to-date quote on your model and grade mix.
+            figures on this page may not reflect the latest rates — they are for reference only. Listed prices apply
+            from 10 pcs; larger volumes are quoted separately. Contact us for a live, up-to-date quote on your model and
+            grade mix.
           </p>
         </div>
+        </>)}
 
         <div className="mt-8 overflow-x-auto rounded-lg border border-[#e4dccb]">
           <table className="w-full min-w-[760px] border-collapse text-left text-sm">
@@ -153,13 +170,31 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
             <tbody>
               {rows.map((row, i) => (
                 <tr key={row.sku} className={i % 2 ? 'bg-[#faf8f3]' : 'bg-white'}>
-                  <td className="whitespace-nowrap px-4 py-3 font-bold text-[#18212c]">{row.model}</td>
+                  <td className="whitespace-nowrap px-4 py-3 font-bold text-[#18212c]">
+                    {!model && SCREEN_MODEL_PAGE_BY_MODEL[row.model] ? (
+                      <Link
+                        href={`/products/screens/${SCREEN_MODEL_PAGE_BY_MODEL[row.model].slug}`}
+                        className="underline decoration-[#7ee2b0] decoration-2 underline-offset-2 hover:text-[#0b6b45]"
+                      >
+                        {row.model}
+                      </Link>
+                    ) : (
+                      row.model
+                    )}
+                  </td>
                   <td className="px-4 py-3">
                     <span className={`inline-block rounded px-2 py-0.5 text-xs font-bold ${GRADE_BADGE[row.grade] || 'bg-[#f1ede4] text-[#52606d]'}`} title={GRADE_NOTE[row.grade] || ''}>
                       {row.grade}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-[#52606d]">{row.title}</td>
+                  <td className="px-4 py-3 text-[#52606d]">
+                    {row.title}
+                    {row.inStock === false && (
+                      <span className="ml-2 inline-block rounded bg-[#f1ede4] px-1.5 py-0.5 text-xs font-bold text-[#8a5a2a]">
+                        Out of stock
+                      </span>
+                    )}
+                  </td>
                   <td className="whitespace-nowrap px-4 py-3 text-right font-mono font-bold text-[#18212c]">{money(row.p10)}</td>
                   <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-[#52606d]">{money(row.p50)}</td>
                   <td className="whitespace-nowrap px-4 py-3 text-right font-mono text-[#0b6b45]">{money(row.p200)}</td>
@@ -167,7 +202,7 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
                     <Link href={quoteHref(row)} className="font-bold text-[#ff8a2a] hover:text-[#0b6b45]">Add →</Link>
                     <WaQuickLink
                       message={waProductPrefill(`${[row.model, row.brand, row.grade].filter(Boolean).join(' ')} screens`, row.p10)}
-                      eventLabel={`${brand ? `${brand} Table` : 'Screens Table'} WA: ${row.model} ${row.grade}`}
+                      eventLabel={`${brand ? `${brand} Table` : model ? `${model} Table` : 'Screens Table'} WA: ${row.model} ${row.grade}`}
                       className="ml-3 text-xs font-bold text-[#0b6b45] hover:text-[#1f7a52]"
                     >
                       WA
@@ -180,10 +215,10 @@ export default function WholesaleScreenTable({ brand }: { brand?: string } = {})
         </div>
 
         <p className="mt-4 text-xs leading-5 text-[#8a94a0]">
-          {brand ? (
+          {brand || model ? (
             <>
               Indicative factory-direct unit pricing (USD), updated from the live wholesale price sheet. Final quote
-              confirms stock, batch QC and shipping route. This list shows {brand} iPhone assemblies only — see the{' '}
+              confirms stock, batch QC and shipping route. This list shows {brand ? `${brand} iPhone` : model} assemblies only — see the{' '}
               <Link href="/products/screens#price-list" className="font-bold text-[#0b6b45] underline decoration-2 underline-offset-2">
                 full iPhone screen price list
               </Link>{' '}

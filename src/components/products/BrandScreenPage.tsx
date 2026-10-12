@@ -3,9 +3,10 @@ import JsonLd from '@/components/JsonLd';
 import WholesaleScreenTable from '@/components/products/WholesaleScreenTable';
 import WaQuickLink from '@/components/products/WaQuickLink';
 import { waProductPrefill } from '@/lib/whatsapp';
-import { IPHONE_SCREEN_CATALOG } from '@/data/iphone-screen-catalog';
+import { IPHONE_SCREEN_CATALOG } from '@/data/screen-catalog';
 import { GRADE_TAXONOMY } from '@/data/grade-taxonomy';
 import { SCREEN_BRANDS, type ScreenBrandDef } from '@/data/screen-brands';
+import { SCREEN_MODEL_PAGES } from '@/data/screen-model-pages';
 
 // W3-4 panel-brand landing page (GX / JK pilot). Same zero-fake contract as the
 // grade guide: every count and price is computed from the live catalog at build
@@ -85,11 +86,11 @@ export default function BrandScreenPage({ brand }: { brand: ScreenBrandDef }) {
     },
     {
       q: `How much do ${brand.label} iPhone screens cost wholesale?`,
-      a: `${brand.label} iPhone screens run ${money(low)}–${money(high)} per unit at the 10-unit tier on the July 2026 price sheet — for example, an ${exampleModel} ${brand.label} assembly starts at ${money(examplePrice)}. Prices step down at the 50+ and 200+ tiers, and wholesale rates move frequently, so confirm a live quote before ordering.`,
+      a: `${brand.label} iPhone screens run ${money(low)}–${money(high)} per unit at the 10-unit tier on the current price sheet — for example, an ${exampleModel} ${brand.label} assembly starts at ${money(examplePrice)}. Prices step down at the 50+ and 200+ tiers, and wholesale rates move frequently, so confirm a live quote before ordering.`,
     },
     {
       q: 'GX vs JK — which should I stock?',
-      a: `Both are established aftermarket panel brands and the choice follows your repair menu. GX is ${gradeMixSentence('GX').includes('Soft OLED') ? 'almost entirely soft OLED' : 'mainly soft OLED'} (${gradeMixSentence('GX')}) and suits shops selling "like-original" OLED repairs. JK spans two price points (${gradeMixSentence('JK')}), so it fits shops running a premium OLED tier plus a budget incell tier from one brand. Many buyers stock both and split by job type.`,
+      a: `Both are established aftermarket panel brands and the choice follows your repair menu. GX is an OLED line (${gradeMixSentence('GX')}) and suits shops offering OLED repairs below Original-grade prices. JK spans OLED and incell (${gradeMixSentence('JK')}), so it fits shops running a premium OLED tier plus a budget incell tier from one brand. Many buyers stock both and split by job type.`,
     },
     {
       q: `Which iPhone models does ${brand.label} cover that ${sibling.label} does not?`,
@@ -150,7 +151,7 @@ export default function BrandScreenPage({ brand }: { brand: ScreenBrandDef }) {
       {/* Hero + definitional short answer */}
       <section className="bg-[#18212c] py-14 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-sm font-bold text-[#7ee2b0]">{brand.label} panel brand · updated July 2026</p>
+          <p className="text-sm font-bold text-[#7ee2b0]">{brand.label} panel brand · wholesale price list</p>
           <h1 className="mt-3 max-w-4xl text-3xl font-black text-white md:text-5xl">{brand.h1}</h1>
           <p className="mt-5 max-w-3xl text-base leading-7 text-[#c3ccd6]">
             {brand.definition} PRSPARES stocks {rows.length} {brand.label} iPhone screen assemblies covering {models}{' '}
@@ -224,6 +225,21 @@ export default function BrandScreenPage({ brand }: { brand: ScreenBrandDef }) {
           </div>
         </div>
       </section>
+
+      {/* Model pages that carry this brand — deep links into each model's grade sections */}
+      {SCREEN_MODEL_PAGES.some((p) => rows.some((r) => r.model === p.model)) && (
+        <div className="mx-auto max-w-7xl px-4 pt-10 text-sm leading-6 text-[#52606d] sm:px-6 lg:px-8">
+          {brand.label} screens by model:{' '}
+          {SCREEN_MODEL_PAGES.filter((p) => rows.some((r) => r.model === p.model)).map((p, i) => (
+            <span key={p.slug}>
+              {i > 0 && ' · '}
+              <Link href={`/products/screens/${p.slug}`} className="font-bold text-[#0b6b45] hover:text-[#ff8a2a]">
+                {p.model}
+              </Link>
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Full brand price table (no Product schema in brand mode) */}
       <WholesaleScreenTable brand={brand.label} />

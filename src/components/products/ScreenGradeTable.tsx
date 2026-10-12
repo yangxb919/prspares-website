@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { IPHONE_SCREEN_CATALOG } from '@/data/iphone-screen-catalog';
+import { IPHONE_SCREEN_CATALOG } from '@/data/screen-catalog';
 import { GRADE_TAXONOMY, type GradeDef } from '@/data/grade-taxonomy';
 
 // Canonical grade comparison matrix — the site-wide authority for what each

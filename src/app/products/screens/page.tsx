@@ -4,6 +4,10 @@ import WholesaleScreenTable from '@/components/products/WholesaleScreenTable';
 import ScreenGradeTable from '@/components/products/ScreenGradeTable';
 import Link from 'next/link';
 import { productCategoryPages } from '@/data/product-category-pages';
+import BuyingQuestions from '@/components/products/BuyingQuestions';
+import { screensBuyingFaqs } from '@/data/category-buying-faqs';
+
+const buyingFaqs = screensBuyingFaqs();
 
 // FAQ/Breadcrumb schema live here (not in layout.tsx) so they render on the
 // screens hub only — the layout cascades to /products/screens/gx|jk, which emit
@@ -13,6 +17,11 @@ const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: [
+    ...buyingFaqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
     {
       '@type': 'Question',
       name: 'What is the difference between OLED, Soft OLED, Hard OLED, and Incell LCD screens?',
@@ -45,14 +54,6 @@ const faqSchema = {
         text: 'PRSPARES Original grade is a refurbished original panel: the factory OLED cell is kept and fitted with new glass, so brightness, color and True Tone match the stock display. Aftermarket screens (Soft OLED, Hard OLED, Incell) are newly manufactured panels graded by display technology.',
       },
     },
-    {
-      '@type': 'Question',
-      name: 'How much does iPhone screen replacement cost at wholesale?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Wholesale pricing depends on model and grade (July 2026 price list). iPhone 16 Pro Max runs $30 (Incell) to $242 (Original) per unit at the 10+ tier. iPhone 14 Pro Max: $15 to $130. iPhone 13: $11 to $57. Tiered 10/50/200 pricing applies, with 200-unit prices typically 2-4% below 10-unit prices. All 188 iPhone screen SKUs are listed with live prices on this page.',
-      },
-    },
   ],
 };
 
@@ -73,6 +74,7 @@ export default function ScreensPage() {
       <JsonLd data={faqSchema} />
       <CatalogCategoryPage data={productCategoryPages.screens} />
       <WholesaleScreenTable />
+      <BuyingQuestions title="iPhone screen buying questions" faqs={buyingFaqs} />
       <section className="bg-[#f5f3ee] py-14 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-black text-[#18212c] md:text-3xl">iPhone screen grades at a glance</h2>

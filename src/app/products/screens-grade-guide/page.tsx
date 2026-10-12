@@ -4,8 +4,9 @@ import JsonLd from '@/components/JsonLd';
 import ScreenGradeTable, { computeGradeStats } from '@/components/products/ScreenGradeTable';
 import WaQuickLink from '@/components/products/WaQuickLink';
 import { waProductPrefill } from '@/lib/whatsapp';
-import { IPHONE_SCREEN_CATALOG } from '@/data/iphone-screen-catalog';
+import { IPHONE_SCREEN_CATALOG } from '@/data/screen-catalog';
 import { GRADE_TAXONOMY } from '@/data/grade-taxonomy';
+import { SCREEN_MODEL_PAGES } from '@/data/screen-model-pages';
 
 // W2 grade hub (Notion plan 点二 / execution plan 2.1). Canonical explainer for
 // the four screen grades; all prices and counts computed from the live catalog.
@@ -82,15 +83,11 @@ export default function ScreenGradeGuidePage() {
     },
     {
       q: 'How much cheaper is Incell than Original grade?',
-      a: `On the price list reviewed August 2026 an iPhone 13 Incell assembly starts at ${money(i13Incell)} at the 10-unit tier versus ${money(i13Original)} for Original grade — about ${i13SavingPct}% less on the same model. Across all iPhone models, Incell runs ${money(stats[3].minP10)}-${money(stats[3].maxP10)} while Original runs ${money(stats[0].minP10)}-${money(stats[0].maxP10)}.`,
+      a: `On the current price list an iPhone 13 Incell assembly starts at ${money(i13Incell)} at the 10-unit tier versus ${money(i13Original)} for Original grade — about ${i13SavingPct}% less on the same model. Across all iPhone models, Incell runs ${money(stats[3].minP10)}-${money(stats[3].maxP10)} while Original runs ${money(stats[0].minP10)}-${money(stats[0].maxP10)}.`,
     },
     {
       q: 'Can I mix screen grades and models in one wholesale order?',
       a: 'Yes. There is no single-model MOQ — combine any models, grades and product categories in one order, and the published 10+ tier price applies per line once the order totals 10 pcs. Mixed-grade orders are the norm: shops typically pair Soft OLED for premium repairs with Incell for budget jobs. Freight is quoted separately.',
-    },
-    {
-      q: 'Is JK or GX Soft OLED more expensive?',
-      a: 'Neither brand is always more expensive. In the PRSPARES wholesale index, JK Soft OLED sits above GX on the iPhone 16 Pro Max (about $73-75 vs about $59-64), while GX sits above JK on the iPhone 15 Pro Max (about $54-59 vs about $40-44), across the same 10/50/200 tiers and the same canonical grade. Source rows are valid through May 27, 2026. Compare the exact model and request a current quotation — price alone does not establish display quality.',
     },
     {
       q: 'What warranty applies to each screen grade?',
@@ -175,9 +172,22 @@ export default function ScreenGradeGuidePage() {
             <ScreenGradeTable />
           </div>
           <p className="mt-4 text-xs leading-5 text-[#8a94a0]">
-            Indicative 10+ unit pricing (USD) from the July 2026 sheet; ranges span all iPhone models in stock. Confirm
+            Indicative 10+ unit pricing (USD) from the current price sheet; ranges span all iPhone models in stock. Confirm
             live pricing before ordering — wholesale rates move frequently.
           </p>
+          {SCREEN_MODEL_PAGES.length > 0 && (
+            <p className="mt-4 text-sm leading-6 text-[#52606d]">
+              Compare all four grades for one model:{' '}
+              {SCREEN_MODEL_PAGES.map((p, i) => (
+                <span key={p.slug}>
+                  {i > 0 && ' · '}
+                  <Link href={`/products/screens/${p.slug}`} className="font-bold text-[#0b6b45] hover:text-[#ff8a2a]">
+                    {p.model} screens
+                  </Link>
+                </span>
+              ))}
+            </p>
+          )}
         </div>
       </section>
 

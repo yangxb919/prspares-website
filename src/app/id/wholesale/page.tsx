@@ -55,7 +55,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Metode pembayaran apa saja yang diterima?',
-    a: 'Kami terima T/T (Transfer Bank Internasional), PayPal, Western Union, dan Alibaba Trade Assurance untuk keamanan transaksi Anda.',
+    a: 'Kami hanya menerima T/T (Transfer Bank Internasional), dikonfirmasi pada proforma invoice.',
   },
   {
     q: 'Bagaimana kebijakan garansi?',
@@ -460,7 +460,7 @@ export default function IdWholesalePage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { title: 'Tanpa MOQ per Model', items: ['Order campuran dengan layar: total 10 pcs', 'Layar saja: mulai 10 pcs', 'Baterai / sparepart kecil saja: mulai 20 pcs', 'Alat reparasi: mulai 5 pcs'] },
-              { title: 'Metode Pembayaran', items: ['T/T (Transfer Bank Internasional)', 'PayPal', 'Western Union', 'Alibaba Trade Assurance'] },
+              { title: 'Metode Pembayaran', items: ['T/T (Transfer Bank Internasional)'] },
               { title: 'Pengiriman Cepat', items: ['Kirim di hari yang sama', 'DHL / FedEx / UPS', '3–7 hari ke seluruh dunia', 'Sea freight untuk order besar'] },
               { title: 'Garansi 12 Bulan', items: ['Semua produk bergaransi', 'Target RMA < 1%', 'Ganti barang cacat gratis', 'Respon 24 jam dijamin'] },
             ].map((block, index) => (

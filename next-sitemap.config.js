@@ -94,17 +94,47 @@ const ROUTE_EXTRA_DEPS = {
     'src/components/products/BrandScreenPage.tsx',
     'src/data/screen-brands.ts',
     'src/data/iphone-screen-catalog.ts',
+    'src/data/screen-price-refresh.ts',
   ],
   '/products/screens/jk': [
     'src/components/products/BrandScreenPage.tsx',
     'src/data/screen-brands.ts',
     'src/data/iphone-screen-catalog.ts',
+    'src/data/screen-price-refresh.ts',
   ],
   '/products/screens-grade-guide': [
     'src/data/grade-taxonomy.ts',
     'src/data/iphone-screen-catalog.ts',
+    'src/data/screen-price-refresh.ts',
   ],
 };
+
+/**
+ * 机型页 /products/screens/{iphone-…}（2026-10-12 试点）。路由是动态段 [model]，
+ * 页面列表只在 src/data/screen-model-pages.ts 里维护一次；这里从该文件读 slug，
+ * 新增机型页不用再改 sitemap 配置。lastmod 取路由目录 + 组件 + 机型数据 + 价格校正表
+ * 的最后一次提交。
+ */
+const MODEL_PAGE_DEPS = [
+  'src/app/products/screens/[model]',
+  'src/components/products/ModelScreenPage.tsx',
+  'src/data/screen-model-pages.ts',
+  'src/data/screen-price-refresh.ts',
+];
+function screenModelPagePaths() {
+  try {
+    const src = require('fs').readFileSync(
+      require('path').join(__dirname, 'src/data/screen-model-pages.ts'),
+      'utf8'
+    );
+    return [...src.matchAll(/slug:\s*'((?:iphone|galaxy)-[a-z0-9-]+)'/g)].map(
+      (m) => `/products/screens/${m[1]}`
+    );
+  } catch {
+    return [];
+  }
+}
+for (const p of screenModelPagePaths()) ROUTE_EXTRA_DEPS[p] = MODEL_PAGE_DEPS;
 
 /**
  * 静态路由（/about、/products/screens/jk、/products/screens-grade-guide 等）在
@@ -120,11 +150,15 @@ function gitLastmodForRoute(routePath) {
     const rel =
       routePath === '/' ? 'src/app/page.tsx' : `src/app${routePath}`;
     const abs = pathMod.join(__dirname, rel);
-    if (!fsMod.existsSync(abs)) return null;
     const deps = (ROUTE_EXTRA_DEPS[routePath] || []).filter((d) =>
       fsMod.existsSync(pathMod.join(__dirname, d))
     );
-    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', rel, ...deps], {
+    // Dynamic-segment pages (model pages) have no directory of their own; date
+    // them by their registered deps only.
+    const routeExists = fsMod.existsSync(abs);
+    if (!routeExists && !deps.length) return null;
+    const specs = routeExists ? [rel, ...deps] : deps;
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', ...specs], {
       cwd: __dirname,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],
@@ -237,6 +271,7 @@ module.exports = {
       '/products/screens',
       '/products/screens/gx',
       '/products/screens/jk',
+      ...screenModelPagePaths(),
       '/products/screens-grade-guide',
       '/products/batteries',
       '/products/small-parts',
