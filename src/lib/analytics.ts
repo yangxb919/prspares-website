@@ -27,7 +27,9 @@ let _pageLoadTime = typeof window !== 'undefined' ? Date.now() : 0;
 
 /** Signals that count as "human-like" behaviour */
 function markHuman() {
+  if (_humanVerified) return;
   _humanVerified = true;
+  fireEngagedHuman();
 }
 
 // ─── Traffic quality signal collectors ───────────────────────────
@@ -317,10 +319,12 @@ interface EngagementGate {
   minScrollDepth?: number;
 }
 
+// generate_lead and page_view are deliberately NOT gated (2026-10-07):
+// generate_lead only fires after the backend accepted the RFQ, so blocking
+// it dropped real leads (and Ads conversions); page_view was being withheld
+// for 3s+human and left ~88% of GA4 landing pages as (not set). Both still
+// carry traffic_quality / traffic_quality_label for report-side filtering.
 const EVENT_GATES: Record<string, EngagementGate> = {
-  generate_lead:   { requireHuman: true, minTimeOnPage: 5 },
-  form_submit:     { requireHuman: true, minTimeOnPage: 5 },
-  request_quote:   { requireHuman: true, minTimeOnPage: 5 },
   quote_cta_click: { requireHuman: true, minTimeOnPage: 3 },
   contact_click:   { requireHuman: true, minTimeOnPage: 2 },
   email_click:     { requireHuman: true, minTimeOnPage: 2 },
@@ -331,7 +335,6 @@ const EVENT_GATES: Record<string, EngagementGate> = {
   browse_products: { requireHuman: true, minScrollDepth: 15 },
   begin_form:      { requireHuman: true },
   thank_you_page_view: { requireHuman: true, minTimeOnPage: 3 },
-  page_view:       { requireHuman: true, minTimeOnPage: 3 },
 };
 
 function passesEngagementGate(eventName: string): boolean {
@@ -446,7 +449,7 @@ export function trackEvent(eventName: string, params?: Record<string, unknown>):
  * Call this after a Turnstile/CAPTCHA challenge passes.
  */
 export function markAsHumanVerified() {
-  _humanVerified = true;
+  markHuman();
 }
 
 /**
@@ -467,57 +470,62 @@ export function getTrafficQuality() {
   return computeTrafficQuality();
 }
 
-// ─── Delayed page_view (controlled send) ────────────────────────
-let _delayedPageViewFired = false;
+// ─── page_view (immediate, once per URL) ────────────────────────
+// GTM's Google tag runs with send_page_view=false, so the site pushes
+// page_view itself: once on first load and once per client-side route change
+// (see components/PageViewTracker.tsx). The same URL is never sent twice in a
+// row, which also absorbs React StrictMode's double-invoked effects.
+let _lastPageViewUrl = '';
 
-function fireDelayedPageView() {
-  if (_delayedPageViewFired) return;
+export function trackPageView() {
   if (typeof window === 'undefined') return;
 
+  const url = window.location.href;
+  if (url === _lastPageViewUrl) return;
+  const isFirst = _lastPageViewUrl === '';
+  _lastPageViewUrl = url;
+
   attachEngagementListeners();
-
-  if (_pageLoadTime > 0) {
-    _timeOnPage = Math.round((Date.now() - _pageLoadTime) / 1000);
-  }
-
-  if (!passesEngagementGate('page_view')) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[analytics] Delayed page_view blocked — engagement gate not met`, {
-        humanVerified: _humanVerified, timeOnPage: _timeOnPage, scrollDepth: _scrollDepth,
-      });
-    }
-    setTimeout(fireDelayedPageView, 2000);
-    return;
-  }
-
-  _delayedPageViewFired = true;
-
   const tq = computeTrafficQuality();
 
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
     event: 'page_view',
-    page_location: window.location.href,
+    page_location: url,
     page_title: document.title,
-    engagement_signals: _humanVerified,
+    ...(isFirst && document.referrer ? { page_referrer: document.referrer } : {}),
     traffic_quality: tq.score,
     traffic_quality_label: tq.label,
-    _engagement: {
-      human: _humanVerified,
-      timeOnPage: _timeOnPage,
-      scrollDepth: _scrollDepth,
-    },
   });
 
   if (process.env.NODE_ENV === 'development') {
-    console.log(`[analytics] Delayed page_view fired`, {
-      engagement_signals: _humanVerified, tq,
-      timeOnPage: _timeOnPage, scrollDepth: _scrollDepth,
-    });
+    console.log(`[analytics] page_view fired`, { url, tq });
   }
+}
+
+// ─── engaged_human (once per page load) ─────────────────────────
+// Separate signal for "a real person interacted" (mouse/scroll/touch/key/
+// click), replacing the old practice of gating page_view on it.
+let _engagedHumanFired = false;
+
+function fireEngagedHuman() {
+  if (_engagedHumanFired || typeof window === 'undefined') return;
+  _engagedHumanFired = true;
+
+  if (_pageLoadTime > 0) {
+    _timeOnPage = Math.round((Date.now() - _pageLoadTime) / 1000);
+  }
+  const tq = computeTrafficQuality();
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'engaged_human',
+    time_on_page: _timeOnPage,
+    traffic_quality: tq.score,
+    traffic_quality_label: tq.label,
+  });
 }
 
 if (typeof window !== 'undefined') {
   attachEngagementListeners();
-  setTimeout(fireDelayedPageView, 3000);
 }

@@ -49,6 +49,16 @@
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-TTBMN854');</script>
+    <script>
+    // GTM's Google tag has send_page_view=false, so push the page_view here
+    // (static LP, no client-side routing → exactly one per load).
+    window.dataLayer.push({
+        event: 'page_view',
+        page_location: window.location.href,
+        page_title: document.title,
+        page_referrer: document.referrer || undefined
+    });
+    </script>
     <!-- End Google Tag Manager -->
 
     <!-- Preconnect & Preload -->

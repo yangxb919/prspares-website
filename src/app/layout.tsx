@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter, Roboto_Mono } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import { SiteHeader, SiteFooter } from "@/components/layout/SiteChrome";
 import AttributionTracker from "@/components/AttributionTracker";
+import PageViewTracker from "@/components/PageViewTracker";
 
 
 const inter = Inter({
@@ -131,6 +133,11 @@ export default function RootLayout({
         className={`${inter.variable} ${robotoMono.variable} antialiased`}
       >
         <AttributionTracker />
+        {analyticsEnabled && (
+          <Suspense fallback={null}>
+            <PageViewTracker />
+          </Suspense>
+        )}
         <SiteHeader />
         {children}
         <SiteFooter />
