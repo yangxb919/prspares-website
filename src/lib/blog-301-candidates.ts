@@ -177,12 +177,11 @@ export const CANDIDATES_301: Candidate301[] = [
     suggested_observation_window: '4–6 weeks from canonical_applied_on',
     canonical_applied_on: '2026-04-22',
     recheck_after: '2026-06-03',
-    status: 'observe_longer',
+    status: 'ready_for_301',
     decision_reason:
-      'Diversification angle is the unique contribution of this page. Pillar does not currently cover it. Hard 301 would lose this topic from the index. Best to add a section to pillar first, then 301.',
-    review_date: '2026-04-22',
-    next_action:
-      'Content team to add a "single-source vs multi-source supplier risk" section (~300-500 words) to the pillar, then 301 this page. If team declines to add the section, downgrade this candidate to do_not_301 and restore self-canonical.',
+      'P009 pilot (2026-10-13): 0 GSC impressions in 90d, 0 external links, 0 AI user fetches in 14d nginx. Unique section merged into the pillar before the redirect.',
+    review_date: '2026-10-13',
+    next_action: 'Redirect added to next.config.js (P009 pilot block); verify single-hop 308 after deploy.',
   },
   {
     from_slug: 'how-do-you-choose-high-quality-screen-replacement-parts-for-your-phone',
@@ -346,12 +345,107 @@ export const CANDIDATES_301: Candidate301[] = [
     suggested_observation_window: '28 days from canonical application',
     canonical_applied_on: '2026-07-29',
     recheck_after: '2026-08-26',
-    status: 'observe_longer',
+    status: 'ready_for_301',
     decision_reason:
-      'Same cluster, same reasoning. Note this post carries a completed citability pass, so its copy is worth salvaging rather than discarding at 301 time.',
-    review_date: '2026-07-29',
-    next_action:
-      'At recheck: same GSC comparison as the sibling entry. Graft the order-list template into the hub first if graduating to 301.',
+      'P009 pilot (2026-10-13): 0 GSC impressions in 90d, 0 external links, 0 AI user fetches in 14d nginx. Unique section merged into the pillar before the redirect.',
+    review_date: '2026-10-13',
+    next_action: 'Redirect added to next.config.js (P009 pilot block); verify single-hop 308 after deploy.',
+  },
+  {
+    from_slug: 'phone-parts-supplier-relationship',
+    current_title: 'Build Long-Term Phone Parts Supplier Relationships (and Get Better Prices)',
+    to_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    why_recommended_for_301:
+      'Same buyer intent as the pillar (blog-content-decisions.ts); 0 GSC impressions (07-14~10-11), 0 external links, 0 AI user fetches (09-29~10-13 nginx).',
+    prerequisite_before_301: 'Merge any section the pillar lacks into the pillar first.',
+    suggested_observation_window: 'Bypassed — all available evidence is zero (inquiry attribution unavailable site-wide).',
+    canonical_applied_on: '2026-10-13',
+    recheck_after: '2026-11-10',
+    status: 'ready_for_301',
+    decision_reason:
+      'P009 pilot (2026-10-13): unique sections merged into the pillar before the redirect.',
+    review_date: '2026-10-13',
+    next_action: 'Redirect added to next.config.js (P009 pilot block); verify single-hop 308 after deploy.',
+  },
+  {
+    from_slug: 'check-before-repeat-order-phone-parts-supplier',
+    current_title: 'What to Check Before Placing a Repeat Order with the Same Phone Parts Supplier',
+    to_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    why_recommended_for_301:
+      'Same buyer intent as the pillar (blog-content-decisions.ts); 0 GSC impressions (07-14~10-11), 0 external links, 0 AI user fetches (09-29~10-13 nginx).',
+    prerequisite_before_301: 'Merge any section the pillar lacks into the pillar first.',
+    suggested_observation_window: 'Bypassed — all available evidence is zero (inquiry attribution unavailable site-wide).',
+    canonical_applied_on: '2026-10-13',
+    recheck_after: '2026-11-10',
+    status: 'ready_for_301',
+    decision_reason:
+      'P009 pilot (2026-10-13): unique sections merged into the pillar before the redirect.',
+    review_date: '2026-10-13',
+    next_action: 'Redirect added to next.config.js (P009 pilot block); verify single-hop 308 after deploy.',
+  },
+  {
+    from_slug: 'cell-phone-parts-wholesale-sourcing-guide',
+    current_title: 'Cell Phone Parts Wholesale: The Complete Sourcing Guide for Repair Businesses',
+    to_pillar_slug: 'how-to-choose-phone-parts-supplier',
+    why_recommended_for_301:
+      'Same buyer intent as the pillar (blog-content-decisions.ts); 0 GSC impressions (07-14~10-11), 0 external links, 0 AI user fetches (09-29~10-13 nginx).',
+    prerequisite_before_301: 'Merge any section the pillar lacks into the pillar first.',
+    suggested_observation_window: 'Bypassed — all available evidence is zero (inquiry attribution unavailable site-wide).',
+    canonical_applied_on: '2026-10-13',
+    recheck_after: '2026-11-10',
+    status: 'ready_for_301',
+    decision_reason:
+      'P009 pilot (2026-10-13): unique sections merged into the pillar before the redirect.',
+    review_date: '2026-10-13',
+    next_action: 'Redirect added to next.config.js (P009 pilot block); verify single-hop 308 after deploy.',
+  },
+  {
+    from_slug: 'how-repair-shops-choose-iphone-battery-grades-wholesale-orders',
+    current_title: 'Wholesale iPhone Battery Grades: How Repair Shops Pick What to Order in Bulk',
+    to_pillar_slug: 'buying-iphone-batteries-bulk-repair-business',
+    why_recommended_for_301:
+      'Same buyer intent as the pillar (blog-content-decisions.ts); 0 GSC impressions (07-14~10-11), 0 external links, 0 AI user fetches (09-29~10-13 nginx).',
+    prerequisite_before_301: 'Merge any section the pillar lacks into the pillar first.',
+    suggested_observation_window: 'Bypassed — all available evidence is zero (inquiry attribution unavailable site-wide).',
+    canonical_applied_on: '2026-10-13',
+    recheck_after: '2026-11-10',
+    status: 'ready_for_301',
+    decision_reason:
+      'P009 pilot (2026-10-13): unique sections merged into the pillar before the redirect.',
+    review_date: '2026-10-13',
+    next_action: 'Redirect added to next.config.js (P009 pilot block); verify single-hop 308 after deploy.',
+  },
+  {
+    from_slug: 'iphone-battery-stocking-by-model-2026',
+    current_title: 'How Repair Shops Should Stock iPhone Batteries by Model in 2026',
+    to_pillar_slug: 'buying-iphone-batteries-bulk-repair-business',
+    why_recommended_for_301:
+      'Same buyer intent as the pillar (blog-content-decisions.ts); 0 GSC impressions (07-14~10-11), 0 external links, 0 AI user fetches (09-29~10-13 nginx).',
+    prerequisite_before_301: 'Merge any section the pillar lacks into the pillar first.',
+    suggested_observation_window: 'Bypassed — all available evidence is zero (inquiry attribution unavailable site-wide).',
+    canonical_applied_on: '2026-10-13',
+    recheck_after: '2026-11-10',
+    status: 'ready_for_301',
+    decision_reason:
+      'P009 pilot (2026-10-13): unique sections merged into the pillar before the redirect.',
+    review_date: '2026-10-13',
+    next_action: 'Redirect added to next.config.js (P009 pilot block); verify single-hop 308 after deploy.',
+  },
+  {
+    from_slug: 'how-to-choose-charging-ports-bulk-repair-orders',
+    current_title: 'Wholesale Charging Port Assemblies: How Repair Shops Pick Bulk Orders',
+    to_pillar_slug: 'iphone-charging-port-replacement-guide',
+    why_recommended_for_301:
+      'Same buyer intent as the pillar (blog-content-decisions.ts); 0 GSC impressions (07-14~10-11), 0 external links, 0 AI user fetches (09-29~10-13 nginx).',
+    prerequisite_before_301: 'Merge any section the pillar lacks into the pillar first.',
+    suggested_observation_window: 'Bypassed — all available evidence is zero (inquiry attribution unavailable site-wide).',
+    canonical_applied_on: '2026-10-13',
+    recheck_after: '2026-11-10',
+    status: 'ready_for_301',
+    decision_reason:
+      'P009 pilot (2026-10-13): unique sections merged into the pillar before the redirect.',
+    review_date: '2026-10-13',
+    next_action: 'Redirect added to next.config.js (P009 pilot block); verify single-hop 308 after deploy.',
   },
 ];
 
@@ -373,4 +467,13 @@ export const BLOG_LIST_REDIRECT_SOURCE_SLUGS: ReadonlySet<string> = new Set([
   'substandard-battery-sourcing-certified-repair-shops',
   'whats-the-real-difference-between-oled-and-lcd-phone-screens',
   'wholesale-iphone-screens-grades-prices-moq',
+  // P009 pilot (2026-10-13)
+  'why-risk-your-business-on-single-source-display-suppliers',
+  'phone-parts-supplier-relationship',
+  'check-before-repeat-order-phone-parts-supplier',
+  'cell-phone-parts-wholesale-sourcing-guide',
+  'prepare-mixed-order-list-before-contacting-supplier',
+  'how-repair-shops-choose-iphone-battery-grades-wholesale-orders',
+  'iphone-battery-stocking-by-model-2026',
+  'how-to-choose-charging-ports-bulk-repair-orders',
 ]);

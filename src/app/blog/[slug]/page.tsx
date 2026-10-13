@@ -1,4 +1,5 @@
 import { createPublicClient } from '@/utils/supabase-public';
+import { BLOG_LIST_REDIRECT_SOURCE_SLUGS } from '@/lib/blog-301-candidates';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -375,7 +376,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
     // Prefer meta.seo.description over raw excerpt for card previews — some
     // legacy posts have Chinese excerpts despite English SEO descriptions.
-    const candidatePosts = (candidateData || []).map((c: any) => ({
+    // Skip posts that 301 to a pillar — linking them costs a redirect hop and
+    // can even point back to the post being read.
+    const candidatePosts = (candidateData || [])
+      .filter((c: any) => !BLOG_LIST_REDIRECT_SOURCE_SLUGS.has(c.slug))
+      .map((c: any) => ({
       ...c,
       excerpt: pickPostDescription(c.meta, c.excerpt),
     }));

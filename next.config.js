@@ -375,6 +375,51 @@ const nextConfig = {
         permanent: true,
       },
 
+      // --- Blog consolidation pilot (P009, 2026-10-13) ---
+      // 8 posts with 0 GSC impressions (90d), 0 external links and 0 AI user
+      // fetches (14d nginx). Unique sections were merged into the target pillar
+      // before these redirects shipped. See 项目资料 P009 / blog-301-candidates.ts.
+      {
+        source: '/blog/why-risk-your-business-on-single-source-display-suppliers',
+        destination: '/blog/how-to-choose-phone-parts-supplier',
+        permanent: true,
+      },
+      {
+        source: '/blog/phone-parts-supplier-relationship',
+        destination: '/blog/how-to-choose-phone-parts-supplier',
+        permanent: true,
+      },
+      {
+        source: '/blog/check-before-repeat-order-phone-parts-supplier',
+        destination: '/blog/how-to-choose-phone-parts-supplier',
+        permanent: true,
+      },
+      {
+        source: '/blog/cell-phone-parts-wholesale-sourcing-guide',
+        destination: '/blog/how-to-choose-phone-parts-supplier',
+        permanent: true,
+      },
+      {
+        source: '/blog/prepare-mixed-order-list-before-contacting-supplier',
+        destination: '/blog/moq-sample-orders-lead-time-wholesale',
+        permanent: true,
+      },
+      {
+        source: '/blog/how-repair-shops-choose-iphone-battery-grades-wholesale-orders',
+        destination: '/blog/buying-iphone-batteries-bulk-repair-business',
+        permanent: true,
+      },
+      {
+        source: '/blog/iphone-battery-stocking-by-model-2026',
+        destination: '/blog/buying-iphone-batteries-bulk-repair-business',
+        permanent: true,
+      },
+      {
+        source: '/blog/how-to-choose-charging-ports-bulk-repair-orders',
+        destination: '/blog/iphone-charging-port-replacement-guide',
+        permanent: true,
+      },
+
       // --- Cluster consolidation 301s (content-arch, 2026-06-21) ---
       // OEM-vs-aftermarket cannibalization: id89 (pos9) + id74 (pos7) both ranked
       // for the same term, splitting authority. id74 is deeper (4868w, citability-

@@ -256,6 +256,15 @@ module.exports = {
     '/blog/oem-vs-aftermarket-phone-screens', // → phone-screen-wholesale-oem-vs-aftermarket
     '/blog/wholesale-iphone-screens-grades-prices-moq', // → wholesale-iphone-screens-pricing-guide
     '/blog/iphone-screen-replacement-wholesale-repair-business', // → wholesale-iphone-screens-pricing-guide
+    // Blog consolidation pilot (P009, 2026-10-13) — 301 to pillar, stay publish in DB.
+    '/blog/why-risk-your-business-on-single-source-display-suppliers',
+    '/blog/phone-parts-supplier-relationship',
+    '/blog/check-before-repeat-order-phone-parts-supplier',
+    '/blog/cell-phone-parts-wholesale-sourcing-guide',
+    '/blog/prepare-mixed-order-list-before-contacting-supplier',
+    '/blog/how-repair-shops-choose-iphone-battery-grades-wholesale-orders',
+    '/blog/iphone-battery-stocking-by-model-2026',
+    '/blog/how-to-choose-charging-ports-bulk-repair-orders',
     // Internal redesign previews — live for review only, canonical → '/'.
     // Must never be advertised to crawlers (was in sitemap-0.xml until 2026-09-10).
     '/homepage-redesign-preview',
