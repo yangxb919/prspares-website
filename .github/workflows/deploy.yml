@@ -52,7 +52,9 @@ jobs:
             fi
 
             nvm install 22 2>&1 | grep -v "is already installed" || true
-            nvm use 22 2>&1 | head -n 1 || true
+            # 不能写成 nvm use 22 | head：管道里的命令跑在子 shell，切换不会生效
+            nvm use 22 >/dev/null 2>&1 || { echo "❌ nvm use 22 失败"; exit 1; }
+            nvm alias default 22 >/dev/null 2>&1 || true
 
             NODE_VERSION=$(node -v 2>&1)
             if [ $? -eq 0 ]; then
