@@ -37,7 +37,8 @@ jobs:
             echo "🌿 分支: $BRANCH"
             echo ""
 
-            # Ensure NVM/Node 20
+            # Ensure NVM/Node 22（Node 20 已 EOL，不再收安全补丁；
+            # 2026-10-21 Brotli 解码越界写 CVE-2026-111497 只在 22.23.4 / 24.22.1 / 26.12.1 修复）
             echo "📦 检查 Node.js 环境..."
             export NVM_DIR="$HOME/.nvm"
             if [ -s "$NVM_DIR/nvm.sh" ]; then
@@ -50,8 +51,8 @@ jobs:
               echo "✅ NVM 安装完成"
             fi
 
-            nvm install 20 2>&1 | grep -v "is already installed" || true
-            nvm use 20 2>&1 | head -n 1 || true
+            nvm install 22 2>&1 | grep -v "is already installed" || true
+            nvm use 22 2>&1 | head -n 1 || true
 
             NODE_VERSION=$(node -v 2>&1)
             if [ $? -eq 0 ]; then
@@ -60,6 +61,13 @@ jobs:
               echo "❌ Node.js 激活失败"
               exit 1
             fi
+            # 低于安全基线就在停站之前退出，旧版本继续跑
+            if ! node -e 'const [a,b,c]=process.versions.node.split(".").map(Number);process.exit(a===22&&(b>23||(b===23&&c>=4))?0:1)'; then
+              echo "❌ Node.js $NODE_VERSION 低于安全基线 22.23.4，停止部署"
+              exit 1
+            fi
+            # pm2 用自己启动时的 node 拉起应用，交给 ecosystem.config.cjs 显式指定
+            export PM2_NODE_INTERPRETER="$(command -v node)"
             echo ""
 
             # Ensure PM2
@@ -72,6 +80,14 @@ jobs:
               echo "✅ PM2 已存在"
               PM2_VERSION=$(pm2 -v 2>&1) || PM2_VERSION="unknown"
               echo "   版本: $PM2_VERSION"
+            fi
+            # pm2 守护进程还跑在旧 node 上时迁过来（会按 dump 重启一次应用，此时还没开始 build）
+            PM2_GOD_PID=$(cat "$HOME/.pm2/pm2.pid" 2>/dev/null)
+            if [ -n "$PM2_GOD_PID" ] && [ "$(readlink /proc/$PM2_GOD_PID/exe)" != "$PM2_NODE_INTERPRETER" ]; then
+              echo "🔄 PM2 守护进程不在 $NODE_VERSION 上，执行 pm2 update..."
+              pm2 update || echo "⚠️  pm2 update 失败，继续（应用仍会用 PM2_NODE_INTERPRETER 启动）"
+              # 开机自启的 systemd 单元也写着旧 node 路径，一并重新生成
+              pm2 startup systemd -u "$(whoami)" --hp "$HOME" >/dev/null 2>&1 || echo "⚠️  pm2 startup 重新生成失败（不影响本次部署）"
             fi
             echo ""
 
@@ -178,8 +194,10 @@ jobs:
             # Start or reload via PM2
             echo "🚀 启动/重载应用..."
             if [ -f ecosystem.config.cjs ]; then
-              echo "使用 ecosystem.config.cjs 配置..."
-              pm2 startOrReload ecosystem.config.cjs --only prspares-website --env production || { echo "❌ PM2 启动失败"; exit 1; }
+              echo "使用 ecosystem.config.cjs 配置（解释器 $PM2_NODE_INTERPRETER）..."
+              # delete + start 而不是 reload：reload 会沿用进程记录里的旧 node 路径
+              pm2 delete prspares-website 2>/dev/null || true
+              pm2 start ecosystem.config.cjs --only prspares-website --env production || { echo "❌ PM2 启动失败"; exit 1; }
             else
               echo "使用默认配置启动..."
               # 先尝试删除旧进程
@@ -201,6 +219,8 @@ jobs:
             HTTP_STATUS=$(curl -I -sS -A "Mozilla/5.0 (compatible; HealthCheck/1.0)" http://127.0.0.1:3000/ 2>&1 | head -n 1)
             if echo "$HTTP_STATUS" | grep -q "200\|301\|302"; then
               echo "✅ 应用运行正常: $HTTP_STATUS"
+              APP_PID=$(pm2 pid prspares-website | tail -n 1)
+              echo "🔒 应用实际 Node: $(readlink /proc/$APP_PID/exe) $(/proc/$APP_PID/exe -v 2>/dev/null)"
             else
               echo "⚠️  应用响应异常: $HTTP_STATUS"
               echo "📋 PM2 进程状态:"
